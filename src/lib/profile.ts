@@ -2,13 +2,23 @@ import type { Macros } from "./goals";
 
 export type Gender = "male" | "female";
 export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "veryActive";
+export type PaceLevel = "slow" | "moderate" | "aggressive";
+export type TrainingType = "strength" | "hypertrophy" | "cardio" | "rest";
+export type GoalDirection = "cut" | "bulk" | "maintain";
 
 export interface Profile {
+  id: string;
+  /** User-facing name for this saved plan, e.g. "Cutting" or "Off-season bulk". */
+  label: string;
   gender: Gender;
   heightCm: number;
   weightKg: number;
   age: number;
   activity: ActivityLevel;
+  /** Goal bodyweight in kg, or `null` to maintain the current weight. */
+  targetWeightKg: number | null;
+  paceGoal: PaceLevel;
+  trainingType: TrainingType;
 }
 
 export const ACTIVITY_LEVELS: Record<ActivityLevel, { label: string; factor: number }> = {
@@ -19,6 +29,21 @@ export const ACTIVITY_LEVELS: Record<ActivityLevel, { label: string; factor: num
   veryActive: { label: "Very active — physical job or 2× training", factor: 1.9 },
 };
 
+/** Weekly rate of change: how aggressively the calorie target departs from maintenance. */
+export const PACE_LEVELS: Record<PaceLevel, { label: string; cutKcal: number; bulkKcal: number }> = {
+  slow: { label: "Slow (~0.25 kg/week)", cutKcal: 250, bulkKcal: 150 },
+  moderate: { label: "Moderate (~0.5 kg/week)", cutKcal: 500, bulkKcal: 300 },
+  aggressive: { label: "Aggressive (~0.75–1 kg/week)", cutKcal: 750, bulkKcal: 500 },
+};
+
+/** How training demand scales protein needs, in grams per kg of bodyweight. */
+export const TRAINING_TYPES: Record<TrainingType, { label: string; proteinGPerKg: number }> = {
+  strength: { label: "Strength training", proteinGPerKg: 1.8 },
+  hypertrophy: { label: "Hypertrophy / bodybuilding", proteinGPerKg: 2.2 },
+  cardio: { label: "Cardio-focused", proteinGPerKg: 1.6 },
+  rest: { label: "Rest days / general activity", proteinGPerKg: 1.4 },
+};
+
 /** Accepted ranges (inclusive). Mifflin-St Jeor is validated for adults. */
 export const PROFILE_LIMITS = {
   heightCm: { min: 100, max: 250 },
@@ -26,8 +51,8 @@ export const PROFILE_LIMITS = {
   age: { min: 15, max: 100 },
 } as const;
 
-const PROTEIN_G_PER_KG = 1.6;
 const FAT_SHARE_OF_CALORIES = 0.25;
+const MIN_CALORIES = 1200;
 
 export function inRange(field: keyof typeof PROFILE_LIMITS, value: number): boolean {
   const { min, max } = PROFILE_LIMITS[field];
@@ -36,11 +61,17 @@ export function inRange(field: keyof typeof PROFILE_LIMITS, value: number): bool
 
 export function isValidProfile(p: Profile): boolean {
   return (
+    typeof p.id === "string" &&
+    p.id.length > 0 &&
+    typeof p.label === "string" &&
     (p.gender === "male" || p.gender === "female") &&
     p.activity in ACTIVITY_LEVELS &&
+    p.paceGoal in PACE_LEVELS &&
+    p.trainingType in TRAINING_TYPES &&
     inRange("heightCm", p.heightCm) &&
     inRange("weightKg", p.weightKg) &&
-    inRange("age", p.age)
+    inRange("age", p.age) &&
+    (p.targetWeightKg === null || inRange("weightKg", p.targetWeightKg))
   );
 }
 
@@ -80,27 +111,48 @@ export function calculateTdee(p: Profile): number {
   return calculateBmr(p) * ACTIVITY_LEVELS[p.activity].factor;
 }
 
+/** Whether the target weight implies losing, gaining, or holding bodyweight. */
+export function goalDirection(p: Pick<Profile, "weightKg" | "targetWeightKg">): GoalDirection {
+  if (p.targetWeightKg == null) return "maintain";
+  const diff = p.targetWeightKg - p.weightKg;
+  if (diff <= -0.5) return "cut";
+  if (diff >= 0.5) return "bulk";
+  return "maintain";
+}
+
 /**
- * Daily targets at maintenance calories: protein by body weight, fat as a share
- * of calories, carbohydrates fill the remainder.
+ * Daily targets: calories are TDEE adjusted for the goal's direction and pace,
+ * protein scales with training demand (body weight × g/kg), fat is a share of
+ * calories, and carbohydrates fill the remainder.
  */
 export function calculateTargets(p: Profile): Macros {
-  const calories = Math.round(calculateTdee(p));
-  const protein = Math.round(p.weightKg * PROTEIN_G_PER_KG);
+  const tdee = calculateTdee(p);
+  const direction = goalDirection(p);
+  const pace = PACE_LEVELS[p.paceGoal];
+  const adjustment = direction === "cut" ? -pace.cutKcal : direction === "bulk" ? pace.bulkKcal : 0;
+  const calories = Math.max(MIN_CALORIES, Math.round(tdee + adjustment));
+  const protein = Math.round(p.weightKg * TRAINING_TYPES[p.trainingType].proteinGPerKg);
   const fat = Math.round((calories * FAT_SHARE_OF_CALORIES) / 9);
   const carbs = Math.max(0, Math.round((calories - protein * 4 - fat * 9) / 4));
   return { calories, protein, carbs, fat };
 }
 
 /** Parses a stored profile, returning null for anything missing or malformed. */
-export function parseProfile(raw: string | null): Profile | null {
-  if (!raw) return null;
-  try {
-    const p = JSON.parse(raw) as Profile;
-    return isValidProfile(p)
-      ? { gender: p.gender, heightCm: p.heightCm, weightKg: p.weightKg, age: p.age, activity: p.activity }
-      : null;
-  } catch {
-    return null;
-  }
+export function parseProfile(raw: unknown): Profile | null {
+  if (!raw || typeof raw !== "object") return null;
+  const p = raw as Profile;
+  return isValidProfile(p)
+    ? {
+        id: p.id,
+        label: p.label,
+        gender: p.gender,
+        heightCm: p.heightCm,
+        weightKg: p.weightKg,
+        age: p.age,
+        activity: p.activity,
+        targetWeightKg: p.targetWeightKg,
+        paceGoal: p.paceGoal,
+        trainingType: p.trainingType,
+      }
+    : null;
 }

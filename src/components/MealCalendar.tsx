@@ -13,6 +13,8 @@ interface Props {
   targets: Macros;
   /** Bump to refetch the visible month after meals are added or deleted. */
   refreshKey: number;
+  onDelete: (id: string) => void;
+  onClearDay: (ids: string[]) => void;
 }
 
 interface MonthData {
@@ -36,7 +38,7 @@ export default function MealCalendar(props: Props) {
   );
 }
 
-function CalendarView({ targets, refreshKey }: Props) {
+function CalendarView({ targets, refreshKey, onDelete, onClearDay }: Props) {
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
   const [selected, setSelected] = useState(() => new Date());
   const [data, setData] = useState<MonthData | null>(null);
@@ -186,7 +188,7 @@ function CalendarView({ targets, refreshKey }: Props) {
         ) : loading ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading…</p>
         ) : (
-          <DayDetail meals={byDay.get(selectedKey) ?? []} targets={targets} />
+          <DayDetail meals={byDay.get(selectedKey) ?? []} targets={targets} onDelete={onDelete} onClearDay={onClearDay} />
         )}
       </section>
     </div>

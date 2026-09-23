@@ -97,5 +97,5 @@ export function composePlate(f: ImageFeatures, digest: Buffer): Plate {
   });
 
   const grams = Math.round(total.grams / 5) * 5;
-  return { ...total, grams, name: `${dish.name} (~${grams} g)` };
+  return { ...total, grams, name: dish.name };
 }

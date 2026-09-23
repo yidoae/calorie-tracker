@@ -9,6 +9,8 @@ export interface NutritionData {
   protein: number; // g
   carbs: number; // g
   fat: number; // g
+  /** Estimated portion size in grams, if known — informational; not persisted to the DB. */
+  grams?: number;
 }
 
 export interface VisionInput {
@@ -16,7 +18,7 @@ export interface VisionInput {
   mimeType: string;
 }
 
-export const NO_FOOD_MESSAGE = "No food detected in image. Please show a valid meal.";
+export const NO_FOOD_MESSAGE = "Görselde besin tespit edilemedi. Lütfen tabağınızı net bir şekilde gösterin.";
 
 /** The photo doesn't show a meal (a person, a blank wall, a screenshot…), so nothing should be logged. */
 export class NoFoodError extends Error {
@@ -63,11 +65,14 @@ export function normalize(raw: NutritionData): NutritionData {
     throw new Error("Vision provider returned invalid nutrition data");
   }
   const round1 = (n: number) => Math.round(n * 10) / 10;
+  const grams =
+    typeof raw.grams === "number" && Number.isFinite(raw.grams) && raw.grams > 0 ? Math.round(raw.grams) : undefined;
   return {
     name,
     calories: Math.round(raw.calories),
     protein: round1(raw.protein),
     carbs: round1(raw.carbs),
     fat: round1(raw.fat),
+    ...(grams !== undefined ? { grams } : {}),
   };
 }

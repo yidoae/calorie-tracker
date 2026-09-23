@@ -1,10 +1,13 @@
 import {
   BMI_CATEGORIES,
+  PACE_LEVELS,
+  TRAINING_TYPES,
   bmiCategory,
   calculateBmi,
   calculateBmr,
   calculateTargets,
   calculateTdee,
+  goalDirection,
   healthyWeightRange,
   type BmiCategory,
   type Profile,
@@ -62,14 +65,35 @@ function BmiGauge({ bmi, label }: { bmi: number; label: string }) {
 }
 
 /** BMI, energy needs and suggested daily targets for a valid profile. */
+const DIRECTION_LABEL: Record<ReturnType<typeof goalDirection>, string> = {
+  cut: "Losing weight",
+  bulk: "Gaining weight",
+  maintain: "Maintaining weight",
+};
+
 export default function ProfileResults({ profile }: { profile: Profile }) {
   const bmi = calculateBmi(profile);
   const category = bmiCategory(bmi);
   const healthy = healthyWeightRange(profile.heightCm);
   const targets = calculateTargets(profile);
+  const direction = goalDirection(profile);
+  const tdee = calculateTdee(profile);
+  const adjustment = Math.round(targets.calories - tdee);
 
   return (
     <div aria-live="polite" className="space-y-4">
+      <section aria-label="Goal" className={tile}>
+        <p className={tileLabel}>Goal</p>
+        <p className="font-semibold">
+          {DIRECTION_LABEL[direction]}
+          {direction !== "maintain" && ` · ${PACE_LEVELS[profile.paceGoal].label}`}
+        </p>
+        <p className={`${tileLabel} mt-1`}>
+          {adjustment === 0 ? "At maintenance calories" : `${adjustment > 0 ? "+" : ""}${adjustment} kcal/day vs. maintenance`} ·{" "}
+          {TRAINING_TYPES[profile.trainingType].label}
+        </p>
+      </section>
+
       <section aria-label="Body mass index" className={tile}>
         <div className="flex items-center justify-between gap-2">
           <div>

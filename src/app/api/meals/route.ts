@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { deleteImage, saveImage, ALLOWED_MIME_TYPES, MAX_IMAGE_BYTES } from "@/lib/storage";
 import type { MealDTO } from "@/lib/types";
-import { NoFoodError, analyzeFoodImage } from "@/lib/vision";
+import { NoFoodError, analyzeFoodImage, normalize, type NutritionData } from "@/lib/vision";
 import type { Meal } from "@prisma/client";
 
 function toDTO(meal: Meal): MealDTO {
@@ -10,6 +10,28 @@ function toDTO(meal: Meal): MealDTO {
 
 function error(message: string, status: number) {
   return Response.json({ error: message }, { status });
+}
+
+/**
+ * Nutrition fields the client already reviewed/edited (via /api/meals/analyze),
+ * sent alongside the image so it isn't re-analyzed. `null` if the form doesn't
+ * carry a full set of them, in which case the image is analyzed as a fallback.
+ */
+function reviewedNutrition(form: FormData): NutritionData | null {
+  const fields = ["name", "calories", "protein", "carbs", "fat"] as const;
+  const raw = Object.fromEntries(fields.map((f) => [f, form.get(f)]));
+  if (fields.some((f) => typeof raw[f] !== "string")) return null;
+  try {
+    return normalize({
+      name: raw.name as string,
+      calories: Number(raw.calories),
+      protein: Number(raw.protein),
+      carbs: Number(raw.carbs),
+      fat: Number(raw.fat),
+    });
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -38,15 +60,20 @@ export async function GET(request: Request) {
   return Response.json(meals.map(toDTO));
 }
 
-/** POST /api/meals — multipart form with an `image` file; analyzes and logs the meal. */
+/**
+ * POST /api/meals — multipart form with an `image` file, plus optionally the reviewed
+ * `name`/`calories`/`protein`/`carbs`/`fat` fields from a prior /api/meals/analyze call.
+ * Analyzes the image (if those fields aren't supplied) and logs the meal.
+ */
 export async function POST(request: Request) {
-  let image: FormDataEntryValue | null;
+  let form: FormData;
   try {
-    image = (await request.formData()).get("image");
+    form = await request.formData();
   } catch {
     return error("Expected multipart form data", 400);
   }
 
+  const image = form.get("image");
   if (!(image instanceof File) || image.size === 0) {
     return error("Missing `image` file", 400);
   }
@@ -59,22 +86,33 @@ export async function POST(request: Request) {
 
   const data = Buffer.from(await image.arrayBuffer());
 
-  let nutrition;
-  try {
-    nutrition = await analyzeFoodImage({ data, mimeType: image.type });
-  } catch (err) {
-    if (err instanceof NoFoodError) {
-      // Not a failure: the photo just isn't a meal. Nothing is stored.
-      console.info(`No food detected (${err.reason})`);
-      return error(err.message, 422);
+  let nutrition = reviewedNutrition(form);
+  if (!nutrition) {
+    try {
+      nutrition = await analyzeFoodImage({ data, mimeType: image.type });
+    } catch (err) {
+      if (err instanceof NoFoodError) {
+        // Not a failure: the photo just isn't a meal. Nothing is stored.
+        console.info(`No food detected (${err.reason})`);
+        return error(err.message, 422);
+      }
+      console.error("Vision analysis failed:", err);
+      return error("Could not analyze this photo — please try again", 502);
     }
-    console.error("Vision analysis failed:", err);
-    return error("Could not analyze this photo — please try again", 502);
   }
 
   const imageUrl = await saveImage(data, image.type);
   try {
-    const meal = await db.meal.create({ data: { ...nutrition, imageUrl } });
+    const meal = await db.meal.create({
+      data: {
+        name: nutrition.name,
+        calories: nutrition.calories,
+        protein: nutrition.protein,
+        carbs: nutrition.carbs,
+        fat: nutrition.fat,
+        imageUrl,
+      },
+    });
     return Response.json(toDTO(meal), { status: 201 });
   } catch (err) {
     await deleteImage(imageUrl); // don't orphan the file if the insert failed
