@@ -2,9 +2,9 @@
 
 # Calorie Tracker
 
-Mobile-first web app that logs meals from food photos. The user snaps or uploads a photo, a Vision AI handler extracts name/calories/macros, and the dashboard shows daily progress bars plus a timeline of today's meals. Desktop is a 3-column layout (calendar · camera/progress/meals · profile & calculator); on phones the columns become tabs.
+Mobile-first web app that logs meals from food photos. The user snaps or uploads a photo, a Claude vision model extracts name/calories/macros, and the dashboard shows daily progress bars plus a timeline of today's meals. Desktop is a 3-column layout (calendar · camera/progress/meals · profile & calculator); on phones the columns become tabs.
 
-**Stack:** Next.js (App Router, TypeScript) · Tailwind CSS v4 · Lucide icons · Prisma 6 + SQLite.
+**Stack:** Next.js (App Router, TypeScript) · Tailwind CSS v4 · Lucide icons · Prisma 6 + SQLite · Anthropic SDK (Claude vision).
 
 > Next.js here is a newer version than most training data. Before changing framework-level code, read the matching guide in `node_modules/next/dist/docs/` (see AGENTS.md).
 
@@ -12,7 +12,7 @@ Mobile-first web app that logs meals from food photos. The user snaps or uploads
 
 ```bash
 npm install                 # also runs `prisma generate` via postinstall
-cp .env.example .env        # DATABASE_URL="file:./dev.db"
+cp .env.example .env        # DATABASE_URL, plus ANTHROPIC_API_KEY for real food recognition
 npm run db:migrate          # creates prisma/dev.db and applies migrations
 npm run dev                 # http://localhost:3000
 ```
@@ -58,8 +58,8 @@ src/
     MealTimeline.tsx       List of meals (photo, time, macros, delete)
     MealThumb.tsx          Square meal photo with fallback icon
   lib/
-    vision.ts              Vision AI handler (currently a mock): NoFoodError, analyzeFoodImage, output validation
-    food/                  The mock's internals: imageFeatures.ts (sharp -> colour/texture stats),
+    vision.ts              Vision AI handler: Claude call (or offline mock without a key), NoFoodError, output validation
+    food/                  The offline mock's internals: imageFeatures.ts (sharp -> colour/texture stats),
                            recognize.ts (not-food guard + dish match/portion), catalog.ts (ingredients per 100 g, dishes)
     storage.ts             Save/read/delete uploaded images on disk; filename validation
     goals.ts               DAILY_GOALS fallback, MacroKey/Macros, sumMacros
@@ -81,7 +81,7 @@ src/
 
 ## Conventions and gotchas
 
-- **Vision AI is a mock, driven by image statistics.** `analyzeFoodImage()` in `src/lib/vision.ts` decodes the photo with `sharp` (an explicit dependency; Next treats it as a server-external package), measures colour/texture/skin-tone stats, and (1) rejects non-food via `detectNoFood()` (too dark, flat/blank, a smooth skin-toned blob that doesn't reach the frame edge = person/face, mostly blue, only white/grey/black), else (2) matches the middle of the frame's colours to a dish in `food/catalog.ts` and derives weight and macros from per-100 g ingredient data, scaled by frame coverage plus per-image jitter. Same photo → same result; simulated latency 800 ms. These are heuristics, not a classifier — thresholds live in `GUARD` in `food/recognize.ts`, and wood tables, beige purées and unusual lighting can fool it. To use a real model, replace the body of `analyzeFoodImage` (keep throwing `NoFoodError` for non-food) and keep passing provider results through `normalize()`.
+- **Vision AI is Claude, with an offline mock fallback.** When `ANTHROPIC_API_KEY` is set, `analyzeFoodImage()` in `src/lib/vision.ts` downsizes the photo to a ≤1568 px JPEG with `sharp`, sends it to `ANTHROPIC_MODEL` (default `claude-opus-5`) with a JSON-schema structured output (`is_food`, `not_food_reason`, `name`, `calories`, `protein`, `carbs`, `fat`), throws `NoFoodError` when `is_food` is false, and passes the rest through `normalize()`. It opts into server-side refusal fallbacks (`fallbacks: "default"`, beta `server-side-fallback-2026-07-01`) and treats a remaining refusal as a 502. Without a key it uses the old heuristic mock (`food/`: colour/texture stats, not-food guard in `GUARD` in `food/recognize.ts`, dish catalog) so dev works offline; that mock is not a classifier and is easily fooled. Never commit the key — `.env*` is gitignored.
 - **Photos are not in `public/`.** Files added to `public/` after build aren't reliably served in production, so photos go to `uploads/` and are served by `/api/uploads/[filename]`. Filenames must be server-generated UUIDs (`isValidFilename`) — this also blocks path traversal.
 - **Daily targets come from the profile.** `Dashboard` uses `calculateTargets(profile)` (maintenance calories; protein 1.6 g/kg, fat 25% of kcal, carbs the remainder). The profile lives in browser `localStorage` (not the DB), so it is per-device; until it's set, `DAILY_GOALS` in `src/lib/goals.ts` is the fallback.
 - **Live camera needs a secure context** (https or localhost). Otherwise `navigator.mediaDevices` is undefined and "Snap a meal" falls back to the hidden `capture` file input, which opens the native camera app on phones.
