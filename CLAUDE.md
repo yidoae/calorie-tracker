@@ -24,6 +24,7 @@ npm run dev                 # http://localhost:3000
 | `npm run dev` | Dev server |
 | `npm run build` / `npm start` | Production build / serve it |
 | `npm run lint` | ESLint |
+| `npm test` | Unit tests for `src/lib` (Node's built-in test runner via `tsx`; files are `src/**/*.test.ts`) |
 | `npm run typecheck` | `next typegen` + `tsc --noEmit` (route types like `RouteContext` are generated, so plain `tsc` fails on a clean checkout) |
 | `npm run db:migrate` | `prisma migrate dev` — create/apply migrations after editing `schema.prisma` |
 | `npm run db:deploy` | `prisma migrate deploy` — apply existing migrations (production) |
