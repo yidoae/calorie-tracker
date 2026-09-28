@@ -63,6 +63,7 @@ src/
   lib/
     fitbot.ts              ChatMessage type + FitBot system prompt (persona)
     fitbotContext.ts       Validates the widget's context; builds the "user's data" block (profile, targets, today's meals)
+    fitbotTools.ts         FitBot's calculator tools (calculate_targets, macros_to_calories, weeks_to_goal) + runner
     targets.ts             resolveTargets: custom plan > profile > DAILY_GOALS (shared by Dashboard and FitBot)
     vision.ts              Vision AI handler (currently a mock): NoFoodError, analyzeFoodImage, output validation
     food/                  The mock's internals: imageFeatures.ts (sharp -> colour/texture stats),
@@ -95,6 +96,7 @@ src/
 - **Responsive layout is CSS-only.** `Dashboard` renders all three columns and hides the inactive ones below `lg` with `hidden lg:block`; the tab state only matters on phones. `ProfilePanel` is keyed on the saved profile so it remounts with fresh values when the profile changes.
 - **FitBot needs a local Ollama server.** `/api/fitbot/chat` calls `${LOCAL_LLM_URL}/api/chat` (default `http://localhost:11434`) with `LOCAL_LLM_MODEL` (default `llama3.2`), non-streaming, 120 s timeout, last 20 messages. It answers 503 when Ollama isn't running and 502 with an `ollama pull` hint when the model is missing; the widget shows these instead of crashing. The persona lives in `FITBOT_SYSTEM_PROMPT` (`src/lib/fitbot.ts`).
 - **FitBot sees the user's data.** The widget sends the active profile, custom plan, local-day bounds and timezone as `context`; the route re-validates them (`parseProfile`/`parseCustomPlan`), reads today's meals from the DB and appends `buildUserContext()` to the system prompt. All numbers (targets, eaten, remaining) are precomputed there on purpose — small models get arithmetic wrong, so always give them the final figures. If the DB read fails the block is omitted rather than claiming nothing was eaten.
+- **FitBot calls calculator tools.** The route offers `FITBOT_TOOLS` to Ollama and loops (max 3 rounds) running `runFitbotTool()` and feeding results back as `role: "tool"` messages; on the last round tools are withheld so the model must answer. Models without tool support are retried without tools. Each tool result carries a `summary` sentence because small models copy that far more reliably than they read nested JSON. Tool calls are logged to the server console. With `llama3.2` (3B) "what if I weighed X" still puts X into the wrong argument — a model-size limit.
 - **Prisma is pinned to v6.** `prisma@latest` on npm is currently a v8 release candidate; v7+ changes client generation and config, so don't bump without migrating.
 - `DATABASE_URL` for SQLite is relative to `prisma/schema.prisma`, so `file:./dev.db` means `prisma/dev.db`.
 - Route Handlers receive `params` as a Promise: `const { id } = await ctx.params` (typed via the global `RouteContext<"/route/[param]">`).
