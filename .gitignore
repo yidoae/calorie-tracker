@@ -48,3 +48,6 @@ next-env.d.ts
 
 # next dev --experimental-https
 /certificates
+
+# FitBot evaluation outputs (npm run fitbot:eval)
+/eval-results

@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { FITBOT_SYSTEM_PROMPT, type ChatMessage } from "@/lib/fitbot";
 import { buildUserContext, parseClientContext } from "@/lib/fitbotContext";
-import { FITBOT_TOOLS, runFitbotTool } from "@/lib/fitbotTools";
+import { FITBOT_TOOLS, isFitbotTool, runFitbotTool } from "@/lib/fitbotTools";
 import type { Profile } from "@/lib/profile";
 
 const LLM_URL = (process.env.LOCAL_LLM_URL || "http://localhost:11434").replace(/\/+$/, "");
@@ -26,6 +26,22 @@ interface LlmMessage {
   content: string;
   tool_calls?: ToolCall[];
   tool_name?: string;
+}
+
+/**
+ * `{"name": "...", "parameters": {...}}` written into the reply text, as llama3.2 sometimes does
+ * instead of a real tool call. Returns it as a tool call, or null if the reply is ordinary text.
+ */
+function parseTextToolCall(content: string): ToolCall | null {
+  const text = content.replace(/^```(?:json)?\s*|\s*```$/g, "").trim();
+  if (!text.startsWith("{") || !text.endsWith("}")) return null;
+  try {
+    const json = JSON.parse(text) as { name?: unknown; parameters?: unknown; arguments?: unknown };
+    return typeof json.name === "string" ? { function: { name: json.name, arguments: json.parameters ?? json.arguments ?? {} } } : null;
+  } catch {
+    // Malformed, but still clearly an attempted call rather than an answer: report it as an unknown tool.
+    return /^\{\s*"name"\s*:/.test(text) ? { function: { name: "", arguments: {} } } : null;
+  }
 }
 
 function error(message: string, status: number) {
@@ -122,6 +138,7 @@ export async function POST(request: Request) {
   const conversation: LlmMessage[] = [{ role: "system", content: system }, ...messages];
   const signal = AbortSignal.timeout(TIMEOUT_MS);
   let toolsEnabled = true;
+  let nudgedToText = false;
 
   for (let round = 0; ; round++) {
     // On the last round, withhold the tools so the model has to answer with what it has.
@@ -136,11 +153,25 @@ export async function POST(request: Request) {
     }
 
     const { message } = result;
-    const calls = withTools ? (message.tool_calls ?? []) : [];
+    let calls = withTools ? (message.tool_calls ?? []) : [];
+    const reply = message.content?.trim() ?? "";
+
     if (calls.length === 0) {
-      const reply = message.content?.trim() ?? "";
-      if (!reply) return error("The local LLM returned an empty reply. Please try again.", 502);
-      return Response.json({ reply });
+      // Small models sometimes write a tool call as plain text instead of using tool_calls.
+      const textCall = parseTextToolCall(reply);
+      if (textCall && withTools && isFitbotTool(textCall.function.name)) {
+        calls = [textCall];
+      } else if (textCall) {
+        if (nudgedToText) return error("The local LLM couldn't produce an answer. Please rephrase and try again.", 502);
+        // A made-up tool: drop the tools and ask for plain sentences instead.
+        nudgedToText = true;
+        toolsEnabled = false;
+        conversation.push({ role: "system", content: "Answer the user's last message directly in plain sentences. Do not output JSON or function calls." });
+        continue;
+      } else {
+        if (!reply) return error("The local LLM returned an empty reply. Please try again.", 502);
+        return Response.json({ reply });
+      }
     }
 
     conversation.push({ role: "assistant", content: message.content ?? "", tool_calls: calls });

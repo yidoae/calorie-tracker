@@ -196,6 +196,10 @@ function weeksToGoalTool(args: Args, profile: Profile | null) {
   };
 }
 
+export function isFitbotTool(name: string): boolean {
+  return FITBOT_TOOLS.some((t) => t.function.name === name);
+}
+
 /** Runs one tool call. Never throws: problems are returned to the model as `{ error }` so it can recover. */
 export function runFitbotTool(name: string, rawArgs: unknown, profile: Profile | null): object {
   const args: Args = rawArgs && typeof rawArgs === "object" ? (rawArgs as Args) : {};
