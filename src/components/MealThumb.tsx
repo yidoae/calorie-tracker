@@ -18,11 +18,11 @@ export default function MealThumb({ imageUrl, name, size }: Props) {
       height={size}
       unoptimized
       style={style}
-      className="shrink-0 rounded-lg object-cover"
+      className="shrink-0 rounded-lg object-cover ring-1 ring-border"
     />
   ) : (
-    <div style={style} className="flex shrink-0 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
-      <Utensils className="size-1/3 text-zinc-400" />
+    <div style={style} className="flex shrink-0 items-center justify-center rounded-lg bg-surface-2 ring-1 ring-border">
+      <Utensils aria-hidden className="size-1/3 text-fg-subtle" />
     </div>
   );
 }

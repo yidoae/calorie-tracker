@@ -30,8 +30,6 @@ interface Props {
   onDiscard: () => void;
 }
 
-const tile = "rounded-lg bg-white p-2 text-center dark:bg-zinc-900";
-const tileLabel = "text-[11px] text-zinc-500 dark:text-zinc-400";
 
 /** Lets the user check, edit or discard a vision-model draft before it's logged. */
 export default function MealReviewCard({ image, draft, saving, onSave, onDiscard }: Props) {
@@ -53,34 +51,38 @@ export default function MealReviewCard({ image, draft, saving, onSave, onDiscard
   const valid = name.trim().length > 0 && gramsValid;
 
   return (
-    <div className="space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900 dark:bg-emerald-950/20">
-      <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Review before logging</p>
+    <div className="card space-y-4 p-4">
+      <div>
+        <h2 className="card-title">Review before logging</h2>
+        <p className="mt-0.5 text-xs text-fg-subtle">Check the estimate — edit the name or weight if it&apos;s off.</p>
+      </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-end gap-3">
         <Image
           src={previewUrl}
           alt=""
           width={64}
           height={64}
           unoptimized
-          className="size-16 shrink-0 rounded-xl object-cover"
+          className="size-16 shrink-0 rounded-lg object-cover ring-1 ring-border"
         />
         <div className="min-w-0 flex-1">
-          <label htmlFor="review-name" className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
+          <label htmlFor="review-name" className="label">
             Meal name
           </label>
           <input
             id="review-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="h-10 w-full rounded-lg border border-zinc-300 bg-white px-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/30 dark:border-zinc-700 dark:bg-zinc-900"
+            aria-invalid={name.trim().length === 0}
+            className="input"
           />
         </div>
       </div>
 
       {draft.grams !== undefined && (
         <div>
-          <label htmlFor="review-grams" className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
+          <label htmlFor="review-grams" className="label">
             Estimated weight (g)
           </label>
           <input
@@ -91,47 +93,45 @@ export default function MealReviewCard({ image, draft, saving, onSave, onDiscard
             value={grams}
             onChange={(e) => setGrams(e.target.value)}
             aria-invalid={!gramsValid}
-            className="h-10 w-32 rounded-lg border border-zinc-300 bg-white px-3 text-sm tabular-nums outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/30 aria-[invalid=true]:border-red-500 dark:border-zinc-700 dark:bg-zinc-900"
+            aria-describedby="review-grams-hint"
+            className="input w-32"
           />
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Off? Adjust the weight — macros scale with it.</p>
+          <p id="review-grams-hint" className="hint">
+            Macros scale with the weight.
+          </p>
         </div>
       )}
 
-      <div className="grid grid-cols-4 gap-2">
-        <div className={tile}>
-          <p className={tileLabel}>Calories</p>
-          <p className="font-semibold tabular-nums text-orange-600 dark:text-orange-400">{calories}</p>
-        </div>
-        <div className={tile}>
-          <p className={tileLabel}>Protein</p>
-          <p className="font-semibold tabular-nums">{protein}g</p>
-        </div>
-        <div className={tile}>
-          <p className={tileLabel}>Carbs</p>
-          <p className="font-semibold tabular-nums">{carbs}g</p>
-        </div>
-        <div className={tile}>
-          <p className={tileLabel}>Fat</p>
-          <p className="font-semibold tabular-nums">{fat}g</p>
-        </div>
-      </div>
+      <dl className="grid grid-cols-2 gap-2 min-[400px]:grid-cols-4">
+        {(
+          [
+            ["Calories", `${calories}`, "kcal"],
+            ["Protein", `${protein}`, "g"],
+            ["Carbs", `${carbs}`, "g"],
+            ["Fat", `${fat}`, "g"],
+          ] as const
+        ).map(([label, value, unit]) => (
+          <div key={label} className="tile">
+            <dt className="tile-label">{label}</dt>
+            <dd className="tile-value">
+              {value}
+              <span className="ml-0.5 text-xs font-normal text-fg-subtle">{unit}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
 
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={onDiscard}
-          disabled={saving}
-          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-zinc-300 text-sm font-medium transition-colors hover:bg-zinc-100 disabled:opacity-60 dark:border-zinc-700 dark:hover:bg-zinc-800"
-        >
-          <Trash2 className="size-4" /> Discard
+      <div className="flex gap-2 border-t border-border pt-4">
+        <button type="button" onClick={onDiscard} disabled={saving} className="btn btn-secondary flex-1">
+          <Trash2 aria-hidden className="size-4" /> Discard
         </button>
         <button
           type="button"
           disabled={!valid || saving}
           onClick={() => onSave({ name: name.trim(), calories, protein, carbs, fat })}
-          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 text-sm font-medium text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
+          className="btn btn-primary flex-1"
         >
-          {saving ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
+          {saving ? <Loader2 aria-hidden className="size-4 animate-spin" /> : <Check aria-hidden className="size-4" />}
           {saving ? "Saving…" : "Save to log"}
         </button>
       </div>

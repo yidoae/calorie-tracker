@@ -1,8 +1,9 @@
 "use client";
 
-import { Check, RotateCcw, Sparkles } from "lucide-react";
+import { Check, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import { MACRO_PRESETS, isValidCustomPlan, presetMacros, type CustomPlan, type MacroPresetKey } from "@/lib/customPlan";
+import CustomPlanBadge from "./CustomPlanBadge";
 
 interface Props {
   customPlan: CustomPlan | null;
@@ -10,10 +11,7 @@ interface Props {
   onRemove: () => void;
 }
 
-const inputClass =
-  "h-11 w-full rounded-xl border border-zinc-300 bg-transparent px-3 tabular-nums outline-none focus:border-violet-600 focus:ring-2 focus:ring-violet-600/30 dark:border-zinc-700";
-
-/** "Kendi Planımı Oluştur" — a manually-authored set of daily targets that overrides the calculator. */
+/** "Custom plan" — a manually-authored set of daily targets that overrides the calculator. */
 export default function CustomPlanCard({ customPlan, onSave, onRemove }: Props) {
   const [calories, setCalories] = useState(customPlan ? String(customPlan.calories) : "2000");
   const [minProtein, setMinProtein] = useState(customPlan ? String(customPlan.minProtein) : "150");
@@ -39,8 +37,8 @@ export default function CustomPlanCard({ customPlan, onSave, onRemove }: Props) 
   function numberField(id: string, label: string, unit: string, value: string, setValue: (v: string) => void) {
     return (
       <div>
-        <label htmlFor={`custom-${id}`} className="mb-1 block text-sm font-medium">
-          {label} <span className="font-normal text-zinc-500 dark:text-zinc-400">({unit})</span>
+        <label htmlFor={`custom-${id}`} className="label truncate">
+          {label} <span className="font-normal text-fg-subtle">({unit})</span>
         </label>
         <input
           id={`custom-${id}`}
@@ -49,27 +47,21 @@ export default function CustomPlanCard({ customPlan, onSave, onRemove }: Props) 
           min={0}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className={inputClass}
+          className="input"
         />
       </div>
     );
   }
 
   return (
-    <div className="space-y-5 rounded-2xl border border-violet-200 bg-violet-50/40 p-4 dark:border-violet-900 dark:bg-violet-950/20">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-violet-700 dark:text-violet-400">
-          Kendi Planımı Oluştur
-        </h2>
-        {customPlan?.active && (
-          <span className="flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-800 dark:bg-violet-950 dark:text-violet-300">
-            <Sparkles className="size-3.5" /> Özel Plan Aktif
-          </span>
-        )}
+    <div className="card space-y-5 p-4">
+      <div>
+        <div className="flex min-h-6 items-center justify-between gap-2">
+          <h2 className="card-title">Create your own plan</h2>
+          {customPlan?.active && <CustomPlanBadge />}
+        </div>
+        <p className="mt-1 text-[13px] text-fg-subtle">Set your own daily thresholds — activating this overrides the calculated targets.</p>
       </div>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        Set your own daily thresholds — activating this overrides the calculated targets.
-      </p>
 
       <div className="grid grid-cols-2 gap-3">
         {numberField("calories", "Target calories", "kcal", calories, setCalories)}
@@ -79,14 +71,14 @@ export default function CustomPlanCard({ customPlan, onSave, onRemove }: Props) 
       </div>
 
       <div>
-        <p className="mb-1.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">Quick macro presets</p>
+        <p className="section-title mb-2">Quick macro presets</p>
         <div className="flex flex-wrap gap-2">
           {(Object.entries(MACRO_PRESETS) as [MacroPresetKey, (typeof MACRO_PRESETS)[MacroPresetKey]][]).map(([key, preset]) => (
             <button
               key={key}
               type="button"
               onClick={() => applyPreset(key)}
-              className="rounded-full border border-violet-300 px-3 py-1.5 text-xs font-medium text-violet-800 transition-colors hover:bg-violet-100 dark:border-violet-800 dark:text-violet-300 dark:hover:bg-violet-950"
+              className="btn btn-secondary h-7 rounded-md px-2.5 text-xs"
             >
               {preset.label}
             </button>
@@ -94,23 +86,19 @@ export default function CustomPlanCard({ customPlan, onSave, onRemove }: Props) 
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col-reverse gap-2 border-t border-border pt-4 min-[420px]:flex-row">
         {customPlan && (
-          <button
-            type="button"
-            onClick={onRemove}
-            className="flex h-11 items-center justify-center gap-2 rounded-xl border border-zinc-300 px-4 text-sm font-medium transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
-          >
-            <RotateCcw className="size-4" /> Use calculated targets
+          <button type="button" onClick={onRemove} className="btn btn-secondary btn-lg min-[420px]:flex-1">
+            <RotateCcw aria-hidden className="size-4" /> Use calculated
           </button>
         )}
         <button
           type="button"
           disabled={!valid}
           onClick={() => onSave({ ...plan, active: true })}
-          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-violet-600 text-sm font-medium text-white transition-colors hover:bg-violet-700 disabled:opacity-60"
+          className="btn btn-primary btn-lg min-[420px]:flex-1"
         >
-          <Check className="size-4" /> {customPlan?.active ? "Update custom plan" : "Activate custom plan"}
+          <Check aria-hidden className="size-4" /> {customPlan?.active ? "Update plan" : "Activate plan"}
         </button>
       </div>
     </div>

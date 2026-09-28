@@ -1,28 +1,218 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens. Components use the semantic names (bg-surface, text-fg-muted, border-border,
+ * bg-accent, …) instead of raw palette colours, so light/dark is handled here in one place.
+ * Neutrals are zinc; the single accent is emerald. Text pairs are chosen for WCAG AA.
+ */
 :root {
-  --background: #fafafa;
-  --foreground: #171717;
-}
+  color-scheme: light;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --surface-3: #e9e9ec;
+  --border: #e7e7ea;
+  --border-strong: #d4d4d8;
+  --fg: #09090b;
+  --fg-muted: #52525b;
+  --fg-subtle: #6b6b75;
+  --accent: #047857;
+  --accent-hover: #065f46;
+  --accent-fg: #ffffff;
+  --accent-soft: #ecfdf5;
+  --accent-text: #047857;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-text: #b91c1c;
+  --warning-soft: #fffbeb;
+  --warning-text: #92400e;
+  --ring: rgb(4 120 87 / 0.4);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --macro-calories: #18181b;
+  --macro-protein: #e11d48;
+  --macro-carbs: #0284c7;
+  --macro-fat: #d97706;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.03);
+  --shadow-pop: 0 16px 40px -12px rgb(0 0 0 / 0.2), 0 4px 12px -4px rgb(0 0 0 / 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+    --bg: #09090b;
+    --surface: #111113;
+    --surface-2: #1a1a1d;
+    --surface-3: #26262a;
+    --border: #232327;
+    --border-strong: #34343a;
+    --fg: #fafafa;
+    --fg-muted: #a1a1aa;
+    --fg-subtle: #8b8b95;
+    --accent: #10b981;
+    --accent-hover: #34d399;
+    --accent-fg: #022c22;
+    --accent-soft: rgb(16 185 129 / 0.12);
+    --accent-text: #34d399;
+    --danger-soft: rgb(239 68 68 / 0.12);
+    --danger-text: #f87171;
+    --warning-soft: rgb(245 158 11 / 0.12);
+    --warning-text: #fbbf24;
+    --ring: rgb(52 211 153 / 0.45);
+
+    --macro-calories: #e4e4e7;
+    --macro-protein: #fb7185;
+    --macro-carbs: #38bdf8;
+    --macro-fat: #fbbf24;
+
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.5), inset 0 1px 0 0 rgb(255 255 255 / 0.03);
+    --shadow-pop: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.04);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-text: var(--danger-text);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-text: var(--warning-text);
+  --color-ring: var(--ring);
+  --color-macro-calories: var(--macro-calories);
+  --color-macro-protein: var(--macro-protein);
+  --color-macro-carbs: var(--macro-carbs);
+  --color-macro-fat: var(--macro-fat);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-card: var(--shadow-card);
+  --shadow-pop: var(--shadow-pop);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.006em;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+  }
+}
+
+@layer components {
+  /* Surfaces */
+  .card {
+    @apply rounded-xl border border-border bg-surface shadow-card;
+  }
+  .tile {
+    @apply rounded-lg bg-surface-2 px-3 py-2.5;
+  }
+  .tile-label {
+    @apply text-xs text-fg-subtle;
+  }
+  .tile-value {
+    @apply text-sm font-semibold tabular-nums text-fg;
+  }
+
+  /* Text */
+  .section-title {
+    @apply text-[13px] font-medium text-fg-muted;
+  }
+  .card-title {
+    @apply text-sm font-semibold text-fg;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-medium whitespace-nowrap outline-none select-none;
+    @apply transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out;
+    @apply focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+    @apply active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0;
+  }
+  .btn-lg {
+    @apply h-11 px-4;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg shadow-xs hover:bg-accent-hover disabled:hover:bg-accent;
+  }
+  .btn-secondary {
+    @apply border border-border-strong bg-surface text-fg shadow-xs hover:bg-surface-2 disabled:hover:bg-surface;
+  }
+  .btn-ghost {
+    @apply text-fg-muted hover:bg-surface-2 hover:text-fg;
+  }
+  .btn-danger {
+    @apply bg-danger text-white shadow-xs hover:bg-danger-hover;
+  }
+  .btn-icon {
+    @apply size-9 px-0;
+  }
+  .btn-icon-sm {
+    @apply size-8 px-0;
+  }
+  .btn-ghost-danger {
+    @apply text-fg-subtle hover:bg-danger-soft hover:text-danger-text;
+  }
+
+  /* Forms. Inputs are 16px on phones so iOS doesn't zoom in on focus. */
+  .label {
+    @apply mb-1.5 block text-[13px] font-medium text-fg;
+  }
+  .input {
+    @apply h-10 w-full min-w-0 rounded-lg border border-border-strong bg-surface px-3 text-base text-fg tabular-nums shadow-xs outline-none sm:text-sm;
+    @apply transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-fg-subtle;
+    @apply hover:border-fg-subtle/50 focus:border-accent focus:ring-[3px] focus:ring-ring;
+    @apply aria-[invalid=true]:border-danger aria-[invalid=true]:focus:ring-danger/25;
+  }
+  .hint {
+    @apply mt-1.5 text-xs text-fg-subtle;
+  }
+  .error-text {
+    @apply mt-1.5 text-xs text-danger-text;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-md bg-surface-2;
+  }
 }
 
 /* Camera capture: scanning-laser sweep shown while a captured photo is being analyzed. */
@@ -51,5 +241,56 @@ body {
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* Panels and cards that appear in response to an action. */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.animate-enter {
+  animation: enter 180ms ease-out;
+}
+
+dialog[open] {
+  animation: dialog-in 180ms ease-out;
+}
+dialog[open]::backdrop {
+  animation: backdrop-in 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
   }
 }

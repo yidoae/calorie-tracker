@@ -28,8 +28,8 @@ const GENDERS: { value: Gender; label: string }[] = [
   { value: "female", label: "Female" },
 ];
 
-const inputClass =
-  "h-11 w-full rounded-xl border border-zinc-300 bg-transparent px-3 tabular-nums outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/30 aria-[invalid=true]:border-red-500 dark:border-zinc-700";
+const inputClass = "input";
+const unitClass = "font-normal text-fg-subtle";
 
 function newId() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `p_${Date.now()}_${Math.random()}`;
@@ -80,8 +80,8 @@ export default function ProfilePanel({ editing, onSave }: Props) {
     const invalid = value !== "" && !inRange(id, Number(value));
     return (
       <div>
-        <label htmlFor={`profile-${id}`} className="mb-1 block text-sm font-medium">
-          {label} <span className="font-normal text-zinc-500 dark:text-zinc-400">({unit})</span>
+        <label htmlFor={`profile-${id}`} className="label truncate">
+          {label} <span className={unitClass}>({unit})</span>
         </label>
         <input
           id={`profile-${id}`}
@@ -97,8 +97,8 @@ export default function ProfilePanel({ editing, onSave }: Props) {
           className={inputClass}
         />
         {invalid && (
-          <p id={`profile-${id}-hint`} className="mt-1 text-xs text-red-600 dark:text-red-400">
-            {min}–{max}
+          <p id={`profile-${id}-hint`} className="error-text">
+            {min}–{max} {unit}
           </p>
         )}
       </div>
@@ -108,7 +108,7 @@ export default function ProfilePanel({ editing, onSave }: Props) {
   const targetWeightInvalid = form.targetWeight !== "" && !inRange("weightKg", Number(form.targetWeight));
 
   return (
-    <div className="space-y-5 rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="card space-y-5 p-4">
       <form
         className="space-y-4"
         onSubmit={(e) => {
@@ -120,8 +120,8 @@ export default function ProfilePanel({ editing, onSave }: Props) {
         }}
       >
         <div>
-          <label htmlFor="profile-label" className="mb-1 block text-sm font-medium">
-            Plan name <span className="font-normal text-zinc-500 dark:text-zinc-400">(optional)</span>
+          <label htmlFor="profile-label" className="label">
+            Plan name <span className={unitClass}>(optional)</span>
           </label>
           <input
             id="profile-label"
@@ -133,12 +133,12 @@ export default function ProfilePanel({ editing, onSave }: Props) {
         </div>
 
         <fieldset>
-          <legend className="mb-1 text-sm font-medium">Gender</legend>
-          <div className="grid grid-cols-2 gap-2">
+          <legend className="label">Gender</legend>
+          <div className="grid grid-cols-2 gap-1 rounded-lg border border-border bg-surface-2 p-1">
             {GENDERS.map(({ value, label }) => (
               <label
                 key={value}
-                className="flex h-11 cursor-pointer items-center justify-center rounded-xl border border-zinc-300 text-sm font-medium transition-colors has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50 has-[:checked]:text-emerald-800 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-emerald-600/30 dark:border-zinc-700 dark:has-[:checked]:bg-emerald-950 dark:has-[:checked]:text-emerald-300"
+                className="flex h-8 cursor-pointer items-center justify-center rounded-md text-[13px] font-medium text-fg-muted transition-[background-color,color,box-shadow] duration-150 hover:text-fg has-[:checked]:bg-surface has-[:checked]:text-fg has-[:checked]:shadow-xs has-[:checked]:ring-1 has-[:checked]:ring-border has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring"
               >
                 <input
                   type="radio"
@@ -154,21 +154,21 @@ export default function ProfilePanel({ editing, onSave }: Props) {
           </div>
         </fieldset>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 min-[400px]:grid-cols-3">
           {numberField("heightCm", "Height", "cm", form.height, (v) => setForm((f) => ({ ...f, height: v })))}
           {numberField("weightKg", "Weight", "kg", form.weight, (v) => setForm((f) => ({ ...f, weight: v })))}
           {numberField("age", "Age", "yrs", form.age, (v) => setForm((f) => ({ ...f, age: v })))}
         </div>
 
         <div>
-          <label htmlFor="profile-activity" className="mb-1 block text-sm font-medium">
+          <label htmlFor="profile-activity" className="label">
             Activity level
           </label>
           <select
             id="profile-activity"
             value={form.activity}
             onChange={(e) => setForm((f) => ({ ...f, activity: e.target.value as ActivityLevel }))}
-            className={`${inputClass} bg-white dark:bg-zinc-900`}
+            className={`${inputClass} cursor-pointer`}
           >
             {Object.entries(ACTIVITY_LEVELS).map(([key, { label }]) => (
               <option key={key} value={key}>
@@ -178,12 +178,14 @@ export default function ProfilePanel({ editing, onSave }: Props) {
           </select>
         </div>
 
-        <div className="space-y-4 rounded-xl bg-zinc-50 p-3 dark:bg-zinc-800/60">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Goal &amp; training</p>
+        <div role="group" aria-labelledby="profile-goal-heading" className="space-y-4 border-t border-border pt-4">
+          <p id="profile-goal-heading" className="section-title">
+            Goal &amp; training
+          </p>
 
           <div>
-            <label htmlFor="profile-target-weight" className="mb-1 block text-sm font-medium">
-              Target weight <span className="font-normal text-zinc-500 dark:text-zinc-400">(kg, optional)</span>
+            <label htmlFor="profile-target-weight" className="label">
+              Target weight <span className={unitClass}>(kg, optional)</span>
             </label>
             <input
               id="profile-target-weight"
@@ -194,24 +196,25 @@ export default function ProfilePanel({ editing, onSave }: Props) {
               onChange={(e) => setForm((f) => ({ ...f, targetWeight: e.target.value }))}
               placeholder="Leave blank to maintain"
               aria-invalid={targetWeightInvalid}
+              aria-describedby={targetWeightInvalid ? "profile-target-weight-hint" : undefined}
               className={inputClass}
             />
             {targetWeightInvalid && (
-              <p className="mt-1 text-xs text-red-600 dark:text-red-400">
-                {PROFILE_LIMITS.weightKg.min}–{PROFILE_LIMITS.weightKg.max}
+              <p id="profile-target-weight-hint" className="error-text">
+                {PROFILE_LIMITS.weightKg.min}–{PROFILE_LIMITS.weightKg.max} kg
               </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="profile-pace" className="mb-1 block text-sm font-medium">
+            <label htmlFor="profile-pace" className="label">
               Weekly rate / goal speed
             </label>
             <select
               id="profile-pace"
               value={form.pace}
               onChange={(e) => setForm((f) => ({ ...f, pace: e.target.value as PaceLevel }))}
-              className={`${inputClass} bg-white dark:bg-zinc-900`}
+              className={`${inputClass} cursor-pointer`}
             >
               {Object.entries(PACE_LEVELS).map(([key, { label }]) => (
                 <option key={key} value={key}>
@@ -222,14 +225,14 @@ export default function ProfilePanel({ editing, onSave }: Props) {
           </div>
 
           <div>
-            <label htmlFor="profile-training" className="mb-1 block text-sm font-medium">
+            <label htmlFor="profile-training" className="label">
               Training type / frequency
             </label>
             <select
               id="profile-training"
               value={form.training}
               onChange={(e) => setForm((f) => ({ ...f, training: e.target.value as TrainingType }))}
-              className={`${inputClass} bg-white dark:bg-zinc-900`}
+              className={`${inputClass} cursor-pointer`}
             >
               {Object.entries(TRAINING_TYPES).map(([key, { label }]) => (
                 <option key={key} value={key}>
@@ -240,19 +243,15 @@ export default function ProfilePanel({ editing, onSave }: Props) {
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={!valid}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 font-medium text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
-        >
-          <Check className="size-5" /> {editing ? "Update plan" : "Save targets"}
+        <button type="submit" disabled={!valid} className="btn btn-primary btn-lg w-full">
+          <Check aria-hidden className="size-4" /> {editing ? "Update plan" : "Save plan"}
         </button>
       </form>
 
       {valid ? (
         <ProfileResults profile={profile} />
       ) : (
-        <p aria-live="polite" className="rounded-xl bg-zinc-100 p-3 text-sm text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+        <p aria-live="polite" className="rounded-lg border border-dashed border-border-strong p-3 text-[13px] text-fg-subtle">
           Enter your height, weight and age to see your BMI, energy needs and recommended daily targets.
         </p>
       )}

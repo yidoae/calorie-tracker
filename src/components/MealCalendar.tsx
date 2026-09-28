@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { addMonths, dayKey, monthGrid, startOfMonth } from "@/lib/dates";
+import { LOCALE, addMonths, dayKey, monthGrid, startOfMonth } from "@/lib/dates";
 import type { Macros } from "@/lib/goals";
 import { sumMacros } from "@/lib/goals";
 import type { MealDTO } from "@/lib/types";
@@ -25,7 +25,7 @@ interface MonthData {
 
 // 2024-01-01 is a Monday, so this yields Monday-first weekday initials in the user's locale.
 const WEEKDAYS = Array.from({ length: 7 }, (_, i) =>
-  new Date(2024, 0, 1 + i).toLocaleDateString(undefined, { weekday: "narrow" }),
+  new Date(2024, 0, 1 + i).toLocaleDateString(LOCALE, { weekday: "narrow" }),
 );
 
 export default function MealCalendar(props: Props) {
@@ -34,7 +34,10 @@ export default function MealCalendar(props: Props) {
   return isClient ? (
     <CalendarView {...props} />
   ) : (
-    <div aria-hidden className="h-96 animate-pulse rounded-2xl bg-zinc-100 dark:bg-zinc-900" />
+    <div aria-hidden className="space-y-3">
+      <div className="skeleton h-80 rounded-xl" />
+      <div className="skeleton h-40 rounded-xl" />
+    </div>
   );
 }
 
@@ -81,21 +84,20 @@ function CalendarView({ targets, refreshKey, onDelete, onClearDay }: Props) {
     return groups;
   }, [data, monthKey]);
 
-  const monthLabel = month.toLocaleDateString(undefined, { month: "long", year: "numeric" });
-  const navButton =
-    "rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 disabled:opacity-40 disabled:hover:bg-transparent dark:hover:bg-zinc-800";
+  const monthLabel = month.toLocaleDateString(LOCALE, { month: "long", year: "numeric" });
+  const navButton = "btn btn-ghost btn-icon-sm disabled:hover:bg-transparent";
 
-  const selectedLabel = selected.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+  const selectedLabel = selected.toLocaleDateString(LOCALE, { weekday: "long", month: "long", day: "numeric" });
   const selectedInView = selectedKey.slice(0, 7) === monthKey;
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="space-y-3">
+      <div className="card p-3 sm:p-4">
         <div className="mb-3 flex items-center justify-between">
           <button type="button" aria-label="Previous month" onClick={() => setMonth(addMonths(month, -1))} className={navButton}>
-            <ChevronLeft className="size-5" />
+            <ChevronLeft aria-hidden className="size-4" />
           </button>
-          <h3 aria-live="polite" className="font-medium">
+          <h3 aria-live="polite" className="text-sm font-semibold">
             {monthLabel}
           </h3>
           <button
@@ -105,13 +107,13 @@ function CalendarView({ targets, refreshKey, onDelete, onClearDay }: Props) {
             onClick={() => setMonth(addMonths(month, 1))}
             className={navButton}
           >
-            <ChevronRight className="size-5" />
+            <ChevronRight aria-hidden className="size-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 text-center">
+        <div className="grid grid-cols-7 gap-0.5 text-center sm:gap-1">
           {WEEKDAYS.map((label, i) => (
-            <span key={i} aria-hidden className="pb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            <span key={i} aria-hidden className="pb-1.5 text-[11px] font-medium text-fg-subtle uppercase">
               {label}
             </span>
           ))}
@@ -123,7 +125,7 @@ function CalendarView({ targets, refreshKey, onDelete, onClearDay }: Props) {
             const dayMeals = byDay.get(key);
             const future = key > todayKey; // YYYY-MM-DD keys sort chronologically
             const overGoal = dayMeals ? sumMacros(dayMeals).calories > targets.calories : false;
-            const label = date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+            const label = date.toLocaleDateString(LOCALE, { weekday: "long", month: "long", day: "numeric" });
 
             return (
               <button
@@ -134,18 +136,20 @@ function CalendarView({ targets, refreshKey, onDelete, onClearDay }: Props) {
                 aria-label={dayMeals ? `${label}, ${dayMeals.length} ${dayMeals.length === 1 ? "meal" : "meals"}` : label}
                 aria-current={key === todayKey ? "date" : undefined}
                 aria-pressed={key === selectedKey}
-                className={`relative flex h-10 flex-col items-center justify-center rounded-xl text-sm tabular-nums transition-colors disabled:text-zinc-300 disabled:hover:bg-transparent dark:disabled:text-zinc-700 ${
+                className={`relative flex aspect-square max-h-10 w-full cursor-pointer flex-col items-center justify-center rounded-lg text-[13px] tabular-nums outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:text-fg-subtle/40 disabled:hover:bg-transparent ${
                   key === selectedKey
-                    ? "bg-emerald-600 font-semibold text-white hover:bg-emerald-700"
-                    : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                } ${key === todayKey ? "ring-2 ring-emerald-600 ring-offset-1 ring-offset-white dark:ring-offset-zinc-900" : ""}`}
+                    ? "bg-fg font-semibold text-bg"
+                    : key === todayKey
+                      ? "font-semibold text-accent-text ring-1 ring-accent/40 ring-inset hover:bg-accent-soft"
+                      : "text-fg hover:bg-surface-2"
+                }`}
               >
                 {date.getDate()}
                 {dayMeals && (
                   <span
                     aria-hidden
-                    className={`absolute bottom-1 size-1.5 rounded-full ${
-                      key === selectedKey ? "bg-white" : overGoal ? "bg-red-500" : "bg-emerald-500"
+                    className={`absolute bottom-1 size-1 rounded-full ${
+                      key === selectedKey ? "bg-bg" : overGoal ? "bg-danger" : "bg-accent"
                     }`}
                   />
                 )}
@@ -154,39 +158,43 @@ function CalendarView({ targets, refreshKey, onDelete, onClearDay }: Props) {
           })}
         </div>
 
-        <div className="mt-3 flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="mt-3 flex min-h-5 flex-wrap items-center gap-x-4 gap-y-1 border-t border-border pt-3 text-xs text-fg-subtle">
           {data?.error ? (
-            <p role="alert" className="text-red-600 dark:text-red-400">
+            <p role="alert" className="text-danger-text">
               {data.error}
             </p>
           ) : loading ? (
-            <p>Loading…</p>
+            <div aria-label="Loading" className="skeleton h-3 w-40" />
           ) : (
             <>
               <span className="flex items-center gap-1.5">
-                <span aria-hidden className="size-1.5 rounded-full bg-emerald-500" /> Logged
+                <span aria-hidden className="size-1.5 rounded-full bg-accent" /> Logged
               </span>
               <span className="flex items-center gap-1.5">
-                <span aria-hidden className="size-1.5 rounded-full bg-red-500" /> Over calorie target
+                <span aria-hidden className="size-1.5 rounded-full bg-danger" /> Over calorie target
               </span>
             </>
           )}
         </div>
       </div>
 
-      <section
-        aria-labelledby="day-heading"
-        className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
-      >
-        <h3 id="day-heading" className="mb-3 font-medium">
+      <section aria-labelledby="day-heading" className="card p-4">
+        <h3 id="day-heading" className="card-title mb-4">
           {selectedInView ? selectedLabel : "Select a day"}
         </h3>
         {!selectedInView ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Pick a day to see its meals and totals.</p>
+          <p className="text-[13px] text-fg-subtle">Pick a day to see its meals and totals.</p>
         ) : data?.error ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Couldn&apos;t load this month.</p>
+          <p className="text-[13px] text-danger-text">Couldn&apos;t load this month.</p>
         ) : loading ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading…</p>
+          <div aria-busy="true" aria-label="Loading day" className="space-y-4">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="space-y-2">
+                <div className="skeleton h-3 w-1/3" />
+                <div className="skeleton h-1.5 w-full rounded-full" />
+              </div>
+            ))}
+          </div>
         ) : (
           <DayDetail meals={byDay.get(selectedKey) ?? []} targets={targets} onDelete={onDelete} onClearDay={onClearDay} />
         )}

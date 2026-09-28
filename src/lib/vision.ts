@@ -18,7 +18,7 @@ export interface VisionInput {
   mimeType: string;
 }
 
-export const NO_FOOD_MESSAGE = "Görselde besin tespit edilemedi. Lütfen tabağınızı net bir şekilde gösterin.";
+export const NO_FOOD_MESSAGE = "No food detected in image. Please show a valid meal.";
 
 /** The photo doesn't show a meal (a person, a blank wall, a screenshot…), so nothing should be logged. */
 export class NoFoodError extends Error {

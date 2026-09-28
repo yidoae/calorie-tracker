@@ -1,13 +1,23 @@
+import { Flame } from "lucide-react";
 import Dashboard from "@/components/Dashboard";
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight">Calorie Tracker</h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Snap your meal, we&apos;ll do the math.</p>
+    <>
+      <header className="border-b border-border bg-surface/80 backdrop-blur-md">
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-3 px-4 sm:px-6">
+          <div aria-hidden className="flex size-7 items-center justify-center rounded-md bg-accent text-accent-fg shadow-xs">
+            <Flame className="size-4" strokeWidth={2.25} />
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-[15px] leading-tight font-semibold">Calorie Tracker</h1>
+            <p className="truncate text-xs text-fg-subtle">Snap your meal, we&apos;ll do the math.</p>
+          </div>
+        </div>
       </header>
-      <Dashboard />
-    </main>
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-4 pb-10 sm:px-6 lg:pt-8">
+        <Dashboard />
+      </main>
+    </>
   );
 }

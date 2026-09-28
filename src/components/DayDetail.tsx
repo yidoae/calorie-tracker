@@ -1,10 +1,12 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { CalendarX2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { MACRO_KEYS, sumMacros, type Macros } from "@/lib/goals";
+import { LOCALE } from "@/lib/dates";
 import type { MealDTO } from "@/lib/types";
 import ConfirmDialog from "./ConfirmDialog";
+import EmptyState from "./EmptyState";
 import MacroProgress from "./MacroProgress";
 import MealThumb from "./MealThumb";
 
@@ -21,11 +23,7 @@ export default function DayDetail({ meals, targets, onDelete, onClearDay }: Prop
   const [confirmingClear, setConfirmingClear] = useState(false);
 
   if (meals.length === 0) {
-    return (
-      <p className="rounded-xl border border-dashed border-zinc-300 px-4 py-8 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-        No meals logged on this day.
-      </p>
-    );
+    return <EmptyState icon={<CalendarX2 />} title="Nothing logged" description="No meals were logged on this day." className="py-8" />;
   }
 
   const totals = sumMacros(meals);
@@ -34,45 +32,39 @@ export default function DayDetail({ meals, targets, onDelete, onClearDay }: Prop
 
   return (
     <div className="space-y-5">
-      <section aria-label="Totals" className="space-y-4">
+      <section aria-label="Totals" className="space-y-3.5">
         {MACRO_KEYS.map((macro) => (
           <MacroProgress key={macro} macro={macro} value={totals[macro]} goal={targets[macro]} mode={macro === "protein" ? "min" : "max"} />
         ))}
       </section>
 
-      <section aria-label="Meals">
+      <section aria-label="Meals" className="border-t border-border pt-4">
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-            Meals ({meals.length})
-          </h3>
-          <button
-            type="button"
-            onClick={() => setConfirmingClear(true)}
-            className="text-xs font-medium text-red-600 underline-offset-2 hover:underline dark:text-red-400"
-          >
-            Clear day
+          <h4 className="section-title">
+            Meals <span className="text-fg-subtle tabular-nums">{meals.length}</span>
+          </h4>
+          <button type="button" onClick={() => setConfirmingClear(true)} className="btn btn-ghost-danger h-7 px-2 text-xs">
+            <Trash2 aria-hidden className="size-3.5" /> Clear day
           </button>
         </div>
-        <ul className="space-y-2">
+        <ul className="-mx-2 space-y-0.5">
           {chronological.map((meal) => (
-            <li key={meal.id} className="flex items-center gap-3">
-              <MealThumb imageUrl={meal.imageUrl} name={meal.name} size={44} />
+            <li key={meal.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-surface-2">
+              <MealThumb imageUrl={meal.imageUrl} name={meal.name} size={36} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{meal.name}</p>
-                <time dateTime={meal.createdAt} className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {new Date(meal.createdAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+                <p className="truncate text-[13px] font-medium text-fg">{meal.name}</p>
+                <time dateTime={meal.createdAt} className="text-xs text-fg-subtle">
+                  {new Date(meal.createdAt).toLocaleTimeString(LOCALE, { hour: "numeric", minute: "2-digit" })}
                 </time>
               </div>
-              <p className="shrink-0 text-sm font-semibold tabular-nums text-orange-600 dark:text-orange-400">
-                {meal.calories} kcal
-              </p>
+              <p className="shrink-0 text-[13px] font-medium tabular-nums text-fg">{meal.calories} kcal</p>
               <button
                 type="button"
                 aria-label={`Delete ${meal.name}`}
                 onClick={() => setPending(meal)}
-                className="shrink-0 rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950"
+                className="btn btn-ghost-danger size-7 px-0"
               >
-                <Trash2 className="size-4" />
+                <Trash2 aria-hidden className="size-3.5" />
               </button>
             </li>
           ))}

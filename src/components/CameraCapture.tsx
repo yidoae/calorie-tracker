@@ -56,7 +56,14 @@ export default function CameraCapture({ onCapture, analyzing }: Props) {
           return;
         }
         stream = s;
-        if (videoRef.current) videoRef.current.srcObject = s;
+        const video = videoRef.current;
+        if (!video) return;
+        video.srcObject = s;
+        // `autoPlay` alone isn't reliable on phones (iOS Low Power Mode, some Android WebViews):
+        // without an explicit play() the preview stays black and captured frames come out empty.
+        video.play().catch(() => {
+          if (!cancelled) setStatus({ kind: "error", message: "Couldn't start the camera preview. Use Upload instead." });
+        });
       })
       .catch((err: unknown) => {
         if (!cancelled) setStatus({ kind: "error", message: describeError(err) });
@@ -70,7 +77,10 @@ export default function CameraCapture({ onCapture, analyzing }: Props) {
 
   function capture() {
     const video = videoRef.current;
-    if (!video || !video.videoWidth) return;
+    if (!video || !video.videoWidth || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+      setCaptureError(true);
+      return;
+    }
 
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
@@ -109,7 +119,7 @@ export default function CameraCapture({ onCapture, analyzing }: Props) {
 
   if (status.kind === "error") {
     return (
-      <p role="alert" className="rounded-xl bg-red-50 px-4 py-6 text-center text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+      <p role="alert" className="rounded-lg border border-danger/20 bg-danger-soft px-4 py-6 text-center text-[13px] text-danger-text">
         {status.message}
       </p>
     );
@@ -119,14 +129,16 @@ export default function CameraCapture({ onCapture, analyzing }: Props) {
   const busy = frozenFrame !== null && analyzing;
 
   return (
-    <div className="space-y-4">
-      <div className="relative min-h-64 overflow-hidden rounded-2xl bg-black">
+    <div className="space-y-3">
+      <div className="relative min-h-64 overflow-hidden rounded-lg bg-black">
         <video
           ref={videoRef}
           autoPlay
           playsInline
           muted
-          onLoadedMetadata={() => setStatus({ kind: "ready" })}
+          // "playing" rather than "loadedmetadata": mobile browsers report dimensions before the
+          // first frame is decoded, and capturing then yields a black image (rejected as non-food).
+          onPlaying={() => setStatus((s) => (s.kind === "error" ? s : { kind: "ready" }))}
           className={`block max-h-[60dvh] w-full object-contain ${busy ? "invisible" : ""}`}
         />
 
@@ -188,7 +200,7 @@ export default function CameraCapture({ onCapture, analyzing }: Props) {
       </div>
 
       {captureError && (
-        <p role="alert" className="text-center text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="text-center text-[13px] text-danger-text">
           Couldn&apos;t capture the photo — please try again.
         </p>
       )}
@@ -197,9 +209,9 @@ export default function CameraCapture({ onCapture, analyzing }: Props) {
         type="button"
         disabled={!ready || countdown !== null || busy}
         onClick={startCountdown}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 font-medium text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
+        className="btn btn-primary btn-lg w-full"
       >
-        {busy ? <Loader2 className="size-5 animate-spin" /> : <Aperture className="size-5" />}
+        {busy ? <Loader2 aria-hidden className="size-[18px] animate-spin" /> : <Aperture aria-hidden className="size-[18px]" />}
         {busy ? "Analyzing…" : countdown !== null ? `Hold still… ${countdown}` : "Capture & Analyze"}
       </button>
     </div>

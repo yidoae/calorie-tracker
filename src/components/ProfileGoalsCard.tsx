@@ -1,11 +1,12 @@
 "use client";
 
-import { Pencil, Plus, Sparkles, Trash2 } from "lucide-react";
+import { Check, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import type { CustomPlan } from "@/lib/customPlan";
 import { customPlanTargets } from "@/lib/customPlan";
 import { calculateTargets, goalDirection, PACE_LEVELS, type Profile } from "@/lib/profile";
 import ConfirmDialog from "./ConfirmDialog";
+import CustomPlanBadge from "./CustomPlanBadge";
 
 interface Props {
   profiles: Profile[];
@@ -23,9 +24,6 @@ const DIRECTION_LABEL: Record<ReturnType<typeof goalDirection>, string> = {
   maintain: "Maintaining",
 };
 
-const tile = "rounded-lg bg-zinc-100 p-2 text-center dark:bg-zinc-800";
-const tileLabel = "text-[11px] text-zinc-500 dark:text-zinc-400";
-
 /** Summary of the active saved plan plus a switcher for every saved profile. */
 export default function ProfileGoalsCard({ profiles, activeProfile, customPlan, onSelect, onEdit, onDelete, onNew }: Props) {
   const [confirmingDelete, setConfirmingDelete] = useState<Profile | null>(null);
@@ -34,121 +32,111 @@ export default function ProfileGoalsCard({ profiles, activeProfile, customPlan, 
     customActive && customPlan ? customPlanTargets(customPlan) : activeProfile ? calculateTargets(activeProfile) : null;
 
   return (
-    <section
-      aria-labelledby="active-profile-heading"
-      className="space-y-4 rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
-    >
-      <div className="flex items-center justify-between">
-        <h2 id="active-profile-heading" className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-          Active profile &amp; goals
+    <section aria-labelledby="active-profile-heading" className="card p-4">
+      <div className="flex min-h-6 items-center justify-between gap-2">
+        <h2 id="active-profile-heading" className="card-title">
+          Active plan
         </h2>
-        {customActive && (
-          <span className="flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-1 text-xs font-semibold text-violet-800 dark:bg-violet-950 dark:text-violet-300">
-            <Sparkles className="size-3.5" /> Özel Plan Aktif
-          </span>
-        )}
+        {customActive && <CustomPlanBadge />}
       </div>
 
       {activeProfile ? (
-        <div className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <p className="font-medium">{activeProfile.label}</p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="mt-3 space-y-3">
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="truncate text-sm font-medium text-fg">{activeProfile.label}</p>
+            <p className="shrink-0 text-xs text-fg-subtle">
               {DIRECTION_LABEL[goalDirection(activeProfile)]}
               {goalDirection(activeProfile) !== "maintain" && ` · ${PACE_LEVELS[activeProfile.paceGoal].label}`}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className={tile}>
-              <p className={tileLabel}>Current weight</p>
-              <p className="font-semibold tabular-nums">{activeProfile.weightKg} kg</p>
+          <dl className="grid grid-cols-2 gap-2">
+            <div className="tile">
+              <dt className="tile-label">Current weight</dt>
+              <dd className="tile-value">{activeProfile.weightKg} kg</dd>
             </div>
-            <div className={tile}>
-              <p className={tileLabel}>Target weight</p>
-              <p className="font-semibold tabular-nums">
-                {activeProfile.targetWeightKg != null ? `${activeProfile.targetWeightKg} kg` : "—"}
-              </p>
+            <div className="tile">
+              <dt className="tile-label">Target weight</dt>
+              <dd className="tile-value">{activeProfile.targetWeightKg != null ? `${activeProfile.targetWeightKg} kg` : "—"}</dd>
             </div>
-          </div>
+          </dl>
 
           {targets && (
             <div>
-              <p className={`${tileLabel} mb-1.5`}>{customActive ? "Custom daily targets" : "Daily targets"}</p>
-              <div className="grid grid-cols-4 gap-2">
-                <div className={tile}>
-                  <p className={tileLabel}>Kcal</p>
-                  <p className="font-semibold tabular-nums text-orange-600 dark:text-orange-400">{targets.calories}</p>
-                </div>
-                <div className={tile}>
-                  <p className={tileLabel}>Protein</p>
-                  <p className="font-semibold tabular-nums">{targets.protein}g</p>
-                </div>
-                <div className={tile}>
-                  <p className={tileLabel}>Carbs</p>
-                  <p className="font-semibold tabular-nums">{targets.carbs}g</p>
-                </div>
-                <div className={tile}>
-                  <p className={tileLabel}>Fat</p>
-                  <p className="font-semibold tabular-nums">{targets.fat}g</p>
-                </div>
-              </div>
+              <p className="tile-label mb-1.5">{customActive ? "Custom daily targets" : "Daily targets"}</p>
+              <dl className="grid grid-cols-4 gap-1.5">
+                {(
+                  [
+                    ["Kcal", `${targets.calories}`],
+                    ["Protein", `${targets.protein}g`],
+                    ["Carbs", `${targets.carbs}g`],
+                    ["Fat", `${targets.fat}g`],
+                  ] as const
+                ).map(([label, value]) => (
+                  <div key={label} className="tile min-w-0 px-2 text-center">
+                    <dt className="tile-label truncate">{label}</dt>
+                    <dd className="tile-value truncate">{value}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           )}
         </div>
       ) : (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          No saved plan yet — use the calculator below to create one.
-        </p>
+        <p className="mt-2 text-[13px] text-fg-subtle">No saved plan yet — use the calculator below to create one.</p>
       )}
 
       {profiles.length > 0 && (
-        <ul className="space-y-1.5 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-          {profiles.map((p) => (
-            <li
-              key={p.id}
-              className={`flex items-center gap-2 rounded-xl px-2.5 py-2 transition-colors ${
-                p.id === activeProfile?.id ? "bg-emerald-50 dark:bg-emerald-950/40" : "hover:bg-zinc-50 dark:hover:bg-zinc-800/60"
-              }`}
-            >
-              <button
-                type="button"
-                onClick={() => onSelect(p.id)}
-                aria-pressed={p.id === activeProfile?.id}
-                className="min-w-0 flex-1 text-left"
+        <ul aria-label="Saved plans" className="-mx-1.5 mt-4 space-y-0.5 border-t border-border pt-3">
+          {profiles.map((p) => {
+            const active = p.id === activeProfile?.id;
+            return (
+              <li
+                key={p.id}
+                className={`flex items-center gap-1 rounded-lg py-1 pr-1 pl-1.5 transition-colors duration-150 ${
+                  active ? "bg-accent-soft" : "hover:bg-surface-2"
+                }`}
               >
-                <p className="truncate text-sm font-medium">{p.label}</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {p.weightKg} kg · {DIRECTION_LABEL[goalDirection(p)]}
-                </p>
-              </button>
-              <button
-                type="button"
-                aria-label={`Edit ${p.label}`}
-                onClick={() => onEdit(p)}
-                className="shrink-0 rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-foreground dark:hover:bg-zinc-700"
-              >
-                <Pencil className="size-4" />
-              </button>
-              <button
-                type="button"
-                aria-label={`Delete ${p.label}`}
-                onClick={() => setConfirmingDelete(p)}
-                className="shrink-0 rounded-lg p-1.5 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950"
-              >
-                <Trash2 className="size-4" />
-              </button>
-            </li>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => onSelect(p.id)}
+                  aria-pressed={active}
+                  className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-md px-1 py-0.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <span
+                    aria-hidden
+                    className={`flex size-4 shrink-0 items-center justify-center rounded-full border ${
+                      active ? "border-accent bg-accent text-accent-fg" : "border-border-strong"
+                    }`}
+                  >
+                    {active && <Check className="size-2.5" strokeWidth={3.5} />}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-[13px] font-medium text-fg">{p.label}</span>
+                    <span className="block text-xs text-fg-subtle">
+                      {p.weightKg} kg · {DIRECTION_LABEL[goalDirection(p)]}
+                    </span>
+                  </span>
+                </button>
+                <button type="button" aria-label={`Edit ${p.label}`} onClick={() => onEdit(p)} className="btn btn-ghost size-8 px-0">
+                  <Pencil aria-hidden className="size-3.5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Delete ${p.label}`}
+                  onClick={() => setConfirmingDelete(p)}
+                  className="btn btn-ghost-danger size-8 px-0"
+                >
+                  <Trash2 aria-hidden className="size-3.5" />
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 
-      <button
-        type="button"
-        onClick={onNew}
-        className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-zinc-300 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800/60"
-      >
-        <Plus className="size-4" /> New profile
+      <button type="button" onClick={onNew} className="btn btn-secondary mt-3 w-full border-dashed shadow-none">
+        <Plus aria-hidden className="size-4" /> New plan
       </button>
 
       <ConfirmDialog

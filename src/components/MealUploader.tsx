@@ -1,13 +1,39 @@
 "use client";
 
 import { Camera, ImagePlus, Loader2, TriangleAlert, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MealDTO } from "@/lib/types";
 import CameraCapture from "./CameraCapture";
 import MealReviewCard, { type MealDraft, type ReviewedMeal } from "./MealReviewCard";
 
 interface Props {
   onMealAdded: (meal: MealDTO) => void;
+}
+
+const MAX_PHOTO_EDGE = 1600;
+const PASSTHROUGH_BYTES = 3 * 1024 * 1024;
+const SERVER_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
+/**
+ * Phone camera photos are often 12+ MP (can exceed the server's 10 MB cap) or HEIC, which the
+ * server rejects. Re-encode anything big or unsupported to a downscaled JPEG; small supported
+ * files (and GIFs) are sent untouched. Falls back to the original if the browser can't decode it.
+ */
+async function preparePhoto(file: File): Promise<Blob> {
+  if (file.type === "image/gif" || (SERVER_TYPES.includes(file.type) && file.size <= PASSTHROUGH_BYTES)) return file;
+  try {
+    const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const scale = Math.min(1, MAX_PHOTO_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
+    return blob ?? file;
+  } catch {
+    return file;
+  }
 }
 
 type Phase =
@@ -20,7 +46,13 @@ type Phase =
 export default function MealUploader({ onMealAdded }: Props) {
   const cameraRef = useRef<HTMLInputElement>(null);
   const galleryRef = useRef<HTMLInputElement>(null);
+  const cameraPanelRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
+
+  // On phones the panel can open below the fold, so it looks like nothing happened.
+  useEffect(() => {
+    if (phase.kind === "camera") cameraPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [phase.kind]);
   // A "warning" is a photo that was analyzed but isn't a meal (422), as opposed to a failure.
   const [notice, setNotice] = useState<{ message: string; warning: boolean } | null>(null);
 
@@ -76,7 +108,7 @@ export default function MealUploader({ onMealAdded }: Props) {
   function handleFile(input: HTMLInputElement) {
     const file = input.files?.[0];
     input.value = ""; // allow picking the same file again later
-    if (file) void analyze(file, "upload");
+    if (file) void preparePhoto(file).then((photo) => analyze(photo, "upload"));
   }
 
   function openCamera() {
@@ -90,9 +122,6 @@ export default function MealUploader({ onMealAdded }: Props) {
   const cameraOpen = phase.kind === "camera" || (phase.kind === "analyzing" && phase.source === "camera");
   const analyzing = phase.kind === "analyzing";
   const busy = phase.kind !== "idle";
-
-  const buttonBase =
-    "flex h-12 items-center justify-center gap-2 rounded-xl font-medium transition-colors disabled:opacity-60";
 
   return (
     <div>
@@ -113,43 +142,31 @@ export default function MealUploader({ onMealAdded }: Props) {
         onChange={(e) => handleFile(e.currentTarget)}
       />
 
-      <div className="grid grid-cols-[2fr_1fr] gap-3">
-        <button
-          type="button"
-          disabled={busy}
-          onClick={openCamera}
-          className={`${buttonBase} bg-emerald-600 text-white hover:bg-emerald-700`}
-        >
+      <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-2 sm:gap-3">
+        <button type="button" disabled={busy} onClick={openCamera} className="btn btn-primary btn-lg">
           {phase.kind === "analyzing" && phase.source === "upload" ? (
-            <Loader2 className="size-5 animate-spin" />
+            <Loader2 aria-hidden className="size-[18px] animate-spin" />
           ) : (
-            <Camera className="size-5" />
+            <Camera aria-hidden className="size-[18px]" />
           )}
           {phase.kind === "analyzing" && phase.source === "upload" ? "Analyzing…" : "Snap a meal"}
         </button>
-        <button
-          type="button"
-          disabled={busy}
-          onClick={() => galleryRef.current?.click()}
-          className={`${buttonBase} border border-zinc-300 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800`}
-        >
-          <ImagePlus className="size-5" />
+        <button type="button" disabled={busy} onClick={() => galleryRef.current?.click()} className="btn btn-secondary btn-lg">
+          <ImagePlus aria-hidden className="size-[18px]" />
           Upload
         </button>
       </div>
 
       {cameraOpen && (
-        <div className="mt-3 space-y-3 rounded-2xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Live camera</h2>
+        <div ref={cameraPanelRef} className="card mt-3 animate-enter scroll-mt-16 space-y-3 p-3">
+          <div className="flex min-h-8 items-center justify-between pl-1">
+            <h2 className="section-title flex items-center gap-2">
+              <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-danger" />
+              Live camera
+            </h2>
             {phase.kind === "camera" && (
-              <button
-                type="button"
-                aria-label="Close camera"
-                onClick={() => setPhase({ kind: "idle" })}
-                className="rounded-lg p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
-              >
-                <X className="size-5" />
+              <button type="button" aria-label="Close camera" onClick={() => setPhase({ kind: "idle" })} className="btn btn-ghost btn-icon-sm">
+                <X aria-hidden className="size-4" />
               </button>
             )}
           </div>
@@ -158,7 +175,7 @@ export default function MealUploader({ onMealAdded }: Props) {
       )}
 
       {(phase.kind === "review" || phase.kind === "saving") && (
-        <div className="mt-3">
+        <div className="mt-3 animate-enter">
           <MealReviewCard
             image={phase.image}
             draft={phase.draft}
@@ -172,13 +189,11 @@ export default function MealUploader({ onMealAdded }: Props) {
       {notice && (
         <p
           role="alert"
-          className={`mt-3 flex items-start gap-2 rounded-lg px-3 py-2 text-sm ${
-            notice.warning
-              ? "bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
-              : "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
+          className={`mt-3 flex animate-enter items-start gap-2 rounded-lg border px-3 py-2.5 text-[13px] ${
+            notice.warning ? "border-warning-text/20 bg-warning-soft text-warning-text" : "border-danger/20 bg-danger-soft text-danger-text"
           }`}
         >
-          {notice.warning && <TriangleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />}
+          <TriangleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />
           {notice.message}
         </p>
       )}
