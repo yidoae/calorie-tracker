@@ -2,7 +2,7 @@
 
 import { RotateCcw, SendHorizontal, X } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import type { ChatMessage } from "@/lib/fitbot";
+import type { ChatMessage, FitBotSource } from "@/lib/fitbot";
 import type { FitBotClientContext } from "@/lib/fitbotContext";
 import { useProfile } from "@/lib/useProfile";
 import FitBotAvatar from "./FitBotAvatar";
@@ -15,6 +15,9 @@ const SUGGESTIONS = [
   "How many calories to lose 0.5 kg a week?",
   "How should I recover after leg day?",
 ];
+
+/** A chat message as shown in the widget; `sources` are only kept client-side, never sent back. */
+type UiMessage = ChatMessage & { sources?: FitBotSource[] };
 
 /** The user's active profile/plan and local "today", so the server can personalise FitBot's answers. */
 function buildContext(profile: FitBotClientContext["profile"], customPlan: FitBotClientContext["customPlan"]): FitBotClientContext {
@@ -38,7 +41,7 @@ function buildContext(profile: FitBotClientContext["profile"], customPlan: FitBo
  */
 export default function FitBot() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<UiMessage[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,22 +59,26 @@ export default function FitBot() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
-  async function request(history: ChatMessage[]) {
+  async function request(history: UiMessage[]) {
     setError(null);
     setPending(true);
     try {
       const res = await fetch("/api/fitbot/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history, context: buildContext(activeProfile, customPlan) }),
+        body: JSON.stringify({
+          messages: history.map(({ role, content }) => ({ role, content })),
+          context: buildContext(activeProfile, customPlan),
+        }),
       });
-      const json = (await res.json().catch(() => null)) as { reply?: string; error?: string } | null;
+      const json = (await res.json().catch(() => null)) as { reply?: string; sources?: FitBotSource[]; error?: string } | null;
       if (!res.ok || typeof json?.reply !== "string") {
         setError(json?.error ?? UNREACHABLE);
         return;
       }
       const reply = json.reply;
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      const sources = Array.isArray(json.sources) ? json.sources : [];
+      setMessages((prev) => [...prev, { role: "assistant", content: reply, sources }]);
     } catch {
       setError(UNREACHABLE);
     } finally {
@@ -82,7 +89,7 @@ export default function FitBot() {
   function send(text: string) {
     const content = text.trim();
     if (!content || pending) return;
-    const history: ChatMessage[] = [...messages, { role: "user", content }];
+    const history: UiMessage[] = [...messages, { role: "user", content }];
     setMessages(history);
     setInput("");
     void request(history);
@@ -162,9 +169,20 @@ export default function FitBot() {
               ) : (
                 <div key={i} className="flex items-end gap-2">
                   <FitBotAvatar className="size-6" />
-                  <p className="max-w-[85%] rounded-2xl rounded-bl-md bg-surface-2 px-3.5 py-2 text-[13px] whitespace-pre-wrap text-fg">
-                    {m.content}
-                  </p>
+                  <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-surface-2 px-3.5 py-2 text-[13px] text-fg">
+                    <p className="whitespace-pre-wrap">{m.content}</p>
+                    {m.sources && m.sources.length > 0 && (
+                      <ol aria-label="Sources" className="mt-2 space-y-1 border-t border-border pt-2 text-[11px] leading-snug text-fg-subtle">
+                        {m.sources.map((s) => (
+                          <li key={s.n} title={s.source}>
+                            <span className="font-medium text-fg-muted">[{s.n}]</span> {s.title}
+                            {s.heading ? ` — ${s.heading}` : ""}
+                            <span className="block truncate">{s.source}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </div>
                 </div>
               ),
             )}

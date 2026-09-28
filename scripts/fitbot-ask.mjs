@@ -39,7 +39,8 @@ export async function ask(question, context = sampleContext()) {
   return { status: res.status, reply: json.reply ?? json.error ?? "" };
 }
 
-if (import.meta.url === `file:///${process.argv[1].replace(/\\/g, "/")}` || process.argv[1]?.endsWith("fitbot-ask.mjs")) {
+// Only run the CLI when executed directly, not when imported (e.g. by fitbot-eval.mjs or `node -e`).
+if (process.argv[1]?.endsWith("fitbot-ask.mjs")) {
   for (const q of process.argv.slice(2)) {
     const started = Date.now();
     const { status, reply } = await ask(q);

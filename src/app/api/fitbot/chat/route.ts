@@ -2,10 +2,17 @@ import { db } from "@/lib/db";
 import { FITBOT_SYSTEM_PROMPT, type ChatMessage } from "@/lib/fitbot";
 import { buildUserContext, parseClientContext } from "@/lib/fitbotContext";
 import { FITBOT_TOOLS, isFitbotTool, runFitbotTool } from "@/lib/fitbotTools";
+import { formatKnowledge, searchKnowledge, usedSources } from "@/lib/knowledge";
 import type { Profile } from "@/lib/profile";
 
 const LLM_URL = (process.env.LOCAL_LLM_URL || "http://localhost:11434").replace(/\/+$/, "");
 const LLM_MODEL = process.env.LOCAL_LLM_MODEL || "llama3.2";
+/**
+ * Context window in tokens. Ollama loads models with a small default (4096 here), and anything past
+ * it is cut silently — with the persona, user data, tool definitions, reference excerpts and 20
+ * messages that's easily exceeded, so ask for more.
+ */
+const NUM_CTX = Number(process.env.LOCAL_LLM_NUM_CTX) || 8192;
 
 /** Small local models can be slow on first load (the model is read into memory). Covers all tool rounds. */
 const TIMEOUT_MS = 120_000;
@@ -91,7 +98,13 @@ async function callLlm(messages: LlmMessage[], withTools: boolean, signal: Abort
     res = await fetch(`${LLM_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: LLM_MODEL, stream: false, messages, ...(withTools ? { tools: FITBOT_TOOLS } : {}) }),
+      body: JSON.stringify({
+        model: LLM_MODEL,
+        stream: false,
+        messages,
+        options: { num_ctx: NUM_CTX },
+        ...(withTools ? { tools: FITBOT_TOOLS } : {}),
+      }),
       signal,
     });
   } catch (err) {
@@ -121,7 +134,9 @@ async function callLlm(messages: LlmMessage[], withTools: boolean, signal: Abort
  * POST /api/fitbot/chat — `{ messages: [{ role: "user" | "assistant", content }], context? }`, last
  * message from the user; `context` is a `FitBotClientContext`. Sends the conversation plus FitBot's
  * system prompt (with the user's data, if any) to a local Ollama server (`/api/chat`, non-streaming)
- * and runs any calculator tools it asks for, then returns `{ reply }`. 503 if the server isn't
+ * and runs any calculator tools it asks for, then returns `{ reply, sources }`. Relevant excerpts from
+ * the knowledge base (knowledge/index.json) are inserted just before the latest message; `sources`
+ * lists the ones the reply relied on (cited as [n] or sharing a number). 503 if the server isn't
  * running, 502 if it answers with an error (e.g. the model hasn't been pulled), 504 on timeout.
  */
 export async function POST(request: Request) {
@@ -134,9 +149,26 @@ export async function POST(request: Request) {
   const messages = parseMessages(body);
   if (!messages) return error("`messages` must be a non-empty list ending with a user message", 400);
 
-  const { system, profile } = await loadContext((body as { context?: unknown }).context);
-  const conversation: LlmMessage[] = [{ role: "system", content: system }, ...messages];
   const signal = AbortSignal.timeout(TIMEOUT_MS);
+  const [{ system, profile }, knowledge] = await Promise.all([
+    loadContext((body as { context?: unknown }).context),
+    // The last two user turns, so short follow-ups ("and for women?") still find the right topic.
+    searchKnowledge(
+      messages
+        .filter((m) => m.role === "user")
+        .slice(-2)
+        .map((m) => m.content)
+        .join("\n"),
+      signal,
+    ),
+  ]);
+  // Reference excerpts go right before the latest user message (see formatKnowledge).
+  const conversation: LlmMessage[] = [
+    { role: "system", content: system },
+    ...messages.slice(0, -1),
+    ...(knowledge.length > 0 ? [{ role: "system" as const, content: formatKnowledge(knowledge) }] : []),
+    messages[messages.length - 1],
+  ];
   let toolsEnabled = true;
   let nudgedToText = false;
 
@@ -154,7 +186,8 @@ export async function POST(request: Request) {
 
     const { message } = result;
     let calls = withTools ? (message.tool_calls ?? []) : [];
-    const reply = message.content?.trim() ?? "";
+    // llama3.2 occasionally echoes its role label ("assistant\n\n…") at the start of the reply.
+    const reply = (message.content ?? "").replace(/^\s*assistant\s*\n+/i, "").trim();
 
     if (calls.length === 0) {
       // Small models sometimes write a tool call as plain text instead of using tool_calls.
@@ -170,7 +203,7 @@ export async function POST(request: Request) {
         continue;
       } else {
         if (!reply) return error("The local LLM returned an empty reply. Please try again.", 502);
-        return Response.json({ reply });
+        return Response.json({ reply, sources: usedSources(reply, knowledge) });
       }
     }
 

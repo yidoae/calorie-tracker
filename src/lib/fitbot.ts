@@ -4,6 +4,14 @@ export interface ChatMessage {
   content: string;
 }
 
+/** A knowledge-base excerpt a reply cites as [n]. */
+export interface FitBotSource {
+  n: number;
+  title: string;
+  heading: string | null;
+  source: string;
+}
+
 export const FITBOT_SYSTEM_PROMPT = `You are FitBot, the fitness and nutrition coach inside a calorie-tracking app.
 
 Personality: motivating, energetic and direct — a supportive coach, not a cheerleader. Base advice on well-established sports-science and nutrition evidence, and say so plainly when evidence is mixed.

@@ -29,6 +29,7 @@ npm run dev                 # http://localhost:3000
 | `npm run db:deploy` | `prisma migrate deploy` — apply existing migrations (production) |
 | `npm run db:studio` | Prisma Studio GUI |
 | `npm run db:reset` | Drop and recreate the dev database |
+| `npm run kb:ingest` | Chunk + embed `knowledge/**/*.md|txt` with Ollama (`LOCAL_EMBED_MODEL`, default `bge-m3`) into `knowledge/index.json` — rerun after changing sources |
 | `npm run fitbot:eval` | Ask FitBot the cases in `scripts/fitbot-eval-cases.json` via the running dev server; prints a score (`-- --runs 3`, `-- --only tools`) and saves answers to `eval-results/` |
 
 ## Project structure
@@ -39,6 +40,8 @@ prisma/
   migrations/              Committed migration history
   dev.db                   Local SQLite file (gitignored)
 uploads/                   Stored meal photos (gitignored, created on first upload)
+knowledge/                 FitBot knowledge base: .md/.txt sources (see knowledge/README.md); index.json is generated (gitignored)
+scripts/                   fitbot-ask.mjs (ask from terminal), fitbot-eval.mjs + cases (eval set), kb-ingest.mjs (build knowledge index)
 src/
   app/
     layout.tsx, page.tsx   Shell + home page (renders <Dashboard />)
@@ -47,7 +50,7 @@ src/
       meals/route.ts       GET  list meals in a date range · POST  upload photo -> analyze -> save
       meals/[id]/route.ts  DELETE a meal (and its photo)
       uploads/[filename]/route.ts  GET  serves stored photos
-      fitbot/chat/route.ts POST chat history -> local Ollama /api/chat -> { reply }
+      fitbot/chat/route.ts POST chat history (+ user context, knowledge excerpts, tools) -> local Ollama /api/chat -> { reply, sources }
   components/
     Dashboard.tsx          Client component: 3-column layout (tabs below `lg`), loads today's meals, owns state, picks targets
     MealUploader.tsx       "Snap a meal" (inline live camera panel) + "Upload" buttons; POSTs FormData; shows no-food warning
@@ -65,6 +68,7 @@ src/
     fitbot.ts              ChatMessage type + FitBot system prompt (persona)
     fitbotContext.ts       Validates the widget's context; builds the "user's data" block (profile, targets, today's meals)
     fitbotTools.ts         FitBot's calculator tools (calculate_targets, macros_to_calories, weeks_to_goal) + runner
+    knowledge.ts           RAG retrieval: loads knowledge/index.json, embeds the question, cosine top-k, prompt block
     targets.ts             resolveTargets: custom plan > profile > DAILY_GOALS (shared by Dashboard and FitBot)
     vision.ts              Vision AI handler (currently a mock): NoFoodError, analyzeFoodImage, output validation
     food/                  The mock's internals: imageFeatures.ts (sharp -> colour/texture stats),
@@ -98,7 +102,9 @@ src/
 - **FitBot needs a local Ollama server.** `/api/fitbot/chat` calls `${LOCAL_LLM_URL}/api/chat` (default `http://localhost:11434`) with `LOCAL_LLM_MODEL` (default `llama3.2`), non-streaming, 120 s timeout, last 20 messages. It answers 503 when Ollama isn't running and 502 with an `ollama pull` hint when the model is missing; the widget shows these instead of crashing. The persona lives in `FITBOT_SYSTEM_PROMPT` (`src/lib/fitbot.ts`).
 - **FitBot sees the user's data.** The widget sends the active profile, custom plan, local-day bounds and timezone as `context`; the route re-validates them (`parseProfile`/`parseCustomPlan`), reads today's meals from the DB and appends `buildUserContext()` to the system prompt. All numbers (targets, eaten, remaining) are precomputed there on purpose — small models get arithmetic wrong, so always give them the final figures. If the DB read fails the block is omitted rather than claiming nothing was eaten.
 - **FitBot calls calculator tools.** The route offers `FITBOT_TOOLS` to Ollama and loops (max 3 rounds) running `runFitbotTool()` and feeding results back as `role: "tool"` messages; on the last round tools are withheld so the model must answer. Models without tool support are retried without tools. Each tool result carries a `summary` sentence because small models copy that far more reliably than they read nested JSON. Tool calls are logged to the server console. With `llama3.2` (3B) "what if I weighed X" still puts X into the wrong argument — a model-size limit. llama3.2 also sometimes writes a tool call as JSON text: a known tool name is executed anyway, anything else gets one "answer in plain sentences" retry with tools off.
-- **Measure FitBot changes with `npm run fitbot:eval`.** Cases use a day in 2000 (no meals) so they don't depend on the DB; expected numbers are for the sample profile in `scripts/fitbot-ask.mjs`. Run with `--runs 2`+ since answers vary. Baseline with llama3.2 and no knowledge base: 35/44 (80%); weakest area is `knowledge`.
+- **FitBot answers from a knowledge base (RAG).** `searchKnowledge()` embeds the last two user messages with the model recorded in the index, keeps chunks with cosine ≥ `KB_MIN_SCORE` (0.55) and within `KB_SCORE_MARGIN` (0.1) of the best, top `KB_TOP_K` (4) — calibrated on the starter KB (right section 0.60–0.79, off-topic ≤ 0.43; re-check when sources change), and inserts them as numbered excerpts in a system message right before the latest user message (llama3.2 ignored them at the end of the long system prompt). `usedSources()` returns the excerpts the reply cites as [n] or shares a number with (the model often omits citations) as `sources`, shown under the answer. No index / no embedding model → FitBot answers without excerpts (one console warning). Embeddings run on the CPU (`options.num_gpu: 0`) unless `LOCAL_EMBED_GPU=1`: on this 4 GB GTX 1650 Ti, embedding on the GPU evicted llama3.2 on every question (~12 s vs ~0.3 s). The index is reloaded when its mtime changes, so no restart after `kb:ingest`. `knowledge/starter-guidelines.md` is a hand-written starter summary; replace it with original documents.
+- **`LOCAL_LLM_NUM_CTX` (default 8192) is sent as `options.num_ctx`.** Ollama loads llama3.2 with 4096 tokens and silently truncates past that; persona + user data + tool definitions + excerpts + 20 messages can exceed it.
+- **Measure FitBot changes with `npm run fitbot:eval`.** Cases use a day in 2000 (no meals) so they don't depend on the DB; expected numbers are for the sample profile in `scripts/fitbot-ask.mjs`. Run with `--runs 2`+ since answers vary. With llama3.2: 35/44 (80%) without the knowledge base (knowledge 5/10), 42/44 (95%) with the starter knowledge base (knowledge 10/10); the remaining failure is `tool-whatif-weight`.
 - **Prisma is pinned to v6.** `prisma@latest` on npm is currently a v8 release candidate; v7+ changes client generation and config, so don't bump without migrating.
 - `DATABASE_URL` for SQLite is relative to `prisma/schema.prisma`, so `file:./dev.db` means `prisma/dev.db`.
 - Route Handlers receive `params` as a Promise: `const { id } = await ctx.params` (typed via the global `RouteContext<"/route/[param]">`).

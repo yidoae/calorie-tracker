@@ -14,7 +14,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "fitbot:eval": "node scripts/fitbot-eval.mjs"
+    "fitbot:eval": "node scripts/fitbot-eval.mjs",
+    "kb:ingest": "node scripts/kb-ingest.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
