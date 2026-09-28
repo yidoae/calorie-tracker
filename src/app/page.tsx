@@ -1,5 +1,6 @@
 import { Flame } from "lucide-react";
 import Dashboard from "@/components/Dashboard";
+import FitBot from "@/components/FitBot";
 
 export default function Home() {
   return (
@@ -15,9 +16,10 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-4 pb-10 sm:px-6 lg:pt-8">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-4 pb-24 sm:px-6 lg:pt-8">
         <Dashboard />
       </main>
+      <FitBot />
     </>
   );
 }

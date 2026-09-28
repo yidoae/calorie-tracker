@@ -2,9 +2,10 @@
 
 import { CalendarDays, Trash2, UserRound, Utensils } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { customPlanTargets, type CustomPlan } from "@/lib/customPlan";
-import { DAILY_GOALS, sumMacros, type MacroKey } from "@/lib/goals";
-import { calculateTargets, type Profile } from "@/lib/profile";
+import type { CustomPlan } from "@/lib/customPlan";
+import { sumMacros, type MacroKey } from "@/lib/goals";
+import type { Profile } from "@/lib/profile";
+import { resolveTargets } from "@/lib/targets";
 import type { MealDTO } from "@/lib/types";
 import { useProfile } from "@/lib/useProfile";
 import ConfirmDialog from "./ConfirmDialog";
@@ -50,10 +51,7 @@ export default function Dashboard() {
     useProfile();
 
   const customActive = customPlan?.active ?? false;
-  const targets = useMemo(() => {
-    if (customActive && customPlan) return customPlanTargets(customPlan);
-    return activeProfile ? calculateTargets(activeProfile) : DAILY_GOALS;
-  }, [customActive, customPlan, activeProfile]);
+  const targets = useMemo(() => resolveTargets(activeProfile, customPlan).targets, [activeProfile, customPlan]);
 
   // Load today's meals using the browser's local-day boundaries.
   useEffect(() => {

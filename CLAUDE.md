@@ -46,6 +46,7 @@ src/
       meals/route.ts       GET  list meals in a date range · POST  upload photo -> analyze -> save
       meals/[id]/route.ts  DELETE a meal (and its photo)
       uploads/[filename]/route.ts  GET  serves stored photos
+      fitbot/chat/route.ts POST chat history -> local Ollama /api/chat -> { reply }
   components/
     Dashboard.tsx          Client component: 3-column layout (tabs below `lg`), loads today's meals, owns state, picks targets
     MealUploader.tsx       "Snap a meal" (inline live camera panel) + "Upload" buttons; POSTs FormData; shows no-food warning
@@ -57,7 +58,12 @@ src/
     MacroProgress.tsx      Accessible progress bar for one macro; turns red when over goal
     MealTimeline.tsx       List of meals (photo, time, macros, delete)
     MealThumb.tsx          Square meal photo with fallback icon
+    FitBot.tsx             Floating bottom-right chat widget for the FitBot coach (state-only history)
+    FitBotAvatar.tsx       Inline SVG robot-with-dumbbell avatar
   lib/
+    fitbot.ts              ChatMessage type + FitBot system prompt (persona)
+    fitbotContext.ts       Validates the widget's context; builds the "user's data" block (profile, targets, today's meals)
+    targets.ts             resolveTargets: custom plan > profile > DAILY_GOALS (shared by Dashboard and FitBot)
     vision.ts              Vision AI handler (currently a mock): NoFoodError, analyzeFoodImage, output validation
     food/                  The mock's internals: imageFeatures.ts (sharp -> colour/texture stats),
                            recognize.ts (not-food guard + dish match/portion), catalog.ts (ingredients per 100 g, dishes)
@@ -87,6 +93,8 @@ src/
 - **Live camera needs a secure context** (https or localhost). Otherwise `navigator.mediaDevices` is undefined and "Snap a meal" falls back to the hidden `capture` file input, which opens the native camera app on phones. To test the live camera on a phone, run `npm run dev:https` and open `https://<LAN-IP>:3000` (accept the self-signed cert warning). LAN origins are whitelisted in `allowedDevOrigins` (`next.config.ts`); without that, Next blocks the dev bundles for them and the page never hydrates. Large/HEIC picks are re-encoded to a ≤1600 px JPEG client-side (`preparePhoto` in `MealUploader`).
 - **The live camera is inline, not a modal.** `MealUploader` renders `CameraCapture` in a panel under the buttons; unmounting it (close button or capture) is what releases the camera stream.
 - **Responsive layout is CSS-only.** `Dashboard` renders all three columns and hides the inactive ones below `lg` with `hidden lg:block`; the tab state only matters on phones. `ProfilePanel` is keyed on the saved profile so it remounts with fresh values when the profile changes.
+- **FitBot needs a local Ollama server.** `/api/fitbot/chat` calls `${LOCAL_LLM_URL}/api/chat` (default `http://localhost:11434`) with `LOCAL_LLM_MODEL` (default `llama3.2`), non-streaming, 120 s timeout, last 20 messages. It answers 503 when Ollama isn't running and 502 with an `ollama pull` hint when the model is missing; the widget shows these instead of crashing. The persona lives in `FITBOT_SYSTEM_PROMPT` (`src/lib/fitbot.ts`).
+- **FitBot sees the user's data.** The widget sends the active profile, custom plan, local-day bounds and timezone as `context`; the route re-validates them (`parseProfile`/`parseCustomPlan`), reads today's meals from the DB and appends `buildUserContext()` to the system prompt. All numbers (targets, eaten, remaining) are precomputed there on purpose — small models get arithmetic wrong, so always give them the final figures. If the DB read fails the block is omitted rather than claiming nothing was eaten.
 - **Prisma is pinned to v6.** `prisma@latest` on npm is currently a v8 release candidate; v7+ changes client generation and config, so don't bump without migrating.
 - `DATABASE_URL` for SQLite is relative to `prisma/schema.prisma`, so `file:./dev.db` means `prisma/dev.db`.
 - Route Handlers receive `params` as a Promise: `const { id } = await ctx.params` (typed via the global `RouteContext<"/route/[param]">`).
