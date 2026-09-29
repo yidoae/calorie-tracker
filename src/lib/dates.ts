@@ -1,7 +1,7 @@
 /** Local-timezone date helpers for the calendar. Weeks start on Monday. */
 
-/** UI language is English; pin it so dates don't follow the browser locale (e.g. "Eylül"). */
-export const LOCALE = "en-US";
+/** UI language is Turkish; pin it so dates and numbers don't follow the browser locale. */
+export const LOCALE = "tr-TR";
 
 /** `YYYY-MM-DD` in the local timezone. */
 export function dayKey(d: Date): string {

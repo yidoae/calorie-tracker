@@ -7,6 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           String    @id @default(cuid())
+  /// Stored lower-cased; unique per account.
+  username     String    @unique
+  /// argon2id hash (salt + parameters embedded). The plain password is never stored.
+  passwordHash String
+  /// JSON: saved profiles, active profile id and custom plan (see src/lib/settings.ts).
+  settings     String?
+  createdAt    DateTime  @default(now())
+  meals        Meal[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  /// SHA-256 of the cookie token, so a leaked DB can't be replayed as live sessions.
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
 model Meal {
   id        String   @id @default(cuid())
   name      String
@@ -16,6 +41,30 @@ model Meal {
   fat       Float
   imageUrl  String?
   createdAt DateTime @default(now())
+  /// Null only for meals logged before accounts existed; those are never shown.
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Plate components (photo breakdown or quick-bar items). Totals above are their sum.
+  items     MealItem[]
 
   @@index([createdAt])
+  @@index([userId, createdAt])
+}
+
+/// One component of a meal. Nutrition is stored per 100 g so the portion stays editable.
+model MealItem {
+  id            String @id @default(cuid())
+  mealId        String
+  meal          Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  position      Int
+  name          String
+  /// protein | carb | fat | vegetable | fruit | dairy (validated by foodCategorySchema)
+  category      String
+  grams         Float
+  kcalPer100    Float
+  proteinPer100 Float
+  carbsPer100   Float
+  fatPer100     Float
+
+  @@index([mealId])
 }

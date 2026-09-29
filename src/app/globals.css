@@ -1,79 +1,63 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Components use the semantic names (bg-surface, text-fg-muted, border-border,
- * bg-accent, …) instead of raw palette colours, so light/dark is handled here in one place.
- * Neutrals are zinc; the single accent is emerald. Text pairs are chosen for WCAG AA.
+ * Design tokens — tofuhq design system (tofuhq-design/SKILL.md). Light theme only, cool palette:
+ * deep ink (#170b21) for the header band and text, white surfaces with crisp #222 outlines, lime
+ * (#a8e40f) for the primary call to action as on tofuhq.com, and #007aff reserved for links, focus
+ * rings and active states. Components use the semantic names (bg-surface, text-fg-muted, …).
+ * Every colour comes from the tofuhq palette except --danger / --danger-text: the palette's only
+ * danger colour (#ffdede) is a background tint, so a readable red was added as an extension.
  */
 :root {
   color-scheme: light;
-  --bg: #fafafa;
+  --ink: #170b21;
+  --ink-2: #2c203a;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --surface-2: #f4f4f5;
-  --surface-3: #e9e9ec;
-  --border: #e7e7ea;
-  --border-strong: #d4d4d8;
-  --fg: #09090b;
-  --fg-muted: #52525b;
-  --fg-subtle: #6b6b75;
-  --accent: #047857;
-  --accent-hover: #065f46;
-  --accent-fg: #ffffff;
-  --accent-soft: #ecfdf5;
-  --accent-text: #047857;
-  --danger: #dc2626;
-  --danger-hover: #b91c1c;
-  --danger-soft: #fef2f2;
-  --danger-text: #b91c1c;
-  --warning-soft: #fffbeb;
-  --warning-text: #92400e;
-  --ring: rgb(4 120 87 / 0.4);
+  --surface-2: #f5f8f1;
+  --surface-3: #eeeeee;
+  --border: #dddddd;
+  --border-strong: #222222;
+  --fg: #170b21;
+  --fg-muted: #5d6c7b;
+  --fg-subtle: #758696;
+  --on-ink: #ffffff;
+  --on-ink-muted: #c8c8c8;
 
-  --macro-calories: #18181b;
-  --macro-protein: #e11d48;
-  --macro-carbs: #0284c7;
-  --macro-fat: #d97706;
+  --accent: #007aff;
+  --accent-text: #1d4ed8;
+  --accent-soft: rgb(0 122 255 / 0.08);
+  --cta: #a8e40f;
+  --cta-hover: #c5f058;
+  --cta-fg: #170b21;
+  --info: #3898ec;
+  --success: #84cc16;
+  --success-soft: #e5f4c1;
+  --success-text: #3b5500;
 
-  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
-  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.03);
-  --shadow-pop: 0 16px 40px -12px rgb(0 0 0 / 0.2), 0 4px 12px -4px rgb(0 0 0 / 0.08);
-}
+  --danger: #d92d20;
+  --danger-hover: #b42318;
+  --danger-soft: #ffdede;
+  --danger-text: #b42318;
+  --warning-soft: #e9ddff;
+  --warning-text: #3e1e7a;
+  --ring: #007aff;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --bg: #09090b;
-    --surface: #111113;
-    --surface-2: #1a1a1d;
-    --surface-3: #26262a;
-    --border: #232327;
-    --border-strong: #34343a;
-    --fg: #fafafa;
-    --fg-muted: #a1a1aa;
-    --fg-subtle: #8b8b95;
-    --accent: #10b981;
-    --accent-hover: #34d399;
-    --accent-fg: #022c22;
-    --accent-soft: rgb(16 185 129 / 0.12);
-    --accent-text: #34d399;
-    --danger-soft: rgb(239 68 68 / 0.12);
-    --danger-text: #f87171;
-    --warning-soft: rgb(245 158 11 / 0.12);
-    --warning-text: #fbbf24;
-    --ring: rgb(52 211 153 / 0.45);
+  --macro-calories: #170b21;
+  --macro-protein: #bd41f0;
+  --macro-carbs: #3898ec;
+  --macro-fat: #84cc16;
 
-    --macro-calories: #e4e4e7;
-    --macro-protein: #fb7185;
-    --macro-carbs: #38bdf8;
-    --macro-fat: #fbbf24;
-
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-    --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.5), inset 0 1px 0 0 rgb(255 255 255 / 0.03);
-    --shadow-pop: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.04);
-  }
+  /* Elevation tokens (SKILL.md › Depth & Elevation). */
+  --shadow-xs: 0 0 0 1px #0000001a, 0 1px 3px #0000001a;
+  --shadow-card: 0 0 #0000;
+  --shadow-pop: 0 5px 20px #0000001a;
+  --shadow-overlay: 0 10px 60px #00000040;
 }
 
 @theme inline {
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -83,11 +67,18 @@
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
   --color-fg-subtle: var(--fg-subtle);
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-muted: var(--on-ink-muted);
   --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-fg: var(--accent-fg);
-  --color-accent-soft: var(--accent-soft);
   --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-fg: var(--cta-fg);
+  --color-info: var(--info);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-text: var(--success-text);
   --color-danger: var(--danger);
   --color-danger-hover: var(--danger-hover);
   --color-danger-soft: var(--danger-soft);
@@ -102,8 +93,10 @@
   --shadow-xs: var(--shadow-xs);
   --shadow-card: var(--shadow-card);
   --shadow-pop: var(--shadow-pop);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --shadow-overlay: var(--shadow-overlay);
+  /* The system's two typefaces: a sans for body/UI text, Space Grotesk Bold for display. */
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display-face);
 }
 
 @layer base {
@@ -114,70 +107,84 @@
   }
 
   body {
-    background: var(--bg);
+    background: var(--ink);
     color: var(--fg);
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     font-size: 0.875rem;
     line-height: 1.5;
-    letter-spacing: -0.006em;
     -webkit-tap-highlight-color: transparent;
   }
 
   h1,
   h2,
   h3 {
-    letter-spacing: -0.02em;
+    line-height: 1.2;
   }
 
   ::selection {
-    background: var(--accent-soft);
+    background: var(--cta);
+    color: var(--cta-fg);
   }
 }
 
+@utility font-display {
+  font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
 @layer components {
-  /* Surfaces */
+  /* Surfaces: white, 1px #222 outline, 10px radius, no shadow (SKILL.md › Card). */
   .card {
-    @apply rounded-xl border border-border bg-surface shadow-card;
+    @apply rounded-[10px] border border-border-strong bg-surface shadow-card;
   }
   .tile {
-    @apply rounded-lg bg-surface-2 px-3 py-2.5;
+    @apply rounded-[6px] border border-border bg-surface-2 px-3 py-2;
   }
   .tile-label {
-    @apply text-xs text-fg-subtle;
+    @apply text-xs text-fg-muted;
   }
   .tile-value {
-    @apply text-sm font-semibold tabular-nums text-fg;
+    @apply font-display text-sm tabular-nums text-fg;
   }
 
   /* Text */
   .section-title {
-    @apply text-[13px] font-medium text-fg-muted;
+    @apply text-xs font-semibold tracking-[0.05em] text-fg-muted uppercase;
   }
   .card-title {
-    @apply text-sm font-semibold text-fg;
+    @apply font-display text-base text-fg;
   }
 
-  /* Buttons */
+  /* Buttons: squared-off 4px corners as on tofuhq.com; all sizes on the 4px grid. */
   .btn {
-    @apply inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-medium whitespace-nowrap outline-none select-none;
-    @apply transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out;
+    @apply inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[4px] px-4 text-sm font-semibold whitespace-nowrap outline-none select-none;
+    @apply transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-out;
     @apply focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
-    @apply active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0;
+    @apply active:translate-y-px disabled:cursor-not-allowed disabled:active:translate-y-0;
   }
   .btn-lg {
-    @apply h-11 px-4;
+    @apply h-12 px-6 text-[15px];
   }
+  /* Disabled states use muted colours, not opacity (SKILL.md › Anti-patterns). */
   .btn-primary {
-    @apply bg-accent text-accent-fg shadow-xs hover:bg-accent-hover disabled:hover:bg-accent;
+    @apply bg-cta text-cta-fg hover:bg-cta-hover disabled:bg-surface-3 disabled:text-fg-subtle;
   }
   .btn-secondary {
-    @apply border border-border-strong bg-surface text-fg shadow-xs hover:bg-surface-2 disabled:hover:bg-surface;
+    @apply border border-border-strong bg-surface text-fg hover:bg-surface-2 disabled:border-border disabled:bg-surface disabled:text-fg-subtle;
+  }
+  .btn-soft {
+    @apply bg-surface-3 text-fg hover:bg-border disabled:text-fg-subtle;
   }
   .btn-ghost {
-    @apply text-fg-muted hover:bg-surface-2 hover:text-fg;
+    @apply text-fg-muted hover:bg-surface-2 hover:text-fg disabled:text-fg-subtle;
+  }
+  /* Outline button for the dark ink band (header). */
+  .btn-on-ink {
+    @apply border border-on-ink bg-transparent text-on-ink hover:bg-on-ink hover:text-ink focus-visible:ring-offset-ink;
   }
   .btn-danger {
-    @apply bg-danger text-white shadow-xs hover:bg-danger-hover;
+    @apply bg-danger text-on-ink hover:bg-danger-hover;
   }
   .btn-icon {
     @apply size-9 px-0;
@@ -189,29 +196,48 @@
     @apply text-fg-subtle hover:bg-danger-soft hover:text-danger-text;
   }
 
+  .link {
+    @apply cursor-pointer rounded-[2px] font-semibold text-accent-text underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
   /* Forms. Inputs are 16px on phones so iOS doesn't zoom in on focus. */
   .label {
-    @apply mb-1.5 block text-[13px] font-medium text-fg;
+    @apply mb-2 block text-xs font-semibold text-fg;
   }
   .input {
-    @apply h-10 w-full min-w-0 rounded-lg border border-border-strong bg-surface px-3 text-base text-fg tabular-nums shadow-xs outline-none sm:text-sm;
+    @apply h-10 w-full min-w-0 rounded-[4px] border border-border-strong bg-surface px-3 text-base text-fg tabular-nums outline-none sm:text-sm;
     @apply transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-fg-subtle;
-    @apply hover:border-fg-subtle/50 focus:border-accent focus:ring-[3px] focus:ring-ring;
-    @apply aria-[invalid=true]:border-danger aria-[invalid=true]:focus:ring-danger/25;
+    @apply focus:border-accent focus:ring-4 focus:ring-accent-soft;
+    @apply aria-[invalid=true]:border-danger aria-[invalid=true]:focus:ring-danger-soft;
   }
   .hint {
-    @apply mt-1.5 text-xs text-fg-subtle;
+    @apply mt-2 text-xs text-fg-muted;
   }
   .error-text {
-    @apply mt-1.5 text-xs text-danger-text;
+    @apply mt-2 text-xs text-danger-text;
   }
 
   .badge {
-    @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium;
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs leading-none font-semibold;
+  }
+
+  .alert {
+    @apply flex items-start gap-2 rounded-[6px] border px-3 py-2 text-[13px];
+  }
+  .alert-danger {
+    @apply border-danger-text/30 bg-danger-soft text-danger-text;
+  }
+  .alert-warning {
+    @apply border-warning-text/20 bg-warning-soft text-warning-text;
+  }
+
+  /* Modal surface (SKILL.md › Modal): white, #222 outline, overlay shadow, dimmed backdrop, no blur. */
+  .modal {
+    @apply m-auto w-[calc(100%-2rem)] rounded-[24px] border border-border-strong bg-surface p-0 text-fg shadow-overlay backdrop:bg-black/60;
   }
 
   .skeleton {
-    @apply animate-pulse rounded-md bg-surface-2;
+    @apply animate-pulse rounded-[6px] bg-surface-3;
   }
 }
 
@@ -248,7 +274,7 @@
 @keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -273,15 +299,161 @@
   }
 }
 
+/* Expressive motion: entrances rise from below on an overshooting spring curve. */
 .animate-enter {
-  animation: enter 180ms ease-out;
+  animation: enter 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 dialog[open] {
-  animation: dialog-in 180ms ease-out;
+  animation: dialog-in 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 dialog[open]::backdrop {
-  animation: backdrop-in 180ms ease-out;
+  animation: backdrop-in 200ms ease-out;
+}
+
+/* Goal reached: the ring pops, a check badge springs in and a burst of dots flies out. */
+@keyframes ring-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.12);
+  }
+  60% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2) rotate(-45deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateY(calc(var(--burst-distance) * -1)) scale(0.4);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-ring-pop {
+  animation: ring-pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-check-in {
+  animation: check-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.animate-burst {
+  animation: burst 900ms ease-out both;
+}
+.animate-toast-in {
+  animation: toast-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Wizard steps slide in from the direction of travel. */
+@keyframes step-forward {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes step-back {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-step-forward {
+  animation: step-forward 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-step-back {
+  animation: step-back 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Loading screen: a gentle breathing glow behind the FitBot avatar. */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.15;
+  }
+}
+.animate-breathe {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+
+/* Range sliders: track filled up to the thumb (`--fill`) in `--fill-color` (lime by default). */
+.portion-slider {
+  appearance: none;
+  background: transparent;
+}
+.portion-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--fill-color, var(--cta)) var(--fill), var(--surface-3) var(--fill));
+}
+.portion-slider::-moz-range-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--fill-color, var(--cta)) var(--fill), var(--surface-3) var(--fill));
+}
+.portion-slider::-webkit-slider-thumb {
+  appearance: none;
+  margin-top: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--ink);
+  border: 2px solid var(--surface);
+  box-shadow: var(--shadow-xs);
+}
+.portion-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--ink);
+  border: 2px solid var(--surface);
+  box-shadow: var(--shadow-xs);
+}
+.portion-slider:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
