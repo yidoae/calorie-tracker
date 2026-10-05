@@ -1,37 +1,41 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { authPath, ROUTES } from "@/lib/routes";
 import { authService } from "@/services/authService";
 import type { PublicUser } from "@/types/auth";
 import { EMPTY_SETTINGS, type UserSettings } from "@/types/settings";
 import { useToast } from "./useToast";
 
 export type AuthStatus = "loading" | "guest" | "user";
-/** "guard" is the "no membership" panel shown when a visitor tries a members-only action. */
-export type AuthView = "guard" | "login" | "register";
+/** The two auth pages: sign-in (/giris-yap) and sign-up (/kayit-ol). */
+export type AuthView = "login" | "register";
 
 export interface AuthApi {
   status: AuthStatus;
   user: PublicUser | null;
   /** The signed-in user's saved plans (empty for guests). */
   settings: UserSettings;
-  /** Which auth dialog is open, if any. */
-  dialog: AuthView | null;
+  /** Whether the "no membership" panel is open (a guest tried a members-only action). */
+  guardOpen: boolean;
   /** Applies an update optimistically and saves it to the account. */
   updateSettings: (update: (current: UserSettings) => UserSettings) => void;
   /**
-   * Runs `action` if signed in. Otherwise stops, shows the "no membership" panel and runs
-   * `action` once the visitor signs in or registers, so they continue where they left off.
+   * Runs `action` if signed in. Otherwise stops and shows the "no membership" panel, whose
+   * buttons lead to the auth pages; after signing in the visitor returns to this page.
    */
   requireAuth: (action?: () => void) => boolean;
-  /** Opens the dialog fresh (e.g. from the header); forgets any pending action. */
+  /** Goes to the sign-in or sign-up page, remembering the current page to come back to. */
   openAuth: (view: AuthView) => void;
-  /** Moves between guard / login / register inside the open dialog, keeping the pending action. */
-  switchAuthView: (view: AuthView) => void;
-  closeAuth: () => void;
-  /** Called by the auth form after the server set the session cookie. */
+  closeGuard: () => void;
+  /** Puts settings the server just saved (e.g. by the first-time setup) into the local state. */
+  replaceSettings: (settings: UserSettings) => void;
+  /** Called by the auth form after the server set the session cookie (the form navigates). */
   completeAuth: () => Promise<void>;
   logout: () => Promise<void>;
+  /** Drops the local session after the server already ended it (account deleted). */
+  forgetSession: () => void;
 }
 
 export const AuthContext = createContext<AuthApi | null>(null);
@@ -42,11 +46,12 @@ export function useAuthController(): AuthApi {
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [user, setUser] = useState<PublicUser | null>(null);
   const [settings, setSettings] = useState<UserSettings>(EMPTY_SETTINGS);
-  const [dialog, setDialog] = useState<AuthView | null>(null);
-  // Refs so actions resumed after sign-in see the fresh account, not a stale closure.
+  const [guardOpen, setGuardOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  // Refs so callbacks always see the fresh account, not a stale closure.
   const statusRef = useRef<AuthStatus>("loading");
   const settingsRef = useRef<UserSettings>(EMPTY_SETTINGS);
-  const pendingRef = useRef<(() => void) | null>(null);
   const saveChain = useRef<Promise<unknown>>(Promise.resolve());
 
   const apply = useCallback((next: { user: PublicUser | null; settings: UserSettings }) => {
@@ -76,14 +81,14 @@ export function useAuthController(): AuthApi {
         .catch((err: unknown) => {
           if ((err as { status?: number }).status === 401) {
             apply({ user: null, settings: EMPTY_SETTINGS });
-            setDialog("login");
+            router.push(authPath("login", pathname));
             toast.error("Oturumun sona erdi", "Değişikliklerini kaydetmek için tekrar giriş yap.");
           } else {
             toast.error("Plan kaydedilemedi", "Bağlantını kontrol edip tekrar dene.");
           }
         });
     },
-    [apply, toast],
+    [apply, toast, router, pathname],
   );
 
   const requireAuth = useCallback<AuthApi["requireAuth"]>((action) => {
@@ -91,42 +96,46 @@ export function useAuthController(): AuthApi {
       action?.();
       return true;
     }
-    pendingRef.current = action ?? null;
-    setDialog("guard");
+    setGuardOpen(true);
     return false;
   }, []);
 
-  const openAuth = useCallback((view: AuthView) => {
-    pendingRef.current = null;
-    setDialog(view);
-  }, []);
+  const openAuth = useCallback(
+    (view: AuthView) => {
+      setGuardOpen(false);
+      router.push(authPath(view, pathname));
+    },
+    [router, pathname],
+  );
 
-  const switchAuthView = useCallback((view: AuthView) => setDialog(view), []);
+  const closeGuard = useCallback(() => setGuardOpen(false), []);
 
-  const closeAuth = useCallback(() => {
-    pendingRef.current = null;
-    setDialog(null);
+  const replaceSettings = useCallback((next: UserSettings) => {
+    settingsRef.current = next;
+    setSettings(next);
   }, []);
 
   const completeAuth = useCallback(async () => {
     const account = await authService.me();
     apply(account);
-    setDialog(null);
     toast.success(`Hoş geldin, ${account.user?.username ?? ""}!`);
-    const pending = pendingRef.current;
-    pendingRef.current = null;
-    pending?.();
   }, [apply, toast]);
 
   const logout = useCallback(async () => {
     await authService.logout().catch(() => {});
     apply({ user: null, settings: EMPTY_SETTINGS });
+    router.push(ROUTES.landing);
     toast.info("Çıkış yapıldı");
-  }, [apply, toast]);
+  }, [apply, toast, router]);
+
+  const forgetSession = useCallback(() => {
+    apply({ user: null, settings: EMPTY_SETTINGS });
+    router.push(ROUTES.landing);
+  }, [apply, router]);
 
   return useMemo(
-    () => ({ status, user, settings, dialog, updateSettings, requireAuth, openAuth, switchAuthView, closeAuth, completeAuth, logout }),
-    [status, user, settings, dialog, updateSettings, requireAuth, openAuth, switchAuthView, closeAuth, completeAuth, logout],
+    () => ({ status, user, settings, guardOpen, updateSettings, requireAuth, openAuth, closeGuard, replaceSettings, completeAuth, logout, forgetSession }),
+    [status, user, settings, guardOpen, updateSettings, requireAuth, openAuth, closeGuard, replaceSettings, completeAuth, logout, forgetSession],
   );
 }
 

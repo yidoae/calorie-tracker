@@ -1,4 +1,5 @@
 import type { Macros } from "@/types/nutrition";
+import { CALORIE_TOLERANCE } from "./dayRating";
 import { getFood, type Food } from "./foods";
 
 /*
@@ -19,7 +20,6 @@ export interface Insight {
 const PROTEIN_SUGGESTIONS = ["chicken", "tuna", "yogurtGreek", "egg", "lentils"] as const;
 
 const PROTEIN_GAP_MIN_G = 8;
-const CALORIE_TOLERANCE = 0.05;
 
 /** The day is "winding down" from this hour on: the summary talks about the whole day. */
 export const DAY_END_HOUR = 18;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { authService } from "@/services/authService";
 import { errorMessage } from "@/services/http";
@@ -18,9 +19,10 @@ function legacySettings(): UserSettings | null {
   }
 }
 
-/** State and submit logic of the sign-in / sign-up form. */
-export function useAuthForm(mode: "login" | "register") {
+/** State and submit logic of the sign-in / sign-up form; on success it goes to `returnTo`. */
+export function useAuthForm(mode: "login" | "register", returnTo: string) {
   const { completeAuth } = useAuth();
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -35,9 +37,10 @@ export function useAuthForm(mode: "login" | "register") {
       if (mode === "register") await authService.register(username, password, legacySettings());
       else await authService.login(username, password);
       await completeAuth();
+      // Stays "pending" while the next page loads, so the button can't be pressed twice.
+      router.replace(returnTo);
     } catch (err) {
       setError(errorMessage(err));
-    } finally {
       setPending(false);
     }
   }

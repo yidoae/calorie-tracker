@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { formulaPlan, formulaSummary } from "@/lib/nutrition/plan";
+import { ROUTES } from "@/lib/routes";
 import { ApiError } from "@/services/http";
 import { planService } from "@/services/planService";
 import type { NutritionPlan, PlanInputs } from "@/types/plan";
@@ -90,7 +91,7 @@ export function usePlanBuilder(startInReview: boolean) {
       requireAuth(() => {
         savePlan(plan);
         toast.celebrate("Planın aktif!", `Günlük hedefin ${plan.base.calories.toLocaleString("tr-TR")} kcal. Ana ekranda takip edebilirsin.`);
-        router.push("/");
+        router.push(ROUTES.panel);
       }),
     [requireAuth, savePlan, toast, router],
   );

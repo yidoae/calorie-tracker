@@ -1,3 +1,4 @@
+import { fastingSettingsSchema, type FastingSettings } from "./fasting";
 import { nutritionPlanSchema, type NutritionPlan } from "./plan";
 import { customPlanSchema, profileSchema, type CustomPlan, type Profile } from "./profile";
 import { z } from "./zod";
@@ -12,9 +13,25 @@ export interface UserSettings {
   profiles: Profile[];
   activeProfileId: string | null;
   customPlan: CustomPlan | null;
+  /** Daily water goal chosen by the user; null = the default for their sex (lib/nutrition/water.ts). */
+  waterGoalMl: number | null;
+  /** The user read the content warning shown before fasting / large-deficit plans. */
+  sensitiveWarningAck: boolean;
+  /** Intermittent-fasting module; null = never set up (off). */
+  fasting: FastingSettings | null;
 }
 
-export const EMPTY_SETTINGS: UserSettings = { nutritionPlan: null, profiles: [], activeProfileId: null, customPlan: null };
+export const WATER_GOAL_RANGE = { min: 500, max: 6000, step: 250 } as const;
+
+export const EMPTY_SETTINGS: UserSettings = {
+  nutritionPlan: null,
+  profiles: [],
+  activeProfileId: null,
+  customPlan: null,
+  waterGoalMl: null,
+  sensitiveWarningAck: false,
+  fasting: null,
+};
 
 /**
  * Lenient on purpose: settings come from the DB or the client, and one malformed part shouldn't
@@ -25,7 +42,15 @@ const looseSettingsSchema = z.object({
   profiles: z.array(z.unknown()).optional(),
   activeProfileId: z.unknown().optional(),
   customPlan: z.unknown().optional(),
+  waterGoalMl: z.unknown().optional(),
+  sensitiveWarningAck: z.unknown().optional(),
+  fasting: z.unknown().optional(),
 });
+
+const waterGoalSchema = z.number().int().min(WATER_GOAL_RANGE.min).max(WATER_GOAL_RANGE.max);
+
+/** API responses carrying settings: an object, checked part by part by `parseSettings`. */
+export const settingsResponseSchema = z.record(z.string(), z.unknown());
 
 export function parseSettings(raw: unknown): UserSettings {
   const loose = looseSettingsSchema.safeParse(raw);
@@ -39,7 +64,10 @@ export function parseSettings(raw: unknown): UserSettings {
     : (profiles[0]?.id ?? null);
   const customPlan = customPlanSchema.safeParse(loose.data.customPlan).data ?? null;
   const nutritionPlan = nutritionPlanSchema.safeParse(loose.data.nutritionPlan).data ?? null;
-  return { nutritionPlan, profiles, activeProfileId, customPlan };
+  const waterGoalMl = waterGoalSchema.safeParse(loose.data.waterGoalMl).data ?? null;
+  const sensitiveWarningAck = loose.data.sensitiveWarningAck === true;
+  const fasting = fastingSettingsSchema.safeParse(loose.data.fasting).data ?? null;
+  return { nutritionPlan, profiles, activeProfileId, customPlan, waterGoalMl, sensitiveWarningAck, fasting };
 }
 
 export function parseSettingsJSON(json: string | null | undefined): UserSettings {

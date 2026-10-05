@@ -304,6 +304,11 @@
   animation: enter 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
+/* Utility form, so it can take variants (e.g. `max-lg:animate-panel` for the phone tabs). */
+@utility animate-panel {
+  animation: enter 350ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
 dialog[open] {
   animation: dialog-in 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }

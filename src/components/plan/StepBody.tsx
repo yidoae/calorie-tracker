@@ -115,7 +115,7 @@ export default function StepBody({ w }: { w: Wizard }) {
               min={range.min}
               max={range.max}
               step={range.step}
-              onChange={(v) => w.set("intensity", v)}
+              onChange={w.setIntensity}
               valueText={`${form.intensity} kcal, haftada ${fmt(Math.abs(change), 2)} kg`}
               fillColor={form.goal === "cut" ? "var(--macro-protein)" : undefined}
             />

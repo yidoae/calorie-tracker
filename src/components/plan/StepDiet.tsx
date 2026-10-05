@@ -3,6 +3,7 @@ import type { usePlanWizard } from "@/hooks/usePlanWizard";
 import { DIET_STYLE_HINTS, DIET_STYLE_LABELS, MEAL_PATTERN_LABELS } from "@/lib/labels";
 import { DIET_STYLES, MEAL_PATTERNS, type DietStyle, type MealPattern } from "@/types/plan";
 import ChoiceCard from "../ui/ChoiceCard";
+import FatPerKgControl from "./FatPerKgControl";
 import RangeSlider from "../ui/RangeSlider";
 
 type Wizard = ReturnType<typeof usePlanWizard>;
@@ -41,6 +42,14 @@ export default function StepDiet({ w }: { w: Wizard }) {
           ))}
         </div>
       </fieldset>
+
+      <FatPerKgControl
+        id="plan-fat-per-kg"
+        value={form.fatPerKg}
+        weightKg={w.inputs?.weightKg ?? null}
+        onChange={w.setFatPerKg}
+        disabled={form.dietStyle === "keto"}
+      />
 
       <fieldset>
         <legend className="label">Öğün düzeni</legend>

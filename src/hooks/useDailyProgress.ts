@@ -3,9 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MACRO_LABELS } from "@/lib/labels";
 import { DAY_END_HOUR, buildInsights } from "@/lib/nutrition/insights";
-import { progressOf, sumMacros } from "@/lib/nutrition/macros";
-import type { MealDTO } from "@/types/meal";
-import type { MacroKey, Macros } from "@/types/nutrition";
+import { rateDay } from "@/lib/nutrition/dayRating";
+import { itemMacros, progressOf, sumMacros } from "@/lib/nutrition/macros";
+import { microReferences, sumMicros } from "@/lib/nutrition/micros";
+import { slotTargets } from "@/lib/nutrition/slots";
+import { MEAL_SLOTS, type MealDTO, type MealSlot } from "@/types/meal";
+import type { MealPattern } from "@/types/plan";
+import type { MacroKey, Macros, MealItem } from "@/types/nutrition";
 import { useIsClient } from "./useIsClient";
 import { useToast } from "./useToast";
 
@@ -30,8 +34,9 @@ const CELEBRATED: MacroKey[] = ["calories", "protein"];
 
 function ringFor(key: MacroKey, value: number, goal: number): Omit<RingState, "celebrating"> {
   const ratio = goal > 0 ? value / goal : 0;
-  const over = key === "calories" ? ratio > 1.05 : key !== "protein" && ratio > 1;
-  const reached = key === "protein" ? ratio >= 1 : key === "calories" ? ratio >= 0.95 && !over : false;
+  const rating = key === "calories" ? rateDay(value, goal) : null;
+  const over = key === "calories" ? rating === "over" : key !== "protein" && ratio > 1;
+  const reached = key === "protein" ? ratio >= 1 : rating === "onTarget";
   return { key, label: MACRO_LABELS[key], value, goal, progress: progressOf(value, goal), over, reached };
 }
 
@@ -39,7 +44,25 @@ function ringFor(key: MacroKey, value: number, goal: number): Omit<RingState, "c
  * Today's totals against the targets as ring data, plus the smart summary. When a goal is reached
  * during the session (not already on page load), it toasts once and flags the ring to animate.
  */
-export function useDailyProgress(meals: MealDTO[], targets: Macros, loading: boolean) {
+export interface SlotProgress {
+  slot: MealSlot;
+  meals: MealDTO[];
+  /** The same meals with each component's macros for its portion (for the item rows). */
+  entries: { meal: MealDTO; items: (MealItem & { macros: Macros })[] }[];
+  /** Share of the slot's energy from protein / carbs / fat (0–1 each; 0 when empty). */
+  energyShare: { protein: number; carbs: number; fat: number };
+  /** When the first meal of this slot was logged (ISO), null if none. */
+  firstLoggedAt: string | null;
+  calories: number;
+  /** kcal target for this slot from the meal pattern; null when the pattern skips it (16:8 breakfast). */
+  goal: number | null;
+  /** Clearly above its share (more than 15 % over; slots are a guide, not a limit). */
+  over: boolean;
+}
+
+const SLOT_OVER_TOLERANCE = 0.15;
+
+export function useDailyProgress(meals: MealDTO[], targets: Macros, loading: boolean, mealPattern: MealPattern = "classic") {
   const toast = useToast();
   const isClient = useIsClient();
   const totals = useMemo(() => sumMacros(meals), [meals]);
@@ -79,8 +102,41 @@ export function useDailyProgress(meals: MealDTO[], targets: Macros, loading: boo
     [isClient, loading, totals, targets, meals.length, hour],
   );
 
+  const micros = useMemo(() => {
+    const totals = sumMicros(meals.flatMap((m) => m.items));
+    return { ...totals, references: microReferences(targets.calories) };
+  }, [meals, targets.calories]);
+
+  /** Today's meals grouped by slot (in day order), each with its share of the calorie target. */
+  const slots: SlotProgress[] = useMemo(() => {
+    const goals = slotTargets(targets.calories, mealPattern);
+    return MEAL_SLOTS.flatMap((slot) => {
+      const slotMeals = meals.filter((m) => m.slot === slot);
+      const goal = goals[slot] ?? null;
+      if (slotMeals.length === 0 && goal === null) return [];
+      const totals = sumMacros(slotMeals);
+      const calories = Math.round(totals.calories);
+      const energy = { protein: totals.protein * 4, carbs: totals.carbs * 4, fat: totals.fat * 9 };
+      const all = energy.protein + energy.carbs + energy.fat;
+      return [
+        {
+          slot,
+          meals: slotMeals,
+          entries: slotMeals.map((meal) => ({ meal, items: meal.items.map((item) => ({ ...item, macros: itemMacros(item) })) })),
+          energyShare: all > 0 ? { protein: energy.protein / all, carbs: energy.carbs / all, fat: energy.fat / all } : { protein: 0, carbs: 0, fat: 0 },
+          firstLoggedAt: slotMeals.reduce<string | null>((first, m) => (first === null || m.createdAt < first ? m.createdAt : first), null),
+          calories,
+          goal,
+          over: goal !== null && calories > goal * (1 + SLOT_OVER_TOLERANCE),
+        },
+      ];
+    });
+  }, [meals, targets.calories, mealPattern]);
+
   return {
     totals,
+    micros,
+    slots,
     rings,
     calorieRing: rings[0],
     macroRings: rings.slice(1),

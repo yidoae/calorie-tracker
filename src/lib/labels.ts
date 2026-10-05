@@ -1,5 +1,7 @@
-import type { FoodCategory, MacroKey } from "@/types/nutrition";
+import type { MealSlot } from "@/types/meal";
+import type { FoodCategory, MacroKey, MicroKey } from "@/types/nutrition";
 import type { DietStyle, MealPattern, PlanGoal, StrengthSplit, TrainingStyle } from "@/types/plan";
+import type { ActivityLevel } from "@/types/profile";
 import type { BmiCategory } from "./nutrition/energy";
 
 /*
@@ -64,10 +66,19 @@ export const DIET_STYLE_LABELS: Record<DietStyle, string> = {
 };
 
 export const DIET_STYLE_HINTS: Record<DietStyle, string> = {
-  highProtein: "Protein 2,2 g/kg · yağ %25 · kalan karbonhidrat",
-  lowCarb: "Protein 2 g/kg · yağ %40",
-  keto: "Karbonhidrat ≤30 g · yağ ağırlıklı",
-  iifym: "Makrolara uyduğun sürece esnek seçim",
+  highProtein: "Protein 2,2 g/kg · yağ 1–1,5 g/kg · kalan karbonhidrat",
+  lowCarb: "Protein 2,2 g/kg · karbonhidrat ≤100 g · kalan yağ",
+  keto: "Protein 2,2 g/kg · karbonhidrat ≤30 g · yağ ağırlıklı",
+  iifym: "Aynı makrolar; yemek seçiminde esneklik",
+};
+
+/** Turkish activity levels for the first-time setup (energy.ts keeps English labels for FitBot). */
+export const ACTIVITY_LEVEL_LABELS: Record<ActivityLevel, { title: string; hint: string }> = {
+  sedentary: { title: "Hareketsiz", hint: "Masa başı, egzersiz yok" },
+  light: { title: "Az hareketli", hint: "Haftada 1–3 gün hafif egzersiz" },
+  moderate: { title: "Orta", hint: "Haftada 3–5 gün antrenman" },
+  active: { title: "Aktif", hint: "Haftada 6–7 gün antrenman" },
+  veryActive: { title: "Çok aktif", hint: "Günde iki antrenman ya da fiziksel iş" },
 };
 
 export const MEAL_PATTERN_LABELS: Record<MealPattern, { title: string; hint: string }> = {
@@ -77,3 +88,17 @@ export const MEAL_PATTERN_LABELS: Record<MealPattern, { title: string; hint: str
 
 /** Monday-first short weekday names. */
 export const WEEKDAY_SHORT = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"] as const;
+
+export const SLOT_LABELS: Record<MealSlot, string> = {
+  breakfast: "Kahvaltı",
+  lunch: "Öğle yemeği",
+  dinner: "Akşam yemeği",
+  snack: "Ara öğün",
+};
+
+export const MICRO_LABELS: Record<MicroKey, { label: string; unit: string }> = {
+  fiber: { label: "Lif", unit: "g" },
+  sugar: { label: "Şeker", unit: "g" },
+  satFat: { label: "Doymuş yağ", unit: "g" },
+  sodium: { label: "Sodyum", unit: "mg" },
+};

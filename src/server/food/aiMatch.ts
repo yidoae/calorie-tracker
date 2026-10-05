@@ -38,7 +38,8 @@ Estimate the grams eaten from the amount described (1 tabak ≈ 300 g, 1 kase �
 use null if no amount is given. Return exactly one entry per fragment, in the same order. Answer with JSON only.
 
 Examples: "ravioli" -> manti, "tzatziki" -> cacik, "türlü" -> stirFryVeg, "etli nohut" -> chickpeas,
-"pilav üstü tavuk" -> chicken.
+"tavuk göğüs fileto" -> chicken, "tavuk incik" -> chickenThigh, "tavuk kavurma" -> chickenSaute,
+"çıtır kanat" -> chickenWing.
 
 Foods (id: name):
 ${FOOD_LIST}`;

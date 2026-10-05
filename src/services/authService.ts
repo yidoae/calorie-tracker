@@ -1,5 +1,6 @@
 import { authResponseSchema, meResponseSchema, type PublicUser } from "@/types/auth";
-import { EMPTY_SETTINGS, parseSettings, type UserSettings } from "@/types/settings";
+import type { OnboardingInput } from "@/types/onboarding";
+import { EMPTY_SETTINGS, parseSettings, settingsResponseSchema, type UserSettings } from "@/types/settings";
 import { request } from "./http";
 
 /** Account endpoints (/api/auth/*, /api/me/*). */
@@ -20,6 +21,11 @@ export const authService = {
 
   logout(): Promise<void> {
     return request("/api/auth/logout", null, { method: "POST" });
+  },
+
+  /** Finishes the first-time setup; returns the settings with the new active plan. */
+  async completeOnboarding(input: OnboardingInput): Promise<UserSettings> {
+    return parseSettings(await request("/api/me/onboarding", settingsResponseSchema, { json: input }));
   },
 
   saveSettings(settings: UserSettings): Promise<void> {

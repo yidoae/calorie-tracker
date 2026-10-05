@@ -1,10 +1,11 @@
 import { DIET_STYLE_LABELS, TRAINING_STYLE_LABELS } from "@/lib/labels";
 import type { CustomPlan, Profile } from "@/types/profile";
-import type { DayTargets, DietStyle, NutritionPlan, PlanInputs, TrainingStyle } from "@/types/plan";
+import { PROTEIN_PER_KG, type DayTargets, type DietStyle, type NutritionPlan, type PlanInputs, type TrainingStyle } from "@/types/plan";
 
 /*
- * Plan math: Harris-Benedict BMR, activity from the training routine, goal adjustment, macro split
- * per diet style and training/rest-day calorie cycling. Pure functions shared by the server
+ * Plan math: Harris-Benedict BMR, activity from the training routine, goal adjustment, the
+ * high-protein macro engine (protein 2.2 g/kg, fat 1.0–1.5 g/kg, carbs fill the rest; keto and
+ * low-carb cap the carbs) and training/rest-day calorie cycling. Pure functions shared by the server
  * (formula baseline + AI sanity checks) and the wizard (live previews).
  */
 
@@ -44,15 +45,9 @@ export function weeksToGoal(inputs: Pick<PlanInputs, "weightKg" | "targetWeightK
   return Math.ceil(diff / perWeek);
 }
 
-/** Protein per kg of body weight and fat share of calories, by diet style. */
-export const DIET_RULES: Record<DietStyle, { proteinPerKg: number; fatShare: number }> = {
-  highProtein: { proteinPerKg: 2.2, fatShare: 0.25 },
-  lowCarb: { proteinPerKg: 2.0, fatShare: 0.4 },
-  keto: { proteinPerKg: 1.7, fatShare: 0.7 },
-  iifym: { proteinPerKg: 1.8, fatShare: 0.3 },
-};
-
 export const KETO_CARBS = { min: 15, max: 30 } as const;
+/** Low-carb days stop carbs here; the remaining energy goes to fat. */
+export const LOW_CARB_MAX_G = 100;
 const MIN_PLAN_KCAL = { male: 1500, female: 1200 } as const;
 /** Above this BMI, protein is based on the weight at this BMI (lean-mass proxy). */
 const PROTEIN_REFERENCE_BMI = 27;
@@ -62,15 +57,23 @@ export function proteinReferenceWeight({ weightKg, heightCm }: Pick<PlanInputs, 
   return Math.min(weightKg, PROTEIN_REFERENCE_BMI * (heightCm / 100) ** 2);
 }
 
+/** Grams of protein and fat for a body (both per kg of the protein reference weight). */
+export function baseGrams(inputs: Pick<PlanInputs, "weightKg" | "heightCm" | "fatPerKg">): { protein: number; fat: number } {
+  const weight = proteinReferenceWeight(inputs);
+  return { protein: weight * PROTEIN_PER_KG, fat: weight * inputs.fatPerKg };
+}
+
 /**
- * Macros for a calorie target: protein fixed, fat as a share of calories, carbs fill the rest.
- * `fatScale` shifts energy between fat and carbs (lower on training days, higher on rest days).
+ * Macros for a calorie target: protein and fat fixed in grams (4 and 9 kcal/g), carbs (4 kcal/g)
+ * fill the rest. Keto keeps carbs at 15–30 g and low-carb at most 100 g; fat absorbs the
+ * difference. If protein + fat alone exceed the calories, carbs drop to 0 and fat gives way.
  */
-export function macrosFor(kcal: number, protein: number, style: DietStyle, fatScale = 1): DayTargets {
-  let fat = (kcal * DIET_RULES[style].fatShare * fatScale) / 9;
+export function macrosFor(kcal: number, grams: { protein: number; fat: number }, style: DietStyle): DayTargets {
+  const protein = grams.protein;
+  let fat = grams.fat;
   let carbs = (kcal - protein * 4 - fat * 9) / 4;
-  if (style === "keto") {
-    carbs = Math.min(KETO_CARBS.max, Math.max(KETO_CARBS.min, carbs));
+  if (style === "keto" || (style === "lowCarb" && carbs > LOW_CARB_MAX_G)) {
+    carbs = style === "keto" ? Math.min(KETO_CARBS.max, Math.max(KETO_CARBS.min, carbs)) : LOW_CARB_MAX_G;
     fat = (kcal - protein * 4 - carbs * 4) / 9;
   }
   if (carbs < 0) {
@@ -87,14 +90,15 @@ const REST_FLOOR = 0.8;
 
 /** Training/rest-day targets whose weekly average equals `base.calories`. */
 export function cycleTargets(base: DayTargets, style: DietStyle, trainingDays: number): { training: DayTargets; rest: DayTargets } | null {
+  // Carbs follow training: less fat on training days, more on rest days (same protein).
   const restDays = 7 - trainingDays;
   if (trainingDays === 0 || restDays === 0) return null;
   const shift = Math.min(CYCLE_SHIFT, ((1 - REST_FLOOR) * restDays) / trainingDays);
   const training = base.calories * (1 + shift);
   const rest = (7 * base.calories - trainingDays * training) / restDays;
   return {
-    training: macrosFor(training, base.protein, style, 0.8),
-    rest: macrosFor(rest, base.protein, style, 1.3),
+    training: macrosFor(training, { protein: base.protein, fat: base.fat * 0.8 }, style),
+    rest: macrosFor(rest, { protein: base.protein, fat: base.fat * 1.3 }, style),
   };
 }
 
@@ -105,14 +109,13 @@ export interface FormulaResult {
   cycle: { training: DayTargets; rest: DayTargets } | null;
 }
 
-/** The deterministic plan: Harris-Benedict → activity → goal → diet-style macros → optional cycling. */
+/** The deterministic plan: Harris-Benedict → activity → goal → macro engine → optional cycling. */
 export function formulaPlan(inputs: PlanInputs): FormulaResult {
   const bmr = harrisBenedictBmr(inputs);
   const days = inputs.trainingStyle === "sedentary" ? 0 : inputs.trainingDays.length;
   const tdee = bmr * activityFactor(inputs.trainingStyle, days);
   const kcal = Math.max(MIN_PLAN_KCAL[inputs.sex], tdee + goalAdjustment(inputs));
-  const protein = proteinReferenceWeight(inputs) * DIET_RULES[inputs.dietStyle].proteinPerKg;
-  const base = macrosFor(kcal, protein, inputs.dietStyle);
+  const base = macrosFor(kcal, baseGrams(inputs), inputs.dietStyle);
   const cycle = inputs.cycling ? cycleTargets(base, inputs.dietStyle, days) : null;
   return { bmr: Math.round(bmr), tdee: Math.round(tdee), base, cycle };
 }

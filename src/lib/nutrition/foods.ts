@@ -1,4 +1,4 @@
-import type { FoodCategory, Macros, MealItem } from "@/types/nutrition";
+import type { FoodCategory, Macros, MealItem, Micros } from "@/types/nutrition";
 
 /*
  * The app's single food database: Turkish names, category, nutrition per 100 g (approximate,
@@ -26,12 +26,20 @@ export interface Food {
 const m = (calories: number, protein: number, carbs: number, fat: number): Macros => ({ calories, protein, carbs, fat });
 
 export const FOODS = [
-  // Protein sources
-  { id: "chicken", name: "Izgara tavuk", category: "protein", per100g: m(165, 31, 0, 3.6), aliases: ["ızgara tavuk", "tavuk göğsü", "tavuk", "piliç", "grilled chicken", "chicken"], portion: 150 },
-  { id: "friedChicken", name: "Kızarmış tavuk", category: "protein", per100g: m(246, 19, 10, 14), aliases: ["kızarmış tavuk", "tavuk kızartma", "nugget"], portion: 150 },
+  // Protein sources. Chicken comes in its common forms: cooking method and cut change fat a lot
+  // (breast vs thigh vs wing, skin on or off, raw weight vs cooked weight). Plain "tavuk" = grilled breast.
+  { id: "chicken", name: "Izgara tavuk göğsü", category: "protein", per100g: m(165, 31, 0, 3.6), aliases: ["ızgara tavuk göğsü", "ızgara tavuk", "tavuk göğsü", "tavuk fileto", "tavuk şiş", "tavuk", "piliç", "grilled chicken", "chicken"], portion: 150 },
+  { id: "chickenBreastRaw", name: "Tavuk göğsü (çiğ)", category: "protein", per100g: m(120, 22.5, 0, 2.6), aliases: ["çiğ tavuk göğsü", "çiğ tavuk", "raw chicken"], portion: 200 },
+  { id: "chickenBoiled", name: "Haşlama tavuk", category: "protein", per100g: m(151, 29, 0, 3), aliases: ["haşlama tavuk", "haşlanmış tavuk", "tavuk haşlama", "didiklenmiş tavuk", "pilav üstü tavuk"], portion: 150 },
+  { id: "chickenThigh", name: "Tavuk but (derisiz, ızgara)", category: "protein", per100g: m(179, 25, 0, 8.2), aliases: ["ızgara tavuk but", "tavuk but", "tavuk baget", "baget", "tavuk pirzola", "chicken thigh"], portion: 150, units: { adet: 90 } },
+  { id: "chickenRoast", name: "Fırın tavuk (derili)", category: "protein", per100g: m(239, 27, 0, 13.6), aliases: ["fırında tavuk", "fırın tavuk", "derili tavuk", "bütün tavuk", "roast chicken"], portion: 180 },
+  { id: "chickenWing", name: "Tavuk kanat", category: "protein", per100g: m(290, 27, 0, 19.5), aliases: ["tavuk kanat", "kanat", "chicken wings"], portion: 150, units: { adet: 35 } },
+  { id: "chickenSaute", name: "Tavuk sote", category: "protein", per100g: m(140, 18, 5, 5.5), aliases: ["tavuk sote", "sote tavuk", "sebzeli tavuk", "tavuk tava"], portion: 250, units: { kase: 250 } },
+  { id: "friedChicken", name: "Kızarmış tavuk", category: "protein", per100g: m(246, 19, 10, 14), aliases: ["kızarmış tavuk", "tavuk kızartma", "çıtır tavuk", "pane tavuk", "tavuk şnitzel", "nugget"], portion: 150 },
   { id: "doner", name: "Döner", category: "protein", per100g: m(215, 18, 4, 14), aliases: ["döner", "tavuk döner", "et döner"], portion: 150 },
   { id: "salmon", name: "Somon", category: "protein", per100g: m(206, 22, 0, 12), aliases: ["somon", "salmon"], portion: 150 },
-  { id: "tuna", name: "Ton balığı", category: "protein", per100g: m(116, 26, 0, 0.8), aliases: ["ton balığı", "ton"], portion: 100, units: { kutu: 120 } },
+  { id: "tuna", name: "Ton balığı (suda)", category: "protein", per100g: m(116, 26, 0, 0.8), aliases: ["ton balığı", "ton"], portion: 100, units: { kutu: 120 } },
+  { id: "tunaOil", name: "Ton balığı (yağlı)", category: "protein", per100g: m(198, 29, 0, 8.2), aliases: ["yağlı ton balığı", "zeytinyağlı ton balığı", "yağlı ton"], portion: 100, units: { kutu: 120 } },
   { id: "shrimp", name: "Karides", category: "protein", per100g: m(99, 24, 0.2, 0.3), aliases: ["karides", "shrimp"], portion: 120 },
   { id: "steak", name: "Biftek", category: "protein", per100g: m(250, 26, 0, 15), aliases: ["biftek", "bonfile", "dana eti", "kırmızı et", "et", "steak"], portion: 150 },
   { id: "kofte", name: "Köfte", category: "protein", per100g: m(230, 16, 6, 16), aliases: ["ızgara köfte", "köfte"], portion: 150, units: { adet: 25 } },
@@ -109,6 +117,97 @@ export const FOODS = [
 
 export type FoodId = (typeof FOODS)[number]["id"];
 
+/**
+ * Micronutrients per 100 g as eaten: [fibre g, sugar g, saturated fat g, sodium mg]. Approximations
+ * from USDA FoodData Central and typical Turkish recipes (salted dishes carry their salt).
+ */
+const MICROS: Record<FoodId, [number, number, number, number]> = {
+  chicken: [0, 0, 1, 74],
+  chickenBreastRaw: [0, 0, 0.6, 45],
+  chickenBoiled: [0, 0, 0.9, 65],
+  chickenThigh: [0, 0, 2.3, 95],
+  chickenRoast: [0, 0, 3.8, 82],
+  chickenWing: [0, 0, 5.5, 82],
+  chickenSaute: [1.2, 2, 1.2, 350],
+  friedChicken: [0.5, 0, 3.8, 500],
+  doner: [0.5, 1, 5, 700],
+  salmon: [0, 0, 3.1, 59],
+  tuna: [0, 0, 0.2, 250],
+  tunaOil: [0, 0, 1.5, 350],
+  shrimp: [0, 0, 0.1, 111],
+  steak: [0, 0, 6, 56],
+  kofte: [0.5, 1, 6.5, 500],
+  beefPatty: [0, 0, 7.7, 75],
+  bolognese: [1.5, 4, 2.5, 400],
+  egg: [0, 1.1, 3.3, 124],
+  eggFried: [0, 0.8, 4.3, 207],
+  menemen: [1, 3, 2, 250],
+  turkey: [0, 3, 0.6, 1000],
+  sucuk: [0, 1, 15, 1300],
+  lentils: [7.9, 1.8, 0.1, 2],
+  chickpeas: [7.6, 4.8, 0.3, 7],
+  proteinPowder: [1, 6, 2.5, 250],
+  whiteRice: [0.4, 0.1, 0.2, 200],
+  bulgur: [4.5, 0.1, 0.8, 250],
+  brownRice: [1.6, 0.4, 0.3, 5],
+  spaghetti: [1.8, 0.6, 0.2, 1],
+  noodles: [1.2, 0.4, 0.4, 5],
+  fries: [3.8, 0.3, 2.3, 210],
+  potato: [1.8, 0.9, 0, 5],
+  sweetPotato: [3.3, 6.5, 0, 36],
+  bread: [2.7, 5, 0.8, 490],
+  wholeWheatBread: [6, 4.4, 0.7, 450],
+  bun: [2.2, 5, 1, 470],
+  simit: [3, 4, 0.8, 500],
+  lahmacun: [2, 2, 2, 600],
+  pizza: [2.3, 3.6, 4.5, 600],
+  oats: [1.7, 0.3, 0.3, 4],
+  oatsDry: [10, 1, 1.2, 2],
+  corn: [2.4, 4.5, 0.2, 1],
+  lentilSoup: [1.5, 1, 0.2, 350],
+  honey: [0.2, 82, 0, 4],
+  greens: [1.8, 1.5, 0, 20],
+  broccoli: [3.3, 1.4, 0.1, 41],
+  greenBeans: [3.2, 1.4, 0, 1],
+  stirFryVeg: [2.5, 4, 0.3, 200],
+  tomato: [1.2, 2.6, 0, 5],
+  cucumber: [0.5, 1.7, 0, 2],
+  redPepper: [2.1, 4.2, 0, 4],
+  carrot: [2.8, 4.7, 0, 69],
+  banana: [2.6, 12, 0.1, 1],
+  apple: [2.4, 10, 0, 1],
+  orange: [2.4, 9.4, 0, 0],
+  berries: [2.5, 9, 0, 1],
+  yogurtGreek: [0, 3.6, 3.2, 40],
+  yogurt: [0, 4.7, 2.1, 46],
+  ayran: [0, 2.6, 1.3, 200],
+  milk: [0, 5, 1.9, 43],
+  cheese: [0, 0.5, 13, 620],
+  whiteCheese: [0, 1, 14, 1100],
+  manti: [1.5, 2, 3, 350],
+  iskender: [0.8, 2, 4.5, 500],
+  karniyarik: [2.5, 4, 1.2, 300],
+  kuruFasulye: [5, 2, 1, 350],
+  borek: [1.5, 1.5, 5, 450],
+  pide: [1.8, 2, 4.5, 550],
+  tost: [2, 3, 6.5, 700],
+  sutlac: [0.1, 15, 1.8, 50],
+  baklava: [2.2, 30, 8, 250],
+  cacik: [0.3, 3, 1.6, 250],
+  oil: [0, 0, 14, 2],
+  butter: [0, 0.1, 51, 11],
+  avocado: [6.7, 0.7, 2.1, 7],
+  olives: [3.3, 0, 1.4, 1200],
+  walnuts: [6.7, 2.6, 6.1, 2],
+  almonds: [12.5, 4.4, 3.8, 1],
+  hummus: [6, 0.3, 1.4, 380],
+};
+
+export function foodMicros(id: string): Micros | undefined {
+  const row = (MICROS as Record<string, [number, number, number, number]>)[id];
+  return row ? { fiber: row[0], sugar: row[1], satFat: row[2], sodium: row[3] } : undefined;
+}
+
 const BY_ID = new Map<string, Food>(FOODS.map((f) => [f.id, f]));
 
 export function getFood(id: string): Food | undefined {
@@ -119,7 +218,33 @@ export function isFoodId(id: string): id is FoodId {
   return BY_ID.has(id);
 }
 
+/**
+ * Foods whose name or an alias contains `query` (Turkish lower-casing), name matches first. An
+ * empty query returns the whole list. Used by the dashboard's "Hızlı ekle" list.
+ */
+export function searchFoods(query: string): Food[] {
+  const q = query.trim().toLocaleLowerCase("tr-TR");
+  if (!q) return [...FOODS];
+  const byName: Food[] = [];
+  const byAlias: Food[] = [];
+  for (const food of FOODS) {
+    if (food.name.toLocaleLowerCase("tr-TR").includes(q)) byName.push(food);
+    else if (food.aliases.some((a) => a.includes(q))) byAlias.push(food);
+  }
+  return [...byName, ...byAlias];
+}
+
 /** A meal component for `grams` of a food. */
 export function foodItem(food: Food, grams: number): MealItem {
-  return { name: food.name, category: food.category, grams: Math.max(1, Math.round(grams)), per100g: food.per100g };
+  return { name: food.name, category: food.category, grams: Math.max(1, Math.round(grams)), per100g: food.per100g, micros: foodMicros(food.id) };
+}
+
+/** A best-guess plate role for a product we only know the macros of (barcode lookups). */
+export function categoryFromMacros(per100g: Macros): FoodCategory {
+  const kcal = per100g.protein * 4 + per100g.carbs * 4 + per100g.fat * 9;
+  if (kcal <= 0) return "vegetable";
+  if ((per100g.protein * 4) / kcal >= 0.35) return "protein";
+  if ((per100g.fat * 9) / kcal >= 0.6) return "fat";
+  if (per100g.calories < 50 && per100g.carbs < 10) return "vegetable";
+  return "carb";
 }

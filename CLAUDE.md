@@ -67,42 +67,59 @@ prisma/
   migrations/              Committed migration history
 src/
   app/
-    layout.tsx, page.tsx   Shell (fonts, <AppProviders>) + home page (<Dashboard />, <FitBot />)
+    layout.tsx, page.tsx   Shell (fonts, <AppProviders>) + "/": redirect only (member -> /panel, guest -> /giris). Paths live in `lib/routes.ts`
+    giris/page.tsx         Landing page (motion scenes + athlete stories); members are redirected to /panel
+    giris-yap/, kayit-ol/  Sign-in / sign-up pages (<AuthScreen />); `?sonra=/path` returns there afterwards (`safeReturnPath`, no open redirects)
+    baslangic/page.tsx     Required first-time setup (<Onboarding />): age, sex, height, weight, goal weight, activity, diet + fat g/kg
+    panel/page.tsx         <Dashboard /> + <FitBot />; guests may look around (old /uygulama redirects here)
     plan/page.tsx          Plan wizard (`?duzenle=1` opens the active plan in the tuning desk)
+    gelisim/page.tsx       "Gelişim & Analiz": streaks, calories vs goal (7/30/90 days), macro averages (old /trendler redirects here)
+    kaynaklar/page.tsx     Sources for every formula and reference value
     globals.css            tofuhq tokens, component classes, animations
     api/
       auth/{register,login,logout,me}/route.ts   Account + session cookie
-      me/settings/route.ts                       PUT saved profiles / custom plan
+      me/route.ts                                DELETE account + all data (password-confirmed)
+      me/settings/route.ts                       PUT saved profiles / custom plan / water goal / fasting window
+      me/onboarding/route.ts                     POST first-time setup -> builds the formula plan server-side, sets onboardingCompleted
+      me/export/route.ts                         GET ?format=json|csv data download
       meals/route.ts                             GET range · POST (multipart photo + `meal` JSON, or JSON from quick bar)
       meals/analyze/route.ts                     POST photo -> { name, items } breakdown (nothing saved)
       meals/parse/route.ts                       POST { text } -> quick-bar items (rule parser + local AI)
-      meals/[id]/route.ts                        DELETE
+      meals/[id]/route.ts                        PATCH (name, slot, items) · DELETE
+      meals/recent/route.ts                      GET latest distinct meals (one-tap re-log)
+      saved-meals/route.ts, saved-meals/[id]     Meal templates: GET · POST · DELETE
+      weights/route.ts, weights/[id]             Weigh-ins (one per local day): GET · POST · DELETE
+      water/route.ts, water/[id]                 Water entries: GET range · POST · DELETE (undo)
+      foods/barcode/[code]/route.ts              GET Open Food Facts product (cached in FoodProduct)
       plans/generate/route.ts                    POST PlanInputs -> { plan, notice } draft (AI or Harris-Benedict fallback)
       uploads/[filename]/route.ts                GET photo (owner only)
       fitbot/chat/route.ts                       POST chat -> { reply, sources }
   components/
     Dashboard.tsx          Composition root: calls hooks, passes props down
     ErrorBoundary.tsx      Section-level error boundary
-    ui/                    Dumb primitives: ProgressRing, PortionControl, RangeSlider, Switch, ChoiceCard, CategoryChip, Toaster,
+    dashboard/             Panel cards (Lokma layout): DashboardIntro, EnergyCard (ring), MealsCard (by slot, item delete + undo), QuickAddCard, WeekCard
+    ui/                    Dumb primitives: DashCard, PortionControl, RangeSlider, Switch, ChoiceCard, CategoryChip, Toaster,
                            Dialog, ConfirmDialog, Segmented, EmptyState, MacroBar, MealThumb, Avatar, FitBotAvatar, CustomPlanBadge, ErrorFallback
     layout/SiteHeader.tsx  Nav: login/register or avatar + profile menu
-    auth/AuthDialog.tsx    Guard panel ("Üyelik bulunamadı…") + login/register forms
-    meals/                 MealCapture (photo flow), CameraView, MealReview (breakdown + sliders), QuickEntryBar, MealTimeline
-    progress/              TodayHero (calorie ring), MacroRings, DailyInsights
+    auth/                  GuardDialog ("Üyelik bulunamadı…"), AuthScreen (sign-in/up page + form), DeleteAccountDialog
+    meals/                 MealCapture (photo flow), CameraView, MealReview (breakdown + sliders), QuickEntryBar, QuickPicks, MealEditDialog
+    progress/              DailyInsights, WaterCard (glasses), MicroPanel
     history/               MealCalendar, DayDetail
     plan/                  PlanBuilder (/plan container), WizardProgress, StepBody/Training/Diet/Advanced, LivePreview,
                            GeneratingScreen, PlanReview (tuning desk), MacroSliderRow
     profile/ActivePlanCard Dashboard card for the active plan (or the CTA to create one)
     fitbot/FitBot.tsx      Floating chat widget
+    landing/               Landing: IntroHero, LegendStories (useStoryPlayer), HowItWorks, FinalCall, MaskedWords; legends.ts (sourced athlete anecdotes)
   hooks/                   State + business flows (see rule 2)
-  providers/               AppProviders -> ToastProvider -> AuthProvider (renders AuthDialog)
+  providers/               AppProviders -> ToastProvider -> AuthProvider (renders GuardDialog)
   services/                http.ts (request, ApiError), authService, mealService, fitbotService
   server/
     db.ts, auth.ts         Prisma client · argon2id hashing, sessions, getCurrentUser
     accounts.ts            registerUser, authenticate, settings
     http.ts                apiError, unauthorized, readJson, validate
     rateLimit.ts, storage.ts
-    meals/repository.ts    All meal/meal-item queries (user-scoped), DTO mapping
+    meals/repository.ts    All meal/meal-item/saved-meal queries (user-scoped), DTO mapping
+    tracking/repository.ts Weight and water queries (user-scoped)
     vision.ts              analyzeFoodImage (mock) -> MealDraft, validated with mealDraftSchema
     food/                  catalog.ts (dishes, plate colours), recognize.ts (not-food guard, plate breakdown),
                            imageFeatures.ts (sharp stats), aiMatch.ts (LLM fallback for the quick bar), quickEntry.ts
@@ -110,7 +127,9 @@ src/
     plans/                 generate.ts (formula baseline -> AI -> fallback), aiStrategy.ts (LLM numbers + summary, quality gate)
     fitbot/                chat.ts (orchestration, tools loop), context.ts, tools.ts, knowledge.ts (RAG), prompt.ts
   lib/
-    nutrition/             energy, macros, targets, customPlan (legacy), plan, planTuning, foods (food DB), quickParse, insights
+    nutrition/             energy, macros, targets, customPlan (legacy), plan, planTuning, foods (food DB + micros), quickParse, insights,
+                           slots (meal slots, per-slot kcal shares), dayRating, micros, water, weight (trend, rate), trends (series, streaks)
+    csv.ts                 CSV writer for the export
     labels.ts              Turkish UI labels
     dates.ts, photo.ts     Date helpers · browser-only photo helpers (resize, frame capture)
   types/                   zod.ts, nutrition.ts, meal.ts, plan.ts, profile.ts, settings.ts, auth.ts, fitbot.ts, api.ts
@@ -123,14 +142,21 @@ src/
 - **Progress.** `useDailyProgress` turns today's meals + targets into ring data (calories: goal met within ±5 %, red above +5 %; protein: minimum; carbs/fat: limits) and insights (`buildInsights`: e.g. "Bugün hedefine göre 25 g protein açığın var" + a concrete food suggestion that fits the remaining calories). When a goal is reached during the session, the ring pops, a check badge appears and a toast celebrates (not on page load).
 - **Meal lists refresh** through a shared version counter in `useMeals` (`invalidateMeals()` after any mutation), so the today list and the calendar month refetch without prop drilling.
 - **Plan wizard (`/plan`).** `usePlanWizard` holds the 4 steps (body + goal with deficit/surplus slider, training school + weekdays, diet style + meal pattern/16:8 window, calorie-cycling switch) and a live Harris-Benedict preview. "AI planını oluştur" (guarded) -> `usePlanBuilder` shows the stepped loading screen and calls `POST /api/plans/generate`. The server always computes the formula plan (`formulaPlan`), then `generateAiPlan` asks the local LLM in two calls: numbers as schema-constrained JSON (clamped to ±5 % of the formula so the user's deficit isn't undone, macros re-balanced to add up) and the coach summary as plain text with a hard token cap. The summary must pass a quality gate (`cleanSummary`: Turkish only, no garbled/English words, nothing contradicting the goal) or the formula summary is used. LLM down/invalid -> formula plan + notice "AI koç servisine erişilemedi…"; server unreachable -> the same fallback is built client-side. The draft opens in `PlanReview` (`usePlanTuner`): calorie slider, macro sliders with g/kg, "Kalori sabit" lock (moving one macro rebalances the others, `withMacro`), training/rest tabs when cycling. "Bu planı aktif planım yap" saves it to `User.settings.nutritionPlan` and returns to the dashboard.
+- **First-time setup (`/baslangic`).** New accounts have `User.onboardingCompleted = false` (accounts that existed before the migration were set to true). `requireOnboarded()` (`server/guards.ts`) in the /panel, /plan and /gelisim pages redirects them to /baslangic until `POST /api/me/onboarding` saves the answers; the server maps them to PlanInputs (`lib/nutrition/onboarding.ts`: goal from current vs goal weight, activity level -> training routine) and stores a formula plan as the active plan.
+- **Macro engine** (`lib/nutrition/plan.ts#macrosFor`): protein 2.2 g/kg, fat `fatPerKg` (1.0–1.5, default 1.2) g/kg, carbs fill the remaining calories (4/4/9 kcal per g). Keto caps carbs at 15–30 g and low-carb at 100 g, fat absorbs the rest; if protein + fat exceed the calories, carbs are 0. Above BMI 27 the grams use the weight at BMI 27. The AI plan only adjusts calories (±5 %); its macros are always re-derived by the engine.
+- **Intermittent fasting** (`FastingCard`, `useFasting`, `lib/nutrition/fasting.ts`): window saved in `settings.fasting` (minutes after local midnight; may cross midnight; 16:8/18:6/20:4/custom). The phase and countdown are derived from the window and the browser's local clock every second, so reloads and other devices agree. Switching it on the first time shows `SensitiveWarningDialog`.
 - **Targets:** wizard plan (`targetsForDate`: training or rest day by weekday when cycling) > legacy custom plan > legacy profile > `DAILY_GOALS` (`resolveTargets`). Settings live on the account (`User.settings` JSON), saved optimistically by `useAuth().updateSettings`. The old calculator/custom-plan UI was replaced by the wizard; legacy data is still read so existing users keep their targets until they create a plan. FitBot receives the plan in its existing shape (`planForFitbot`: a Profile + today's targets as a custom plan), so its prompt and eval are unchanged.
 
 ## Conventions and gotchas
 
-- **Auth.** Passwords are hashed with argon2id (`server/auth.ts`); never store or log them. Sessions are a random 32-byte token in the httpOnly `ct_session` cookie (SameSite=Lax, `Secure` in production, 30 days); the DB stores only its SHA-256. Unknown usernames cost as much time as wrong passwords. Login/register are rate-limited in memory. Because the cookie is `Secure` under `next start`, a production build must be served over https (localhost is exempt in browsers).
-- **Guarding members-only actions.** `requireAuth(action)` from `useAuth()`: signed in → runs now; guest → shows the "Üyelik bulunamadı. Üye olmak ister misiniz?" panel and runs `action` after sign-in/up. Inside the dialog use `switchAuthView` (keeps the pending action); `openAuth` (header buttons) starts fresh. Used for photo/upload, the quick bar, saving a plan, activating a custom plan and revealing calculator results.
+- **Auth.** Passwords are hashed with argon2id (`server/auth.ts`); never store or log them. Sessions are a random 32-byte token in the httpOnly `ct_session` cookie (SameSite=Lax, `Secure` in production, no expiry = deleted when the browser closes); the DB stores only its SHA-256. The server ends a session after 30 minutes idle (sliding, renewed at most every 5 min) and 12 hours at most (`server/auth.ts`), so returning later always asks for the password. Unknown usernames cost as much time as wrong passwords. Login/register are rate-limited in memory. Because the cookie is `Secure` under `next start`, a production build must be served over https (localhost is exempt in browsers).
+- **Guarding members-only actions.** `requireAuth(action)` from `useAuth()`: signed in → runs now; guest → shows the "Üyelik bulunamadı. Üye olmak ister misiniz?" panel, whose buttons go to /kayit-ol or /giris-yap with `?sonra=<current page>`; after signing in the visitor lands back on that page (the action itself is not replayed). `openAuth(view)` navigates the same way; logout and account deletion go to /giris. Used for photo/upload, the quick bar, saving a plan, activating a custom plan and revealing calculator results.
 - **Local LLM limits (llama3.2, 3B).** It's weak at arithmetic and at long Turkish text inside JSON (rambles, breaks escapes), so every LLM feature here is: small calls, schema-constrained output, hard `num_predict` caps, server-side validation/clamping, and a deterministic fallback. Its Turkish summaries often fail the quality gate; a larger model via `LOCAL_LLM_MODEL` (e.g. a 7-8B model) should pass more often.
 - **Two sets of labels on purpose.** `ACTIVITY_LEVELS`/`PACE_LEVELS`/`TRAINING_TYPES`/`BMI_CATEGORIES` in `lib/nutrition/energy.ts` keep English `label`s because they feed FitBot's prompt and tool results (the eval set is calibrated on them); the UI renders the Turkish ones from `lib/labels.ts`. FitBot replies in the user's language.
+- **Meal slots.** Every meal has a `slot` (breakfast/lunch/dinner/snack). The quick bar reads it from the text ("öğlen"), otherwise `slotForHour`. The day's calories are shared between slots per meal pattern (`SLOT_SHARES`; 16:8 has no breakfast).
+- **Day rating.** "On target" is ±5 % of that day's own calorie target (`rateDay`), shared by the calorie ring and the calendar dots; unlogged days are never counted as zero.
+- **Barcodes.** `@zxing/browser` is lazy-loaded when the scanner opens (works on iOS too); a manual field covers no-camera cases. Only the barcode is sent to Open Food Facts; misses are cached for a day, hits for 30.
+- **Sensitive content.** Choosing 16:8 or a deficit ≥ 750 kcal in the wizard first shows `SensitiveWarningDialog`; "Bana göre değil" keeps the gentler option. Acknowledgement is stored in `settings.sensitiveWarningAck`.
 - **Food database.** `lib/nutrition/foods.ts` is the single source of nutrition values (per 100 g, as eaten), aliases (lower-case Turkish; longest match wins) and unit weights. Add foods there; the photo catalog (`server/food/catalog.ts`) references them by id. Values are approximations.
 - **Vision AI is a mock, driven by image statistics.** `analyzeFoodImage()` decodes the photo with `sharp`, rejects non-food via `detectNoFood()` (too dark, flat, a face/person, mostly blue, no colour), else matches the frame's colours to a dish in `server/food/catalog.ts` and estimates each component's grams from frame coverage plus per-image jitter. Same photo → same result; 800 ms simulated latency. Thresholds live in `GUARD` in `server/food/recognize.ts`. To use a real model, replace `mockAnalyze` and keep returning `{ name, items }` (it's validated with `mealDraftSchema`) and throwing `NoFoodError` for non-food.
 - **Photos are not in `public/`.** They go to `uploads/` and are served by `/api/uploads/[filename]` to their owner only. Filenames are server-generated UUIDs (`isValidFilename`), which also blocks path traversal.

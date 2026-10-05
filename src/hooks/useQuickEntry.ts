@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { getFood } from "@/lib/nutrition/foods";
 import { totalOfItems } from "@/lib/nutrition/macros";
 import { quickParse } from "@/lib/nutrition/quickParse";
+import { slotForHour } from "@/lib/nutrition/slots";
 import { errorMessage } from "@/services/http";
 import { mealService } from "@/services/mealService";
 import type { QuickParseResult } from "@/types/meal";
@@ -52,7 +53,8 @@ export function useQuickEntry() {
     if (!result || result.items.length === 0) return;
     setSaving(true);
     try {
-      const saved = await mealService.create({ name: result.name, items: result.items });
+      const slot = result.slot ?? slotForHour(new Date().getHours());
+      const saved = await mealService.create({ name: result.name, slot, items: result.items });
       toast.success(`"${saved.name}" kaydedildi`, `${saved.calories} kcal günlüğüne eklendi.`);
       setText("");
       setAiResult(null);

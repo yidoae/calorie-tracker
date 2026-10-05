@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { itemMacros, roundMacros, totalOfItems } from "@/lib/nutrition/macros";
-import type { CreateMealInput, MealDraft } from "@/types/meal";
+import type { CreateMealInput, MealDraft, MealSlot } from "@/types/meal";
 import type { Macros, MealItem } from "@/types/nutrition";
 
 /** Portion presets shown on each component, relative to the analyser's estimate. */
@@ -19,12 +19,14 @@ export interface ReviewItem {
 }
 
 /**
- * Editable copy of a photo's breakdown: each component's portion can be slid or snapped to a
- * preset, removed, and the meal renamed. Totals are recomputed with the same pure function the
+ * Editable copy of a meal's components (a photo's breakdown, a scanned product or a logged meal):
+ * each portion can be slid or snapped to a preset, removed, and the meal renamed or moved to
+ * another slot. Totals are recomputed with the same pure function the
  * server uses to store them.
  */
-export function useMealReview(draft: MealDraft) {
+export function useMealReview(draft: MealDraft, initialSlot: MealSlot) {
   const [name, setName] = useState(draft.name);
+  const [slot, setSlot] = useState<MealSlot>(initialSlot);
   const [factors, setFactors] = useState(() => draft.items.map(() => 1));
   const [removed, setRemoved] = useState<Set<number>>(() => new Set());
 
@@ -45,6 +47,8 @@ export function useMealReview(draft: MealDraft) {
   return {
     name,
     setName,
+    slot,
+    setSlot,
     rows,
     totals,
     valid,
@@ -53,6 +57,6 @@ export function useMealReview(draft: MealDraft) {
       setFactors((f) => f.map((v, i) => (i === index ? Math.min(PORTION_RANGE.max, Math.max(PORTION_RANGE.min, factor)) : v))),
     remove: (index: number) => setRemoved((r) => new Set(r).add(index)),
     restoreAll: () => setRemoved(new Set()),
-    toMeal: (): CreateMealInput => ({ name: name.trim(), items: rows.map((r) => r.item) }),
+    toMeal: (): CreateMealInput => ({ name: name.trim(), slot, items: rows.map((r) => r.item) }),
   };
 }

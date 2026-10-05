@@ -1,6 +1,8 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useRef, type KeyboardEvent, type ReactNode } from "react";
+import { SPRING } from "./motion";
 
 export interface SegmentedItem<T extends string> {
   id: T;
@@ -58,12 +60,16 @@ export default function Segmented<T extends string>({ items, value, onChange, la
             tabIndex={selected ? 0 : -1}
             onClick={() => onChange(id)}
             onKeyDown={(e) => onKeyDown(e, i)}
-            className={`flex h-8 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-[4px] px-2 text-[13px] font-semibold outline-none transition-[background-color,color] duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring ${
-              selected ? "bg-ink text-on-ink" : "text-fg-muted hover:bg-surface-2 hover:text-fg"
+            className={`relative flex h-8 min-w-0 cursor-pointer items-center justify-center rounded-[4px] px-2 text-[13px] font-semibold outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring ${
+              selected ? "text-on-ink" : "text-fg-muted hover:bg-surface-2 hover:text-fg"
             }`}
           >
-            {icon}
-            <span className="truncate">{itemLabel}</span>
+            {/* The ink pill slides from the old tab to the new one. */}
+            {selected && <motion.span layoutId={`${idPrefix}-pill`} transition={SPRING} aria-hidden className="absolute inset-0 rounded-[4px] bg-ink" />}
+            <span className="relative flex min-w-0 items-center gap-2">
+              {icon}
+              <span className="truncate">{itemLabel}</span>
+            </span>
           </button>
         );
       })}

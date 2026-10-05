@@ -1,8 +1,9 @@
 "use client";
 
-import { CalendarX2, Trash2 } from "lucide-react";
+import { CalendarX2, Pencil, Trash2 } from "lucide-react";
 import { useConfirm } from "@/hooks/useConfirm";
 import { LOCALE } from "@/lib/dates";
+import { SLOT_LABELS } from "@/lib/labels";
 import { sumMacros } from "@/lib/nutrition/macros";
 import type { MealDTO } from "@/types/meal";
 import { MACRO_KEYS, type Macros } from "@/types/nutrition";
@@ -14,12 +15,13 @@ import MealThumb from "../ui/MealThumb";
 interface Props {
   meals: MealDTO[];
   targets: Macros;
+  onEdit: (meal: MealDTO) => void;
   onDelete: (meal: MealDTO) => void;
   onClearDay: (ids: string[]) => void;
 }
 
 /** One day's totals against the targets, plus a compact list of its meals. */
-export default function DayDetail({ meals, targets, onDelete, onClearDay }: Props) {
+export default function DayDetail({ meals, targets, onEdit, onDelete, onClearDay }: Props) {
   const confirmMeal = useConfirm<MealDTO>();
   const confirmClear = useConfirm<string[]>();
 
@@ -54,11 +56,18 @@ export default function DayDetail({ meals, targets, onDelete, onClearDay }: Prop
               <MealThumb imageUrl={meal.imageUrl} name={meal.name} size={36} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-medium text-fg">{meal.name}</p>
-                <time dateTime={meal.createdAt} className="text-xs text-fg-subtle">
-                  {new Date(meal.createdAt).toLocaleTimeString(LOCALE, { hour: "numeric", minute: "2-digit" })}
-                </time>
+                <p className="truncate text-xs text-fg-subtle tabular-nums">
+                  <span className="font-semibold text-fg">{meal.calories} kcal</span>
+                  {meal.name !== SLOT_LABELS[meal.slot] && ` · ${SLOT_LABELS[meal.slot]}`}
+                  {" · "}
+                  <time dateTime={meal.createdAt}>{new Date(meal.createdAt).toLocaleTimeString(LOCALE, { hour: "numeric", minute: "2-digit" })}</time>
+                </p>
               </div>
-              <p className="shrink-0 text-[13px] font-medium tabular-nums text-fg">{meal.calories} kcal</p>
+              {meal.items.length > 0 && (
+                <button type="button" aria-label={`${meal.name} öğününü düzenle`} onClick={() => onEdit(meal)} className="btn btn-ghost size-7 px-0">
+                  <Pencil aria-hidden className="size-3.5" />
+                </button>
+              )}
               <button type="button" aria-label={`${meal.name} öğününü sil`} onClick={() => confirmMeal.ask(meal)} className="btn btn-ghost-danger size-7 px-0">
                 <Trash2 aria-hidden className="size-3.5" />
               </button>

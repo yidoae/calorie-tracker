@@ -14,8 +14,8 @@ export function useDashboardLayout(profileRef: RefObject<HTMLElement | null>) {
   return {
     activePanel,
     setActivePanel,
-    /** Visible when its tab is active on small screens; always visible from `lg`. */
-    panelClass: (id: Panel) => (id === activePanel ? "block" : "hidden lg:block"),
+    /** Visible when its tab is active on small screens (rising in as it appears); always visible from `lg`. */
+    panelClass: (id: Panel) => (id === activePanel ? "block max-lg:animate-panel" : "hidden lg:block"),
     openProfile: () => {
       setActivePanel("profile");
       requestAnimationFrame(() => profileRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));

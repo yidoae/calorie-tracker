@@ -6,8 +6,15 @@ import { db } from "./db";
 import type { PublicUser } from "@/types/auth";
 
 export const SESSION_COOKIE = "ct_session";
-const SESSION_DAYS = 30;
-const SESSION_MS = SESSION_DAYS * 24 * 60 * 60 * 1000;
+/*
+ * Sessions are short on purpose: the cookie has no expiry (the browser drops it when it closes),
+ * the server ends a session after 30 minutes without a request, and after 12 hours in any case.
+ * So opening the site again later always asks for the password.
+ */
+const IDLE_MS = 30 * 60 * 1000;
+const MAX_AGE_MS = 12 * 60 * 60 * 1000;
+/** Sliding expiry is written at most this often, not on every request. */
+const RENEW_AFTER_MS = 5 * 60 * 1000;
 
 
 export const toPublicUser = (u: Pick<User, "id" | "username">): PublicUser => ({ id: u.id, username: u.username });
@@ -38,17 +45,16 @@ export async function burnPasswordCheck(password: string) {
 
 const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
 
-/** Creates a session row and sets the httpOnly cookie. Call only from Route Handlers. */
+/** Creates a session row and sets the httpOnly browser-session cookie. Call only from Route Handlers. */
 export async function startSession(userId: string) {
   const token = randomBytes(32).toString("base64url");
-  const expiresAt = new Date(Date.now() + SESSION_MS);
-  await db.session.create({ data: { tokenHash: hashToken(token), userId, expiresAt } });
+  await db.session.create({ data: { tokenHash: hashToken(token), userId, expiresAt: new Date(Date.now() + IDLE_MS) } });
+  // No `expires`/`maxAge`: a session cookie, gone when the browser is closed.
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    expires: expiresAt,
   });
 }
 
@@ -59,15 +65,24 @@ export async function endSession() {
   store.delete(SESSION_COOKIE);
 }
 
-/** The signed-in user for this request, or null. Expired sessions are removed on sight. */
+/**
+ * The signed-in user for this request, or null. Idle (30 min) or old (12 h) sessions are removed
+ * on sight; an active one has its idle deadline pushed forward (capped at the 12-hour limit).
+ */
 export async function getCurrentUser(): Promise<User | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const session = await db.session.findUnique({ where: { tokenHash: hashToken(token) }, include: { user: true } });
   if (!session) return null;
-  if (session.expiresAt.getTime() <= Date.now()) {
+  const now = Date.now();
+  const hardLimit = session.createdAt.getTime() + MAX_AGE_MS;
+  if (session.expiresAt.getTime() <= now || hardLimit <= now) {
     await db.session.delete({ where: { id: session.id } }).catch(() => {});
     return null;
+  }
+  if (session.expiresAt.getTime() - now < IDLE_MS - RENEW_AFTER_MS) {
+    const expiresAt = new Date(Math.min(now + IDLE_MS, hardLimit));
+    await db.session.update({ where: { id: session.id }, data: { expiresAt } }).catch(() => {});
   }
   return session.user;
 }

@@ -23,6 +23,7 @@ export async function parseQuickEntry(text: string): Promise<QuickParseResult> {
   const aiMatched = aiMatches.map((m) => m.fragment);
   return {
     name: mealName(slot, items),
+    slot,
     items,
     unmatched: unmatched.filter((f) => !aiMatched.includes(f)),
     aiMatched,

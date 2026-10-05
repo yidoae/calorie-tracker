@@ -1,11 +1,15 @@
 "use client";
 
-import { ChevronDown, Flame, LogOut, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, Download, Flame, LineChart, Loader2, LogOut, SlidersHorizontal, UserX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
+import { useAccountDeletion, useDataExport } from "@/hooks/useAccountData";
 import { useAuth } from "@/hooks/useAuth";
 import { useDisclosure } from "@/hooks/useDisclosure";
+import { ROUTES } from "@/lib/routes";
+import type { ExportFormat } from "@/types/account";
+import DeleteAccountDialog from "../auth/DeleteAccountDialog";
 import Avatar from "../ui/Avatar";
 
 interface Props {
@@ -58,6 +62,8 @@ function ProfileMenu({ username, onOpenProfile }: { username: string; onOpenProf
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menu = useDisclosure(rootRef, triggerRef);
+  const exporter = useDataExport();
+  const deletion = useAccountDeletion();
   const item =
     "flex h-10 w-full cursor-pointer items-center gap-3 rounded-[4px] px-3 text-left text-sm font-medium text-fg outline-none hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -106,6 +112,31 @@ function ProfileMenu({ username, onOpenProfile }: { username: string; onOpenProf
               <SlidersHorizontal aria-hidden className="size-4 text-fg-muted" />
               Beslenme planım
             </button>
+            <Link href={ROUTES.progress} role="menuitem" onClick={menu.close} className={item}>
+              <LineChart aria-hidden className="size-4 text-fg-muted" />
+              Gelişim &amp; Analiz
+            </Link>
+          </div>
+          <div className="mt-2 border-t border-border pt-2">
+            {(["json", "csv"] as ExportFormat[]).map((format) => (
+              <button
+                key={format}
+                type="button"
+                role="menuitem"
+                disabled={exporter.exporting !== null}
+                onClick={() => void exporter.download(format)}
+                className={`${item} disabled:cursor-wait disabled:text-fg-subtle`}
+              >
+                {exporter.exporting === format ? (
+                  <Loader2 aria-hidden className="size-4 animate-spin text-fg-muted" />
+                ) : (
+                  <Download aria-hidden className="size-4 text-fg-muted" />
+                )}
+                Verilerimi indir ({format.toUpperCase()})
+              </button>
+            ))}
+          </div>
+          <div className="mt-2 border-t border-border pt-2">
             <button
               type="button"
               role="menuitem"
@@ -118,9 +149,30 @@ function ProfileMenu({ username, onOpenProfile }: { username: string; onOpenProf
               <LogOut aria-hidden className="size-4 text-fg-muted" />
               Çıkış yap
             </button>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                menu.close();
+                deletion.ask();
+              }}
+              className={`${item} text-danger-text hover:bg-danger-soft`}
+            >
+              <UserX aria-hidden className="size-4" />
+              Hesabımı sil
+            </button>
           </div>
         </div>
       )}
+      <DeleteAccountDialog
+        open={deletion.open}
+        password={deletion.password}
+        error={deletion.error}
+        deleting={deletion.deleting}
+        onPasswordChange={deletion.setPassword}
+        onSubmit={(e) => void deletion.submit(e)}
+        onClose={deletion.close}
+      />
     </div>
   );
 }

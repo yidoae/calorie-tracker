@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { formulaPlan, goalAdjustment, weeklyChangeKg, weeksToGoal } from "@/lib/nutrition/plan";
 import {
+  FAT_PER_KG_RANGE,
   INTENSITY_RANGE,
   TRAINING_DAYS_RANGE,
   planInputsSchema,
@@ -31,6 +32,11 @@ export const DEFAULT_DAYS: Record<number, number[]> = {
   5: [0, 1, 2, 3, 4],
   6: [0, 1, 2, 3, 4, 5],
 };
+
+/** A daily deficit from this size up shows the content warning first (as does choosing 16:8). */
+export const SENSITIVE_DEFICIT_KCAL = 750;
+
+export type SensitiveWarning = { kind: "fasting" } | { kind: "deficit"; value: number };
 
 /** The form keeps number fields as typed text; everything else is already typed. */
 export interface WizardForm extends Omit<PlanInputs, "heightCm" | "weightKg" | "age" | "targetWeightKg"> {
@@ -64,6 +70,7 @@ function initialForm(previous: PlanInputs | null, legacy: Profile | null): Wizar
     split: "upperLower",
     trainingDays: DEFAULT_DAYS[4],
     dietStyle: "highProtein",
+    fatPerKg: FAT_PER_KG_RANGE.default,
     mealPattern: "classic",
     fastingWindowStart: 12,
     cycling: false,
@@ -74,8 +81,17 @@ function initialForm(previous: PlanInputs | null, legacy: Profile | null): Wizar
  * The 4-step plan wizard: form state, per-step validation, navigation (with direction for the
  * slide animation) and a live preview computed with the same formula the server uses.
  */
-export function usePlanWizard(previous: PlanInputs | null, legacy: Profile | null) {
+export function usePlanWizard(
+  previous: PlanInputs | null,
+  legacy: Profile | null,
+  /** Whether the user already read the fasting / large-deficit warning, and how to remember it. */
+  warningAck: { acknowledged: boolean; onAcknowledge: () => void },
+) {
   const [form, setForm] = useState<WizardForm>(() => initialForm(previous, legacy));
+  const [warning, setWarning] = useState<SensitiveWarning | null>(null);
+  // Guests can't save settings, so the acknowledgement also lives here for this visit.
+  const [ackedHere, setAckedHere] = useState(false);
+  const acknowledged = warningAck.acknowledged || ackedHere;
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState<"forward" | "back">("forward");
 
@@ -153,7 +169,31 @@ export function usePlanWizard(previous: PlanInputs | null, legacy: Profile | nul
         return { ...f, trainingDays: [...f.trainingDays, day].sort((a, b) => a - b) };
       }),
     setDietStyle: (style: DietStyle) => set("dietStyle", style),
-    setMealPattern: (pattern: MealPattern) => set("mealPattern", pattern),
+    setFatPerKg: (value: number) => set("fatPerKg", value),
+    setMealPattern: (pattern: MealPattern) => {
+      if (pattern === "if168" && form.mealPattern !== "if168" && !acknowledged) setWarning({ kind: "fasting" });
+      else set("mealPattern", pattern);
+    },
+    setIntensity: (value: number) => {
+      if (form.goal === "cut" && value >= SENSITIVE_DEFICIT_KCAL && !acknowledged) setWarning({ kind: "deficit", value });
+      else set("intensity", value);
+    },
+    /** The content warning before 16:8 or a large deficit, if one is waiting for an answer. */
+    warning,
+    /** "Anladım, devam et": apply the choice and don't ask again. */
+    acceptWarning: () => {
+      if (!warning) return;
+      if (warning.kind === "fasting") set("mealPattern", "if168");
+      else set("intensity", warning.value);
+      setWarning(null);
+      setAckedHere(true);
+      warningAck.onAcknowledge();
+    },
+    /** "Bana göre değil": keep the gentler option. */
+    declineWarning: () => {
+      if (warning?.kind === "deficit") set("intensity", Math.min(form.intensity, SENSITIVE_DEFICIT_KCAL - INTENSITY_RANGE.cut.step));
+      setWarning(null);
+    },
     next: () => {
       if (!stepValid[step]) return;
       setDirection("forward");

@@ -9,6 +9,8 @@ export interface Toast {
   tone: ToastTone;
   title: string;
   description?: string;
+  /** One button in the toast, e.g. "Geri al"; pressing it also closes the toast. */
+  action?: { label: string; onClick: () => void };
 }
 
 export interface ToastApi {
@@ -35,7 +37,8 @@ export function useToastController() {
     (toast: Omit<Toast, "id">) => {
       const id = nextId.current++;
       setToasts((list) => [...list.slice(-(MAX_VISIBLE - 1)), { ...toast, id }]);
-      setTimeout(() => dismiss(id), DURATION_MS[toast.tone]);
+      // Toasts with an action (undo) stay a little longer so there is time to press it.
+      setTimeout(() => dismiss(id), DURATION_MS[toast.tone] + (toast.action ? 2000 : 0));
     },
     [dismiss],
   );

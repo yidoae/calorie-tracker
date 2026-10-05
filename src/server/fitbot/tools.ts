@@ -10,6 +10,9 @@ import {
   goalDirection,
   isValidProfile,
 } from "@/lib/nutrition/energy";
+import { foodItem, getFood } from "@/lib/nutrition/foods";
+import { itemMacros, roundMacros } from "@/lib/nutrition/macros";
+import { parseMealText } from "@/lib/nutrition/quickParse";
 import type { ActivityLevel, Gender, PaceLevel, Profile, TrainingType } from "@/types/profile";
 
 /**
@@ -76,6 +79,23 @@ export const FITBOT_TOOLS: ToolDefinition[] = [
           target_weight_kg: num("Goal body weight in kg (defaults to the saved profile)"),
           kg_per_week: num("Weekly change in kg, e.g. 0.5. Defaults to the pace in the saved profile."),
         },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "food_nutrition",
+      description:
+        "Calories and macros of a specific food from the app's food database, e.g. 'how many calories in 150 g of rice' -> " +
+        "food: 'pirinç pilavı', grams: 150. Without grams, a typical portion is used. Use this instead of estimating food values.",
+      parameters: {
+        type: "object",
+        properties: {
+          food: { type: "string", description: "The food, preferably in Turkish (e.g. 'tavuk göğsü', 'yulaf ezmesi')" },
+          grams: num("Amount in grams, if the user gave one"),
+        },
+        required: ["food"],
       },
     },
   },
@@ -192,6 +212,27 @@ function weeksToGoalTool(args: Args, profile: Profile | null) {
   };
 }
 
+/** Looks foods up with the quick-bar parser, so nutrition comes from our database, never the model. */
+function foodNutritionTool(args: Args) {
+  const food = typeof args.food === "string" ? args.food.trim().slice(0, 120) : "";
+  if (!food) return { error: "Pass the food name in `food`." };
+  const grams = toNumber(args.grams);
+  const { foods } = parseMealText(grams !== undefined && grams > 0 && grams <= 3000 ? `${Math.round(grams)} g ${food}` : food);
+  const items = foods.flatMap(({ foodId, grams: g }) => {
+    const entry = getFood(foodId);
+    return entry ? [foodItem(entry, g)] : [];
+  });
+  if (items.length === 0) {
+    return { error: `"${food}" is not in the app's food database. Say you don't have reliable data for it; do not guess numbers.` };
+  }
+  const rows = items.map((item) => ({ name: item.name, grams: item.grams, ...roundMacros(itemMacros(item)) }));
+  return {
+    summary: rows.map((r) => `${r.grams} g ${r.name}: ${r.calories} kcal, protein ${r.protein} g, carbs ${r.carbs} g, fat ${r.fat} g`).join("; ") +
+      ". Source: the app's food database (approximate values).",
+    items: rows,
+  };
+}
+
 export function isFitbotTool(name: string): boolean {
   return FITBOT_TOOLS.some((t) => t.function.name === name);
 }
@@ -206,6 +247,8 @@ export function runFitbotTool(name: string, rawArgs: unknown, profile: Profile |
       return macrosToCaloriesTool(args);
     case "weeks_to_goal":
       return weeksToGoalTool(args, profile);
+    case "food_nutrition":
+      return foodNutritionTool(args);
     default:
       return { error: `Unknown tool "${name}". Available: ${FITBOT_TOOLS.map((t) => t.function.name).join(", ")}.` };
   }

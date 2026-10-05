@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { errorMessage } from "@/services/http";
 import { mealService } from "@/services/mealService";
-import type { MealDTO } from "@/types/meal";
+import type { CreateMealInput, MealDTO, UpdateMealInput } from "@/types/meal";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
 
@@ -70,9 +70,49 @@ export function useTodayMeals() {
   return useMealsInRange(from, to);
 }
 
-/** Deleting meals, with toasts; lists refresh automatically. */
+/** The version counter, for other hooks that should refetch when meals change. */
+export function useMealsVersion(): number {
+  return useSyncExternalStore(subscribe, () => mealsVersion, () => 0);
+}
+
+/** A meal as input for logging again or saving as a template. */
+export const asMealInput = (meal: Pick<MealDTO, "name" | "slot" | "items">): CreateMealInput => ({
+  name: meal.name,
+  slot: meal.slot,
+  items: meal.items,
+});
+
+/** Editing, deleting and templating meals, with toasts; lists refresh automatically. */
 export function useMealActions() {
   const toast = useToast();
+
+  const update = useCallback(
+    async (id: string, input: UpdateMealInput): Promise<boolean> => {
+      try {
+        const saved = await mealService.update(id, input);
+        toast.success(`"${saved.name}" güncellendi`, `${saved.calories} kcal`);
+        invalidateMeals();
+        return true;
+      } catch (err) {
+        toast.error("Öğün güncellenemedi", errorMessage(err));
+        return false;
+      }
+    },
+    [toast],
+  );
+
+  const saveAsTemplate = useCallback(
+    async (meal: MealDTO) => {
+      try {
+        await mealService.saveTemplate(asMealInput(meal));
+        toast.success(`"${meal.name}" kayıtlı öğünlere eklendi`, "Hızlı girişin altından tek dokunuşla ekleyebilirsin.");
+        invalidateMeals();
+      } catch (err) {
+        toast.error("Öğün kaydedilemedi", errorMessage(err));
+      }
+    },
+    [toast],
+  );
 
   const remove = useCallback(
     async (meal: Pick<MealDTO, "id" | "name">) => {
@@ -99,5 +139,55 @@ export function useMealActions() {
     [toast],
   );
 
-  return { remove, clearDay };
+  /**
+   * Deletes one component of a meal (the whole meal if it was the last one), with "Geri al".
+   * Undo puts the meal back as it was; a deleted meal with a photo can't be restored, so it gets
+   * no undo button.
+   */
+  const removeItem = useCallback(
+    async (meal: MealDTO, index: number) => {
+      const item = meal.items[index];
+      if (!item) return;
+      try {
+        if (meal.items.length <= 1) {
+          await mealService.remove(meal.id);
+          toast.show({
+            tone: "success",
+            title: `${item.name} silindi`,
+            action: meal.imageUrl
+              ? undefined
+              : {
+                  label: "Geri al",
+                  onClick: () =>
+                    void mealService
+                      .create({ ...asMealInput(meal), loggedAt: meal.createdAt })
+                      .catch((err: unknown) => toast.error("Geri alınamadı", errorMessage(err)))
+                      .finally(invalidateMeals),
+                },
+          });
+        } else {
+          await mealService.update(meal.id, { ...asMealInput(meal), items: meal.items.filter((_, i) => i !== index) });
+          toast.show({
+            tone: "success",
+            title: `${item.name} silindi`,
+            action: {
+              label: "Geri al",
+              onClick: () =>
+                void mealService
+                  .update(meal.id, asMealInput(meal))
+                  .catch((err: unknown) => toast.error("Geri alınamadı", errorMessage(err)))
+                  .finally(invalidateMeals),
+            },
+          });
+        }
+      } catch (err) {
+        toast.error("Silinemedi", errorMessage(err));
+      } finally {
+        invalidateMeals();
+      }
+    },
+    [toast],
+  );
+
+  return { update, remove, removeItem, clearDay, saveAsTemplate };
 }

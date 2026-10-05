@@ -14,6 +14,18 @@ export const macrosSchema = z.object({
 });
 export type Macros = z.infer<typeof macrosSchema>;
 
+/** Optional micronutrients, per 100 g like the macros. Sodium in mg, the rest in g. */
+export const MICRO_KEYS = ["fiber", "sugar", "satFat", "sodium"] as const;
+export type MicroKey = (typeof MICRO_KEYS)[number];
+
+export const microsSchema = z.object({
+  fiber: amount.optional(),
+  sugar: amount.optional(),
+  satFat: amount.optional(),
+  sodium: amount.optional(),
+});
+export type Micros = z.infer<typeof microsSchema>;
+
 /** What role a food plays on the plate; drives the chips and colours in the breakdown. */
 export const FOOD_CATEGORIES = ["protein", "carb", "fat", "vegetable", "fruit", "dairy"] as const;
 export const foodCategorySchema = z.enum(FOOD_CATEGORIES);
@@ -29,5 +41,7 @@ export const mealItemSchema = z.object({
   category: foodCategorySchema,
   grams: z.number().positive().max(5000),
   per100g: macrosSchema,
+  /** Fibre, sugar, saturated fat and sodium per 100 g, where known. */
+  micros: microsSchema.optional(),
 });
 export type MealItem = z.infer<typeof mealItemSchema>;

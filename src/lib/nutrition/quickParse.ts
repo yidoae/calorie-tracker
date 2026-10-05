@@ -1,4 +1,5 @@
-import type { QuickParseResult } from "@/types/meal";
+import type { MealSlot, QuickParseResult } from "@/types/meal";
+import { SLOT_LABELS } from "../labels";
 import type { MealItem } from "@/types/nutrition";
 import { FOODS, foodItem, type Food, type FoodUnit } from "./foods";
 
@@ -63,13 +64,13 @@ const MODIFIERS: Record<string, number> = {
   bol: 1.5, kocaman: 1.5, büyük: 1.3, çift: 2, duble: 2, az: 0.5, biraz: 0.5, küçük: 0.7,
 };
 
-const MEAL_SLOTS: [string, string][] = [
-  ["kahvaltı", "Kahvaltı"],
-  ["sabah", "Kahvaltı"],
-  ["öğle", "Öğle yemeği"],
-  ["akşam", "Akşam yemeği"],
-  ["ara", "Ara öğün"],
-  ["atıştırma", "Ara öğün"],
+const MEAL_SLOTS: [string, MealSlot][] = [
+  ["kahvaltı", "breakfast"],
+  ["sabah", "breakfast"],
+  ["öğle", "lunch"],
+  ["akşam", "dinner"],
+  ["ara", "snack"],
+  ["atıştırma", "snack"],
 ];
 
 /** Filler words that are fine to leave unmatched. */
@@ -192,9 +193,9 @@ function segments(text: string): string[] {
     .filter(Boolean);
 }
 
-function mealSlot(words: string[]): string | null {
-  for (const [stem, label] of MEAL_SLOTS) {
-    if (words.some((w) => w.startsWith(stem) && !(stem === "ara" && w !== "ara"))) return label;
+function mealSlot(words: string[]): MealSlot | null {
+  for (const [stem, slot] of MEAL_SLOTS) {
+    if (words.some((w) => w.startsWith(stem) && !(stem === "ara" && w !== "ara"))) return slot;
   }
   return null;
 }
@@ -207,7 +208,7 @@ export interface ParsedFood {
 }
 
 /** Items recognised in `text`, the fragments that weren't, and a meal slot word if one was used. */
-export function parseMealText(text: string): { foods: ParsedFood[]; unmatched: string[]; slot: string | null } {
+export function parseMealText(text: string): { foods: ParsedFood[]; unmatched: string[]; slot: MealSlot | null } {
   const normalized = normalizeText(text);
   const foods: ParsedFood[] = [];
   const unmatched: string[] = [];
@@ -265,8 +266,8 @@ export function parseMealText(text: string): { foods: ParsedFood[]; unmatched: s
 }
 
 /** A meal name for parsed items: the slot ("Öğle yemeği") or the first few item names. */
-export function mealName(slot: string | null, items: Pick<MealItem, "name">[]): string {
-  if (slot) return slot;
+export function mealName(slot: MealSlot | null, items: Pick<MealItem, "name">[]): string {
+  if (slot) return SLOT_LABELS[slot];
   const names = items.slice(0, 3).map((i, k) => (k === 0 ? i.name : i.name.toLocaleLowerCase("tr-TR")));
   return names.join(", ") + (items.length > 3 ? " …" : "");
 }
@@ -278,5 +279,5 @@ export function quickParse(text: string, lookup: (id: string) => Food | undefine
     const food = lookup(foodId);
     return food ? [foodItem(food, grams)] : [];
   });
-  return { name: mealName(slot, items), items, unmatched, aiMatched: [] };
+  return { name: mealName(slot, items), slot, items, unmatched, aiMatched: [] };
 }

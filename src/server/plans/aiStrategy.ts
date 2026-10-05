@@ -1,14 +1,14 @@
 import { DIET_STYLE_LABELS, GOAL_LABELS, MEAL_PATTERN_LABELS, SPLIT_LABELS, TRAINING_STYLE_LABELS, WEEKDAY_SHORT } from "@/lib/labels";
-import { cycleTargets, macrosFor, proteinReferenceWeight, type FormulaResult } from "@/lib/nutrition/plan";
-import { energyOf } from "@/lib/nutrition/planTuning";
+import { cycleTargets, macrosFor, type FormulaResult } from "@/lib/nutrition/plan";
 import type { DayTargets, PlanInputs } from "@/types/plan";
 import { z } from "@/types/zod";
 import { ollamaChat, parseJsonAnswer } from "../llm/ollama";
 
 /*
  * FitBot's plan strategy, in two small calls that a 3B local model handles reliably:
- * 1. Numbers as JSON (constrained by a schema): the model may adjust the formula baseline; the
- *    answer is validated, clamped and re-balanced so the macros always add up.
+ * 1. Numbers as JSON (constrained by a schema): the model may adjust the formula's calories; they
+ *    are clamped, and the macros are always re-derived with the macro engine (protein 2.2 g/kg,
+ *    fat g/kg as chosen, carbs fill the rest), so the model can't skew them.
  * 2. The coach summary as plain text with a hard token cap, written after the numbers are final.
  *    (Long Turkish text inside JSON made llama3.2 ramble and break string escapes.)
  * Any failure returns null; the caller then uses the Harris-Benedict fallback.
@@ -68,17 +68,11 @@ function summaryPrompt(inputs: PlanInputs, base: DayTargets, cycle: AiPlan["cycl
     .join("\n");
 }
 
-/** Clamp the model's numbers to sane bounds and make the macros add up to the calories. */
+/** The model's calories, clamped; the macros come from the engine with the reference grams. */
 function sanitizeDay(raw: z.infer<typeof dayJson>, reference: DayTargets, inputs: PlanInputs): DayTargets {
-  const refWeight = proteinReferenceWeight(inputs);
   // ±5%: the AI may personalise, but not undo the deficit/surplus the user picked on the slider.
   const calories = Math.min(reference.calories * 1.05, Math.max(reference.calories * 0.95, raw.calories));
-  const protein = Math.min(refWeight * 2.6, Math.max(refWeight * 1.4, raw.protein));
-  const fat = Math.max(inputs.weightKg * 0.5, raw.fat);
-  let carbs = raw.carbs;
-  if (Math.abs(energyOf({ protein, carbs, fat }) - calories) > calories * 0.05) carbs = (calories - protein * 4 - fat * 9) / 4;
-  if (carbs < 0 || (inputs.dietStyle === "keto" && carbs > 50)) return macrosFor(calories, protein, inputs.dietStyle);
-  return { calories: Math.round(calories), protein: Math.round(protein), carbs: Math.round(carbs), fat: Math.round(fat) };
+  return macrosFor(calories, { protein: reference.protein, fat: reference.fat }, inputs.dietStyle);
 }
 
 /** Letters outside the Turkish alphabet (e.g. "ź"), a sign of a garbled answer. */

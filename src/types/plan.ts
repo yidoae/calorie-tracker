@@ -27,6 +27,11 @@ export const INTENSITY_RANGE = {
 
 export const TRAINING_DAYS_RANGE = { min: 2, max: 6 } as const;
 
+/** Protein is fixed per kg of body weight (high-protein engine, lib/nutrition/plan.ts). */
+export const PROTEIN_PER_KG = 2.2;
+/** Fat per kg of body weight: user-adjustable; carbs fill the remaining calories. */
+export const FAT_PER_KG_RANGE = { min: 1, max: 1.5, step: 0.05, default: 1.2 } as const;
+
 /** A target weight must point the same way as the goal: below today's weight to cut, above to bulk. */
 export function targetWeightMatchesGoal(i: { goal: PlanGoal; weightKg: number; targetWeightKg: number | null }): boolean {
   if (i.targetWeightKg === null || i.goal === "maintain") return true;
@@ -51,6 +56,8 @@ export const planInputsSchema = z
     split: z.enum(STRENGTH_SPLITS).nullable(),
     trainingDays: z.array(z.number().int().min(0).max(6)).max(7),
     dietStyle: z.enum(DIET_STYLES),
+    /** Fat in g per kg of body weight (plans saved before this field existed read the default). */
+    fatPerKg: z.number().min(FAT_PER_KG_RANGE.min).max(FAT_PER_KG_RANGE.max).default(FAT_PER_KG_RANGE.default),
     mealPattern: z.enum(MEAL_PATTERNS),
     /** First hour of the 8-hour eating window (16:8), e.g. 12 = 12:00–20:00. */
     fastingWindowStart: z.number().int().min(6).max(16),

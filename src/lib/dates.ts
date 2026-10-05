@@ -10,6 +10,12 @@ export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${month}-${day}`;
 }
 
+/** `YYYY-MM-DD` → local midnight of that day. */
+export function dayToDate(day: string): Date {
+  const [y, m, d] = day.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
 export function startOfMonth(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), 1);
 }

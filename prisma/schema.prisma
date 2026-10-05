@@ -15,9 +15,14 @@ model User {
   passwordHash String
   /// JSON: saved profiles, active profile id and custom plan (see src/lib/settings.ts).
   settings     String?
+  /// False until the first-time setup (/baslangic) is done; the panel pages redirect there until then.
+  onboardingCompleted Boolean @default(false)
   createdAt    DateTime  @default(now())
   meals        Meal[]
   sessions     Session[]
+  weights      WeightLog[]
+  water        WaterLog[]
+  savedMeals   SavedMeal[]
 }
 
 model Session {
@@ -40,6 +45,8 @@ model Meal {
   carbs     Float
   fat       Float
   imageUrl  String?
+  /// breakfast | lunch | dinner | snack (validated by mealSlotSchema)
+  slot      String   @default("snack")
   createdAt DateTime @default(now())
   /// Null only for meals logged before accounts existed; those are never shown.
   userId    String?
@@ -65,6 +72,58 @@ model MealItem {
   proteinPer100 Float
   carbsPer100   Float
   fatPer100     Float
+  /// Optional micronutrients per 100 g (null = unknown for this food).
+  fiberPer100   Float?
+  sugarPer100   Float?
+  satFatPer100  Float?
+  /// mg per 100 g
+  sodiumPer100  Float?
 
   @@index([mealId])
+}
+
+/// One body-weight entry per user and local day (re-logging a day replaces it).
+model WeightLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Local calendar day, YYYY-MM-DD.
+  day       String
+  kg        Float
+  createdAt DateTime @default(now())
+
+  @@unique([userId, day])
+}
+
+/// One drink entry (ml); a day's total is the sum of its entries.
+model WaterLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ml        Int
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+/// A reusable meal template ("Kayıtlı öğün"): name, slot and items, logged again in one tap.
+model SavedMeal {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  slot      String
+  /// JSON array of meal items (validated by mealItemSchema on read).
+  items     String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// Cached Open Food Facts lookups by barcode (shared; product data is public).
+model FoodProduct {
+  barcode   String   @id
+  /// JSON of the normalised product, or null when OFF doesn't know the barcode.
+  data      String?
+  fetchedAt DateTime @default(now())
 }
