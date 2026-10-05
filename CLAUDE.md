@@ -99,9 +99,9 @@ src/
     Dashboard.tsx          Composition root: calls hooks, passes props down
     ErrorBoundary.tsx      Section-level error boundary
     dashboard/             Panel cards (Lokma layout): DashboardIntro, EnergyCard (ring), MealsCard (by slot, item delete + undo), QuickAddCard, WeekCard
-    ui/                    Dumb primitives: DashCard, PortionControl, RangeSlider, Switch, ChoiceCard, CategoryChip, Toaster,
+    ui/                    Dumb primitives: DashCard, LogoMark (animated brand ring), PortionControl, RangeSlider, Switch, ChoiceCard, CategoryChip, Toaster,
                            Dialog, ConfirmDialog, Segmented, EmptyState, MacroBar, MealThumb, Avatar, FitBotAvatar, CustomPlanBadge, ErrorFallback
-    layout/SiteHeader.tsx  Nav: login/register or avatar + profile menu
+    layout/SiteHeader.tsx  Nav: animated brand, section pills (members), login/register or avatar + profile menu
     auth/                  GuardDialog ("Üyelik bulunamadı…"), AuthScreen (sign-in/up page + form), DeleteAccountDialog
     meals/                 MealCapture (photo flow), CameraView, MealReview (breakdown + sliders), QuickEntryBar, QuickPicks, MealEditDialog
     progress/              DailyInsights, WaterCard (glasses), MicroPanel
