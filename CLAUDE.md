@@ -27,6 +27,7 @@ npm run dev                 # http://localhost:3000
 | --- | --- |
 | `npm run dev` | Dev server |
 | `npm run build` / `npm start` | Production build / serve it |
+| `npm test` | Unit tests in `tests/*.test.ts` (Node's `node:test` run through `tsx`; no extra test framework) |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | `next typegen` + `tsc --noEmit` (route types like `RouteContext` are generated, so plain `tsc` fails on a clean checkout) |
 | `npm run db:migrate` | `prisma migrate dev`: create/apply migrations after editing `schema.prisma` |
@@ -175,4 +176,4 @@ src/
 - Keep components presentational; if a component needs `useState` for anything but trivial DOM concerns (focus, scroll), that state belongs in a hook.
 - Every new API route: validate with a schema, scope by user, return `{ error }` in Turkish on failure, and add a service function for the client.
 - Every new async UI action: loading state + toast/alert on both success and failure.
-- Run `npm run typecheck`, `npm run lint` and `npm run build` before considering a change done.
+- Run `npm test`, `npm run typecheck`, `npm run lint` and `npm run build` before considering a change done. CI (`.github/workflows/ci.yml`) runs the same four on every pull request and push to master.
