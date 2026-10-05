@@ -1,13 +1,19 @@
 /** Local-timezone date helpers for the calendar. Weeks start on Monday. */
 
-/** UI language is English; pin it so dates don't follow the browser locale (e.g. "Eylül"). */
-export const LOCALE = "en-US";
+/** UI language is Turkish; pin it so dates and numbers don't follow the browser locale. */
+export const LOCALE = "tr-TR";
 
 /** `YYYY-MM-DD` in the local timezone. */
 export function dayKey(d: Date): string {
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${d.getFullYear()}-${month}-${day}`;
+}
+
+/** `YYYY-MM-DD` → local midnight of that day. */
+export function dayToDate(day: string): Date {
+  const [y, m, d] = day.split("-").map(Number);
+  return new Date(y, m - 1, d);
 }
 
 export function startOfMonth(d: Date): Date {

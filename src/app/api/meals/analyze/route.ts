@@ -1,44 +1,35 @@
-import { ALLOWED_MIME_TYPES, MAX_IMAGE_BYTES } from "@/lib/storage";
-import { NoFoodError, analyzeFoodImage } from "@/lib/vision";
-
-function error(message: string, status: number) {
-  return Response.json({ error: message }, { status });
-}
+import { getCurrentUser } from "@/server/auth";
+import { apiError, unauthorized } from "@/server/http";
+import { imageProblem } from "@/server/storage";
+import { NoFoodError, analyzeFoodImage } from "@/server/vision";
 
 /**
- * POST /api/meals/analyze — multipart form with an `image` file; runs the vision model
- * and returns a draft (name, estimated grams, macros) without saving anything. The
- * caller reviews/edits the draft and then POSTs the same image to /api/meals to log it.
+ * POST /api/meals/analyze: multipart form with an `image` file. Runs the vision model and returns
+ * a draft `{ name, items }` (the plate's components with grams) without saving anything. The user
+ * adjusts portions and then POSTs the same image with the reviewed draft to /api/meals.
+ * 422 when the photo isn't food.
  */
 export async function POST(request: Request) {
+  if (!(await getCurrentUser())) return unauthorized();
+
   let image: FormDataEntryValue | null;
   try {
     image = (await request.formData()).get("image");
   } catch {
-    return error("Expected multipart form data", 400);
+    return apiError("Çok parçalı form verisi bekleniyordu", 400);
   }
+  const problem = imageProblem(image);
+  if (problem) return apiError(problem.message, problem.status);
 
-  if (!(image instanceof File) || image.size === 0) {
-    return error("Missing `image` file", 400);
-  }
-  if (!ALLOWED_MIME_TYPES.includes(image.type)) {
-    return error("Unsupported image type — use JPEG, PNG, WebP or GIF", 415);
-  }
-  if (image.size > MAX_IMAGE_BYTES) {
-    return error(`Image too large (max ${MAX_IMAGE_BYTES / 1024 / 1024} MB)`, 413);
-  }
-
-  const data = Buffer.from(await image.arrayBuffer());
-
+  const file = image as File;
   try {
-    const nutrition = await analyzeFoodImage({ data, mimeType: image.type });
-    return Response.json(nutrition);
+    return Response.json(await analyzeFoodImage({ data: Buffer.from(await file.arrayBuffer()), mimeType: file.type }));
   } catch (err) {
     if (err instanceof NoFoodError) {
       console.info(`No food detected (${err.reason})`);
-      return error(err.message, 422);
+      return apiError(err.message, 422);
     }
     console.error("Vision analysis failed:", err);
-    return error("Could not analyze this photo — please try again", 502);
+    return apiError("Bu fotoğraf analiz edilemedi — lütfen tekrar deneyin", 502);
   }
 }

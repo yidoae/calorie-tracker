@@ -1,245 +1,310 @@
 "use client";
 
-import { CalendarDays, Trash2, UserRound, Utensils } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import type { CustomPlan } from "@/lib/customPlan";
-import { sumMacros, type MacroKey } from "@/lib/goals";
-import type { Profile } from "@/lib/profile";
-import { resolveTargets } from "@/lib/targets";
-import type { MealDTO } from "@/lib/types";
-import { useProfile } from "@/lib/useProfile";
-import ConfirmDialog from "./ConfirmDialog";
-import CustomPlanBadge from "./CustomPlanBadge";
-import CustomPlanCard from "./CustomPlanCard";
-import MacroProgress from "./MacroProgress";
-import MealCalendar from "./MealCalendar";
-import MealTimeline, { MealTimelineSkeleton } from "./MealTimeline";
-import MealUploader from "./MealUploader";
-import ProfileGoalsCard from "./ProfileGoalsCard";
-import ProfilePanel from "./ProfilePanel";
-import Segmented, { type SegmentedItem } from "./Segmented";
-
-type Panel = "calendar" | "today" | "profile";
-type ProfileTab = "calculator" | "custom";
+import {
+  CalendarDays,
+  LineChart,
+  Moon,
+  UserRound,
+  Utensils,
+  Zap,
+} from "lucide-react";
+import { motion } from "motion/react";
+import Link from "next/link";
+import { useRef } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useCalorieGoal } from "@/hooks/useCalorieGoal";
+import { useConfirm } from "@/hooks/useConfirm";
+import { useDailyProgress } from "@/hooks/useDailyProgress";
+import { useDashboardLayout, type Panel } from "@/hooks/useDashboardLayout";
+import { useFasting } from "@/hooks/useFasting";
+import { useIsClient } from "@/hooks/useIsClient";
+import { useMealEdit } from "@/hooks/useMealEdit";
+import { useMealActions, useTodayMeals } from "@/hooks/useMeals";
+import { useQuickAdd } from "@/hooks/useQuickAdd";
+import { useWater } from "@/hooks/useWater";
+import { useWeekSeries } from "@/hooks/useWeekSeries";
+import { useWeightLog } from "@/hooks/useWeightLog";
+import { ROUTES } from "@/lib/routes";
+import type { MealSlot } from "@/types/meal";
+import DashboardIntro from "./dashboard/DashboardIntro";
+import EnergyCard from "./dashboard/EnergyCard";
+import MealsCard from "./dashboard/MealsCard";
+import QuickAddCard from "./dashboard/QuickAddCard";
+import WeekCard from "./dashboard/WeekCard";
+import ErrorBoundary from "./ErrorBoundary";
+import FastingCard from "./fasting/FastingCard";
+import MealCalendar from "./history/MealCalendar";
+import SiteHeader from "./layout/SiteHeader";
+import MealCapture from "./meals/MealCapture";
+import MealEditDialog from "./meals/MealEditDialog";
+import QuickEntryBar from "./meals/QuickEntryBar";
+import QuickPicks from "./meals/QuickPicks";
+import ActivePlanCard from "./profile/ActivePlanCard";
+import WeightCard from "./profile/WeightCard";
+import DailyInsights from "./progress/DailyInsights";
+import MicroPanel from "./progress/MicroPanel";
+import WaterCard from "./progress/WaterCard";
+import ConfirmDialog from "./ui/ConfirmDialog";
+import CustomPlanBadge from "./ui/CustomPlanBadge";
+import { cardEnter } from "./ui/motion";
+import Segmented, { type SegmentedItem } from "./ui/Segmented";
 
 const TABS: SegmentedItem<Panel>[] = [
-  { id: "calendar", label: "History", icon: <CalendarDays aria-hidden className="size-4" /> },
-  { id: "today", label: "Today", icon: <Utensils aria-hidden className="size-4" /> },
-  { id: "profile", label: "Profile", icon: <UserRound aria-hidden className="size-4" /> },
+  {
+    id: "calendar",
+    label: "Geçmiş",
+    icon: <CalendarDays aria-hidden className="size-4" />,
+  },
+  {
+    id: "today",
+    label: "Bugün",
+    icon: <Utensils aria-hidden className="size-4" />,
+  },
+  {
+    id: "profile",
+    label: "Plan",
+    icon: <UserRound aria-hidden className="size-4" />,
+  },
 ];
 
-const PROFILE_TABS: SegmentedItem<ProfileTab>[] = [
-  { id: "calculator", label: "Calculator" },
-  { id: "custom", label: "Custom plan" },
-];
-
-const MACROS: MacroKey[] = ["protein", "carbs", "fat"];
-
+/**
+ * The whole app screen. This is the composition root: it reads state from hooks and passes plain
+ * props down; the components below it don't fetch or hold business rules themselves.
+ *
+ * Layout: energy ring · the day's meals · water + quick add on the first row (two columns on
+ * tablets, three from xl), the week chart + micronutrients below, then history and the plan.
+ * On phones the sections are tabs (Geçmiş / Bugün / Plan).
+ */
 export default function Dashboard() {
-  const [meals, setMeals] = useState<MealDTO[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  // Below `lg` the three columns become tabs; from `lg` up every panel is visible and this is ignored.
-  const [activePanel, setActivePanel] = useState<Panel>("today");
-  // Bumped whenever a meal is added or deleted so the calendar refetches its month.
-  const [mealsVersion, setMealsVersion] = useState(0);
-  const [profileTab, setProfileTab] = useState<ProfileTab>("calculator");
-  const [editingProfile, setEditingProfile] = useState<Profile | null>(null);
-  const [confirmingClearToday, setConfirmingClearToday] = useState(false);
+  const { status, user, openAuth } = useAuth();
+  const profileRef = useRef<HTMLDivElement>(null);
+  const quickRef = useRef<HTMLDivElement>(null);
+  const layout = useDashboardLayout(profileRef);
+  const { targets, source, dayType, plan } = useCalorieGoal();
+  const today = useTodayMeals();
+  const actions = useMealActions();
+  const progress = useDailyProgress(
+    today.meals,
+    targets,
+    today.loading,
+    plan?.inputs.mealPattern ?? "classic",
+  );
+  const clearToday = useConfirm<string[]>();
+  const edit = useMealEdit();
+  const water = useWater();
+  const fasting = useFasting();
+  const weight = useWeightLog();
+  const quick = useQuickAdd();
+  const week = useWeekSeries();
+  const isClient = useIsClient();
+  const { panelClass } = layout;
 
-  const { profiles, activeProfile, customPlan, saveProfile, deleteProfile, setActiveProfileId, saveCustomPlan, clearCustomPlan } =
-    useProfile();
+  const badge = dayType ? (
+    <span
+      className={`badge ${dayType === "training" ? "bg-cta text-cta-fg" : "bg-warning-soft text-warning-text"}`}
+    >
+      {dayType === "training" ? (
+        <Zap aria-hidden className="size-3" />
+      ) : (
+        <Moon aria-hidden className="size-3" />
+      )}
+      {dayType === "training" ? "Antrenman günü" : "Dinlenme günü"}
+    </span>
+  ) : source === "custom" ? (
+    <CustomPlanBadge />
+  ) : undefined;
 
-  const customActive = customPlan?.active ?? false;
-  const targets = useMemo(() => resolveTargets(activeProfile, customPlan).targets, [activeProfile, customPlan]);
-
-  // Load today's meals using the browser's local-day boundaries.
-  useEffect(() => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(start);
-    end.setDate(end.getDate() + 1);
-
-    const query = new URLSearchParams({ from: start.toISOString(), to: end.toISOString() });
-    fetch(`/api/meals?${query}`)
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Couldn't load today's meals."))))
-      .then((data: MealDTO[]) => setMeals(data))
-      .catch((err: Error) => setLoadError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const totals = useMemo(() => sumMacros(meals), [meals]);
-  const remaining = targets.calories - Math.round(totals.calories);
-  const caloriePercent = targets.calories > 0 ? Math.min(100, (totals.calories / targets.calories) * 100) : 0;
-
-  function addMeal(meal: MealDTO) {
-    setMeals((prev) => [meal, ...prev]);
-    setMealsVersion((v) => v + 1);
-  }
-
-  async function deleteMeal(id: string) {
-    const res = await fetch(`/api/meals/${id}`, { method: "DELETE" });
-    if (res.ok || res.status === 404) {
-      setMeals((prev) => prev.filter((m) => m.id !== id));
-      setMealsVersion((v) => v + 1);
-    }
-  }
-
-  async function clearDay(ids: string[]) {
-    await Promise.all(ids.map((id) => fetch(`/api/meals/${id}`, { method: "DELETE" })));
-    setMeals((prev) => prev.filter((m) => !ids.includes(m.id)));
-    setMealsVersion((v) => v + 1);
-  }
-
-  function saveCustomPlanForm(plan: CustomPlan) {
-    saveCustomPlan(plan);
-  }
-
-  /** Visible when its tab is active on small screens; always visible from `lg`. */
-  const panelClass = (id: Panel) => (id === activePanel ? "block" : "hidden lg:block");
+  const pickSlot = (slot: MealSlot) => {
+    quick.pick(slot);
+    requestAnimationFrame(() =>
+      quickRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }),
+    );
+  };
 
   return (
-    <div>
-      {/* Phone/tablet section switcher; sticks under the top edge while scrolling. */}
-      <div className="sticky top-0 z-20 -mx-4 mb-4 border-b border-border bg-bg/85 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6 lg:hidden">
-        <Segmented items={TABS} value={activePanel} onChange={setActivePanel} label="Dashboard sections" idPrefix="panel" />
-      </div>
+    <>
+      <SiteHeader onOpenProfile={layout.openProfile} />
+      <DashboardIntro
+        username={user?.username ?? null}
+        goalKcal={targets.calories}
+        ready={isClient}
+      />
 
-      <div className="grid gap-6 lg:grid-cols-[18.5rem_minmax(0,1fr)_21rem] lg:items-start lg:gap-8">
-        <aside id="panel-calendar" aria-label="Calendar and history" className={`space-y-3 ${panelClass("calendar")}`}>
-          <h2 className="section-title hidden lg:block">History</h2>
-          <MealCalendar targets={targets} refreshKey={mealsVersion} onDelete={deleteMeal} onClearDay={clearDay} />
-        </aside>
-
-        <div id="panel-today" className={`min-w-0 space-y-6 ${panelClass("today")}`}>
-          <MealUploader onMealAdded={addMeal} />
-
-          <section aria-labelledby="progress-heading" className="card p-4 sm:p-5">
-            <div className="flex items-center justify-between gap-2">
-              <h2 id="progress-heading" className="section-title">
-                Today&apos;s progress
-              </h2>
-              {customActive && <CustomPlanBadge />}
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
-              <p className="tabular-nums">
-                <span className="text-3xl font-semibold tracking-[-0.03em] text-fg">{Math.round(totals.calories)}</span>
-                <span className="ml-1.5 text-[13px] text-fg-subtle">/ {targets.calories} kcal</span>
-              </p>
-              <p className={`text-[13px] font-medium tabular-nums ${remaining < 0 ? "text-danger-text" : "text-fg-muted"}`}>
-                {remaining < 0 ? `${-remaining} kcal over` : `${remaining} kcal left`}
-              </p>
-            </div>
-            <div
-              role="progressbar"
-              aria-label="Calories"
-              aria-valuemin={0}
-              aria-valuemax={targets.calories}
-              aria-valuenow={Math.min(Math.round(totals.calories), targets.calories)}
-              aria-valuetext={`${Math.round(totals.calories)} of ${targets.calories} kcal`}
-              className="mt-3 h-2 overflow-hidden rounded-full bg-surface-3"
-            >
-              <div
-                className={`h-full rounded-full transition-[width,background-color] duration-500 ease-out ${remaining < 0 ? "bg-danger" : "bg-accent"}`}
-                style={{ width: `${caloriePercent}%` }}
-              />
-            </div>
-
-            <div className="mt-5 grid gap-4 border-t border-border pt-4 sm:grid-cols-3 sm:gap-5">
-              {MACROS.map((macro) => (
-                <MacroProgress key={macro} macro={macro} value={totals[macro]} goal={targets[macro]} mode={macro === "protein" ? "min" : "max"} />
-              ))}
-            </div>
-
-            {!activeProfile && !customActive && (
-              <p className="mt-4 rounded-lg bg-surface-2 px-3 py-2 text-xs text-fg-muted">
-                Showing default goals.{" "}
-                <button
-                  type="button"
-                  onClick={() => setActivePanel("profile")}
-                  className="cursor-pointer rounded font-medium text-accent-text underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
-                >
-                  Set up your profile
-                </button>
-                <span className="hidden lg:inline">Fill in your profile on the right</span> to get personal targets.
-              </p>
-            )}
-          </section>
-
-          <section aria-labelledby="timeline-heading">
-            <div className="mb-3 flex min-h-8 items-center justify-between">
-              <h2 id="timeline-heading" className="section-title">
-                Today&apos;s meals
-                {meals.length > 0 && <span className="ml-1.5 text-fg-subtle tabular-nums">{meals.length}</span>}
-              </h2>
-              {meals.length > 0 && (
-                <button type="button" onClick={() => setConfirmingClearToday(true)} className="btn btn-ghost-danger h-8 px-2.5 text-xs">
-                  <Trash2 aria-hidden className="size-3.5" /> Clear day
-                </button>
-              )}
-            </div>
-            {loadError ? (
-              <p role="alert" className="rounded-lg border border-danger/20 bg-danger-soft px-3 py-2.5 text-[13px] text-danger-text">
-                {loadError}
-              </p>
-            ) : loading ? (
-              <MealTimelineSkeleton />
-            ) : (
-              <MealTimeline meals={meals} onDelete={deleteMeal} />
-            )}
-          </section>
-        </div>
-
-        <aside id="panel-profile" aria-label="Profile and targets" className={`space-y-4 ${panelClass("profile")}`}>
-          <h2 className="section-title hidden lg:block">Profile &amp; targets</h2>
-
-          <ProfileGoalsCard
-            profiles={profiles}
-            activeProfile={activeProfile}
-            customPlan={customPlan}
-            onSelect={setActiveProfileId}
-            onEdit={(p) => {
-              setEditingProfile(p);
-              setProfileTab("calculator");
-            }}
-            onDelete={deleteProfile}
-            onNew={() => {
-              setEditingProfile(null);
-              setProfileTab("calculator");
-            }}
-          />
-
-          <Segmented items={PROFILE_TABS} value={profileTab} onChange={setProfileTab} label="Targets source" idPrefix="targets" />
-
-          <div id={`targets-${profileTab}`} role="tabpanel" aria-labelledby={`targets-tab-${profileTab}`}>
-            {profileTab === "calculator" ? (
-              <ProfilePanel
-                key={editingProfile ? JSON.stringify(editingProfile) : "new"}
-                editing={editingProfile}
-                onSave={(p) => {
-                  saveProfile(p);
-                  setEditingProfile(null);
-                }}
-              />
-            ) : (
-              <CustomPlanCard customPlan={customPlan} onSave={saveCustomPlanForm} onRemove={clearCustomPlan} />
-            )}
+      <main className="flex-1 rounded-t-[24px] bg-bg sm:rounded-t-[40px]">
+        <div className="mx-auto w-full max-w-7xl space-y-5 px-4 pt-4 pb-24 sm:px-6 lg:pt-10">
+          {/* Phone/tablet section switcher; sticks to the top edge while scrolling. */}
+          <div className="sticky top-0 z-20 -mx-4 border-b border-border bg-bg px-4 py-2 sm:-mx-6 sm:px-6 lg:hidden">
+            <Segmented
+              items={TABS}
+              value={layout.activePanel}
+              onChange={layout.setActivePanel}
+              label="Pano bölümleri"
+              idPrefix="panel"
+            />
           </div>
-        </aside>
-      </div>
+
+          {/* panelClass toggles display, so it sits on a wrapper and never fights the grid. */}
+          <div id="panel-today" className={panelClass("today")}>
+            <div className="grid gap-5 lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start xl:grid-cols-[20rem_minmax(0,1fr)_21rem]">
+              <div className="min-w-0 space-y-5 lg:col-start-1 lg:row-start-1">
+                <ErrorBoundary title="Günlük enerji yüklenemedi">
+                  <EnergyCard
+                    index={0}
+                    calories={progress.calorieRing}
+                    macros={progress.macroRings}
+                    badge={badge}
+                    defaultTargets={source === "default"}
+                  />
+                </ErrorBoundary>
+                <ErrorBoundary title="Özet yüklenemedi">
+                  <motion.div {...cardEnter(4)}>
+                    <DailyInsights
+                      title={progress.summaryTitle}
+                      insights={progress.insights}
+                      loading={today.loading}
+                    />
+                  </motion.div>
+                </ErrorBoundary>
+              </div>
+
+              <div className="min-w-0 space-y-5 lg:col-start-2 lg:row-span-2 lg:row-start-1 xl:row-span-1">
+                <ErrorBoundary title="Öğün ekleme yüklenemedi">
+                  <motion.div {...cardEnter(1)} className="space-y-4">
+                    <MealCapture />
+                    <QuickEntryBar />
+                    {status === "user" && <QuickPicks />}
+                  </motion.div>
+                </ErrorBoundary>
+                <ErrorBoundary title="Öğünler yüklenemedi">
+                  <MealsCard
+                    index={1}
+                    status={status}
+                    loading={today.loading}
+                    error={today.error}
+                    slots={progress.slots}
+                    onPick={pickSlot}
+                    onEdit={edit.open}
+                    onSaveTemplate={(m) => void actions.saveAsTemplate(m)}
+                    onDeleteMeal={(m) => void actions.remove(m)}
+                    onDeleteItem={(m, i) => void actions.removeItem(m, i)}
+                    onClearDay={() =>
+                      clearToday.ask(today.meals.map((m) => m.id))
+                    }
+                    onRegister={() => openAuth("register")}
+                    onLogin={() => openAuth("login")}
+                  />
+                </ErrorBoundary>
+              </div>
+
+              <div className="min-w-0 space-y-5 lg:col-start-1 lg:row-start-2 xl:col-start-3 xl:row-start-1">
+                <ErrorBoundary title="Su takibi yüklenemedi">
+                  <WaterCard water={water} index={2} />
+                </ErrorBoundary>
+                <div ref={quickRef} className="scroll-mt-20">
+                  <ErrorBoundary title="Hızlı ekle yüklenemedi">
+                    <QuickAddCard quick={quick} index={3} />
+                  </ErrorBoundary>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-start">
+            <div className={`min-w-0 ${panelClass("calendar")}`}>
+              <ErrorBoundary title="Haftalık grafik yüklenemedi">
+                <WeekCard week={week} index={4} ready={isClient} />
+              </ErrorBoundary>
+            </div>
+            <div className={`min-w-0 ${panelClass("today")}`}>
+              <ErrorBoundary title="Mikro besinler yüklenemedi">
+                <MicroPanel micros={progress.micros} index={5} />
+              </ErrorBoundary>
+            </div>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
+            <motion.section
+              {...cardEnter(6)}
+              aria-labelledby="history-heading"
+              className={`min-w-0 space-y-3 ${panelClass("calendar")}`}
+            >
+              <h2 id="history-heading" className="section-title">
+                Geçmiş
+              </h2>
+              <ErrorBoundary title="Geçmiş yüklenemedi">
+                <MealCalendar
+                  onEdit={edit.open}
+                  onDelete={actions.remove}
+                  onClearDay={actions.clearDay}
+                />
+              </ErrorBoundary>
+            </motion.section>
+
+            <motion.div
+              {...cardEnter(7)}
+              ref={profileRef}
+              id="panel-profile"
+              aria-label="Beslenme planı"
+              className={`min-w-0 scroll-mt-20 space-y-3 lg:scroll-mt-4 ${panelClass("profile")}`}
+            >
+              <h2 className="section-title">Beslenme planı</h2>
+              <ErrorBoundary title="Plan yüklenemedi">
+                <ActivePlanCard
+                  plan={plan}
+                  targets={targets}
+                  source={source}
+                  dayType={dayType}
+                />
+              </ErrorBoundary>
+              <Link
+                href={ROUTES.progress}
+                className="card flex items-center justify-between gap-3 p-4 transition-colors hover:bg-surface-2"
+              >
+                <span>
+                  <span className="card-title block">Gelişim &amp; Analiz</span>
+                  <span className="text-xs text-fg-muted">
+                    Seri, hedef çizgisine karşı kaloriler ve ortalamalar
+                  </span>
+                </span>
+                <LineChart
+                  aria-hidden
+                  className="size-5 shrink-0 text-fg-muted"
+                />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              {...cardEnter(8)}
+              className={`min-w-0 space-y-3 ${panelClass("profile")}`}
+            >
+              <h2 className="section-title">Takip</h2>
+              <ErrorBoundary title="Aralıklı oruç yüklenemedi">
+                <FastingCard fasting={fasting} />
+              </ErrorBoundary>
+              <ErrorBoundary title="Kilo takibi yüklenemedi">
+                <WeightCard log={weight} />
+              </ErrorBoundary>
+            </motion.div>
+          </div>
+        </div>
+      </main>
 
       <ConfirmDialog
-        open={confirmingClearToday}
-        title="Clear today's log?"
-        message={`All ${meals.length} meal${meals.length === 1 ? "" : "s"} logged today will be removed. This can't be undone.`}
-        confirmLabel="Clear day"
-        onConfirm={() => {
-          void clearDay(meals.map((m) => m.id));
-          setConfirmingClearToday(false);
-        }}
-        onCancel={() => setConfirmingClearToday(false)}
+        open={clearToday.open}
+        title="Bugünün kaydı temizlensin mi?"
+        message={`Bugün kaydedilen ${today.meals.length} öğünün tamamı silinecek. Bu işlem geri alınamaz.`}
+        confirmLabel="Günü temizle"
+        onConfirm={() =>
+          clearToday.confirm((ids) => void actions.clearDay(ids))
+        }
+        onCancel={clearToday.cancel}
       />
-    </div>
+      <MealEditDialog
+        meal={edit.editing}
+        saving={edit.saving}
+        onSave={(input) => void edit.save(input)}
+        onClose={edit.close}
+      />
+    </>
   );
 }

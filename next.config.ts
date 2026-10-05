@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   // Without this, Next blocks the dev JS bundles for that origin, the page never hydrates and
   // no button (including "Snap a meal") responds. Dev-only; ignored by `next start`.
   allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.*.*.*", "*.local"],
+  // Old paths: the guest dashboard lived at /uygulama, "Gelişim & Analiz" at /trendler.
+  async redirects() {
+    return [
+      { source: "/uygulama", destination: "/panel", permanent: false },
+      { source: "/trendler", destination: "/gelisim", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;
