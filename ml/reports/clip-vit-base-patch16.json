@@ -1,0 +1,333 @@
+{
+  "model": "openai/clip-vit-base-patch16",
+  "n_train": 10587,
+  "n_test": 2739,
+  "scores": {
+    "probe": {
+      "top1": 0.8784227820372399,
+      "top3": 0.9678714859437751
+    },
+    "zeroshot_covered": {
+      "top1": 0.7572106608251187,
+      "top3": 0.9182183278568821
+    },
+    "zeroshot_all79": {
+      "top1": 0.6385542168674698,
+      "top3": 0.8305951077035414
+    }
+  },
+  "by_source": {
+    "food101": {
+      "n": 880,
+      "probe_top1": 0.9806818181818182,
+      "zeroshot_covered_top1": 0.9363636363636364
+    },
+    "foodseg103": {
+      "n": 1410,
+      "probe_top1": 0.7872340425531915,
+      "zeroshot_covered_top1": 0.6177304964539007
+    },
+    "turkishfoods25": {
+      "n": 449,
+      "probe_top1": 0.9643652561247216,
+      "zeroshot_covered_top1": 0.844097995545657
+    }
+  },
+  "per_class": {
+    "almonds": {
+      "n": 10,
+      "probe_top1": 0.4
+    },
+    "apple": {
+      "n": 36,
+      "probe_top1": 0.8611111111111112
+    },
+    "avocado": {
+      "n": 18,
+      "probe_top1": 0.6666666666666666
+    },
+    "baklava": {
+      "n": 118,
+      "probe_top1": 0.9491525423728814
+    },
+    "banana": {
+      "n": 41,
+      "probe_top1": 0.8292682926829268
+    },
+    "berries": {
+      "n": 80,
+      "probe_top1": 0.925
+    },
+    "borek": {
+      "n": 78,
+      "probe_top1": 0.9743589743589743
+    },
+    "bread": {
+      "n": 80,
+      "probe_top1": 0.7875
+    },
+    "broccoli": {
+      "n": 80,
+      "probe_top1": 0.9625
+    },
+    "carrot": {
+      "n": 80,
+      "probe_top1": 0.8375
+    },
+    "chickenWing": {
+      "n": 80,
+      "probe_top1": 1.0
+    },
+    "corn": {
+      "n": 80,
+      "probe_top1": 0.9125
+    },
+    "cucumber": {
+      "n": 80,
+      "probe_top1": 0.775
+    },
+    "egg": {
+      "n": 56,
+      "probe_top1": 0.8035714285714286
+    },
+    "eggFried": {
+      "n": 80,
+      "probe_top1": 0.9625
+    },
+    "fries": {
+      "n": 155,
+      "probe_top1": 0.8580645161290322
+    },
+    "greenBeans": {
+      "n": 115,
+      "probe_top1": 0.8521739130434782
+    },
+    "greens": {
+      "n": 160,
+      "probe_top1": 0.74375
+    },
+    "hummus": {
+      "n": 80,
+      "probe_top1": 1.0
+    },
+    "karniyarik": {
+      "n": 30,
+      "probe_top1": 0.8666666666666667
+    },
+    "kofte": {
+      "n": 47,
+      "probe_top1": 1.0
+    },
+    "kuruFasulye": {
+      "n": 51,
+      "probe_top1": 0.9803921568627451
+    },
+    "lahmacun": {
+      "n": 24,
+      "probe_top1": 1.0
+    },
+    "manti": {
+      "n": 52,
+      "probe_top1": 1.0
+    },
+    "milk": {
+      "n": 23,
+      "probe_top1": 0.9565217391304348
+    },
+    "noodles": {
+      "n": 62,
+      "probe_top1": 0.8064516129032258
+    },
+    "olives": {
+      "n": 7,
+      "probe_top1": 0.5714285714285714
+    },
+    "orange": {
+      "n": 46,
+      "probe_top1": 0.8478260869565217
+    },
+    "pizza": {
+      "n": 80,
+      "probe_top1": 0.9875
+    },
+    "potato": {
+      "n": 80,
+      "probe_top1": 0.85
+    },
+    "redPepper": {
+      "n": 59,
+      "probe_top1": 0.7288135593220338
+    },
+    "salmon": {
+      "n": 80,
+      "probe_top1": 0.9875
+    },
+    "shrimp": {
+      "n": 42,
+      "probe_top1": 0.6904761904761905
+    },
+    "simit": {
+      "n": 43,
+      "probe_top1": 0.9534883720930233
+    },
+    "spaghetti": {
+      "n": 126,
+      "probe_top1": 0.873015873015873
+    },
+    "steak": {
+      "n": 80,
+      "probe_top1": 0.9625
+    },
+    "tomato": {
+      "n": 80,
+      "probe_top1": 0.6375
+    },
+    "tost": {
+      "n": 80,
+      "probe_top1": 0.95
+    },
+    "walnuts": {
+      "n": 9,
+      "probe_top1": 0.6666666666666666
+    },
+    "whiteRice": {
+      "n": 131,
+      "probe_top1": 0.8854961832061069
+    }
+  },
+  "confusions": [
+    {
+      "truth": "greens",
+      "pred": "tomato",
+      "n": 9
+    },
+    {
+      "truth": "tomato",
+      "pred": "redPepper",
+      "n": 9
+    },
+    {
+      "truth": "greens",
+      "pred": "bread",
+      "n": 9
+    },
+    {
+      "truth": "redPepper",
+      "pred": "carrot",
+      "n": 7
+    },
+    {
+      "truth": "tomato",
+      "pred": "olives",
+      "n": 6
+    },
+    {
+      "truth": "greens",
+      "pred": "carrot",
+      "n": 6
+    },
+    {
+      "truth": "spaghetti",
+      "pred": "noodles",
+      "n": 5
+    },
+    {
+      "truth": "greens",
+      "pred": "potato",
+      "n": 5
+    },
+    {
+      "truth": "banana",
+      "pred": "berries",
+      "n": 5
+    },
+    {
+      "truth": "whiteRice",
+      "pred": "potato",
+      "n": 4
+    }
+  ],
+  "foods_without_photos": [
+    "ayran",
+    "beefPatty",
+    "bolognese",
+    "brownRice",
+    "bulgur",
+    "bun",
+    "butter",
+    "cacik",
+    "cheese",
+    "chicken",
+    "chickenBoiled",
+    "chickenBreastRaw",
+    "chickenRoast",
+    "chickenSaute",
+    "chickenThigh",
+    "chickpeas",
+    "doner",
+    "friedChicken",
+    "honey",
+    "iskender",
+    "lentilSoup",
+    "lentils",
+    "menemen",
+    "oats",
+    "oatsDry",
+    "oil",
+    "pide",
+    "proteinPowder",
+    "stirFryVeg",
+    "sucuk",
+    "sutlac",
+    "sweetPotato",
+    "tuna",
+    "tunaOil",
+    "turkey",
+    "whiteCheese",
+    "wholeWheatBread",
+    "yogurt",
+    "yogurtGreek"
+  ],
+  "train_counts": {
+    "whiteRice": 600,
+    "baklava": 600,
+    "borek": 300,
+    "kuruFasulye": 300,
+    "karniyarik": 300,
+    "manti": 300,
+    "simit": 300,
+    "greenBeans": 571,
+    "kofte": 300,
+    "lahmacun": 203,
+    "chickenWing": 300,
+    "greens": 532,
+    "pizza": 300,
+    "hummus": 300,
+    "steak": 300,
+    "tost": 300,
+    "fries": 448,
+    "eggFried": 300,
+    "spaghetti": 403,
+    "salmon": 300,
+    "potato": 300,
+    "cucumber": 270,
+    "bread": 300,
+    "carrot": 300,
+    "broccoli": 300,
+    "corn": 300,
+    "egg": 178,
+    "berries": 300,
+    "tomato": 300,
+    "redPepper": 150,
+    "apple": 73,
+    "banana": 79,
+    "orange": 126,
+    "milk": 36,
+    "shrimp": 77,
+    "noodles": 152,
+    "avocado": 36,
+    "walnuts": 21,
+    "almonds": 17,
+    "olives": 15
+  }
+}
