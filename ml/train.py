@@ -27,6 +27,14 @@ from transformers import CLIPModel, CLIPProcessor
 ROOT = Path(__file__).parent
 DATA = ROOT / "data"
 BATCH = 32
+# What else a region of a meal photo can be. The app splits a plate into regions and drops the ones
+# that look more like these than like food.
+BACKGROUND_PROMPTS = {
+    "plate": "an empty white plate", "bowl": "an empty bowl", "table": "a wooden table", "tablecloth": "a tablecloth",
+    "tray": "a food tray", "napkin": "a paper napkin", "cutlery": "a fork, knife or spoon", "glass": "a drinking glass",
+    "cup": "a cup", "bottle": "a bottle", "hand": "a person's hand", "phone": "a phone screen",
+    "packaging": "food packaging", "box": "a takeaway box", "board": "a cutting board",
+}
 
 
 def load_manifest():
@@ -59,7 +67,7 @@ def embed_images(model, processor, paths: list[str], cache: Path) -> np.ndarray:
 @torch.no_grad()
 def embed_texts(model, processor, prompts: dict[str, str]) -> tuple[list[str], np.ndarray]:
     ids = list(prompts)
-    texts = [f"a photo of {prompts[i]}, a type of food." for i in ids]
+    texts = [prompts[i] if i.startswith("bg:") else f"a photo of {prompts[i]}, a type of food." for i in ids]
     out = model.get_text_features(**processor(text=texts, return_tensors="pt", padding=True))
     out = out.pooler_output if hasattr(out, "pooler_output") else out
     return ids, torch.nn.functional.normalize(out, dim=-1).numpy()
@@ -90,6 +98,7 @@ def main():
     slug = args.model.split("/")[-1]
     emb = embed_images(model, processor, [r["path"] for r in rows], DATA / f"emb-{slug}.npz")
     text_ids, text_emb = embed_texts(model, processor, prompts)
+    bg_ids, bg_emb = embed_texts(model, processor, {f"bg:{k}": f"a photo of {v}." for k, v in BACKGROUND_PROMPTS.items()})
 
     train = np.array([r["split"] == "train" for r in rows])
     y = np.array([r["food_id"] for r in rows])
@@ -149,6 +158,7 @@ def main():
         "coef": np.round(probe.coef_, 5).tolist(),
         "intercept": np.round(probe.intercept_, 5).tolist(),
         "zeroshot": {"ids": text_ids, "text_emb": np.round(text_emb, 5).tolist()},
+        "background": {"ids": [i.removeprefix("bg:") for i in bg_ids], "text_emb": np.round(bg_emb, 5).tolist()},
     }), encoding="utf-8")
     (ROOT / "reports").mkdir(exist_ok=True)
     (ROOT / "reports" / f"{slug}.json").write_text(json.dumps({

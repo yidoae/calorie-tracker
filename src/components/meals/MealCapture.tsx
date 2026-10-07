@@ -137,6 +137,7 @@ export default function MealCapture() {
                 saving={phase.kind === "saving"}
                 onSave={(meal) => void capture.save(meal)}
                 onDiscard={capture.discard}
+                subtitle={`${phase.draft.items.length} bileşen bulduk. Yanlış olanı altındaki seçeneklerle düzelt, gramları kontrol et.`}
               />
             </div>
           )

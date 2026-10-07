@@ -47,7 +47,10 @@ export const updateMealSchema = createMealSchema.omit({ loggedAt: true });
 export type UpdateMealInput = CreateMealInput;
 
 /** The vision model's (or a barcode's) proposal, reviewed and portion-adjusted before it's logged. */
-export const mealDraftSchema = createMealSchema.omit({ slot: true, loggedAt: true });
+export const mealDraftSchema = createMealSchema.omit({ slot: true, loggedAt: true }).extend({
+  /** Photo drafts: per item, the model's top guesses, best first (`alternatives[i][0]` is `items[i]`). */
+  alternatives: z.array(z.array(mealItemSchema).min(1).max(5)).max(30).optional(),
+});
 export type MealDraft = z.infer<typeof mealDraftSchema>;
 
 /** A reusable meal template ("Kayıtlı öğün"). */

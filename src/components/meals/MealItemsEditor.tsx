@@ -5,6 +5,7 @@ import { PORTION_RANGE, PORTION_STEPS, type useMealReview } from "@/hooks/useMea
 import { LOCALE } from "@/lib/dates";
 import { SLOT_LABELS } from "@/lib/labels";
 import { MEAL_SLOTS } from "@/types/meal";
+import type { MealItem } from "@/types/nutrition";
 import CategoryChip from "../ui/CategoryChip";
 import ChipGroup from "../ui/ChipGroup";
 import PortionControl from "../ui/PortionControl";
@@ -14,11 +15,29 @@ type Review = ReturnType<typeof useMealReview>;
 const fmt = (n: number) => n.toLocaleString(LOCALE, { maximumFractionDigits: 1 });
 const SLOT_OPTIONS = MEAL_SLOTS.map((id) => ({ id, label: SLOT_LABELS[id] }));
 
+/** A photo component's guesses, best first; the user picks the right one. */
+export interface ComponentGuesses {
+  options: MealItem[];
+  picked: number;
+  onPick: (index: number) => void;
+}
+
 /**
  * The editable body of a meal: name, slot, one card per component with its portion slider, and
- * live totals. Shared by the photo review, the barcode review and the edit dialog.
+ * live totals. Shared by the photo review, the barcode review and the edit dialog. `guesses[i]`
+ * (photo meals) adds "Bu mu?" chips to component i.
  */
-export default function MealItemsEditor({ review, idPrefix }: { review: Review; idPrefix: string }) {
+export default function MealItemsEditor({
+  review,
+  idPrefix,
+  guesses,
+  disabled = false,
+}: {
+  review: Review;
+  idPrefix: string;
+  guesses?: ComponentGuesses[];
+  disabled?: boolean;
+}) {
   return (
     <div className="space-y-4">
       <div>
@@ -56,6 +75,9 @@ export default function MealItemsEditor({ review, idPrefix }: { review: Review; 
                 <X aria-hidden className="size-4" />
               </button>
             </div>
+            {(guesses?.[row.index]?.options.length ?? 0) > 1 && (
+              <GuessChips guesses={guesses![row.index]} label={`${row.item.name} doğru mu?`} disabled={disabled} />
+            )}
             <PortionControl
               id={`${idPrefix}-portion-${row.index}`}
               label={row.item.name}
@@ -99,6 +121,29 @@ export default function MealItemsEditor({ review, idPrefix }: { review: Review; 
           </div>
         ))}
       </dl>
+    </div>
+  );
+}
+
+function GuessChips({ guesses, label, disabled }: { guesses: ComponentGuesses; label: string; disabled: boolean }) {
+  return (
+    <div role="radiogroup" aria-label={label} className="mb-3 flex flex-wrap items-center gap-1.5">
+      <span className="text-xs font-semibold text-fg-muted">Bu mu?</span>
+      {guesses.options.map((option, i) => (
+        <button
+          key={option.name}
+          type="button"
+          role="radio"
+          aria-checked={i === guesses.picked}
+          onClick={() => guesses.onPick(i)}
+          disabled={disabled}
+          className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors ${
+            i === guesses.picked ? "border-ink bg-ink text-on-ink" : "border-border bg-surface text-fg hover:border-ink"
+          }`}
+        >
+          {option.name}
+        </button>
+      ))}
     </div>
   );
 }

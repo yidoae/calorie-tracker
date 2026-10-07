@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
   // no button (including "Snap a meal") responds. Dev-only; ignored by `next start`.
   allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.*.*.*", "*.local"],
   // Tesseract (label OCR) spawns a worker thread from its own files; bundling breaks that path.
-  serverExternalPackages: ["tesseract.js"],
+  // transformers.js (photo recognition) loads ONNX Runtime's native binaries the same way.
+  serverExternalPackages: ["tesseract.js", "@huggingface/transformers"],
   // Old paths: the guest dashboard lived at /uygulama, "Gelişim & Analiz" at /trendler.
   async redirects() {
     return [

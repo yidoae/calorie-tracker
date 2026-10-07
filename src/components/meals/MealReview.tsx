@@ -4,6 +4,7 @@ import { Check, Loader2, ScanBarcode, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useMealReview } from "@/hooks/useMealReview";
+import { plateName } from "@/lib/nutrition/plateName";
 import { slotForHour } from "@/lib/nutrition/slots";
 import type { CreateMealInput, MealDraft } from "@/types/meal";
 import MealItemsEditor from "./MealItemsEditor";
@@ -17,13 +18,14 @@ interface Props {
   onDiscard: () => void;
   title?: string;
   subtitle?: string;
-  /** Start with empty gram fields the user must fill (a scanned product: amount eaten unknown). */
+  /** Start with empty gram fields the user must fill (amount eaten unknown: a scanned product or a photo). */
   askGrams?: boolean;
 }
 
 /**
  * A proposed meal before logging (a photo's breakdown or a scanned product): every component with
- * its own portion slider and presets, the slot, and live totals.
+ * its own portion slider and presets, the slot, and live totals. A photo draft with `alternatives`
+ * shows each component's guesses as chips; picking one swaps that food and keeps its grams.
  */
 export default function MealReview({ image, draft, saving, onSave, onDiscard, title = "Tabağını kontrol et", subtitle, askGrams = false }: Props) {
   const previewUrl = useMemo(() => (image ? URL.createObjectURL(image) : null), [image]);
@@ -32,7 +34,25 @@ export default function MealReview({ image, draft, saving, onSave, onDiscard, ti
   }, [previewUrl]);
   // The slot follows the time the review opened; the user can change it.
   const [initialSlot] = useState(() => slotForHour(new Date().getHours()));
-  const review = useMealReview(draft, initialSlot, { askGrams });
+  const [picked, setPicked] = useState<number[]>(() => draft.items.map(() => 0));
+  const shown = useMemo(() => {
+    const alternatives = draft.alternatives;
+    if (!alternatives) return draft;
+    return { ...draft, items: draft.items.map((item, i) => alternatives[i]?.[picked[i]] ?? item) };
+  }, [draft, picked]);
+  const review = useMealReview(shown, initialSlot, { askGrams });
+
+  const guesses = draft.alternatives?.map((options, component) => ({
+    options,
+    picked: picked[component],
+    onPick: (choice: number) => {
+      const next = picked.map((p, i) => (i === component ? choice : p));
+      // Rename only while the name is still the one built from the guesses, not something typed.
+      const names = (pick: number[]) => shown.items.map((item, i) => draft.alternatives?.[i]?.[pick[i]]?.name ?? item.name);
+      if (review.name === plateName(names(picked))) review.setName(plateName(names(next)));
+      setPicked(next);
+    },
+  }));
 
   return (
     <div className="card space-y-4 p-4 sm:p-6">
@@ -52,7 +72,7 @@ export default function MealReview({ image, draft, saving, onSave, onDiscard, ti
         </div>
       </div>
 
-      <MealItemsEditor review={review} idPrefix="review" />
+      <MealItemsEditor review={review} idPrefix="review" guesses={guesses} disabled={saving} />
 
       <div className="flex gap-2 border-t border-border pt-4">
         <button type="button" onClick={onDiscard} disabled={saving} className="btn btn-secondary flex-1">
