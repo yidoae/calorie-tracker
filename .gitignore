@@ -60,3 +60,6 @@ next-env.d.ts
 
 # OCR language data for label reading (downloaded on first use)
 /.cache
+
+# Training/build logs (ml/train.py, ml/build_dataset.py)
+/ml/*.log
