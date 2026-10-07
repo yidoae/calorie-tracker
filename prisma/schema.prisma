@@ -23,6 +23,7 @@ model User {
   weights      WeightLog[]
   water        WaterLog[]
   savedMeals   SavedMeal[]
+  customFoods  CustomFood[]
 }
 
 model Session {
@@ -126,4 +127,28 @@ model FoodProduct {
   /// JSON of the normalised product, or null when OFF doesn't know the barcode.
   data      String?
   fetchedAt DateTime @default(now())
+}
+
+/// A food the user entered themselves (typed or read from a pack's nutrition label); shown in
+/// "Hızlı ekle" next to the built-in foods. Nutrition per 100 g like MealItem.
+model CustomFood {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  brand         String?
+  kcalPer100    Float
+  proteinPer100 Float
+  carbsPer100   Float
+  fatPer100     Float
+  fiberPer100   Float?
+  sugarPer100   Float?
+  satFatPer100  Float?
+  /// mg per 100 g
+  sodiumPer100  Float?
+  /// Grams in one serving as printed on the pack, if known (shown as a hint, never pre-filled).
+  servingGrams  Float?
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
 }

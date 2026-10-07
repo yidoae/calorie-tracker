@@ -61,9 +61,12 @@ export default function MealItemsEditor({ review, idPrefix }: { review: Review; 
               label={row.item.name}
               factor={row.factor}
               grams={row.item.grams}
+              gramText={row.gramText}
+              missing={row.missing}
               steps={PORTION_STEPS}
               range={PORTION_RANGE}
               onChange={(f) => review.setFactor(row.index, f)}
+              onGramsChange={(text) => review.setGrams(row.index, text)}
             />
             <p className="mt-2 text-xs text-fg-muted tabular-nums">
               P {fmt(row.macros.protein)} g · K {fmt(row.macros.carbs)} g · Y {fmt(row.macros.fat)} g

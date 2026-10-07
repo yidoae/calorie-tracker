@@ -57,3 +57,6 @@ next-env.d.ts
 
 # Food vision dataset (built by ml/build_dataset.py)
 /ml/data
+
+# OCR language data for label reading (downloaded on first use)
+/.cache

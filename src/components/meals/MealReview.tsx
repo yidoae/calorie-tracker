@@ -17,20 +17,22 @@ interface Props {
   onDiscard: () => void;
   title?: string;
   subtitle?: string;
+  /** Start with empty gram fields the user must fill (a scanned product: amount eaten unknown). */
+  askGrams?: boolean;
 }
 
 /**
  * A proposed meal before logging (a photo's breakdown or a scanned product): every component with
  * its own portion slider and presets, the slot, and live totals.
  */
-export default function MealReview({ image, draft, saving, onSave, onDiscard, title = "Tabağını kontrol et", subtitle }: Props) {
+export default function MealReview({ image, draft, saving, onSave, onDiscard, title = "Tabağını kontrol et", subtitle, askGrams = false }: Props) {
   const previewUrl = useMemo(() => (image ? URL.createObjectURL(image) : null), [image]);
   useEffect(() => () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
   }, [previewUrl]);
   // The slot follows the time the review opened; the user can change it.
   const [initialSlot] = useState(() => slotForHour(new Date().getHours()));
-  const review = useMealReview(draft, initialSlot);
+  const review = useMealReview(draft, initialSlot, { askGrams });
 
   return (
     <div className="card space-y-4 p-4 sm:p-6">

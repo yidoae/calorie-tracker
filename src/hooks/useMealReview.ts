@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { itemMacros, roundMacros, totalOfItems } from "@/lib/nutrition/macros";
+import { itemMacros, parseGrams, roundMacros, totalOfItems } from "@/lib/nutrition/macros";
 import type { CreateMealInput, MealDraft, MealSlot } from "@/types/meal";
 import type { Macros, MealItem } from "@/types/nutrition";
 
@@ -16,33 +16,52 @@ export interface ReviewItem {
   estimate: number;
   factor: number;
   macros: Macros;
+  /** What's in the gram field (typed, or set by the slider/presets). */
+  gramText: string;
+  /** True while the gram field is empty or invalid; the meal can't be saved then. */
+  missing: boolean;
 }
+
+const asText = (grams: number) => String(Math.max(1, Math.round(grams)));
 
 /**
  * Editable copy of a meal's components (a photo's breakdown, a scanned product or a logged meal):
- * each portion can be slid or snapped to a preset, removed, and the meal renamed or moved to
- * another slot. Totals are recomputed with the same pure function the
+ * each portion can be typed in grams, slid or snapped to a preset, removed, and the meal renamed or
+ * moved to another slot. With `askGrams` (a scanned product: we don't know how much was eaten) the
+ * gram fields start empty and must be filled. Totals are recomputed with the same pure function the
  * server uses to store them.
  */
-export function useMealReview(draft: MealDraft, initialSlot: MealSlot) {
+export function useMealReview(draft: MealDraft, initialSlot: MealSlot, { askGrams = false }: { askGrams?: boolean } = {}) {
   const [name, setName] = useState(draft.name);
   const [slot, setSlot] = useState<MealSlot>(initialSlot);
-  const [factors, setFactors] = useState(() => draft.items.map(() => 1));
+  const [gramTexts, setGramTexts] = useState(() => draft.items.map((item) => (askGrams ? "" : asText(item.grams))));
   const [removed, setRemoved] = useState<Set<number>>(() => new Set());
 
   const rows = useMemo(
     () =>
       draft.items.flatMap((item, i): (ReviewItem & { index: number })[] => {
         if (removed.has(i)) return [];
-        const grams = Math.max(1, Math.round(item.grams * factors[i]));
-        const scaled = { ...item, grams };
-        return [{ index: i, item: scaled, estimate: item.grams, factor: factors[i], macros: roundMacros(itemMacros(scaled)) }];
+        const grams = parseGrams(gramTexts[i]);
+        const scaled = { ...item, grams: grams ?? 0 };
+        return [
+          {
+            index: i,
+            item: scaled,
+            estimate: item.grams,
+            factor: grams === null ? 0 : grams / item.grams,
+            macros: roundMacros(itemMacros(scaled)),
+            gramText: gramTexts[i],
+            missing: grams === null,
+          },
+        ];
       }),
-    [draft.items, factors, removed],
+    [draft.items, gramTexts, removed],
   );
 
   const totals = useMemo(() => totalOfItems(rows.map((r) => r.item)), [rows]);
-  const valid = name.trim().length > 0 && rows.length > 0;
+  const valid = name.trim().length > 0 && rows.length > 0 && rows.every((r) => !r.missing);
+
+  const setText = (index: number, text: string) => setGramTexts((t) => t.map((v, i) => (i === index ? text : v)));
 
   return {
     name,
@@ -54,7 +73,8 @@ export function useMealReview(draft: MealDraft, initialSlot: MealSlot) {
     valid,
     removedCount: removed.size,
     setFactor: (index: number, factor: number) =>
-      setFactors((f) => f.map((v, i) => (i === index ? Math.min(PORTION_RANGE.max, Math.max(PORTION_RANGE.min, factor)) : v))),
+      setText(index, asText(draft.items[index].grams * Math.min(PORTION_RANGE.max, Math.max(PORTION_RANGE.min, factor)))),
+    setGrams: (index: number, text: string) => setText(index, text.replace(/[^\d.,]/g, "").slice(0, 6)),
     remove: (index: number) => setRemoved((r) => new Set(r).add(index)),
     restoreAll: () => setRemoved(new Set()),
     toMeal: (): CreateMealInput => ({ name: name.trim(), slot, items: rows.map((r) => r.item) }),

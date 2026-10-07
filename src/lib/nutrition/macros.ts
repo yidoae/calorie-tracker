@@ -48,6 +48,17 @@ export function totalOfItems(items: readonly Pick<MealItem, "grams" | "per100g">
   return roundMacros(sumMacros(items.map(itemMacros)));
 }
 
+/** Most grams one meal component may have (matches mealItemSchema). */
+export const MAX_ITEM_GRAMS = 5000;
+
+/** Grams typed by the user ("150", "62,5"); null when empty or outside (0, 5000]. */
+export function parseGrams(text: string): number | null {
+  const t = text.trim().replace(",", ".");
+  if (!/^\d+(\.\d+)?$/.test(t)) return null;
+  const grams = Number.parseFloat(t);
+  return grams > 0 && grams <= MAX_ITEM_GRAMS ? round1(grams) : null;
+}
+
 /** Share (0–1) of `value` against `goal`, clamped; 0 when there's no goal. */
 export function progressOf(value: number, goal: number): number {
   return goal > 0 ? Math.min(1, Math.max(0, value / goal)) : 0;

@@ -84,7 +84,10 @@ export default function MealCapture() {
                 onSave={(meal) => void barcode.save(meal)}
                 onDiscard={barcode.close}
                 title={barcode.phase.product.name}
-                subtitle={`${barcode.phase.product.brand ? `${barcode.phase.product.brand} · ` : ""}${barcode.phase.product.per100g.calories} kcal / 100 g. Porsiyonu ayarla, sonra kaydet.`}
+                subtitle={`${barcode.phase.product.brand ? `${barcode.phase.product.brand} · ` : ""}${barcode.phase.product.per100g.calories} kcal / 100 g. Kaç gram yediğini yaz${
+                  barcode.phase.product.servingGrams ? ` (1 porsiyon = ${barcode.phase.product.servingGrams} g)` : ""
+                }, sonra kaydet.`}
+                askGrams
               />
             </div>
           )

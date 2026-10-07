@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // Without this, Next blocks the dev JS bundles for that origin, the page never hydrates and
   // no button (including "Snap a meal") responds. Dev-only; ignored by `next start`.
   allowedDevOrigins: ["192.168.*.*", "10.*.*.*", "172.*.*.*", "*.local"],
+  // Tesseract (label OCR) spawns a worker thread from its own files; bundling breaks that path.
+  serverExternalPackages: ["tesseract.js"],
   // Old paths: the guest dashboard lived at /uygulama, "Gelişim & Analiz" at /trendler.
   async redirects() {
     return [
