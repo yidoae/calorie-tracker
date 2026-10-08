@@ -64,6 +64,46 @@ export async function request<T>(url: string, schema: z.ZodType<T> | null, optio
   return parsed.data;
 }
 
+/**
+ * A streamed NDJSON response: calls `onEvent` with each line, validated against `schema`, as it
+ * arrives. Errors before the stream starts are thrown like `request`'s.
+ */
+export async function requestStream<T>(url: string, schema: z.ZodType<T>, options: RequestOptions, onEvent: (event: T) => void): Promise<void> {
+  const res = await send(url, options);
+  if (!res.body) throw new ApiError("Sunucudan beklenmeyen bir yanıt geldi.", res.status);
+  const emit = (line: string) => {
+    if (!line.trim()) return;
+    let json: unknown;
+    try {
+      json = JSON.parse(line);
+    } catch {
+      json = undefined;
+    }
+    const parsed = schema.safeParse(json);
+    if (!parsed.success) {
+      console.error(`Unexpected stream line from ${url}:`, line);
+      throw new ApiError("Sunucudan beklenmeyen bir yanıt geldi.", res.status);
+    }
+    onEvent(parsed.data);
+  };
+  const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+  let buffer = "";
+  for (;;) {
+    let chunk: ReadableStreamReadResult<string>;
+    try {
+      chunk = await reader.read();
+    } catch {
+      throw new ApiError("Bağlantı yanıt gelirken koptu. Tekrar dene.", 0);
+    }
+    if (chunk.done) break;
+    buffer += chunk.value;
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    lines.forEach(emit);
+  }
+  emit(buffer);
+}
+
 /** A file download: the body as a Blob plus the server's suggested filename. */
 export async function requestFile(url: string, fallbackName: string): Promise<{ blob: Blob; filename: string }> {
   const res = await send(url, {});
