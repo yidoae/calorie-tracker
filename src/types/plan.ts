@@ -99,3 +99,44 @@ export const generatePlanResponseSchema = z.object({
   notice: z.string().nullable(),
 });
 export type GeneratePlanResponse = z.infer<typeof generatePlanResponseSchema>;
+
+/*
+ * Plan periods ("dönemler"): a titled plan that applies between two dates, both included, e.g. a
+ * Cut from November to mid-December, then a Bulk. Days outside every period use the main plan
+ * (`UserSettings.nutritionPlan`). Periods never overlap.
+ */
+
+export const MAX_PLAN_PERIODS = 24;
+export const PLAN_TITLE_MAX = 40;
+/** Quick picks in the period dialog; any other title can be typed. */
+export const PLAN_TITLE_SUGGESTIONS = ["Cut", "Bulk", "Koruma", "Mini cut", "Reverse diet"] as const;
+
+/** A real calendar day as `YYYY-MM-DD` (2027-02-30 is rejected). */
+export const dayKeySchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine((s) => {
+    const [y, m, d] = s.split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d;
+  }, "Geçersiz tarih");
+
+export const planTitleSchema = z.string().trim().min(1).max(PLAN_TITLE_MAX);
+
+export const planPeriodSchema = z
+  .object({
+    id: z.string().min(1).max(64),
+    title: planTitleSchema,
+    /** First and last day of the period, `YYYY-MM-DD`, both included. */
+    start: dayKeySchema,
+    end: dayKeySchema,
+    plan: nutritionPlanSchema,
+  })
+  .refine((p) => p.start <= p.end, { message: "Bitiş tarihi başlangıçtan önce olamaz", path: ["end"] });
+export type PlanPeriod = z.infer<typeof planPeriodSchema>;
+
+/** An inclusive `YYYY-MM-DD` range. */
+export interface DayRange {
+  start: string;
+  end: string;
+}

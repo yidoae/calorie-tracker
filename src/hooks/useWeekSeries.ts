@@ -13,7 +13,7 @@ const DAYS = 7;
  * The summary only counts finished, logged days (today is still running; empty days aren't 0).
  */
 export function useWeekSeries() {
-  const { plan, legacyProfile, legacyCustomPlan } = useNutritionPlan();
+  const { planOn, legacyProfile, legacyCustomPlan } = useNutritionPlan();
   // Midnight today, fixed for the life of the screen so the range key is stable.
   const [today] = useState(() => {
     const d = new Date();
@@ -30,8 +30,8 @@ export function useWeekSeries() {
   const { meals, loading, error } = useMealsInRange(from, to);
 
   const series = useMemo(
-    () => dailySeries(meals, DAYS, today, (date) => resolveTargets(legacyProfile, legacyCustomPlan, plan, date).targets),
-    [meals, today, legacyProfile, legacyCustomPlan, plan],
+    () => dailySeries(meals, DAYS, today, (date) => resolveTargets(legacyProfile, legacyCustomPlan, planOn(date), date).targets),
+    [meals, today, legacyProfile, legacyCustomPlan, planOn],
   );
 
   const summary = useMemo(() => {

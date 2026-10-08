@@ -6,6 +6,7 @@ import type { FastingPreset, FastingSettings } from "@/types/fasting";
 import { useAuth } from "./useAuth";
 import { useIsClient } from "./useIsClient";
 import type { SensitiveWarning } from "./usePlanWizard";
+import { planOn } from "@/lib/nutrition/schedule";
 
 const TICK_MS = 1000;
 
@@ -17,7 +18,7 @@ const TICK_MS = 1000;
 export function useFasting() {
   const { status, settings, updateSettings, requireAuth } = useAuth();
   const isClient = useIsClient();
-  const plan = settings.nutritionPlan?.inputs;
+  const plan = planOn(settings, new Date())?.inputs;
   // A 16:8 plan from the wizard already has a window: start from it.
   const config: FastingSettings =
     settings.fasting ??

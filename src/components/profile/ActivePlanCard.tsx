@@ -9,6 +9,8 @@ import FitBotAvatar from "../ui/FitBotAvatar";
 
 interface Props {
   plan: NutritionPlan | null;
+  /** The dated period today falls in (its plan is `plan`); null when the main plan applies. */
+  period?: { id: string; title: string } | null;
   /** Today's targets and where they come from (plan, legacy plan or defaults). */
   targets: Macros;
   source: TargetSource;
@@ -18,7 +20,7 @@ interface Props {
 const fmt = (n: number) => n.toLocaleString("tr-TR");
 
 /** Dashboard summary of the active nutrition plan, with links into the plan wizard / tuning desk. */
-export default function ActivePlanCard({ plan, targets, source, dayType }: Props) {
+export default function ActivePlanCard({ plan, period = null, targets, source, dayType }: Props) {
   if (!plan) {
     return (
       <section aria-labelledby="plan-heading" className="card overflow-hidden">
@@ -54,7 +56,7 @@ export default function ActivePlanCard({ plan, targets, source, dayType }: Props
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <h2 id="plan-heading" className="card-title">
-            Aktif planın
+            Aktif planın{period && <span className="text-fg-muted"> · {period.title}</span>}
           </h2>
           <p className="mt-1 text-xs text-fg-muted">
             {GOAL_LABELS[i.goal].title} · {DIET_STYLE_LABELS[i.dietStyle]}
@@ -104,7 +106,7 @@ export default function ActivePlanCard({ plan, targets, source, dayType }: Props
       </p>
 
       <div className="mt-4 grid grid-cols-2 gap-2">
-        <Link href="/plan?duzenle=1" className="btn btn-secondary">
+        <Link href={period ? `/plan?duzenle=1&donem=${encodeURIComponent(period.id)}` : "/plan?duzenle=1"} className="btn btn-secondary">
           <Pencil aria-hidden className="size-4" /> İnce ayar
         </Link>
         <Link href="/plan" className="btn btn-soft">

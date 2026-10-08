@@ -1,5 +1,6 @@
 import { fastingSettingsSchema, type FastingSettings } from "./fasting";
-import { nutritionPlanSchema, type NutritionPlan } from "./plan";
+import { normalizePeriods } from "@/lib/nutrition/schedule";
+import { MAX_PLAN_PERIODS, nutritionPlanSchema, planPeriodSchema, planTitleSchema, type NutritionPlan, type PlanPeriod } from "./plan";
 import { customPlanSchema, profileSchema, type CustomPlan, type Profile } from "./profile";
 import { z } from "./zod";
 
@@ -7,8 +8,12 @@ const MAX_PROFILES = 20;
 
 /** A user's saved plans, stored as JSON on their account (`User.settings`). */
 export interface UserSettings {
-  /** The active plan from the plan wizard; wins over the legacy profile/custom plan. */
+  /** The main plan from the plan wizard: applies on days no period covers; wins over the legacy profile/custom plan. */
   nutritionPlan: NutritionPlan | null;
+  /** The main plan's title in "Planlarım"; null = derived from its goal. */
+  mainPlanTitle: string | null;
+  /** Dated plans (Cut, Bulk…) that replace the main plan between their dates. Sorted, never overlapping. */
+  planPeriods: PlanPeriod[];
   /** Legacy calculator profiles (before the plan wizard); still used when there's no nutritionPlan. */
   profiles: Profile[];
   activeProfileId: string | null;
@@ -25,6 +30,8 @@ export const WATER_GOAL_RANGE = { min: 500, max: 6000, step: 250 } as const;
 
 export const EMPTY_SETTINGS: UserSettings = {
   nutritionPlan: null,
+  mainPlanTitle: null,
+  planPeriods: [],
   profiles: [],
   activeProfileId: null,
   customPlan: null,
@@ -39,6 +46,8 @@ export const EMPTY_SETTINGS: UserSettings = {
  */
 const looseSettingsSchema = z.object({
   nutritionPlan: z.unknown().optional(),
+  mainPlanTitle: z.unknown().optional(),
+  planPeriods: z.array(z.unknown()).optional(),
   profiles: z.array(z.unknown()).optional(),
   activeProfileId: z.unknown().optional(),
   customPlan: z.unknown().optional(),
@@ -64,10 +73,15 @@ export function parseSettings(raw: unknown): UserSettings {
     : (profiles[0]?.id ?? null);
   const customPlan = customPlanSchema.safeParse(loose.data.customPlan).data ?? null;
   const nutritionPlan = nutritionPlanSchema.safeParse(loose.data.nutritionPlan).data ?? null;
+  const mainPlanTitle = planTitleSchema.safeParse(loose.data.mainPlanTitle).data ?? null;
+  const planPeriods = normalizePeriods(
+    (loose.data.planPeriods ?? []).map((p) => planPeriodSchema.safeParse(p).data).filter((p): p is PlanPeriod => p !== undefined),
+    MAX_PLAN_PERIODS,
+  );
   const waterGoalMl = waterGoalSchema.safeParse(loose.data.waterGoalMl).data ?? null;
   const sensitiveWarningAck = loose.data.sensitiveWarningAck === true;
   const fasting = fastingSettingsSchema.safeParse(loose.data.fasting).data ?? null;
-  return { nutritionPlan, profiles, activeProfileId, customPlan, waterGoalMl, sensitiveWarningAck, fasting };
+  return { nutritionPlan, mainPlanTitle, planPeriods, profiles, activeProfileId, customPlan, waterGoalMl, sensitiveWarningAck, fasting };
 }
 
 export function parseSettingsJSON(json: string | null | undefined): UserSettings {

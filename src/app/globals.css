@@ -48,6 +48,11 @@
   --macro-carbs: #3898ec;
   --macro-fat: #84cc16;
 
+  /* Plan goals on the "Planlarım" timeline: cut, maintain, bulk. */
+  --goal-cut: #f97316;
+  --goal-maintain: #94a3b8;
+  --goal-bulk: #84cc16;
+
   /* Elevation tokens (SKILL.md › Depth & Elevation). */
   --shadow-xs: 0 0 0 1px #0000001a, 0 1px 3px #0000001a;
   --shadow-card: 0 0 #0000;
@@ -90,6 +95,9 @@
   --color-macro-protein: var(--macro-protein);
   --color-macro-carbs: var(--macro-carbs);
   --color-macro-fat: var(--macro-fat);
+  --color-goal-cut: var(--goal-cut);
+  --color-goal-maintain: var(--goal-maintain);
+  --color-goal-bulk: var(--goal-bulk);
   --shadow-xs: var(--shadow-xs);
   --shadow-card: var(--shadow-card);
   --shadow-pop: var(--shadow-pop);

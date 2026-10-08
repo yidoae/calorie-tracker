@@ -6,6 +6,7 @@ import { formulaPlan, formulaSummary } from "@/lib/nutrition/plan";
 import { ROUTES } from "@/lib/routes";
 import { ApiError } from "@/services/http";
 import { planService } from "@/services/planService";
+import { defaultPlanTitle } from "@/lib/nutrition/schedule";
 import type { NutritionPlan, PlanInputs } from "@/types/plan";
 import { useAuth } from "./useAuth";
 import { useNutritionPlan } from "./useNutritionPlan";
@@ -17,6 +18,15 @@ const STEP_MS = 1300;
 const MIN_LOADING_MS = STEP_MS * GENERATION_STEPS.length;
 
 const AI_UNAVAILABLE = "AI koç servisine erişilemedi, standart bilimsel formülle plan oluşturuldu.";
+
+/** Which plan the flow edits: the main plan, a saved period's plan, or one for a new period. */
+export type BuilderTarget = { kind: "main" } | { kind: "period"; id: string } | { kind: "newPeriod" };
+
+/** A new period's plan, waiting for its title and dates. */
+export interface PendingPeriod {
+  plan: NutritionPlan;
+  title: string;
+}
 
 export type BuilderPhase =
   | { kind: "wizard" }
@@ -44,11 +54,14 @@ function localFallback(inputs: PlanInputs): NutritionPlan {
  * is always produced: if the AI or even the server is unavailable, the formula plan is used and
  * the user is told so.
  */
-export function usePlanBuilder(startInReview: boolean) {
+export function usePlanBuilder(startInReview: boolean, target: BuilderTarget = { kind: "main" }) {
   const router = useRouter();
   const toast = useToast();
   const { requireAuth } = useAuth();
-  const { plan: activePlan, savePlan } = useNutritionPlan();
+  const { plan: todaysPlan, mainPlan, periods, savePlan, savePeriod } = useNutritionPlan();
+  const period = target.kind === "period" ? (periods.find((p) => p.id === target.id) ?? null) : null;
+  const activePlan = target.kind === "period" ? (period?.plan ?? null) : target.kind === "newPeriod" ? todaysPlan : mainPlan;
+  const [pending, setPending] = useState<PendingPeriod | null>(null);
   // null until the user does something: then "Planı düzenle" (startInReview) shows the saved plan
   // in the tuning desk once the account has loaded, otherwise the wizard.
   const [phase, setPhase] = useState<BuilderPhase | null>(null);
@@ -89,18 +102,53 @@ export function usePlanBuilder(startInReview: boolean) {
   const activate = useCallback(
     (plan: NutritionPlan) =>
       requireAuth(() => {
-        savePlan(plan);
-        toast.celebrate("Planın aktif!", `Günlük hedefin ${plan.base.calories.toLocaleString("tr-TR")} kcal. Ana ekranda takip edebilirsin.`);
+        if (target.kind === "newPeriod") {
+          // Title and dates come next, in the period dialog (see `pending`).
+          setPending({ plan, title: defaultPlanTitle(plan.inputs.goal) });
+          return;
+        }
+        const kcal = plan.base.calories.toLocaleString("tr-TR");
+        if (target.kind === "period" && !period) {
+          // Deleted meanwhile (another tab): don't silently overwrite the main plan instead.
+          toast.error("Dönem bulunamadı", "Bu dönem silinmiş olabilir; panelden yeniden oluşturabilirsin.");
+          router.push(ROUTES.panel);
+          return;
+        }
+        if (period) {
+          savePeriod({ ...period, plan });
+          toast.success(`"${period.title}" güncellendi`, `Bu dönemde günlük hedefin ${kcal} kcal.`);
+        } else {
+          savePlan(plan);
+          toast.celebrate("Planın aktif!", `Günlük hedefin ${kcal} kcal. Ana ekranda takip edebilirsin.`);
+        }
         router.push(ROUTES.panel);
       }),
-    [requireAuth, savePlan, toast, router],
+    [requireAuth, target.kind, period, savePeriod, savePlan, toast, router],
+  );
+
+  /** The new period got its title and dates in the dialog: save it and go back to the panel. */
+  const finishPeriod = useCallback(
+    (saved: Parameters<typeof savePeriod>[0]) => {
+      savePeriod(saved);
+      setPending(null);
+      toast.celebrate(`"${saved.title}" planlandı`, "Tarihi gelince hedeflerin otomatik bu plana geçer.");
+      router.push(ROUTES.panel);
+    },
+    [savePeriod, toast, router],
   );
 
   return {
     phase: effectivePhase,
     hasActivePlan: activePlan !== null,
+    /** The plan the wizard starts from: the edited one, else today's. */
+    startingPlan: activePlan,
+    periods,
+    period,
+    pending,
     generate,
     activate,
+    finishPeriod,
+    cancelPending: () => setPending(null),
     backToWizard: () => setPhase({ kind: "wizard" }),
   };
 }
