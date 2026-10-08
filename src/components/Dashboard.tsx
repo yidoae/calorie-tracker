@@ -2,15 +2,14 @@
 
 import {
   CalendarDays,
-  LineChart,
   Moon,
   UserRound,
   Utensils,
   Zap,
 } from "lucide-react";
 import { motion } from "motion/react";
-import Link from "next/link";
-import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useCalorieGoal } from "@/hooks/useCalorieGoal";
 import { useConfirm } from "@/hooks/useConfirm";
@@ -20,6 +19,7 @@ import { useFasting } from "@/hooks/useFasting";
 import { useIsClient } from "@/hooks/useIsClient";
 import { useMealEdit } from "@/hooks/useMealEdit";
 import { useMealActions, useTodayMeals } from "@/hooks/useMeals";
+import { useNutritionPlan } from "@/hooks/useNutritionPlan";
 import { useQuickAdd } from "@/hooks/useQuickAdd";
 import { useWater } from "@/hooks/useWater";
 import { useWeekSeries } from "@/hooks/useWeekSeries";
@@ -37,6 +37,8 @@ import MealCalendar from "./history/MealCalendar";
 import SiteHeader from "./layout/SiteHeader";
 import MealCapture from "./meals/MealCapture";
 import MealEditDialog from "./meals/MealEditDialog";
+import PlanPeriodDialog, { type PeriodTarget } from "./plans/PlanPeriodDialog";
+import PlansCard from "./plans/PlansCard";
 import QuickEntryBar from "./meals/QuickEntryBar";
 import QuickPicks from "./meals/QuickPicks";
 import ActivePlanCard from "./profile/ActivePlanCard";
@@ -98,6 +100,9 @@ export default function Dashboard() {
   const week = useWeekSeries();
   const isClient = useIsClient();
   const { panelClass } = layout;
+  const plans = useNutritionPlan();
+  const router = useRouter();
+  const [periodTarget, setPeriodTarget] = useState<PeriodTarget | null>(null);
 
   const badge = dayType ? (
     <span
@@ -251,26 +256,20 @@ export default function Dashboard() {
               <ErrorBoundary title="Plan yüklenemedi">
                 <ActivePlanCard
                   plan={plan}
+                  period={plans.activePeriod}
                   targets={targets}
                   source={source}
                   dayType={dayType}
                 />
               </ErrorBoundary>
-              <Link
-                href={ROUTES.progress}
-                className="card flex items-center justify-between gap-3 p-4 transition-colors hover:bg-surface-2"
-              >
-                <span>
-                  <span className="card-title block">Gelişim &amp; Analiz</span>
-                  <span className="text-xs text-fg-muted">
-                    Seri, hedef çizgisine karşı kaloriler ve ortalamalar
-                  </span>
-                </span>
-                <LineChart
-                  aria-hidden
-                  className="size-5 shrink-0 text-fg-muted"
+              <ErrorBoundary title="Planlarım yüklenemedi">
+                <PlansCard
+                  mainPlan={plans.mainPlan}
+                  mainPlanTitle={plans.mainPlanTitle}
+                  periods={plans.periods}
+                  onOpen={setPeriodTarget}
                 />
-              </Link>
+              </ErrorBoundary>
             </motion.div>
 
             <motion.div
@@ -298,6 +297,17 @@ export default function Dashboard() {
           clearToday.confirm((ids) => void actions.clearDay(ids))
         }
         onCancel={clearToday.cancel}
+      />
+      <PlanPeriodDialog
+        target={periodTarget}
+        periods={plans.periods}
+        onSavePeriod={plans.savePeriod}
+        onSaveMainTitle={plans.saveMainTitle}
+        onDelete={plans.removePeriod}
+        onEditTargets={(id) =>
+          router.push(`${ROUTES.plan}?duzenle=1${id ? `&donem=${encodeURIComponent(id)}` : ""}`)
+        }
+        onClose={() => setPeriodTarget(null)}
       />
       <MealEditDialog
         meal={edit.editing}

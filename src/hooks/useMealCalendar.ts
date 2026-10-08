@@ -15,7 +15,7 @@ import { useNutritionPlan } from "./useNutritionPlan";
  * went against that day's own targets (training and rest days differ when cycling).
  */
 export function useMealCalendar() {
-  const { plan, legacyProfile, legacyCustomPlan } = useNutritionPlan();
+  const { planOn, legacyProfile, legacyCustomPlan } = useNutritionPlan();
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
   /** -1 after going back a month, 1 after going forward: the grid slides that way. */
   const [direction, setDirection] = useState<1 | -1>(1);
@@ -32,16 +32,17 @@ export function useMealCalendar() {
     return groups;
   }, [meals]);
 
-  const targetsOn = (date: Date): Macros => resolveTargets(legacyProfile, legacyCustomPlan, plan, date).targets;
+  const targetsOn = (date: Date): Macros => resolveTargets(legacyProfile, legacyCustomPlan, planOn(date), date).targets;
 
   const ratings = useMemo(() => {
     const result = new Map<string, DayRating>();
     for (const [key, dayMeals] of byDay) {
-      const goal = resolveTargets(legacyProfile, legacyCustomPlan, plan, dayToDate(key)).targets;
+      const date = dayToDate(key);
+      const goal = resolveTargets(legacyProfile, legacyCustomPlan, planOn(date), date).targets;
       result.set(key, rateDay(sumMacros(dayMeals).calories, goal.calories));
     }
     return result;
-  }, [byDay, legacyProfile, legacyCustomPlan, plan]);
+  }, [byDay, legacyProfile, legacyCustomPlan, planOn]);
 
   const todayKey = dayKey(new Date());
   const monthKey = dayKey(month).slice(0, 7);

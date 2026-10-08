@@ -18,6 +18,8 @@ interface Props {
   plan: NutritionPlan;
   notice: string | null;
   isNew: boolean;
+  /** Overrides the save button's text (e.g. when the plan is for a dated period). */
+  activateLabel?: string;
   onActivate: (plan: NutritionPlan) => void;
   onBackToWizard: () => void;
 }
@@ -31,7 +33,7 @@ const MACRO_UI: Record<MacroField, { label: string; color: string; dot: string }
 const fmt = (n: number, digits = 0) => n.toLocaleString("tr-TR", { maximumFractionDigits: digits });
 
 /** The "fine-tuning desk": FitBot's strategy, then live sliders for calories and each macro. */
-export default function PlanReview({ plan, notice, isNew, onActivate, onBackToWizard }: Props) {
+export default function PlanReview({ plan, notice, isNew, activateLabel, onActivate, onBackToWizard }: Props) {
   const t = usePlanTuner(plan);
   const bmi = calculateBmi(plan.inputs);
   const change = weeklyChangeKg(goalAdjustment(plan.inputs));
@@ -192,7 +194,7 @@ export default function PlanReview({ plan, notice, isNew, onActivate, onBackToWi
 
         <div className="card space-y-2 p-4">
           <button type="button" onClick={() => onActivate(t.result())} className="btn btn-primary btn-lg w-full">
-            <Check aria-hidden className="size-4" /> {isNew ? "Bu planı aktif planım yap" : "Değişiklikleri kaydet"}
+            <Check aria-hidden className="size-4" /> {activateLabel ?? (isNew ? "Bu planı aktif planım yap" : "Değişiklikleri kaydet")}
           </button>
           <button type="button" onClick={onBackToWizard} className="btn btn-ghost w-full">
             <ArrowLeft aria-hidden className="size-4" /> {isNew ? "Cevaplarımı düzenle" : "Sihirbazla yeni plan oluştur"}

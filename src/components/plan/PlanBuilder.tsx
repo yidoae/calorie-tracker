@@ -4,12 +4,13 @@ import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useNutritionPlan } from "@/hooks/useNutritionPlan";
-import { usePlanBuilder } from "@/hooks/usePlanBuilder";
+import { usePlanBuilder, type BuilderTarget } from "@/hooks/usePlanBuilder";
 import { WIZARD_STEPS, usePlanWizard } from "@/hooks/usePlanWizard";
 import { ROUTES } from "@/lib/routes";
 import type { NutritionPlan } from "@/types/plan";
 import type { Profile } from "@/types/profile";
 import SiteHeader from "../layout/SiteHeader";
+import PlanPeriodDialog from "../plans/PlanPeriodDialog";
 import GeneratingScreen from "./GeneratingScreen";
 import LivePreview from "./LivePreview";
 import PlanReview from "./PlanReview";
@@ -21,11 +22,13 @@ import StepTraining from "./StepTraining";
 import WizardProgress from "./WizardProgress";
 
 /** The /plan screen: wizard -> generating -> tuning desk. */
-export default function PlanBuilder({ startInReview }: { startInReview: boolean }) {
+export default function PlanBuilder({ startInReview, target }: { startInReview: boolean; target: BuilderTarget }) {
   const { status } = useAuth();
-  const { plan, legacyProfile } = useNutritionPlan();
-  const builder = usePlanBuilder(startInReview);
-  const { phase } = builder;
+  const { legacyProfile } = useNutritionPlan();
+  const builder = usePlanBuilder(startInReview, target);
+  const { phase, startingPlan: plan } = builder;
+  const activateLabel =
+    target.kind === "newPeriod" ? "Devam: başlık ve tarihleri seç" : builder.period ? `"${builder.period.title}" dönemini kaydet` : undefined;
 
   return (
     <>
@@ -36,12 +39,14 @@ export default function PlanBuilder({ startInReview }: { startInReview: boolean 
             <ArrowLeft aria-hidden className="size-3" /> Ana ekrana dön
           </Link>
           <h1 className="mt-4 font-display text-3xl sm:text-5xl">
-            {phase.kind === "review" ? "Planını ince ayarla" : "AI beslenme planın"}
+            {phase.kind === "review" ? "Planını ince ayarla" : target.kind === "newPeriod" ? "Yeni dönem planı" : "AI beslenme planın"}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-on-ink-muted">
             {phase.kind === "review"
               ? "FitBot'un önerisini kaydırıcılarla kendine göre ayarla, sonra aktif planın yap."
-              : "4 kısa adımda seni tanıyalım; FitBot metabolizmanı hesaplayıp sana özel bir strateji yazsın."}
+              : target.kind === "newPeriod"
+                ? "Cut, Bulk ya da koruma: bu dönemin hedefini seç. Sonunda başlığını ve tarihlerini belirleyeceksin."
+                : "4 kısa adımda seni tanıyalım; FitBot metabolizmanı hesaplayıp sana özel bir strateji yazsın."}
           </p>
         </div>
       </section>
@@ -56,6 +61,7 @@ export default function PlanBuilder({ startInReview }: { startInReview: boolean 
               plan={phase.plan}
               notice={phase.notice}
               isNew={phase.isNew}
+              activateLabel={activateLabel}
               onActivate={builder.activate}
               onBackToWizard={builder.backToWizard}
             />
@@ -70,6 +76,13 @@ export default function PlanBuilder({ startInReview }: { startInReview: boolean 
           )}
         </div>
       </main>
+
+      <PlanPeriodDialog
+        target={builder.pending ? { kind: "new", plan: builder.pending.plan, title: builder.pending.title } : null}
+        periods={builder.periods}
+        onSavePeriod={builder.finishPeriod}
+        onClose={builder.cancelPending}
+      />
     </>
   );
 }

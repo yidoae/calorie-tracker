@@ -36,3 +36,10 @@ export function monthGrid(month: Date): (Date | null)[] {
   while (cells.length % 7 !== 0) cells.push(null);
   return cells;
 }
+
+/** The `YYYY-MM-DD` key `days` calendar days after (or before, when negative) `key`. */
+export function shiftDay(key: string, days: number): string {
+  const d = dayToDate(key);
+  d.setDate(d.getDate() + days);
+  return dayKey(d);
+}

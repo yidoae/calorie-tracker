@@ -8,6 +8,7 @@ import { WATER_GOAL_RANGE } from "@/types/settings";
 import type { WaterEntry } from "@/types/tracking";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
+import { planOn } from "@/lib/nutrition/schedule";
 
 function todayRange(): { from: Date; to: Date } {
   const from = new Date();
@@ -47,7 +48,7 @@ export function useWater() {
 
   const entries = useMemo(() => (user && state?.userId === user.id ? state.entries : []), [user, state]);
   const total = entries.reduce((sum, e) => sum + e.ml, 0);
-  const goal = settings.waterGoalMl ?? defaultWaterGoal(settings.nutritionPlan?.inputs.sex ?? null);
+  const goal = settings.waterGoalMl ?? defaultWaterGoal(planOn(settings, new Date())?.inputs.sex ?? null);
 
   const add = useCallback(
     (ml: number) =>

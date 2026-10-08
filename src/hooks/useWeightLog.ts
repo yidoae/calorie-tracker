@@ -8,6 +8,7 @@ import { trackingService } from "@/services/trackingService";
 import { WEIGHT_LIMITS, type WeightEntry } from "@/types/tracking";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
+import { planOn } from "@/lib/nutrition/schedule";
 
 const CHART_POINTS = 60;
 
@@ -43,7 +44,7 @@ export function useWeightLog() {
   const points = useMemo(() => weightTrend(entries).slice(-CHART_POINTS), [entries]);
   const rate = useMemo(() => weeklyRate(entries), [entries]);
   const latest = points.at(-1) ?? null;
-  const target = settings.nutritionPlan?.inputs.targetWeightKg ?? null;
+  const target = planOn(settings, new Date())?.inputs.targetWeightKg ?? null;
   const weeksLeft = latest && target !== null ? weeksToTarget(latest.trend, target, rate) : null;
 
   const kg = Number(input.replace(",", "."));

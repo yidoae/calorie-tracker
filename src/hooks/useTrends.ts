@@ -11,7 +11,7 @@ export type TrendWindow = (typeof TREND_WINDOWS)[number];
 
 /** Calories against the goal line, streaks and averages over the last 7/30/90 days. */
 export function useTrends() {
-  const { plan, legacyProfile, legacyCustomPlan } = useNutritionPlan();
+  const { planOn, legacyProfile, legacyCustomPlan } = useNutritionPlan();
   const [days, setDays] = useState<TrendWindow>(30);
   // Midnight today, fixed for the life of the screen so the range key is stable.
   const [today] = useState(() => {
@@ -29,8 +29,8 @@ export function useTrends() {
   const { meals, loading, error } = useMealsInRange(from, to);
 
   const series = useMemo(
-    () => dailySeries(meals, days, today, (date) => resolveTargets(legacyProfile, legacyCustomPlan, plan, date).targets),
-    [meals, days, today, legacyProfile, legacyCustomPlan, plan],
+    () => dailySeries(meals, days, today, (date) => resolveTargets(legacyProfile, legacyCustomPlan, planOn(date), date).targets),
+    [meals, days, today, legacyProfile, legacyCustomPlan, planOn],
   );
 
   return {
