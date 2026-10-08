@@ -8,6 +8,11 @@ export const LLM_MODEL = process.env.LOCAL_LLM_MODEL || "llama3.2";
  */
 export const NUM_CTX = Number(process.env.LOCAL_LLM_NUM_CTX) || 8192;
 /**
+ * How long Ollama keeps a model in memory after a request. Its default is 5 minutes, after which
+ * the next question pays ~6 s to load the model again.
+ */
+export const KEEP_ALIVE = process.env.LOCAL_LLM_KEEP_ALIVE || "30m";
+/**
  * Optional Ollama vision model for reading nutrition labels (e.g. "qwen2.5vl:7b"). Unset: labels
  * are read with OCR + the rule-based parser only.
  */
