@@ -1,0 +1,78 @@
+{
+  "_comment": "Source dataset class -> food id in src/lib/nutrition/foods.ts. Classes not listed are dropped. A class maps to one food only; composite dishes that would need two foods (hamburger = bun + patty) are left out rather than guessed.",
+  "sources": {
+    "turkishfoods25": {
+      "hf": "yunusserhat/TurkishFoods-25",
+      "license": "Apache-2.0 (as declared by the uploader; original photo provenance not documented)",
+      "kind": "dish",
+      "map": {
+        "baklava": "baklava",
+        "borek": "borek",
+        "karniyarik": "karniyarik",
+        "kuru_fasulye": "kuruFasulye",
+        "lahmacun": "lahmacun",
+        "manti": "manti",
+        "pirinc_pilavi": "whiteRice",
+        "simit": "simit",
+        "taze_fasulye": "greenBeans",
+        "izmir_kofte": "kofte"
+      }
+    },
+    "food101": {
+      "hf": "ethz/food101",
+      "license": "Research / scientific fair use only (Foodspotting photos; commercial use must be negotiated with the photo owners)",
+      "kind": "dish",
+      "map": {
+        "baklava": "baklava",
+        "chicken_wings": "chickenWing",
+        "french_fries": "fries",
+        "grilled_salmon": "salmon",
+        "hummus": "hummus",
+        "omelette": "eggFried",
+        "pizza": "pizza",
+        "steak": "steak",
+        "spaghetti_bolognese": "spaghetti",
+        "spaghetti_carbonara": "spaghetti",
+        "grilled_cheese_sandwich": "tost",
+        "greek_salad": "greens"
+      }
+    },
+    "foodseg103": {
+      "hf": "EduardoPacheco/FoodSeg103",
+      "license": "Apache-2.0 declared on the HF card; images are a sample of Recipe1M, whose own terms are research-only",
+      "kind": "ingredient-crop",
+      "_comment": "Pixel masks per ingredient; the builder crops each large enough ingredient region into its own image.",
+      "map": {
+        "egg": "egg",
+        "apple": "apple",
+        "banana": "banana",
+        "orange": "orange",
+        "strawberry": "berries",
+        "blueberry": "berries",
+        "raspberry": "berries",
+        "avocado": "avocado",
+        "olives": "olives",
+        "walnut": "walnuts",
+        "almond": "almonds",
+        "shrimp": "shrimp",
+        "bread": "bread",
+        "corn": "corn",
+        "rice": "whiteRice",
+        "pasta": "spaghetti",
+        "noodles": "noodles",
+        "potato": "potato",
+        "tomato": "tomato",
+        "cucumber": "cucumber",
+        "carrot": "carrot",
+        "broccoli": "broccoli",
+        "green beans": "greenBeans",
+        "French beans": "greenBeans",
+        "lettuce": "greens",
+        "salad": "greens",
+        "french fries": "fries",
+        "milk": "milk",
+        "pepper": "redPepper"
+      }
+    }
+  }
+}

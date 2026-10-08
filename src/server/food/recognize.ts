@@ -1,12 +1,9 @@
-import { foodItem } from "@/lib/nutrition/foods";
-import type { MealDraft } from "@/types/meal";
-import { DISHES, FOOD_COLORS, type FoodColor } from "./catalog";
 import type { ImageFeatures } from "./imageFeatures";
 
 /**
  * Thresholds for the food/non-food check. These are heuristics tuned on colour and
- * texture statistics, not a trained classifier — expect the odd false positive or
- * negative until `analyzeFoodImage` is backed by a real vision model.
+ * texture statistics, not a trained classifier: expect the odd false positive or
+ * negative. The CLIP classifier only runs on photos that pass.
  */
 const GUARD = {
   minBrightness: 0.12, // covered lens, night shot
@@ -18,9 +15,6 @@ const GUARD = {
   minColourfulShare: 0.05, // only white/grey/black: paper, documents, screenshots
   minFoodShare: 0.3, // otherwise mostly grey/black/blue background
 } as const;
-
-/** Below this share of non-white food colours, the photo is judged on its whites too. */
-const COLOURFUL_ENOUGH = 0.1;
 
 /** Why an image was rejected, or `null` if it plausibly shows food. */
 export function detectNoFood(f: ImageFeatures): string | null {
@@ -37,49 +31,4 @@ export function detectNoFood(f: ImageFeatures): string | null {
   if (f.foodShare - f.colors.white < GUARD.minColourfulShare) return "no colour (text or screenshot)";
   if (f.foodShare < GUARD.minFoodShare) return "no food-like colours";
   return null;
-}
-
-/** 0–1 value taken from byte `i` of the image hash — a stable per-image source of variation. */
-const unit = (digest: Buffer, i: number) => digest[i % digest.length] / 255;
-
-type Distribution = Record<FoodColor, number>;
-
-/** Scales colour amounts to sum to 1, optionally ignoring white (plates and tables are white too). */
-function distribution(amounts: Distribution, includeWhite: boolean): Distribution {
-  const kept = { ...amounts, white: includeWhite ? amounts.white : 0 };
-  const total = FOOD_COLORS.reduce((sum, c) => sum + kept[c], 0) || 1;
-  return Object.fromEntries(FOOD_COLORS.map((c) => [c, kept[c] / total])) as Distribution;
-}
-
-/** How closely two colour distributions match: 1 = identical, 0 = disjoint. */
-function similarity(a: Distribution, b: Distribution): number {
-  return 1 - FOOD_COLORS.reduce((sum, c) => sum + Math.abs(a[c] - b[c]), 0) / 2;
-}
-
-/**
- * Picks the dish whose colours best match the photo, then scales the portion to how
- * much of the frame is food and varies each ingredient's weight a little. Everything
- * is derived from the image and its hash, so the same photo always gives the same plate.
- */
-export function composePlate(f: ImageFeatures, digest: Buffer): MealDraft {
-  // Plates read as white, so match on the other colours, unless there are hardly any (rice, yogurt).
-  const includeWhite = f.foodShare - f.colors.white < COLOURFUL_ENOUGH;
-  const observed = distribution(f.colors, includeWhite);
-
-  // A little per-image jitter so similar-looking photos don't always collapse to one dish.
-  const dish = DISHES.map((d, i) => ({
-    d,
-    score: similarity(observed, distribution(d.appearance, includeWhite)) + unit(digest, i) * 0.06,
-  })).reduce((best, cand) => (cand.score > best.score ? cand : best)).d;
-
-  // Fuller frame -> bigger portion (about 75%-125% of a typical serving), plus +/-8% noise.
-  const coverage = (f.foodShare - GUARD.minFoodShare) / (1 - GUARD.minFoodShare);
-  const portion = 0.75 + 0.5 * Math.min(1, Math.max(0, coverage)) + (unit(digest, 20) - 0.5) * 0.16;
-
-  // Each component gets its own estimate (+/-10%), so the user can correct them one by one.
-  const items = dish.items.map(({ food, grams }, i) => {
-    const g = grams * portion * (0.9 + unit(digest, 24 + i) * 0.2);
-    return foodItem(food, Math.max(5, Math.round(g / 5) * 5));
-  });
-  return { name: dish.name, items };
 }

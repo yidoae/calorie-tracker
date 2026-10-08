@@ -9,25 +9,29 @@ interface ChatOptions {
   maxTokens: number;
   temperature?: number;
   timeoutMs: number;
+  /** Base64 images attached to the user message (vision models only). */
+  images?: string[];
+  /** Overrides LOCAL_LLM_MODEL, e.g. with the vision model. */
+  model?: string;
 }
 
 /**
  * One non-streaming chat call to the local Ollama server. Returns the answer text, or null if the
  * server is down, errors or times out; callers treat null as "AI unavailable" and fall back.
  */
-export async function ollamaChat({ system, user, format, maxTokens, temperature = 0, timeoutMs }: ChatOptions): Promise<string | null> {
+export async function ollamaChat({ system, user, format, maxTokens, temperature = 0, timeoutMs, images, model = LLM_MODEL }: ChatOptions): Promise<string | null> {
   try {
     const res = await fetch(`${LLM_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: LLM_MODEL,
+        model,
         stream: false,
         ...(format ? { format } : {}),
         options: { temperature, num_predict: maxTokens },
         messages: [
           { role: "system", content: system },
-          { role: "user", content: user },
+          { role: "user", content: user, ...(images ? { images } : {}) },
         ],
       }),
       signal: AbortSignal.timeout(timeoutMs),

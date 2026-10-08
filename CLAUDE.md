@@ -92,6 +92,8 @@ src/
       weights/route.ts, weights/[id]             Weigh-ins (one per local day): GET · POST · DELETE
       water/route.ts, water/[id]                 Water entries: GET range · POST · DELETE (undo)
       foods/barcode/[code]/route.ts              GET Open Food Facts product (cached in FoodProduct)
+      foods/custom/route.ts, foods/custom/[id]   The user's own foods (CustomFood): GET · POST · DELETE
+      foods/label/route.ts                       POST label photo -> per-100 g values read (vision model or OCR; nothing saved)
       plans/generate/route.ts                    POST PlanInputs -> { plan, notice } draft (AI or Harris-Benedict fallback)
       uploads/[filename]/route.ts                GET photo (owner only)
       fitbot/chat/route.ts                       POST chat -> { reply, sources }
@@ -157,6 +159,8 @@ src/
 - **Meal slots.** Every meal has a `slot` (breakfast/lunch/dinner/snack). The quick bar reads it from the text ("öğlen"), otherwise `slotForHour`. The day's calories are shared between slots per meal pattern (`SLOT_SHARES`; 16:8 has no breakfast).
 - **Day rating.** "On target" is ±5 % of that day's own calorie target (`rateDay`), shared by the calorie ring and the calendar dots; unlogged days are never counted as zero.
 - **Barcodes.** `@zxing/browser` is lazy-loaded when the scanner opens (works on iOS too); a manual field covers no-camera cases. Only the barcode is sent to Open Food Facts; misses are cached for a day, hits for 30.
+- **Grams are typed, never assumed.** "Hızlı ekle" opens a gram field when a food is tapped (the portion is only a hint); a scanned product's review starts with an empty gram field (`MealReview askGrams`). Photo breakdowns keep their estimates, and every review row has a gram field next to the slider.
+- **Own foods and label reading.** "Kendi ürününü ekle" (`CustomFoodDialog`, `useCustomFoodForm`) saves a `CustomFood` (per 100 g; values may be typed per serving and are converted) and logs the grams eaten; own foods are listed first in "Hızlı ekle". A label photo goes to `POST /api/foods/label` (`server/food/label.ts`): an Ollama vision model if `LOCAL_VISION_MODEL` is set, else/then Tesseract OCR (tur+eng, two passes at 2200/3000 px; language data cached in `.cache/tesseract`) parsed by `lib/nutrition/labelParse.ts` (pure, tested). Unreadable or implausible values stay empty and are highlighted for the user; nothing is guessed.
 - **Sensitive content.** Choosing 16:8 or a deficit ≥ 750 kcal in the wizard first shows `SensitiveWarningDialog`; "Bana göre değil" keeps the gentler option. Acknowledgement is stored in `settings.sensitiveWarningAck`.
 - **Food database.** `lib/nutrition/foods.ts` is the single source of nutrition values (per 100 g, as eaten), aliases (lower-case Turkish; longest match wins) and unit weights. Add foods there; the photo catalog (`server/food/catalog.ts`) references them by id. Values are approximations.
 - **Vision AI is a mock, driven by image statistics.** `analyzeFoodImage()` decodes the photo with `sharp`, rejects non-food via `detectNoFood()` (too dark, flat, a face/person, mostly blue, no colour), else matches the frame's colours to a dish in `server/food/catalog.ts` and estimates each component's grams from frame coverage plus per-image jitter. Same photo → same result; 800 ms simulated latency. Thresholds live in `GUARD` in `server/food/recognize.ts`. To use a real model, replace `mockAnalyze` and keep returning `{ name, items }` (it's validated with `mealDraftSchema`) and throwing `NoFoodError` for non-food.
