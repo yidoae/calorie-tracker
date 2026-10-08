@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { LLM_MODEL, LLM_URL, NUM_CTX } from "@/server/llm/config";
+import { KEEP_ALIVE, LLM_MODEL, LLM_URL, NUM_CTX } from "@/server/llm/config";
 import type { ChatMessage, ChatResponse, ChatStreamEvent } from "@/types/fitbot";
 import type { Profile } from "@/types/profile";
 import { buildUserContext, parseClientContext } from "./context";
@@ -104,6 +104,7 @@ async function callLlm(messages: LlmMessage[], withTools: boolean, signal: Abort
         model: LLM_MODEL,
         stream: true,
         messages,
+        keep_alive: KEEP_ALIVE,
         options: { num_ctx: NUM_CTX },
         ...(withTools ? { tools: FITBOT_TOOLS } : {}),
       }),

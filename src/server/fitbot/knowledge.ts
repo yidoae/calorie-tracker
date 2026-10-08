@@ -1,5 +1,6 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { KEEP_ALIVE } from "@/server/llm/config";
 
 /**
  * Retrieval over knowledge/index.json (built by `npm run kb:ingest`): embeds the question with the
@@ -82,7 +83,7 @@ async function embedQuery(model: string, text: string, signal: AbortSignal): Pro
     const res = await fetch(`${LLM_URL}/api/embed`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, input: text, ...EMBED_OPTIONS }),
+      body: JSON.stringify({ model, input: text, keep_alive: KEEP_ALIVE, ...EMBED_OPTIONS }),
       signal,
     });
     const json = (await res.json().catch(() => null)) as { embeddings?: number[][]; error?: string } | null;

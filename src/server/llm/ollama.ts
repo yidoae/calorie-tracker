@@ -1,4 +1,4 @@
-import { LLM_MODEL, LLM_URL } from "./config";
+import { KEEP_ALIVE, LLM_MODEL, LLM_URL, NUM_CTX } from "./config";
 
 interface ChatOptions {
   system: string;
@@ -28,7 +28,9 @@ export async function ollamaChat({ system, user, format, maxTokens, temperature 
         model,
         stream: false,
         ...(format ? { format } : {}),
-        options: { temperature, num_predict: maxTokens },
+        keep_alive: KEEP_ALIVE,
+        // Same context size as FitBot: Ollama reloads a model (~6 s) whenever num_ctx changes.
+        options: { temperature, num_predict: maxTokens, ...(model === LLM_MODEL ? { num_ctx: NUM_CTX } : {}) },
         messages: [
           { role: "system", content: system },
           { role: "user", content: user, ...(images ? { images } : {}) },
