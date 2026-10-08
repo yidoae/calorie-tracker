@@ -4,7 +4,7 @@ import type { ChatMessage, ChatResponse } from "@/types/fitbot";
 import type { Profile } from "@/types/profile";
 import { buildUserContext, parseClientContext } from "./context";
 import { formatKnowledge, searchKnowledge, usedSources } from "./knowledge";
-import { FITBOT_SYSTEM_PROMPT } from "./prompt";
+import { FITBOT_SYSTEM_PROMPT, isTurkish, TURKISH_REPLY_NOTE } from "./prompt";
 import { FITBOT_TOOLS, isFitbotTool, runFitbotTool } from "./tools";
 
 /** A failure with the HTTP status the API should answer with and a message for the user. */
@@ -142,12 +142,15 @@ export async function runFitbotChat(messages: ChatMessage[], rawContext: unknown
       signal,
     ),
   ]);
-  // Reference excerpts go right before the latest user message (see formatKnowledge).
+  // Reference excerpts and the Turkish reminder go right before the latest user message, where
+  // small models pay the most attention to them (see formatKnowledge, TURKISH_REPLY_NOTE).
+  const latest = messages[messages.length - 1];
   const conversation: LlmMessage[] = [
     { role: "system", content: system },
     ...messages.slice(0, -1),
     ...(knowledge.length > 0 ? [{ role: "system" as const, content: formatKnowledge(knowledge) }] : []),
-    messages[messages.length - 1],
+    ...(isTurkish(latest.content) ? [{ role: "system" as const, content: TURKISH_REPLY_NOTE }] : []),
+    latest,
   ];
   let toolsEnabled = true;
   let nudgedToText = false;
