@@ -42,6 +42,8 @@ export function useFitBot() {
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
+  /** The reply as it streams in; empty until the first words arrive. */
+  const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   async function request(history: UiMessage[]) {
@@ -50,15 +52,17 @@ export function useFitBot() {
     try {
       // The wizard plan is sent in FitBot's existing shape: its body data + today's targets.
       const { profile, customPlan } = plan ? planForFitbot(plan, new Date()) : { profile: legacyProfile, customPlan: legacyCustomPlan };
-      const { reply, sources } = await fitbotService.chat(
+      const { reply, sources } = await fitbotService.chatStream(
         history.map(({ role, content }) => ({ role, content })),
         buildContext(profile, customPlan),
+        setDraft,
       );
       setMessages((prev) => [...prev, { role: "assistant", content: reply, sources }]);
     } catch (err) {
       setError(errorMessage(err));
     } finally {
       setPending(false);
+      setDraft("");
     }
   }
 
@@ -80,6 +84,7 @@ export function useFitBot() {
     input,
     setInput,
     pending,
+    draft,
     error,
     send,
     canRetry: lastIsUser && !pending,

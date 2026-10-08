@@ -15,10 +15,10 @@ export default function FitBot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
-  // Keep the newest message (or the typing indicator / error) in view.
+  // Keep the newest message (or the reply being written / error) in view.
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
-  }, [bot.messages, bot.pending, bot.error, bot.open]);
+  }, [bot.messages, bot.pending, bot.draft, bot.error, bot.open]);
 
   useEffect(() => {
     if (bot.open) inputRef.current?.focus();
@@ -106,7 +106,14 @@ export default function FitBot() {
               ),
             )}
 
-            {bot.pending && (
+            {bot.pending && bot.draft && (
+              <div className="flex items-end gap-2">
+                <FitBotAvatar className="size-6" />
+                <p className="max-w-[85%] rounded-[16px] rounded-bl-[4px] border border-border bg-surface-2 px-4 py-2 text-[13px] whitespace-pre-wrap text-fg">{bot.draft}</p>
+              </div>
+            )}
+
+            {bot.pending && !bot.draft && (
               <div className="flex items-end gap-2">
                 <FitBotAvatar className="size-6" />
                 <div role="status" aria-label="FitBot yazıyor" className="flex gap-1 rounded-[16px] rounded-bl-[4px] border border-border bg-surface-2 px-4 py-3">

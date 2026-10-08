@@ -22,6 +22,19 @@ export const chatResponseSchema = z.object({
 });
 export type ChatResponse = z.infer<typeof chatResponseSchema>;
 
+/**
+ * One line of the streamed reply (`stream: true`, NDJSON): text as it's written, `reset` when the
+ * text shown so far turned out to precede a tool call and should be cleared, then `done` with the
+ * final reply (replaces the streamed text) or `error`.
+ */
+export const chatStreamEventSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("delta"), text: z.string() }),
+  z.object({ type: z.literal("reset") }),
+  chatResponseSchema.extend({ type: z.literal("done") }),
+  z.object({ type: z.literal("error"), error: z.string() }),
+]);
+export type ChatStreamEvent = z.infer<typeof chatStreamEventSchema>;
+
 /** What the chat widget sends alongside the messages. Everything is re-validated on the server. */
 export interface FitBotClientContext {
   profile: Profile | null;
