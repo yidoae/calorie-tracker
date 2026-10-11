@@ -36,8 +36,9 @@ users in `auth.users` and acts as them with `set local role authenticated` plus
 `request.jwt.claims`; nothing persists. A test covering a new migration is written first and must
 fail before the migration is applied.
 
-- One file: pass its whole contents to MCP `execute_sql` or the dashboard SQL editor. Only the last
-  result comes back, so the last line before `rollback` is `select * from finish();`: no row
-  means every test passed; otherwise it reports how many failed or were not run.
+- One file: pass its whole contents to MCP `execute_sql`. Only the last result with rows comes back,
+  so the file ends with `select * from finish();`, which returns a row only when tests failed or
+  were not run ("# Looks like you failed 1 test of 24"). If the last test's `ok N - …` line comes
+  back instead, every test passed. To see which test failed, run the file up to that test.
 - All files (Docker needed): `SUPABASE_DB_URL=postgresql://… npm run test:db -w @calorie/db`. CI
   does the same when the `SUPABASE_DB_URL` secret is set.
