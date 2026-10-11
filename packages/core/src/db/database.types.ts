@@ -367,6 +367,36 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      log_meal: {
+        Args: {
+          items: Json
+          local_date: string
+          name: string
+          slot: Database["public"]["Enums"]["meal_slot"]
+          time_zone: string
+        }
+        Returns: {
+          created_at: string
+          id: string
+          local_date: string
+          logged_at: string
+          name: string
+          slot: Database["public"]["Enums"]["meal_slot"]
+          time_zone: string
+          total_carbs_g: number
+          total_fat_g: number
+          total_kcal: number
+          total_protein_g: number
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "meals"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       normalize_tr: { Args: { t: string }; Returns: string }
       recompute_meal_totals: { Args: { target: string }; Returns: undefined }
       save_plan: {
@@ -400,6 +430,20 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      search_foods: {
+        Args: { max_results?: number; q: string }
+        Returns: {
+          carbs_per_100g: number
+          fat_per_100g: number
+          food_id: string
+          kcal_per_100g: number
+          matched_alias: string
+          name_tr: string
+          protein_per_100g: number
+          score: number
+          typical_portion_g: number
+        }[]
       }
     }
     Enums: {
