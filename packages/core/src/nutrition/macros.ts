@@ -48,12 +48,12 @@ export function totalOfItems(items: readonly Pick<MealItem, "grams" | "per100g">
   return roundMacros(sumMacros(items.map(itemMacros)));
 }
 
-/** Grams typed by the user ("150", "62,5"); null when empty or outside (0, 5000]. */
+/** Grams typed by the user ("150", "62,5"), to 0.1 g; null when empty or outside (0, 5000] after rounding. */
 export function parseGrams(text: string): number | null {
   const t = text.trim().replace(",", ".");
   if (!/^\d+(\.\d+)?$/.test(t)) return null;
-  const grams = Number.parseFloat(t);
-  return grams > 0 && grams <= MAX_ITEM_GRAMS ? round1(grams) : null;
+  const grams = round1(Number.parseFloat(t));
+  return grams > 0 && grams <= MAX_ITEM_GRAMS ? grams : null;
 }
 
 /** Share (0–1) of `value` against `goal`, clamped; 0 when there's no goal. */
