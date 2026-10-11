@@ -65,6 +65,9 @@ settings to the production project before store release.
 - [x] **E-mail sign-up** (Authentication → Sign In / Providers → Email): enabled, **Confirm email**
   on (FR-002). Minimum password length **8**, the same rule the app checks
   (`apps/mobile/src/hooks/authValidation.ts`).
+  **Dev, 2026-10-11: Confirm email is temporarily OFF** so the app can be tried in Expo Go, where
+  `kaloritakip://` links do not open the app; sign-up then returns a session and skips the
+  "E-postanı doğrula" step. Switch it back on before real users.
 - [x] **Site URL** (Authentication → URL Configuration): `kaloritakip://`. There is no website; the
   Site URL is only the fallback when a link's redirect is not allowed.
 - [x] **Redirect URLs** (same page): add `kaloritakip://**`. Confirmation and reset e-mails redirect
