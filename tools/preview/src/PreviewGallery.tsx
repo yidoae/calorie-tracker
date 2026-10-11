@@ -10,17 +10,22 @@ import SignUpScreen from "@/app/(auth)/sign-up";
 import WelcomeScreen from "@/app/(auth)/welcome";
 import ProfileScreen from "@/app/(tabs)/profile";
 import TodayScreen from "@/app/(tabs)/today";
-import SetupScreen from "@/app/setup/[step]";
 import VerifyEmail from "@/components/auth/VerifyEmail";
+import SetupStepScreen from "@/components/setup/SetupStepScreen";
 import Button from "@/components/ui/Button";
+import MacroBar from "@/components/ui/MacroBar";
+import Ring from "@/components/ui/Ring";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
 import TextField from "@/components/ui/TextField";
 import Toast from "@/components/ui/Toast";
+import type { SetupStep } from "@/hooks/setupSteps";
 import { SessionContext, type SessionState } from "@/hooks/useSession";
 import { ToastContext, useToastController } from "@/hooks/useToast";
 import type { Session } from "@/services/authService";
+import type { Profile } from "@/services/profileService";
 import { colors, fontAssets, radius, space, type } from "@/theme";
+import { SAMPLE_PROFILE } from "./fakes/profileService";
 
 /*
  * Screen review gallery: every screen of the app in a 390×844 phone frame, rendered from the app's
@@ -36,6 +41,30 @@ interface ScreenEntry {
   Component: ComponentType;
   /** The session state the screen sees (default: signed out). */
   status?: SessionState["status"];
+  /** The signed-in user's profile (default: the sample profile once signed in). */
+  profile?: Profile;
+}
+
+/** Setup answers stored per step; a step's preview shows it unanswered, the earlier ones answered. */
+const STEP_FIELDS: Record<Exclude<SetupStep, "summary">, (keyof Profile)[]> = {
+  basics: ["sex", "birthYear"],
+  body: ["heightCm", "weightKg"],
+  goal: ["goalWeightKg"],
+  activity: ["activityLevel"],
+  diet: ["dietStyle"],
+};
+
+function setupProfile(step: SetupStep): Profile {
+  const profile: Profile = { ...SAMPLE_PROFILE, onboardingCompleted: false };
+  const steps = Object.keys(STEP_FIELDS) as (keyof typeof STEP_FIELDS)[];
+  for (const later of steps.slice(step === "summary" ? steps.length : steps.indexOf(step))) {
+    for (const field of STEP_FIELDS[later]) Object.assign(profile, { [field]: null });
+  }
+  return profile;
+}
+
+function setupEntry(step: SetupStep, title: string, note: string): ScreenEntry {
+  return { id: `setup-${step}`, title, note, Component: () => <SetupStepScreen step={step} />, status: "needsSetup", profile: setupProfile(step) };
 }
 
 const SCREENS: ScreenEntry[] = [
@@ -56,8 +85,19 @@ const SCREENS: ScreenEntry[] = [
   { id: "reset-password", title: "Yeni şifre", note: "Şifre sıfırlama e-postasındaki bağlantıyla açılır.", Component: ResetPasswordScreen, status: "recovery" },
   { id: "link-error", title: "Bozuk doğrulama bağlantısı", note: "E-postadaki bağlantı bozuksa, süresi dolmuşsa ya da başka cihazda açıldıysa.", Component: ConfirmLinkScreen },
   { id: "profile", title: "Profil", note: "Hesabın e-postası, giriş yöntemleri ve onaylı “Çıkış yap”.", Component: ProfileScreen, status: "ready" },
-  { id: "setup", title: "İlk kurulum (yer tutucu)", note: "Kurulumu bitmemiş hesap buraya yönlenir. Adımlar US2'de (T036).", Component: SetupScreen },
-  { id: "today", title: "Bugün (yer tutucu)", note: "Sekmeli ana ekran: Bugün, Geçmiş, Planım, Profil. Halka ve öğünler US2–US3'te.", Component: TodayScreen, status: "ready" },
+  setupEntry("basics", "Kurulum 1: cinsiyet ve yaş", "Kurulumu bitmemiş hesap buraya yönlenir. Her adımın cevabı “Devam”da profile kaydedilir; uygulama kapanırsa ilk cevapsız adımdan devam eder."),
+  setupEntry("body", "Kurulum 2: boy ve kilo", "Ondalık virgül ya da nokta olur (72,5). Aralık dışı değer kırmızı alan ve Türkçe açıklamayla durdurulur (boy 100–250 cm, kilo 30–300 kg)."),
+  setupEntry("goal", "Kurulum 3: hedef kilo", "Yazdıkça planın yönü görünür: yağ yakımı, formu koruma ya da kas kazanımı."),
+  setupEntry("activity", "Kurulum 4: hareket", "Beş düzey; her biri plan motorunda bir antrenman düzenine karşılık gelir."),
+  setupEntry("diet", "Kurulum 5: beslenme tarzı", "Makro dağılımı buna göre yapılır."),
+  setupEntry("summary", "Kurulum 6: özet", "Hedefler cevaplardan çekirdek plan motoruyla hesaplanır; “Planımı oluştur” profili ve planı tek seferde kaydeder, sonra Bugün açılır."),
+  {
+    id: "today",
+    title: "Bugün",
+    note: "Aktif plandan bugünün hedefleri: kalori halkası (henüz yenen 0) ve makro çubukları. Öğünler ve ekleme düğmesi US3'te.",
+    Component: TodayScreen,
+    status: "ready",
+  },
 ];
 
 const PHONE = { width: 390, height: 844 };
@@ -75,9 +115,10 @@ function VerifyEmailSample() {
 }
 
 /** A phone's own session state and toasts, so a toast shows inside its frame. */
-function Phone({ status = "signedOut", children }: { status?: SessionState["status"]; children: ReactNode }) {
+function Phone({ status = "signedOut", profile = SAMPLE_PROFILE, children }: { status?: SessionState["status"]; profile?: Profile; children: ReactNode }) {
   const { current, show, dismiss } = useToastController();
-  const session: SessionState = { status, session: status === "signedOut" ? null : SAMPLE_SESSION, profile: null, error: null, retry: () => {} };
+  const signedIn = status !== "signedOut";
+  const session: SessionState = { status, session: signedIn ? SAMPLE_SESSION : null, profile: signedIn ? profile : null, error: null, retry: () => {} };
   return (
     <SessionContext.Provider value={session}>
       <ToastContext.Provider value={{ show, dismiss }}>
@@ -98,7 +139,7 @@ export default function PreviewGallery() {
       <SafeAreaProvider>
         <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
           <View style={styles.band}>
-            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 3</Text>
+            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 4</Text>
             <Text style={styles.bandTitle}>Ekran önizlemesi</Text>
             {fontError && <Text style={[styles.bandLead, styles.warning]}>Yazı tipi yüklenemedi: {fontError.message}</Text>}
             <Text style={styles.bandLead}>
@@ -110,10 +151,10 @@ export default function PreviewGallery() {
           <View style={styles.panel}>
             <Text style={styles.sectionTitle}>Ekranlar</Text>
             <ScrollView horizontal contentContainerStyle={styles.phones}>
-              {SCREENS.map(({ id, title, note, Component, status }) => (
+              {SCREENS.map(({ id, title, note, Component, status, profile }) => (
                 <View key={id} style={styles.phoneColumn}>
                   <View style={styles.phone}>
-                    <Phone status={status}>
+                    <Phone status={status} profile={profile}>
                       <Component />
                     </Phone>
                   </View>
@@ -141,6 +182,18 @@ export default function PreviewGallery() {
                 <FieldSample label="E-posta" placeholder="ornek@eposta.com" />
                 <FieldSample label="Ne kadar yedin?" unit="g" initial="150" hint="Tipik porsiyon 150 g" />
                 <FieldSample label="Boy" unit="cm" initial="300" error="Boy 100–250 cm arasında olmalı." />
+              </Specimen>
+              <Specimen label="Kalori halkası: başlangıç, yolda, hedef aşıldı">
+                <View style={styles.rings}>
+                  <Ring value={0} target={1714} size={150} />
+                  <Ring value={1120} target={1714} size={150} />
+                  <Ring value={1900} target={1714} size={150} />
+                </View>
+              </Specimen>
+              <Specimen label="Makro çubukları">
+                <MacroBar label="Protein" value={96} target={154} color={colors.macroProtein} />
+                <MacroBar label="Karbonhidrat" value={40} target={86} color={colors.macroCarbs} />
+                <MacroBar label="Yağ" value={90} target={84} color={colors.macroFat} />
               </Specimen>
               <Specimen label="Boş durum ve hata durumu">
                 <StateMessage kind="empty" title="Henüz öğün yok" body="İlk öğününü eklemek için + düğmesine dokun." actionLabel="Öğün ekle" onAction={() => {}} />
@@ -238,6 +291,7 @@ const styles = StyleSheet.create({
   specimen: { flexGrow: 1, flexBasis: 300, borderWidth: 1, borderColor: colors.border, borderRadius: radius.lg, padding: space(5), gap: space(3) },
   specimenLabel: { ...type.label, color: colors.fgMuted },
   specimenBody: { gap: space(3) },
+  rings: { flexDirection: "row", flexWrap: "wrap", gap: space(3) },
   inkSample: { backgroundColor: colors.ink, borderRadius: radius.md, padding: space(3) },
   toastFrame: { height: 92, backgroundColor: colors.surface2, borderRadius: radius.md, overflow: "hidden" },
   swatches: { flexDirection: "row", flexWrap: "wrap", gap: space(3) },
