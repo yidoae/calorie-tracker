@@ -1,6 +1,7 @@
 # Runs on every pull request and every push to master: types, lint, unused code (knip) and the
-# @calorie/core tests for every workspace. Database tests (supabase/tests, from T011) run in their
-# own job only when the dev project's secrets are configured, so forks without secrets still pass.
+# @calorie/core tests. The pgTAP database tests (supabase/tests/database) run in their own job only
+# when the SUPABASE_DB_URL secret is set, so forks without secrets still pass. Every test file rolls
+# back, so running them against the dev project leaves nothing behind.
 name: CI
 
 on:
@@ -39,19 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
     steps:
       - uses: actions/checkout@v4
-        if: env.SUPABASE_URL != ''
-      - uses: actions/setup-node@v4
-        if: env.SUPABASE_URL != ''
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-        if: env.SUPABASE_URL != ''
-      - name: Database tests against the dev project
-        if: env.SUPABASE_URL != '' && hashFiles('supabase/tests/*.test.ts') != ''
-        run: npm test -w @calorie/db
+        if: env.SUPABASE_DB_URL != ''
+      - name: pgTAP tests against the dev project
+        if: env.SUPABASE_DB_URL != ''
+        run: npx --yes supabase test db --db-url "$SUPABASE_DB_URL"

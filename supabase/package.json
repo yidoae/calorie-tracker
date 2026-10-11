@@ -3,14 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Supabase migrations and (from T011) the database tests that run against the dev project.",
-  "devDependencies": {
-    "@supabase/supabase-js": "^2.117.3",
-    "@types/node": "^22.20.5",
-    "tsx": "^4.23.15"
-  },
+  "description": "Supabase migrations and the pgTAP database tests (tests/database). Not part of the root npm test: test:db needs Docker and the dev database URL.",
   "scripts": {
-    "test": "tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "test:db": "npx --yes supabase test db --db-url \"$SUPABASE_DB_URL\""
   }
 }

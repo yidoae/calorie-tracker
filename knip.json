@@ -23,14 +23,6 @@
         "tests/**/*.ts"
       ]
     },
-    "supabase": {
-      "entry": [
-        "tests/*.test.ts"
-      ],
-      "project": [
-        "tests/**/*.ts"
-      ]
-    },
     "tools/preview": {
       "entry": [
         "scripts/*.mjs"
