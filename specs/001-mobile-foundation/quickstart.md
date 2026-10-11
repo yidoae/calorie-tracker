@@ -6,7 +6,8 @@ How to run this slice and prove it works. Details live in [data-model.md](./data
 ## Prerequisites
 
 - Node 22+, npm, the Supabase CLI (`npx supabase`), an Expo account (`npx eas login`).
-- A Supabase **dev** project; its URL, publishable key and service-role key.
+- A Supabase **dev** project; its URL and publishable key (the app), and its database connection
+  string for the pgTAP tests through the CLI (Docker needed).
 - For Apple/Google sign-in: the provider setup in [research.md](./research.md) §2–3.
 - A phone or emulator with the **development build** installed (Expo Go cannot load the sign-in
   modules).
@@ -27,7 +28,7 @@ npm run mobile                                # starts Metro for the development
 | Command | Proves |
 |---|---|
 | `npm test -w @calorie/core` | engine, tuning, onboarding mapping, slots, day rating, normalizeTr; property tests: every day ≥ floor, macros = calories (SC-006) |
-| `SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=… npm test -w supabase` | user B cannot read or change user A's profile, plans, meals or items (SC-005); totals equal Σ items after insert/update/delete; plans below the floor are rejected; `normalize_tr` matches core |
+| `SUPABASE_DB_URL=… npm run test:db -w @calorie/db` (or each `supabase/tests/database/*.test.sql` through the SQL editor / MCP) | user B cannot read or change user A's profile, plans, meals or items (SC-005); totals equal Σ items after insert/update/delete; plans below the floor are rejected; no internal function is callable through the API |
 | `npm run typecheck && npm run lint && npm run knip` | layers, types and no unused code across workspaces |
 | `maestro test .maestro/smoke.yaml` | sign up → setup → search "tavuk" → 150 g → save → ring shows the meal (SC-001–SC-003) |
 

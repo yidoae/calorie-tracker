@@ -65,7 +65,7 @@ Notes from Phase 1: dependencies listed in T005 that nothing imports yet were re
 - [x] T012 Write `supabase/tests/rls.test.ts` (must fail first): with users A and B, B cannot select, update or delete A's rows in `profiles`, `nutrition_plans`, `meals`, `meal_items`; anonymous clients read nothing; `foods`/`food_aliases` are readable but not writable
 - [x] T013 Migration `supabase/migrations/20261009000100_schema.sql`: enums, the six tables from data-model.md with checks and indexes, RLS enabled with the policies from contracts/database-api.md, `revoke update (onboarding_completed)` on `profiles` from `authenticated`, `pg_trgm` extension
 - [x] T014 Migration `supabase/migrations/20261009000200_triggers.sql`: `handle_new_user` (insert profile on `auth.users` insert), `meal_items` before-trigger (set `user_id` from the meal, reject foreign meals, copy the per-100 g snapshot from `foods`), after-trigger recomputing the meal's four totals, `nutrition_plans` validation trigger (per-day floor by sex, macro sum within max(10 kcal, 1 %)), `updated_at` touch triggers
-- [ ] T015 Apply migrations to the dev project (`npx supabase link`, `npx supabase db push`), generate `packages/core/src/db/database.types.ts` with `npx supabase gen types typescript --linked`, and make T012 pass
+- [x] T015 Apply migrations to the dev project (`npx supabase link`, `npx supabase db push`), generate `packages/core/src/db/database.types.ts` with `npx supabase gen types typescript --linked`, and make T012 pass
 - [x] T016 [P] Fix the plan engine floor in `packages/core/src/nutrition/plan.ts` (every cycling day ≥ the sex floor; the summary and weeks-to-goal use the real deficit `base.calories − tdee`) and in `packages/core/src/nutrition/planTuning.ts` (calorie slider minimum = sex floor; macros never exceed calories)
 - [x] T017 [P] Property tests `packages/core/tests/plan.property.test.ts` with fast-check: for any valid `PlanInputs`, every day (base, training, rest) ≥ floor and protein·4 + carbs·4 + fat·9 = calories within rounding; for any tuning action the same holds (SC-006)
 - [x] T018 [P] RPC payload and row schemas in `packages/core/src/schemas/rpc.ts` (onboarding answers, plan payload, log-meal payload, search row) and `packages/core/src/schemas/rows.ts` (profile, plan, meal, meal item rows mapped from `database.types.ts`)
@@ -79,6 +79,8 @@ Notes from Phase 1: dependencies listed in T005 that nothing imports yet were re
 Note: `Sheet` and `useToast` have no caller until US1, so knip reports them; Phase 2 and US1 go out as one pull request.
 
 Note (2026-10-09): until the dev project exists, the migrations were checked on a local PGlite database with a stubbed `auth` schema (29 checks: RLS for two users and anonymous, column privileges, totals trigger, Turkish normalization, plan floor and macro sum, one active plan). That check is not part of the repository; T015 runs the real suite.
+
+Note (2026-10-11): T015 done on the dev project `kalori-takip-dev` through the Supabase MCP (no CLI link); the T011/T012 node suite needed a service-role key and is replaced by pgTAP files in `supabase/tests/database/` (research.md §7), which is also where the later database test tasks (T023, T032, T040, T041) go; `20261011000100_function_privileges.sql` revokes execute on every `public` function, so each RPC grants it to `authenticated` explicitly.
 
 ---
 

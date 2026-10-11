@@ -6,14 +6,17 @@ weight, water, intermittent fasting and progress trends.
 
 ## Getting started
 
+The Next.js app is gone; the product is being rebuilt as an Expo app on Supabase
+(`specs/001-mobile-foundation/`). Setup and validation: [quickstart.md](specs/001-mobile-foundation/quickstart.md).
+
 ```bash
-npm install                 # also runs `prisma generate`
-cp .env.example .env        # DATABASE_URL="file:./dev.db"
-npm run db:migrate          # creates prisma/dev.db and applies migrations
-npm run dev                 # http://localhost:3000
+npm install          # all workspaces: apps/mobile, packages/core, supabase, tools/preview
+npm run mobile       # Metro for the development build
+npm test             # @calorie/core unit and property tests
+npm run typecheck && npm run lint && npm run knip
 ```
 
-Checks (CI runs the same): `npm test`, `npm run typecheck`, `npm run lint`, `npm run knip`, `npm run build`.
+Database migrations and pgTAP tests: [supabase/README.md](supabase/README.md).
 
 ## Where things are written down
 

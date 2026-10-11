@@ -81,6 +81,12 @@ Decisions behind [plan.md](./plan.md), checked against official documentation on
 - **Alternatives**: install Docker Desktop and use `supabase start` + pgTAP; Supabase branching.
 - Sources: https://supabase.com/docs/reference/cli/supabase-test-db ·
   https://supabase.com/docs/guides/database/testing
+- **Change (2026-10-11)**: the tests are **pgTAP** files in `supabase/tests/database/`, run against
+  the hosted dev project. The node suites needed the service-role key, which is not kept in the repo,
+  CI or agent sessions. Each pgTAP file creates its users in `auth.users` inside a transaction, acts
+  as them with `set local role` + `request.jwt.claims`, and rolls back, so no key is needed and
+  nothing persists. Locally a file runs as one SQL statement (Supabase MCP `execute_sql` or the SQL
+  editor); CI runs `supabase test db --db-url "$SUPABASE_DB_URL"` (GitHub runners have Docker).
 
 ## 8. Turkish search
 
