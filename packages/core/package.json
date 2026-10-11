@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Pure nutrition logic and Zod schemas shared by the app and the Supabase functions.",
+  "description": "Pure nutrition logic and Zod schemas for the app; no platform imports.",
   "exports": {
     "./nutrition/*": "./src/nutrition/*.ts",
     "./schemas/*": "./src/schemas/*.ts",
