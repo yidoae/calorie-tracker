@@ -4,7 +4,7 @@
 -- inside this transaction; nothing persists.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(33);
+select plan(47);
 
 insert into auth.users (id, email) values
   ('a2000000-0000-4000-8000-0000000000a2', 'onboarding-a@test.invalid'),
@@ -90,6 +90,38 @@ select throws_ok(
       jsonb_set(current_setting('test.plan')::jsonb, '{inputs,sex}', '"male"'))$$,
   '22023', 'invalid_plan', 'a plan built for other answers than the ones sent is refused');
 
+-- The stored inputs must parse with core planInputsSchema (the app reads them back with it).
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,goal}', '"lose"'))$$,
+  '22023', 'invalid_plan', 'plan inputs with an unknown goal are refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,split}', '"bro"'))$$,
+  '22023', 'invalid_plan', 'plan inputs with an unknown split are refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,mealPattern}', '"omad"'))$$,
+  '22023', 'invalid_plan', 'plan inputs with an unknown meal pattern are refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,intensity}', '900'))$$,
+  '22023', 'invalid_plan', 'plan inputs with an intensity above 800 are refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,fastingWindowStart}', '30'))$$,
+  '22023', 'invalid_plan', 'plan inputs with an eating window starting at 30:00 are refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,trainingDays}', '[0, 0, 3, 4]'))$$,
+  '22023', 'invalid_plan', 'plan inputs with a repeated training day are refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,trainingDays}', '[0]'))$$,
+  '22023', 'invalid_plan', 'a strength routine with one training day a week is refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,targetWeightKg}', '75'))$$,
+  '22023', 'invalid_plan', 'a cut towards a goal weight above today''s weight is refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.plan')::jsonb, '{inputs,cycling}', 'true'))$$,
+  '22023', 'invalid_plan', 'cycling switched on for a training routine without training/rest targets is refused');
+select throws_ok(
+  $$select public.complete_onboarding(current_setting('test.answers')::jsonb, jsonb_set(current_setting('test.cycling_plan')::jsonb, '{inputs,cycling}', 'false'))$$,
+  '22023', 'invalid_plan', 'training/rest targets with cycling switched off are refused');
+
 select results_eq(
   $$select onboarding_completed, height_cm from public.profiles$$,
   $$values (false, null::numeric)$$,
@@ -102,7 +134,7 @@ select lives_ok(
 select results_eq(
   $$select sex::text, birth_year, height_cm, weight_kg, goal_weight_kg, activity_level::text, diet_style::text, fat_per_kg, time_zone, onboarding_completed
       from public.profiles$$,
-  $$values ('female', extract(year from now() at time zone 'Europe/Istanbul')::int - 30,165.0, 70.0, 62.0, 'moderate', 'highProtein', 1.20, 'Europe/Istanbul', true)$$,
+  $$values ('female', extract(year from now() at time zone 'Europe/Istanbul')::int - 30, 165.0, 70.0, 62.0, 'moderate', 'highProtein', 1.20, 'Europe/Istanbul', true)$$,
   'the profile holds the answers, birth year = current year − age, and setup is complete');
 select results_eq(
   $$select is_active, bmr, tdee, base_kcal, base_protein_g, base_carbs_g, base_fat_g, training_kcal, training_days, summary from public.nutrition_plans$$,
@@ -138,6 +170,30 @@ select throws_ok(
   $$update public.nutrition_plans set is_active = true where user_id = 'a2000000-0000-4000-8000-0000000000a2'$$,
   '42501', null, 'a signed-in user cannot switch plans directly');
 
+-- Real buildPlan outputs that the input checks must keep accepting.
+select lives_ok(
+  $$select public.save_plan('{"inputs": {"sex": "female", "heightCm": 165, "weightKg": 70, "age": 30, "targetWeightKg": 62, "goal": "cut", "intensity": 500,
+      "trainingStyle": "sedentary", "split": null, "trainingDays": [], "dietStyle": "highProtein", "fatPerKg": 1.2, "mealPattern": "classic",
+      "fastingWindowStart": 12, "cycling": false},
+    "bmr": 1476, "tdee": 1771, "base": {"calories": 1271, "protein": 154, "carbs": 0, "fat": 73}, "cycle": null, "strategySummary": "Test planı."}')$$,
+  'save_plan accepts a sedentary plan without training days');
+select lives_ok(
+  $$select public.save_plan('{"inputs": {"sex": "female", "heightCm": 165, "weightKg": 70, "age": 30, "targetWeightKg": 62, "goal": "cut", "intensity": 500,
+      "trainingStyle": "sedentary", "split": null, "trainingDays": [], "dietStyle": "highProtein", "fatPerKg": 1.2, "mealPattern": "classic",
+      "fastingWindowStart": 12, "cycling": true},
+    "bmr": 1476, "tdee": 1771, "base": {"calories": 1271, "protein": 154, "carbs": 0, "fat": 73}, "cycle": null, "strategySummary": "Test planı."}')$$,
+  'save_plan accepts cycling switched on for a sedentary routine (the engine builds no cycle without training days)');
+select lives_ok(
+  $$select public.save_plan('{"inputs": {"sex": "female", "heightCm": 165, "weightKg": 70, "age": 30, "targetWeightKg": null, "goal": "maintain", "intensity": 0,
+      "trainingStyle": "strength", "split": "upperLower", "trainingDays": [0, 1, 3, 4], "dietStyle": "highProtein", "fatPerKg": 1.2, "mealPattern": "classic",
+      "fastingWindowStart": 12, "cycling": false},
+    "bmr": 1476, "tdee": 2214, "base": {"calories": 2214, "protein": 154, "carbs": 211, "fat": 84}, "cycle": null, "strategySummary": "Test planı."}')$$,
+  'save_plan accepts a maintain plan without a goal weight');
+select results_eq(
+  $$select inputs ->> 'goal', inputs -> 'targetWeightKg', base_kcal, count(*) over ()::int from public.nutrition_plans where is_active$$,
+  $$values ('maintain', 'null'::jsonb, 2214, 1)$$,
+  'the last saved plan is the only active one');
+
 -- User B sets up their own account; A's plans are untouched and invisible to B.
 select set_config('request.jwt.claims', json_build_object('sub', 'b2000000-0000-4000-8000-0000000000b2', 'role', 'authenticated')::text, true);
 select lives_ok(
@@ -150,7 +206,7 @@ select results_eq(
   $$select user_id, count(*)::int, count(*) filter (where is_active)::int from public.nutrition_plans
      where user_id in ('a2000000-0000-4000-8000-0000000000a2', 'b2000000-0000-4000-8000-0000000000b2')
      group by user_id order by user_id$$,
-  $$values ('a2000000-0000-4000-8000-0000000000a2'::uuid, 2, 1), ('b2000000-0000-4000-8000-0000000000b2'::uuid, 1, 1)$$,
+  $$values ('a2000000-0000-4000-8000-0000000000a2'::uuid, 5, 1), ('b2000000-0000-4000-8000-0000000000b2'::uuid, 1, 1)$$,
   'each user has their own plans with one active plan each; B''s setup did not touch A''s');
 
 select * from finish();

@@ -30,7 +30,9 @@ Anonymous role: no access to any table.
 - Updates the profile (`birth_year` = current year − age), inserts the plan as active through the
   same path as `save_plan`, sets `onboarding_completed = true`; one transaction.
 - Errors: `invalid_answers`, `plan_below_floor`, `plan_macros_mismatch`, `already_completed`,
-  `invalid_plan` (not shaped like the core schema, or built for other answers).
+  `invalid_plan` (not shaped like the core schema, or built for other answers). `inputs` is checked
+  like core `planInputsSchema` (enums, ranges, refines), and `cycle` must be set exactly when
+  `inputs.cycling` is on for a routine that is not sedentary, as `buildPlan` does.
 
 ### `save_plan(plan jsonb) → nutrition_plans`
 - Inserts the plan as active and deactivates the previous one. The validation trigger enforces the
