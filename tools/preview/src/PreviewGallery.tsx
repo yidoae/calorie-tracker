@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
-import { useState, type ComponentType, type ReactNode } from "react";
+import { useEffect, useState, type ComponentType, type ReactNode } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import ConfirmLinkScreen from "@/app/(auth)/auth/confirm";
@@ -11,6 +11,9 @@ import WelcomeScreen from "@/app/(auth)/welcome";
 import ProfileScreen from "@/app/(tabs)/profile";
 import TodayScreen from "@/app/(tabs)/today";
 import VerifyEmail from "@/components/auth/VerifyEmail";
+import FoodSearchScreen from "@/components/meals/FoodSearchScreen";
+import MealDetailScreen from "@/components/meals/MealDetailScreen";
+import MealReviewScreen from "@/components/meals/MealReviewScreen";
 import SetupStepScreen from "@/components/setup/SetupStepScreen";
 import Button from "@/components/ui/Button";
 import MacroBar from "@/components/ui/MacroBar";
@@ -20,11 +23,14 @@ import StateMessage from "@/components/ui/StateMessage";
 import TextField from "@/components/ui/TextField";
 import Toast from "@/components/ui/Toast";
 import type { SetupStep } from "@/hooks/setupSteps";
+import { useMealDraft } from "@/hooks/useMealDraft";
 import { SessionContext, type SessionState } from "@/hooks/useSession";
 import { ToastContext, useToastController } from "@/hooks/useToast";
 import type { Session } from "@/services/authService";
 import type { Profile } from "@/services/profileService";
 import { colors, fontAssets, radius, space, type } from "@/theme";
+import { SAMPLE_HITS } from "./fakes/foodService";
+import { SAMPLE_MEALS } from "./fakes/mealService";
 import { SAMPLE_PROFILE } from "./fakes/profileService";
 
 /*
@@ -94,8 +100,29 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "today",
     title: "Bugün",
-    note: "Aktif plandan bugünün hedefleri: kalori halkası (henüz yenen 0) ve makro çubukları. Öğünler ve ekleme düğmesi US3'te.",
+    note: "Örnek gün: kahvaltı ve öğle yemeği. Halka ve makro çubukları öğünlerin sunucuda hesaplanan toplamlarından dolar; öğünler öğüne göre gruplanır, dokununca açılır. “Öğün ekle” arama ekranını açar.",
     Component: TodayScreen,
+    status: "ready",
+  },
+  {
+    id: "log-search",
+    title: "Yemek ara",
+    note: "Alttan açılır. Yazdıkça sonuç gelir; ekler de anlaşılır (“tavuğu” → tavuk). Örnek veride “tavuğu”, “pilav”, “yoğurt” ya da “simit” yaz.",
+    Component: () => <FoodSearchScreen adding={false} />,
+    status: "ready",
+  },
+  {
+    id: "log-review",
+    title: "Kontrol et",
+    note: "Seçilen her yemeğin gram alanı boş başlar ve doldurulmadan kaydedilmez (0 < g ≤ 5.000). Kalori ve makrolar yazdıkça güncellenir; öğün saate göre seçili gelir. Kaydedilemezse girilenler kalır.",
+    Component: ReviewSample,
+    status: "ready",
+  },
+  {
+    id: "meal-detail",
+    title: "Öğün",
+    note: "Kayıtlı öğün: bir yemeğe dokununca gramı değişir, çöp kutusu yemeği çıkarır, “Öğünü sil” onay ister. Toplamları her değişiklikte veritabanı yeniden hesaplar.",
+    Component: () => <MealDetailScreen mealId={SAMPLE_MEALS[1].id} />,
     status: "ready",
   },
 ];
@@ -105,6 +132,19 @@ const PHONE = { width: 390, height: 844 };
 const SAMPLE_SESSION = {
   user: { id: "00000000-0000-4000-8000-000000000001", email: "ayse@ornek.com", identities: [{ provider: "email" }, { provider: "google" }] },
 } as unknown as Session;
+
+/** The review step with two picked foods: one with its grams typed, one still empty. */
+function ReviewSample() {
+  const { draft, addFood, setGrams } = useMealDraft();
+  const seeded = draft.items.length > 0;
+  useEffect(() => {
+    if (seeded) return;
+    addFood(SAMPLE_HITS[0]);
+    addFood(SAMPLE_HITS[3]);
+    setGrams("item-1", "200");
+  }, [seeded, addFood, setGrams]);
+  return <MealReviewScreen />;
+}
 
 function VerifyEmailSample() {
   return (
@@ -139,7 +179,7 @@ export default function PreviewGallery() {
       <SafeAreaProvider>
         <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
           <View style={styles.band}>
-            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 4</Text>
+            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 5</Text>
             <Text style={styles.bandTitle}>Ekran önizlemesi</Text>
             {fontError && <Text style={[styles.bandLead, styles.warning]}>Yazı tipi yüklenemedi: {fontError.message}</Text>}
             <Text style={styles.bandLead}>
