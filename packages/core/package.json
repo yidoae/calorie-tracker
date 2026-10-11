@@ -7,6 +7,7 @@
   "exports": {
     "./nutrition/*": "./src/nutrition/*.ts",
     "./schemas/*": "./src/schemas/*.ts",
+    "./search/*": "./src/search/*.ts",
     "./dates": "./src/dates.ts",
     "./labels": "./src/labels.ts"
   },
