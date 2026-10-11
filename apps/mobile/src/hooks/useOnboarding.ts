@@ -5,11 +5,11 @@ import type { DietStyle } from "@calorie/core/schemas/plan";
 import type { ActivityLevel, Gender } from "@calorie/core/schemas/profile";
 import { planPayloadSchema } from "@calorie/core/schemas/rpc";
 import { useQueryClient } from "@tanstack/react-query";
-import { getCalendars } from "expo-localization";
 import { useState } from "react";
 import { toAppError, type AppError } from "@/services/errors";
 import { completeOnboarding } from "@/services/planService";
 import { saveSetupAnswers, type Profile, type SetupAnswers } from "@/services/profileService";
+import { deviceTimeZone } from "./deviceTimeZone";
 import {
   ageFromBirthYear,
   answersFromProfile,
@@ -58,11 +58,6 @@ function draftFromProfile(p: Profile | null, year: number): SetupDraft {
     activity: p?.activityLevel ?? null,
     dietStyle: p?.dietStyle ?? null,
   };
-}
-
-/** The device's IANA time zone (expo-localization); the database checks it can use it. */
-function deviceTimeZone(): string {
-  return getCalendars()[0]?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
 /**

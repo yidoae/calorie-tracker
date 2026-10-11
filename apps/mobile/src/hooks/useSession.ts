@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getSession, onSessionChange, type Session } from "@/services/authService";
 import { getMyProfile, type Profile } from "@/services/profileService";
+import { clearMealDraft } from "./useMealDraft";
 
 /**
  * Where the user is in the app's lifecycle; the root layout routes on this alone
@@ -34,7 +35,10 @@ export function useSessionController(): SessionState {
       if (event === "PASSWORD_RECOVERY") setRecovering(true);
       if (event === "USER_UPDATED" || event === "SIGNED_OUT") setRecovering(false);
       // Signed out here or elsewhere (revoked, expired): nothing personal stays cached (FR-005).
-      if (event === "SIGNED_OUT") queryClient.clear();
+      if (event === "SIGNED_OUT") {
+        queryClient.clear();
+        clearMealDraft();
+      }
     });
     return () => {
       active = false;
