@@ -7,7 +7,8 @@ const limited = (field: keyof typeof PROFILE_LIMITS) => z.number().min(PROFILE_L
 
 /** The first-time setup: body data, goal weight, activity, diet preference and the device time zone. */
 export const onboardingSchema = z.object({
-  age: limited("age"),
+  /** Whole years: the profile stores a birth year (complete_onboarding). */
+  age: limited("age").int(),
   sex: z.enum(GENDERS),
   heightCm: limited("heightCm"),
   weightKg: limited("weightKg"),
