@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import type { Database, Json } from "../src/db/database.types.ts";
 import { buildPlan } from "../src/nutrition/plan.ts";
 import { logMealPayloadSchema } from "../src/schemas/meal.ts";
 import type { PlanInputs } from "../src/schemas/plan.ts";
 import { foodHitRowSchema, mealRowSchema, planRowSchema, profileRowSchema } from "../src/schemas/rows.ts";
+import type { z } from "../src/schemas/zod.ts";
 
 const MEAL_ID = "6f1c2c47-5d7e-4c7b-9b3e-1f2a3b4c5d6e";
 const inputs: PlanInputs = {
@@ -24,7 +26,26 @@ const inputs: PlanInputs = {
   cycling: false,
 };
 
+type Row<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Row"];
+/**
+ * Columns a row schema reads that the table lacks, and nullable columns it does not accept null for
+ * (`Json` contains null by itself, so json columns are left out of the null check).
+ */
+type Drift<In, R> =
+  | Exclude<keyof In, keyof R>
+  | { [K in keyof In & keyof R]: Json extends R[K] ? never : null extends R[K] ? (null extends In[K] ? never : K) : never }[keyof In & keyof R];
+/** Compiles with no argument only when there is no drift; otherwise the expected argument names it. */
+const noDrift = <In, R>(...drift: [Drift<In, R>] extends [never] ? [] : [Drift<In, R>]) => drift.length === 0;
+
 describe("database rows", () => {
+  it("reads only columns of the generated database types, with their nullability", () => {
+    type MealIn = z.input<typeof mealRowSchema>;
+    assert.ok(noDrift<z.input<typeof profileRowSchema>, Row<"profiles">>());
+    assert.ok(noDrift<z.input<typeof planRowSchema>, Row<"nutrition_plans">>());
+    assert.ok(noDrift<Omit<MealIn, "meal_items">, Row<"meals">>());
+    assert.ok(noDrift<Omit<MealIn["meal_items"][number], "foods">, Row<"meal_items">>());
+  });
+
   it("maps a profile row and keeps unanswered fields null", () => {
     const p = profileRowSchema.parse({
       id: MEAL_ID,
