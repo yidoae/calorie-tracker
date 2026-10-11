@@ -59,15 +59,15 @@ fail before the migration is applied.
 The app signs in with e-mail and password, Google and (iOS) Apple, all through `supabase-js`
 ([research.md §1–4](../specs/001-mobile-foundation/research.md)). These settings live in the
 dashboard, not in migrations. **None of them has been set from this repository** (there is no
-management token here), so every item below is an **owner TODO** until it is ticked. Apply the same
+management token here), so every item below is an **owner TODO** until it is ticked. Ticked items were set on the dev project on 2026-10-11 and checked after a reload. Apply the same
 settings to the production project before store release.
 
-- [ ] **E-mail sign-up** (Authentication → Sign In / Providers → Email): enabled, **Confirm email**
+- [x] **E-mail sign-up** (Authentication → Sign In / Providers → Email): enabled, **Confirm email**
   on (FR-002). Minimum password length **8**, the same rule the app checks
   (`apps/mobile/src/hooks/authValidation.ts`).
-- [ ] **Site URL** (Authentication → URL Configuration): `kaloritakip://`. There is no website; the
+- [x] **Site URL** (Authentication → URL Configuration): `kaloritakip://`. There is no website; the
   Site URL is only the fallback when a link's redirect is not allowed.
-- [ ] **Redirect URLs** (same page): add `kaloritakip://**`. Confirmation and reset e-mails redirect
+- [x] **Redirect URLs** (same page): add `kaloritakip://**`. Confirmation and reset e-mails redirect
   to `kaloritakip://auth/confirm` and `kaloritakip://auth/reset` with a PKCE `code`; without this
   entry Supabase sends the user to the Site URL instead and the app never sees the code.
 - [ ] **Google** (Authentication → Sign In / Providers → Google), after creating the Google Cloud
