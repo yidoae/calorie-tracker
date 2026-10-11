@@ -1,6 +1,6 @@
 import type { FoodHit } from "@calorie/core/schemas/rows";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
@@ -19,7 +19,12 @@ interface Props {
 export default function FoodSearchScreen({ adding }: Props) {
   const [text, setText] = useState("");
   const search = useFoodSearch(text);
-  const { addFood } = useMealDraft();
+  const { addFood, clear } = useMealDraft();
+
+  // A new meal starts empty: a draft left by leaving the review with the back gesture is dropped.
+  useEffect(() => {
+    if (!adding) clear();
+  }, [adding, clear]);
 
   function pick(hit: FoodHit) {
     addFood(hit);
