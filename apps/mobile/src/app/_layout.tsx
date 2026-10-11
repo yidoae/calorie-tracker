@@ -53,6 +53,9 @@ function RootNavigator() {
       </Stack.Protected>
       <Stack.Protected guard={status === "ready"}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="log/search" options={{ presentation: "modal" }} />
+        <Stack.Screen name="log/review" />
+        <Stack.Screen name="meal/[id]" />
       </Stack.Protected>
     </Stack>
   );
