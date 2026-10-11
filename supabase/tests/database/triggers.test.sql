@@ -108,7 +108,8 @@ select is_empty(
 select is_empty(
   $$select p.oid::regprocedure::text from pg_proc p
      where p.pronamespace = 'public'::regnamespace and has_function_privilege('authenticated', p.oid, 'execute')
-       and p.oid::regprocedure::text <> all (array['complete_onboarding(jsonb,jsonb)', 'save_plan(jsonb)'])$$,
+       and p.oid::regprocedure::text <> all (array['complete_onboarding(jsonb,jsonb)', 'save_plan(jsonb)',
+                                                   'search_foods(text,integer)', 'log_meal(meal_slot,date,text,text,jsonb)'])$$,
   'authenticated executes no function in public except the listed RPCs');
 
 create function public.tap_privilege_probe() returns int language sql as $$ select 1 $$;

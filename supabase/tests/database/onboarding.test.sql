@@ -27,8 +27,8 @@ select set_config('test.cycling_plan',
     '{"training": {"calories": 1920, "protein": 154, "carbs": 175, "fat": 67}, "rest": {"calories": 1440, "protein": 154, "carbs": 0, "fat": 92}}')::text,
   true);
 
--- The API surface: two RPCs, neither callable anonymously; the private implementation and its
--- helpers are callable by nobody else.
+-- The API surface: two RPCs, neither callable anonymously; the private implementations (these two,
+-- search_foods and log_meal) are callable only by signed-in users, the helpers by nobody.
 select has_function('public', 'complete_onboarding', array['jsonb', 'jsonb'], 'complete_onboarding(answers, plan) exists');
 select has_function('public', 'save_plan', array['jsonb'], 'save_plan(plan) exists');
 select is_empty(
@@ -38,8 +38,8 @@ select is_empty(
 select is_empty(
   $$select p.oid::regprocedure::text from pg_proc p
      where p.pronamespace::regnamespace::text = 'private' and has_function_privilege('authenticated', p.oid, 'execute')
-       and p.proname not in ('complete_onboarding', 'save_plan')$$,
-  'authenticated executes only the two RPC implementations in private');
+       and p.proname not in ('complete_onboarding', 'save_plan', 'search_foods', 'log_meal')$$,
+  'authenticated executes only the RPC implementations in private');
 
 set local role anon;
 select throws_ok($$select public.complete_onboarding(current_setting('test.answers')::jsonb, current_setting('test.plan')::jsonb)$$,
