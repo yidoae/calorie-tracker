@@ -2,9 +2,15 @@ import type { ExpoConfig } from "expo/config";
 
 /*
  * Bundle ID / package: placeholder until the owner picks the store identity (feature 005).
- * Google sign-in's config plugin is added with T026, once the OAuth client IDs exist.
+ * Google sign-in's config plugin needs the iOS URL scheme, the reversed iOS OAuth client ID
+ * ("<id>.apps.googleusercontent.com" → "com.googleusercontent.apps.<id>"); it is added only when
+ * that client ID is set in .env, so a prebuild without the owner's Google clients still works.
  */
 const APP_ID = "com.kaloritakip.app";
+const googleIosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? "";
+const googleSignInPlugin: [string, { iosUrlScheme: string }][] = googleIosClientId
+  ? [["@react-native-google-signin/google-signin", { iosUrlScheme: `com.googleusercontent.apps.${googleIosClientId.replace(/\.apps\.googleusercontent\.com$/, "")}` }]]
+  : [];
 
 const config: ExpoConfig = {
   name: "Kalori Takip",
@@ -37,6 +43,7 @@ const config: ExpoConfig = {
     "expo-apple-authentication",
     "expo-localization",
     ["expo-splash-screen", { backgroundColor: "#170b21", image: "./assets/images/splash-icon.png", imageWidth: 76 }],
+    ...googleSignInPlugin,
   ],
   experiments: { typedRoutes: true, reactCompiler: true },
 };

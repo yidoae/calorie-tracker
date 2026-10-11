@@ -41,14 +41,26 @@ const key = process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "";
 /** False when apps/mobile/.env is missing; requests then fail with a clear message. */
 export const supabaseConfigured = url.length > 0 && key.length > 0;
 
+const storage = new EncryptedSessionStorage();
+const SESSION_KEY = "kalori-takip-session";
+
 export const supabase = createClient(supabaseConfigured ? url : "https://not-configured.invalid", supabaseConfigured ? key : "missing", {
   auth: {
-    storage: new EncryptedSessionStorage(),
+    storage,
+    storageKey: SESSION_KEY,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
+    // E-mail links come back as kaloritakip://auth/…?code=…; the app exchanges the code with the
+    // verifier stored here when the e-mail was requested (authService.exchangeAuthCode).
+    flowType: "pkce",
   },
 });
+
+/** Deletes the stored session (its key in secure storage and the ciphertext) without asking the server. */
+export function forgetStoredSession(): Promise<void> {
+  return storage.removeItem(SESSION_KEY);
+}
 
 // Refresh tokens only while the app is in the foreground.
 AppState.addEventListener("change", (state) => {
