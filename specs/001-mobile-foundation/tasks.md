@@ -93,20 +93,22 @@ platform, reopen the app (still signed in), sign out (nothing personal left), re
 
 ### Tests for User Story 1
 
-- [ ] T023 [P] [US1] `supabase/tests/profiles.test.ts`: signing up creates exactly one profile with `onboarding_completed = false`; a user can update their own profile fields but not `onboarding_completed`
+- [x] T023 [P] [US1] `supabase/tests/profiles.test.ts`: signing up creates exactly one profile with `onboarding_completed = false`; a user can update their own profile fields but not `onboarding_completed`. Done as pgTAP `supabase/tests/database/profiles.test.sql` (9 checks); the sign-up and `onboarding_completed` checks already in `triggers.test.sql` and `rls.test.sql` are not repeated
 
 ### Implementation for User Story 1
 
-- [ ] T024 [US1] `apps/mobile/src/services/authService.ts`: e-mail sign-up (with `emailRedirectTo` = `kaloritakip://auth/confirm`), sign-in, sign-out, `resetPasswordForEmail` (redirect `kaloritakip://auth/reset`), `updatePassword`; errors mapped to Turkish messages
-- [ ] T025 [US1] `apps/mobile/src/hooks/useSession.ts` and `useAuthForm.ts`: session state, form validation (e-mail, password ≥ 8), pending/error states
-- [ ] T026 [US1] Google sign-in in `authService.ts` with `@react-native-google-signin/google-signin` (`webClientId`, `iosClientId` from env) → `signInWithIdToken({ provider: 'google' })`
-- [ ] T027 [US1] Sign in with Apple (iOS only) in `authService.ts` with `expo-apple-authentication` and a nonce (SHA-256 to Apple, raw to Supabase via `expo-crypto`); save the full name on first sign-in with `updateUser`
-- [ ] T028 [P] [US1] Screens `apps/mobile/src/app/(auth)/welcome.tsx`, `sign-in.tsx`, `sign-up.tsx` (with the "E-postanı doğrula" state), `reset-password.tsx` and components in `apps/mobile/src/components/auth/`; the Apple button renders only on iOS
-- [ ] T029 [US1] Deep-link handling for `kaloritakip://auth/confirm` and `kaloritakip://auth/reset` (exchange the code for a session) in `apps/mobile/src/app/(auth)/` routes
-- [ ] T030 [US1] `apps/mobile/src/app/(tabs)/profile.tsx`: account e-mail, sign-in methods, "Çıkış yap" that signs out and clears the query cache and secure storage (FR-005)
-- [ ] T031 [US1] Document the dashboard setup (e-mail confirmation on, redirect URLs, Google and Apple providers with client IDs) in `supabase/README.md`
+- [x] T024 [US1] `apps/mobile/src/services/authService.ts`: e-mail sign-up (with `emailRedirectTo` = `kaloritakip://auth/confirm`), sign-in, sign-out, `resetPasswordForEmail` (redirect `kaloritakip://auth/reset`), `updatePassword`; errors mapped to Turkish messages
+- [x] T025 [US1] `apps/mobile/src/hooks/useSession.ts` and `useAuthForm.ts`: session state, form validation (e-mail, password ≥ 8), pending/error states. Sign-in only requires a password; the length rule applies where a password is chosen. `useSession` adds a `recovery` status for reset links
+- [x] T026 [US1] Google sign-in in `authService.ts` with `@react-native-google-signin/google-signin` (`webClientId`, `iosClientId` from env) → `signInWithIdToken({ provider: 'google' })`. Env-gated: the button and the config plugin appear only once the owner's OAuth client IDs are in `.env`; not device-tested
+- [x] T027 [US1] Sign in with Apple (iOS only) in `authService.ts` with `expo-apple-authentication` and a nonce (SHA-256 to Apple, raw to Supabase via `expo-crypto`); save the full name on first sign-in with `updateUser`. Needs the owner's Apple Developer membership; not device-tested
+- [x] T028 [P] [US1] Screens `apps/mobile/src/app/(auth)/welcome.tsx`, `sign-in.tsx`, `sign-up.tsx` (with the "E-postanı doğrula" state), `reset-password.tsx` and components in `apps/mobile/src/components/auth/`; the Apple button renders only on iOS
+- [x] T029 [US1] Deep-link handling for `kaloritakip://auth/confirm` and `kaloritakip://auth/reset` (exchange the code for a session) in `apps/mobile/src/app/(auth)/` routes. Routes `(auth)/auth/confirm.tsx` and `(auth)/auth/reset.tsx`; the client uses `flowType: "pkce"`
+- [x] T030 [US1] `apps/mobile/src/app/(tabs)/profile.tsx`: account e-mail, sign-in methods, "Çıkış yap" that signs out and clears the query cache and secure storage (FR-005)
+- [x] T031 [US1] Document the dashboard setup (e-mail confirmation on, redirect URLs, Google and Apple providers with client IDs) in `supabase/README.md`. The settings themselves are owner TODOs
 
 **Checkpoint**: US1 works on an Android emulator (e-mail, Google) and an iPhone (all three).
+
+Note (2026-10-11): US1 is checked by typecheck, lint, unit tests (`npm test -w mobile`), pgTAP, `expo export` and the screen preview only. No emulator or phone was available, and the dashboard settings and Google/Apple accounts in `supabase/README.md` are still owner TODOs, so the checkpoint itself has not been run.
 
 ---
 
