@@ -70,8 +70,9 @@ select is(
 select is_empty($$select 1 from public.search_foods('zzqqxx')$$, 'a query that matches nothing returns no rows');
 
 -- The curated foods: suffixed Turkish finds the chicken (the app sends "tavuğu" plus its stem).
-select is((select food_id from public.search_foods('tavuğu tavuk') limit 1), 'chicken_breast_grilled', 'search_foods(''tavuğu tavuk'') returns the chicken first');
-select is((select food_id from public.search_foods('tavuk göğsü') limit 1), 'chicken_breast_grilled', '"tavuk göğsü" returns the chicken first');
+-- Bare names find the raw food first: the owner weighs food raw (raw_weights.test.sql).
+select is((select food_id from public.search_foods('tavuğu tavuk') limit 1), 'chicken_breast_raw', 'search_foods(''tavuğu tavuk'') returns the chicken first');
+select is((select food_id from public.search_foods('tavuk göğsü') limit 1), 'chicken_breast_raw', '"tavuk göğsü" returns the chicken first');
 select is((select food_id from public.search_foods('mercimek çorbası çorba') limit 1), 'lentil_soup', 'a two-word dish name returns that dish first');
 
 -- Caps: max_results defaults to 20 and never exceeds 50.
