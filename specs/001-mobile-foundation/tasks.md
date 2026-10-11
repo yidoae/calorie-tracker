@@ -121,18 +121,20 @@ Note (2026-10-11): US1 is checked by typecheck, lint, unit tests (`npm test -w m
 
 ### Tests for User Story 2
 
-- [ ] T032 [P] [US2] `supabase/tests/onboarding.test.ts` (fail first): `complete_onboarding` stores the profile and one active plan and sets the flag; a second call returns `already_completed`; a plan below the floor returns `plan_below_floor`; `save_plan` deactivates the previous plan; direct inserts into `nutrition_plans` are refused
+- [x] T032 [P] [US2] `supabase/tests/onboarding.test.ts` (fail first): `complete_onboarding` stores the profile and one active plan and sets the flag; a second call returns `already_completed`; a plan below the floor returns `plan_below_floor`; `save_plan` deactivates the previous plan; direct inserts into `nutrition_plans` are refused. Done as pgTAP `supabase/tests/database/onboarding.test.sql` (33 checks, failed 27 of 33 before the migration), also covering `invalid_answers`, `plan_macros_mismatch`, `invalid_plan`, `onboarding_required`, anonymous calls and a second user
 
 ### Implementation for User Story 2
 
-- [ ] T033 [US2] Migration `supabase/migrations/20261011000200_onboarding_rpcs.sql`: `complete_onboarding(answers, plan)` and `save_plan(plan)` as `security definer` with `auth.uid()` checks and the error codes from contracts/database-api.md
-- [ ] T034 [P] [US2] `apps/mobile/src/services/profileService.ts` (read profile, save partial setup answers) and `planService.ts` (`completeOnboarding`, `savePlan`, `getActivePlan`), validating payloads and rows with `@calorie/core` schemas
-- [ ] T035 [US2] `apps/mobile/src/hooks/useOnboarding.ts`: steps from contracts/screens.md, validation with core `PROFILE_LIMITS`, each answer saved to the profile so the setup resumes at the first unanswered step, final step builds the plan with core `onboardingToPlanInputs` + `buildPlan` and calls `completeOnboarding`
-- [ ] T036 [US2] Setup screens `apps/mobile/src/app/(setup)/[step].tsx` and `apps/mobile/src/components/setup/` (choice cards, number fields, summary with the computed targets)
-- [ ] T037 [P] [US2] `apps/mobile/src/components/ui/Ring.tsx` (react-native-svg calorie ring) and `MacroBar.tsx`
-- [ ] T038 [US2] `apps/mobile/src/hooks/useActivePlan.ts` + `useTargets.ts` (core `resolveTargets` for today) and the first version of `apps/mobile/src/app/(tabs)/index.tsx` showing today's targets
+- [x] T033 [US2] Migration `supabase/migrations/20261011000200_onboarding_rpcs.sql`: `complete_onboarding(answers, plan)` and `save_plan(plan)` as `security definer` with `auth.uid()` checks and the error codes from contracts/database-api.md. The `security definer` bodies live in an unexposed `private` schema behind `security invoker` wrappers in `public` (advisor lint 0029); added codes `invalid_plan` and `not_authenticated` (contract updated)
+- [x] T034 [P] [US2] `apps/mobile/src/services/profileService.ts` (read profile, save partial setup answers) and `planService.ts` (`completeOnboarding`, `savePlan`, `getActivePlan`), validating payloads and rows with `@calorie/core` schemas. `savePlan` is added with its first caller, the plan wizard (US4, constitution VI); plan payloads use the new core `schemas/rpc.ts` (`planPayloadSchema`)
+- [x] T035 [US2] `apps/mobile/src/hooks/useOnboarding.ts`: steps from contracts/screens.md, validation with core `PROFILE_LIMITS`, each answer saved to the profile so the setup resumes at the first unanswered step, final step builds the plan with core `onboardingToPlanInputs` + `buildPlan` and calls `completeOnboarding`
+- [x] T036 [US2] Setup screens `apps/mobile/src/app/(setup)/[step].tsx` and `apps/mobile/src/components/setup/` (choice cards, number fields, summary with the computed targets). Route `setup/[step].tsx` (no `(setup)` group, kept from Phase 2), steps `basics`, `body`, `goal`, `activity`, `diet`, `summary`
+- [x] T037 [P] [US2] `apps/mobile/src/components/ui/Ring.tsx` (react-native-svg calorie ring) and `MacroBar.tsx`
+- [x] T038 [US2] `apps/mobile/src/hooks/useActivePlan.ts` + `useTargets.ts` (core `resolveTargets` for today) and the first version of `apps/mobile/src/app/(tabs)/index.tsx` showing today's targets. The dashboard route is `(tabs)/today.tsx`
 
 **Checkpoint**: US1 + US2: a new user reaches a dashboard with correct targets in under 3 minutes (SC-001).
+
+Note (2026-10-11): US2 is checked by pgTAP (onboarding, triggers, rls, profiles), unit tests (`setupSteps`, error codes, core onboarding/payload), typecheck, lint, knip, `expo export` and the screen preview only. No emulator or phone was available, so the checkpoint itself has not been run.
 
 ---
 
