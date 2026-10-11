@@ -99,21 +99,17 @@ select throws_ok(
     values ('f0000000-0000-4000-8000-00000000000f', '{"sex": "female"}', 1300, 1600, 1300, 100, 150, 33)$$,
   '23505', null, 'a second active plan for the same user is rejected');
 
--- Function privileges: nothing here is an RPC, so neither anon nor authenticated may execute it.
+-- Function privileges: anon executes nothing in public; authenticated only the RPCs listed here
+-- (none yet: add each RPC's signature when its migration grants execute).
 select is_empty(
-  $$select f::text
-      from unnest(array['public.handle_new_user()', 'public.touch_updated_at()', 'public.meal_items_prepare()',
-                        'public.meal_items_totals()', 'public.recompute_meal_totals(uuid)', 'public.nutrition_plans_validate()',
-                        'public.check_plan_day(text, int, int, int, int)', 'public.normalize_tr(text)']::regprocedure[]) f
-     where has_function_privilege('anon', f, 'execute')$$,
-  'anon cannot execute the trigger and helper functions');
+  $$select p.oid::regprocedure::text from pg_proc p
+     where p.pronamespace = 'public'::regnamespace and has_function_privilege('anon', p.oid, 'execute')$$,
+  'anon cannot execute any function in public');
 select is_empty(
-  $$select f::text
-      from unnest(array['public.handle_new_user()', 'public.touch_updated_at()', 'public.meal_items_prepare()',
-                        'public.meal_items_totals()', 'public.recompute_meal_totals(uuid)', 'public.nutrition_plans_validate()',
-                        'public.check_plan_day(text, int, int, int, int)', 'public.normalize_tr(text)']::regprocedure[]) f
-     where has_function_privilege('authenticated', f, 'execute')$$,
-  'authenticated cannot execute the trigger and helper functions');
+  $$select p.oid::regprocedure::text from pg_proc p
+     where p.pronamespace = 'public'::regnamespace and has_function_privilege('authenticated', p.oid, 'execute')
+       and p.oid::regprocedure::text <> all (array[]::text[])$$,
+  'authenticated executes no function in public except the listed RPCs');
 
 create function public.tap_privilege_probe() returns int language sql as $$ select 1 $$;
 select ok(

@@ -24,7 +24,7 @@ before the migration they cover and must fail first.
 
 ## Owner inputs needed during this feature
 
-- Before T017: a Supabase **dev** project (URL, publishable key, service-role key).
+- Before T017: a Supabase **dev** project (URL, publishable key; database tests need no service-role key, see research.md §7).
 - Before T006 builds: an Expo account; the app's bundle ID / package name (placeholder
   `com.kaloritakip.app` until decided).
 - Before T026: Google OAuth clients (web, iOS, Android + SHA-1); before T027: Apple Developer
@@ -80,7 +80,7 @@ Note: `Sheet` and `useToast` have no caller until US1, so knip reports them; Pha
 
 Note (2026-10-09): until the dev project exists, the migrations were checked on a local PGlite database with a stubbed `auth` schema (29 checks: RLS for two users and anonymous, column privileges, totals trigger, Turkish normalization, plan floor and macro sum, one active plan). That check is not part of the repository; T015 runs the real suite.
 
-Note (2026-10-11): T015 done on the dev project `kalori-takip-dev` through the Supabase MCP (no CLI link); the T011/T012 node suite needed a service-role key and is replaced by pgTAP files in `supabase/tests/database/` (research.md §7), which is also where the later database test tasks (T023, T032, T040, T041) go; `20261011000100_function_privileges.sql` revokes execute on every `public` function, so each RPC grants it to `authenticated` explicitly.
+Note (2026-10-11): T015 done on the dev project `kalori-takip-dev` through the Supabase MCP (no CLI link); the T011/T012 node suite needed a service-role key and is replaced by pgTAP files in `supabase/tests/database/` (research.md §7), which is also where the later database test tasks (T023, T032, T040, T041) go; `20261011000100_function_privileges.sql` revokes execute on every `public` function, so each RPC grants it to `authenticated` explicitly. Later migrations take versions after `20261011000100` (T033, T043–T045 renumbered): an earlier version would replay before the revoke and lose its grant.
 
 ---
 
@@ -123,7 +123,7 @@ platform, reopen the app (still signed in), sign out (nothing personal left), re
 
 ### Implementation for User Story 2
 
-- [ ] T033 [US2] Migration `supabase/migrations/20261009000300_onboarding_rpcs.sql`: `complete_onboarding(answers, plan)` and `save_plan(plan)` as `security definer` with `auth.uid()` checks and the error codes from contracts/database-api.md
+- [ ] T033 [US2] Migration `supabase/migrations/20261011000200_onboarding_rpcs.sql`: `complete_onboarding(answers, plan)` and `save_plan(plan)` as `security definer` with `auth.uid()` checks and the error codes from contracts/database-api.md
 - [ ] T034 [P] [US2] `apps/mobile/src/services/profileService.ts` (read profile, save partial setup answers) and `planService.ts` (`completeOnboarding`, `savePlan`, `getActivePlan`), validating payloads and rows with `@calorie/core` schemas
 - [ ] T035 [US2] `apps/mobile/src/hooks/useOnboarding.ts`: steps from contracts/screens.md, validation with core `PROFILE_LIMITS`, each answer saved to the profile so the setup resumes at the first unanswered step, final step builds the plan with core `onboardingToPlanInputs` + `buildPlan` and calls `completeOnboarding`
 - [ ] T036 [US2] Setup screens `apps/mobile/src/app/(setup)/[step].tsx` and `apps/mobile/src/components/setup/` (choice cards, number fields, summary with the computed targets)
@@ -150,9 +150,9 @@ totals always equal the remaining items.
 ### Implementation for User Story 3
 
 - [ ] T042 [P] [US3] `packages/core/src/search/normalize.ts`: `normalizeTr` and `searchStems` (Turkish suffix candidates, built from the old quickParse alias handling via `git show`)
-- [ ] T043 [US3] Migration `supabase/migrations/20261009000400_search.sql`: `search_foods(q, max_results)` (`normalize_tr`, the generated `alias_normalized` column and its trigram index already ship with the schema migration, T013, because the table depends on them)
-- [ ] T044 [US3] Migration `supabase/migrations/20261009000500_log_meal.sql`: `log_meal(slot, local_date, time_zone, name, items)` with the error codes from contracts/database-api.md
-- [ ] T045 [US3] Migration `supabase/migrations/20261009000600_seed_curated_foods.sql`: the ~80 curated foods and aliases from the old `src/lib/nutrition/foods.ts` (via `git show`), with the corrected values from the review (kaşar, white bread, simit) and slug ids
+- [ ] T043 [US3] Migration `supabase/migrations/20261011000300_search.sql`: `search_foods(q, max_results)` (`normalize_tr`, the generated `alias_normalized` column and its trigram index already ship with the schema migration, T013, because the table depends on them)
+- [ ] T044 [US3] Migration `supabase/migrations/20261011000400_log_meal.sql`: `log_meal(slot, local_date, time_zone, name, items)` with the error codes from contracts/database-api.md
+- [ ] T045 [US3] Migration `supabase/migrations/20261011000500_seed_curated_foods.sql`: the ~80 curated foods and aliases from the old `src/lib/nutrition/foods.ts` (via `git show`), with the corrected values from the review (kaşar, white bread, simit) and slug ids
 - [ ] T046 [US3] `apps/mobile/src/services/foodService.ts` (`search`) and `mealService.ts` (`logMeal`, `updateItemGrams`, `removeItem`, `deleteMeal`, `getDayMeals`), validating rows with core schemas
 - [ ] T047 [US3] Hooks `apps/mobile/src/hooks/useFoodSearch.ts` (debounced, stems), `useLogMeal.ts` (keeps the draft on failure, Turkish error, invalidates the day query), `useDayMeals.ts`, `useToday.ts` (local date from expo-localization; switches at local midnight and on app resume)
 - [ ] T048 [US3] Screens `apps/mobile/src/app/log/search.tsx`, `log/review.tsx` (empty gram field, 0 < g ≤ 5000, live totals with core `itemMacros`, slot defaulting from core `slotForHour`), `meal/[id].tsx`, and components in `apps/mobile/src/components/meals/`

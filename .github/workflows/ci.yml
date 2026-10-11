@@ -46,4 +46,4 @@ jobs:
         if: env.SUPABASE_DB_URL != ''
       - name: pgTAP tests against the dev project
         if: env.SUPABASE_DB_URL != ''
-        run: npx --yes supabase test db --db-url "$SUPABASE_DB_URL"
+        run: npx --yes supabase@2.120.0 test db --db-url "$SUPABASE_DB_URL"

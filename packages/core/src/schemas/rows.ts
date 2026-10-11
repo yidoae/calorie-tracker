@@ -9,8 +9,8 @@ import { z } from "./zod.ts";
  * Postgres numeric columns may arrive as strings, so numbers are coerced.
  */
 
-const num = z.coerce.number();
-const numOrNull = z.union([z.null(), z.coerce.number()]);
+const num = z.coerce.number<number | string>();
+const numOrNull = z.union([z.null(), num]);
 
 /** The account's profile; most fields stay null until the first-time setup fills them. */
 export const profileRowSchema = z

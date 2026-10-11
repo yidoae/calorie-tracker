@@ -6,7 +6,8 @@ Why pgTAP on the hosted project: [research.md §7](../specs/001-mobile-foundatio
 ## Migrations
 
 `migrations/<version>_<name>.sql`, applied in version order. An applied file is never edited; a
-change is a new file.
+change is a new file. A new version must sort after every existing one: a migration replayed before
+`20261011000100_function_privileges.sql` loses its `grant execute` to the revoke.
 
 To apply one without a linked CLI (how the dev project is maintained), run the file's exact SQL
 with the Supabase MCP `apply_migration` (name = `<name>`), then record the file's version:
@@ -40,5 +41,8 @@ fail before the migration is applied.
   so the file ends with `select * from finish();`, which returns a row only when tests failed or
   were not run ("# Looks like you failed 1 test of 24"). If the last test's `ok N - …` line comes
   back instead, every test passed. To see which test failed, run the file up to that test.
-- All files (Docker needed): `SUPABASE_DB_URL=postgresql://… npm run test:db -w @calorie/db`. CI
-  does the same when the `SUPABASE_DB_URL` secret is set.
+- All files (Docker needed): `SUPABASE_DB_URL=postgresql://… npm run test:db -w @calorie/db` (POSIX
+  shell; cmd.exe does not expand `$SUPABASE_DB_URL`). CI does the same when the `SUPABASE_DB_URL`
+  secret is set. Use the **session pooler** connection string from the dashboard
+  (`…pooler.supabase.com:5432`): the direct `db.<ref>.supabase.co` host is IPv6-only and GitHub
+  runners have no IPv6.

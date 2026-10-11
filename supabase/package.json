@@ -5,6 +5,6 @@
   "type": "module",
   "description": "Supabase migrations and the pgTAP database tests (tests/database). Not part of the root npm test: test:db needs Docker and the dev database URL.",
   "scripts": {
-    "test:db": "npx --yes supabase test db --db-url \"$SUPABASE_DB_URL\""
+    "test:db": "npx --yes supabase@2.120.0 test db --db-url \"$SUPABASE_DB_URL\""
   }
 }
