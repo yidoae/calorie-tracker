@@ -4,7 +4,7 @@ import type { Database, Json } from "../src/db/database.types.ts";
 import { buildPlan } from "../src/nutrition/plan.ts";
 import { logMealPayloadSchema } from "../src/schemas/meal.ts";
 import type { PlanInputs } from "../src/schemas/plan.ts";
-import { foodHitRowSchema, mealRowSchema, planRowSchema, profileRowSchema } from "../src/schemas/rows.ts";
+import { foodHitRowSchema, loggedMealRowSchema, mealRowSchema, planRowSchema, profileRowSchema } from "../src/schemas/rows.ts";
 import type { z } from "../src/schemas/zod.ts";
 
 const MEAL_ID = "6f1c2c47-5d7e-4c7b-9b3e-1f2a3b4c5d6e";
@@ -44,6 +44,7 @@ describe("database rows", () => {
     assert.ok(noDrift<z.input<typeof planRowSchema>, Row<"nutrition_plans">>());
     assert.ok(noDrift<Omit<MealIn, "meal_items">, Row<"meals">>());
     assert.ok(noDrift<Omit<MealIn["meal_items"][number], "foods">, Row<"meal_items">>());
+    assert.ok(noDrift<z.input<typeof loggedMealRowSchema>, Row<"meals">>());
   });
 
   it("maps a profile row and keeps unanswered fields null", () => {
@@ -120,6 +121,25 @@ describe("database rows", () => {
     assert.equal(meal.totals.calories, 495);
     assert.deepEqual(meal.items.map((i) => i.foodId), ["chicken", "rice"]);
     assert.equal(meal.items[0].per100g.fat, 3.6);
+  });
+
+  it("maps the meal log_meal returns, without items", () => {
+    const meal = loggedMealRowSchema.parse({
+      id: MEAL_ID,
+      user_id: MEAL_ID,
+      slot: "dinner",
+      local_date: "2026-10-11",
+      time_zone: "Europe/Istanbul",
+      logged_at: "2026-10-11T17:00:00+00:00",
+      name: "Akşam yemeği",
+      total_kcal: "345.2",
+      total_protein_g: "31.8",
+      total_carbs_g: "38.4",
+      total_fat_g: "12.2",
+      created_at: "2026-10-11T17:00:00+00:00",
+      updated_at: "2026-10-11T17:00:00+00:00",
+    });
+    assert.deepEqual(meal, { id: MEAL_ID, slot: "dinner", localDate: "2026-10-11", totals: { calories: 345.2, protein: 31.8, carbs: 38.4, fat: 12.2 } });
   });
 
   it("maps a search hit", () => {

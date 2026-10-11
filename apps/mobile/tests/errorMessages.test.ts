@@ -64,6 +64,12 @@ describe("database and other errors", () => {
     assert.equal(describeError({ message: "not_authenticated", code: "42501" }).code, "session_expired");
   });
 
+  it("map the meal and search codes of log_meal and search_foods", () => {
+    for (const code of ["no_items", "too_many_items", "invalid_grams", "unknown_food", "date_out_of_range", "invalid_meal", "invalid_query"] as const) {
+      assert.equal(describeError({ message: code, code: "22023" }).code, code);
+    }
+  });
+
   it("treat fetch failures as a network problem and anything else as unexpected", () => {
     assert.equal(describeError(new TypeError("Network request failed")).code, "network");
     assert.equal(describeError("boom").code, "unexpected");

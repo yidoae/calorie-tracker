@@ -1,4 +1,4 @@
-import { mealSchema, mealSlotSchema, type Meal } from "./meal.ts";
+import { dayKeySchema, mealSchema, mealSlotSchema, type Meal } from "./meal.ts";
 import { DIET_STYLES, nutritionPlanSchema, planInputsSchema, type NutritionPlan } from "./plan.ts";
 import { ACTIVITY_LEVEL_KEYS, GENDERS } from "./profile.ts";
 import { z } from "./zod.ts";
@@ -134,6 +134,25 @@ export const mealRowSchema = z
           })),
       }),
   );
+
+/** The meal `log_meal` returns: the row without its items, with the totals the database computed. */
+export const loggedMealRowSchema = z
+  .object({
+    id: z.uuid(),
+    slot: mealSlotSchema,
+    local_date: dayKeySchema,
+    total_kcal: num,
+    total_protein_g: num,
+    total_carbs_g: num,
+    total_fat_g: num,
+  })
+  .transform((r) => ({
+    id: r.id,
+    slot: r.slot,
+    localDate: r.local_date,
+    totals: { calories: r.total_kcal, protein: r.total_protein_g, carbs: r.total_carbs_g, fat: r.total_fat_g },
+  }));
+export type LoggedMeal = z.output<typeof loggedMealRowSchema>;
 
 /** One `search_foods` result: the food, the alias that matched and its values per 100 g. */
 export const foodHitRowSchema = z
