@@ -11,6 +11,10 @@ export const MESSAGES = {
   not_configured: "Uygulamanın sunucu ayarları eksik. Geliştiriciye haber ver.",
   plan_below_floor: "Bu plan güvenli günlük kalori sınırının altında kalıyor.",
   plan_macros_mismatch: "Makrolar kaloriyle tutmuyor. Değerleri yeniden ayarla.",
+  invalid_answers: "Cevaplarından biri kabul edilen aralığın dışında. Kontrol edip tekrar dene.",
+  invalid_plan: "Plan cevaplarınla uyuşmuyor. Tekrar dene.",
+  already_completed: "İlk kurulumun zaten tamamlanmış.",
+  onboarding_required: "Önce ilk kurulumu tamamla.",
   meal_not_found: "Bu öğün bulunamadı. Silinmiş olabilir.",
   unknown_food: "Bu yemek veritabanında bulunamadı.",
   invalid_credentials: "E-posta ya da şifre hatalı.",
@@ -35,7 +39,18 @@ export const MESSAGES = {
 
 export type MessageCode = keyof typeof MESSAGES;
 
-const DATABASE_CODES: MessageCode[] = ["plan_below_floor", "plan_macros_mismatch", "meal_not_found", "unknown_food"];
+/** Codes raised by database functions (contracts/database-api.md) → ours. */
+const DATABASE_CODES: Record<string, MessageCode> = {
+  plan_below_floor: "plan_below_floor",
+  plan_macros_mismatch: "plan_macros_mismatch",
+  meal_not_found: "meal_not_found",
+  unknown_food: "unknown_food",
+  invalid_answers: "invalid_answers",
+  invalid_plan: "invalid_plan",
+  already_completed: "already_completed",
+  onboarding_required: "onboarding_required",
+  not_authenticated: "session_expired",
+};
 
 /** Supabase Auth error codes (https://supabase.com/docs/guides/auth/debugging/error-codes) → ours. */
 const AUTH_CODES: Record<string, MessageCode> = {
@@ -81,8 +96,8 @@ export function describeError(err: unknown): { code: MessageCode; message: strin
 function codeOf(err: unknown): MessageCode {
   if (isAuthError(err)) return AUTH_CODES[err.code ?? ""] ?? AUTH_ERROR_NAMES[err.name] ?? "auth_failed";
   const message = err instanceof Error ? err.message : typeof err === "object" && err && "message" in err ? String(err.message) : "";
-  const code = DATABASE_CODES.find((c) => message.includes(c));
-  if (code) return code;
+  const raised = Object.keys(DATABASE_CODES).find((c) => message.includes(c));
+  if (raised) return DATABASE_CODES[raised];
   if (/network|fetch|timeout/i.test(message)) return "network";
   return "unexpected";
 }

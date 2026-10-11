@@ -57,6 +57,13 @@ describe("database and other errors", () => {
     assert.equal(describeError(new Error("meal_not_found")).code, "meal_not_found");
   });
 
+  it("map the setup and plan codes of complete_onboarding and save_plan", () => {
+    for (const code of ["invalid_answers", "invalid_plan", "already_completed", "onboarding_required"] as const) {
+      assert.equal(describeError({ message: code, code: "22023" }).code, code);
+    }
+    assert.equal(describeError({ message: "not_authenticated", code: "42501" }).code, "session_expired");
+  });
+
   it("treat fetch failures as a network problem and anything else as unexpected", () => {
     assert.equal(describeError(new TypeError("Network request failed")).code, "network");
     assert.equal(describeError("boom").code, "unexpected");
