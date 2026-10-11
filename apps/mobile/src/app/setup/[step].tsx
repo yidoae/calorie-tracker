@@ -1,7 +1,7 @@
 import { Redirect, useLocalSearchParams } from "expo-router";
 import SetupStepScreen from "@/components/setup/SetupStepScreen";
 import { firstUnansweredStep, isSetupStep, SETUP_STEPS } from "@/hooks/setupSteps";
-import { useSession } from "@/hooks/useSession";
+import { useProfile } from "@/hooks/useSession";
 
 /**
  * First-time setup (US2). Reachable only while setup is incomplete; answered steps and the first
@@ -9,7 +9,7 @@ import { useSession } from "@/hooks/useSession";
  */
 export default function SetupStep() {
   const { step } = useLocalSearchParams<{ step: string }>();
-  const { profile } = useSession();
+  const profile = useProfile();
   if (!profile) return null;
 
   const first = firstUnansweredStep(profile, new Date().getFullYear());

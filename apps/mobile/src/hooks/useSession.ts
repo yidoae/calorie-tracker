@@ -47,11 +47,7 @@ export function useSessionController(): SessionState {
   }, [queryClient]);
 
   const userId = session?.user.id ?? null;
-  const profile = useQuery({
-    queryKey: ["profile", userId],
-    queryFn: () => getMyProfile(userId as string),
-    enabled: userId !== null,
-  });
+  const profile = useQuery(profileQuery(userId));
 
   let status: SessionStatus;
   if (session === undefined) status = "loading";
@@ -68,6 +64,22 @@ export function useSessionController(): SessionState {
     error: profile.error,
     retry: () => void profile.refetch(),
   };
+}
+
+const profileQuery = (userId: string | null) => ({
+  queryKey: ["profile", userId],
+  queryFn: () => getMyProfile(userId as string),
+  enabled: userId !== null,
+});
+
+/**
+ * The signed-in user's profile, read by the calling screen's own query observer. The session
+ * context hears about a cache write a tick later (query notifications are batched), so a screen
+ * opened right after a save would still see the old profile there; this reads the cache at mount.
+ */
+export function useProfile(): Profile | null {
+  const { session } = useSession();
+  return useQuery(profileQuery(session?.user.id ?? null)).data ?? null;
 }
 
 export const SessionContext = createContext<SessionState | null>(null);

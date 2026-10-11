@@ -19,7 +19,7 @@ import {
   type NumberField,
   type SetupStep,
 } from "./setupSteps";
-import { useSession } from "./useSession";
+import { useProfile } from "./useSession";
 
 /** What the user has typed or picked on the current step; numbers stay text until they are saved. */
 interface SetupDraft {
@@ -67,7 +67,7 @@ function draftFromProfile(p: Profile | null, year: number): SetupDraft {
  * query is then refetched, and the root layout moves on to the tabs.
  */
 export function useOnboarding(step: SetupStep) {
-  const { profile } = useSession();
+  const profile = useProfile();
   const queryClient = useQueryClient();
   const year = new Date().getFullYear();
   const [draft, setDraft] = useState(() => draftFromProfile(profile, year));
