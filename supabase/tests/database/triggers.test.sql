@@ -100,7 +100,7 @@ select throws_ok(
   '23505', null, 'a second active plan for the same user is rejected');
 
 -- Function privileges: anon executes nothing in public; authenticated only the RPCs listed here
--- (none yet: add each RPC's signature when its migration grants execute).
+-- (add each RPC's signature when its migration grants execute).
 select is_empty(
   $$select p.oid::regprocedure::text from pg_proc p
      where p.pronamespace = 'public'::regnamespace and has_function_privilege('anon', p.oid, 'execute')$$,
@@ -108,7 +108,7 @@ select is_empty(
 select is_empty(
   $$select p.oid::regprocedure::text from pg_proc p
      where p.pronamespace = 'public'::regnamespace and has_function_privilege('authenticated', p.oid, 'execute')
-       and p.oid::regprocedure::text <> all (array[]::text[])$$,
+       and p.oid::regprocedure::text <> all (array['complete_onboarding(jsonb,jsonb)', 'save_plan(jsonb)'])$$,
   'authenticated executes no function in public except the listed RPCs');
 
 create function public.tap_privilege_probe() returns int language sql as $$ select 1 $$;

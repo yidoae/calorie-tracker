@@ -29,12 +29,18 @@ Anonymous role: no access to any table.
 - `plan`: the plan the app built with `buildPlan` from those answers (core `nutritionPlanSchema`).
 - Updates the profile (`birth_year` = current year − age), inserts the plan as active through the
   same path as `save_plan`, sets `onboarding_completed = true`; one transaction.
-- Errors: `invalid_answers`, `plan_below_floor`, `plan_macros_mismatch`, `already_completed`.
+- Errors: `invalid_answers`, `plan_below_floor`, `plan_macros_mismatch`, `already_completed`,
+  `invalid_plan` (not shaped like the core schema, or built for other answers).
 
 ### `save_plan(plan jsonb) → nutrition_plans`
 - Inserts the plan as active and deactivates the previous one. The validation trigger enforces the
   floor and macro-sum invariants for every day.
-- Errors: `plan_below_floor`, `plan_macros_mismatch`, `onboarding_required`.
+- Errors: `plan_below_floor`, `plan_macros_mismatch`, `onboarding_required`, `invalid_plan`
+  (also when `inputs.sex` is not the profile's: the floor follows the account's sex).
+- Both functions: the plan is sent without `id` and `createdAt` (core `planPayloadSchema`), which
+  the database assigns; `not_authenticated` without a signed-in user. The `security definer` bodies
+  live in the unexposed `private` schema behind `security invoker` wrappers in `public`
+  (supabase/README.md).
 
 ### `log_meal(slot meal_slot, local_date date, time_zone text, name text, items jsonb) → meals`
 - `items`: `[{ food_id, grams }]`, 1–30 entries. Nutrition snapshots and totals are filled by the

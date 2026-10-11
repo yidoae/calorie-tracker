@@ -342,8 +342,65 @@ export type Database = {
         }
         Returns: undefined
       }
+      complete_onboarding: {
+        Args: { answers: Json; plan: Json }
+        Returns: {
+          activity_level: Database["public"]["Enums"]["activity_level"] | null
+          birth_year: number | null
+          created_at: string
+          diet_style: Database["public"]["Enums"]["diet_style"] | null
+          fat_per_kg: number
+          goal_weight_kg: number | null
+          height_cm: number | null
+          id: string
+          onboarding_completed: boolean
+          sensitive_warning_ack: boolean
+          sex: Database["public"]["Enums"]["sex"] | null
+          time_zone: string | null
+          updated_at: string
+          weight_kg: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       normalize_tr: { Args: { t: string }; Returns: string }
       recompute_meal_totals: { Args: { target: string }; Returns: undefined }
+      save_plan: {
+        Args: { plan: Json }
+        Returns: {
+          base_carbs_g: number
+          base_fat_g: number
+          base_kcal: number
+          base_protein_g: number
+          bmr: number
+          created_at: string
+          id: string
+          inputs: Json
+          is_active: boolean
+          rest_carbs_g: number | null
+          rest_fat_g: number | null
+          rest_kcal: number | null
+          rest_protein_g: number | null
+          summary: string
+          tdee: number
+          training_carbs_g: number | null
+          training_days: number[]
+          training_fat_g: number | null
+          training_kcal: number | null
+          training_protein_g: number | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "nutrition_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       activity_level:

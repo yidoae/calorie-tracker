@@ -22,6 +22,13 @@ Every function in `public` starts without execute for `anon` and `authenticated`
 (`20261011000100_function_privileges.sql`). An RPC needs
 `grant execute on function … to authenticated;` in its migration.
 
+An RPC that writes what the API roles cannot (plans, `onboarding_completed`) keeps its
+`security definer` body in the `private` schema, which the API does not expose, behind a
+`security invoker` function of the same name in `public` that only calls it
+(`20261011000200_onboarding_rpcs.sql`): the security advisor (lint 0029) warns about any
+`security definer` function in `public` that `authenticated` can execute. `authenticated` has
+usage on `private` and execute only on the RPC bodies, never on the helpers next to them.
+
 After each migration, regenerate the types and check the security advisor (a new warning is a
 defect):
 
