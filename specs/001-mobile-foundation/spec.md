@@ -109,8 +109,8 @@ and check that the dashboard shows the training-day or rest-day targets for toda
 **Acceptance Scenarios**:
 
 1. **Given** the wizard, **When** the user changes an answer, **Then** the preview updates at once.
-2. **Given** the user chooses 16:8 fasting or a deficit of 750 kcal or more, **When** they continue,
-   **Then** a sensitive-content notice is shown once, with a gentler option.
+2. **Given** the wizard, **When** the user selects 16:8 fasting or a deficit of 750 kcal or more,
+   **Then** a sensitive-content notice is shown once, right at the selection, with a gentler option.
 3. **Given** a plan with calorie cycling, **When** today is a training day, **Then** the dashboard
    shows the training-day targets and labels the day.
 4. **Given** the tuning step, **When** the user moves one macro with "Kalori sabit" on, **Then** the
