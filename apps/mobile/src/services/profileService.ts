@@ -39,3 +39,10 @@ export async function saveSetupAnswers(userId: string, answers: SetupAnswers): P
   if (error) throw toAppError(error);
   return profileRowSchema.parse(data);
 }
+
+/** Remembers that the user read the 16:8 / large-deficit notice, so it is not shown again (FR-010). */
+export async function acknowledgeSensitiveWarning(userId: string): Promise<Profile> {
+  const { data, error } = await supabase.from("profiles").update({ sensitive_warning_ack: true }).eq("id", userId).select("*").single();
+  if (error) throw toAppError(error);
+  return profileRowSchema.parse(data);
+}

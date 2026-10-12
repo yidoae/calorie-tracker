@@ -23,6 +23,16 @@ export async function completeOnboarding(answers: OnboardingInput, plan: PlanPay
   return profileRowSchema.parse(data);
 }
 
+/**
+ * Makes the plan the active one (save_plan); the previous plan stays as history. The database
+ * refuses a day below the calorie floor or macros that do not add up. Returns the stored plan.
+ */
+export async function savePlan(plan: PlanPayload): Promise<NutritionPlan> {
+  const { data, error } = await supabase.rpc("save_plan", { plan: planPayloadSchema.parse(plan) });
+  if (error) throw toAppError(error);
+  return planRowSchema.parse(data);
+}
+
 /** The signed-in user's active plan; null if there is none (RLS limits the rows to the user's own). */
 export async function getActivePlan(): Promise<NutritionPlan | null> {
   const { data, error } = await supabase.from("nutrition_plans").select("*").eq("is_active", true).maybeSingle();
