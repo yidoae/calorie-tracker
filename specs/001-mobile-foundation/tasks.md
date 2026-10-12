@@ -173,11 +173,11 @@ totals always equal the remaining items.
 **Independent Test**: Plan with cycling on 4 days; adjust protein with "Kalori sabit"; save; today's
 targets show the training or rest day.
 
-- [ ] T050 [P] [US4] Port `usePlanWizard` and `usePlanTuner` from the old `src/hooks/` (via `git show`) to `apps/mobile/src/hooks/`, using core for all math and reading `sensitive_warning_ack` from the profile
-- [ ] T051 [P] [US4] `apps/mobile/src/components/ui/Slider.tsx` and `Segmented.tsx`
-- [ ] T052 [US4] Screens `apps/mobile/src/app/plan/wizard.tsx` (4 steps + live preview) and `plan/review.tsx` (calorie and macro sliders, "Kalori sabit", training/rest tabs, "Aktif planım yap" → `savePlan`), components in `apps/mobile/src/components/plan/`
-- [ ] T053 [US4] Sensitive-content notice for 16:8 or a deficit ≥ 750 kcal with the gentler option; acknowledgement saved to `profiles.sensitive_warning_ack`
-- [ ] T054 [US4] `apps/mobile/src/app/(tabs)/plan.tsx` (active plan summary, "Planı düzenle", "Yeni plan") and the training/rest day label on the dashboard
+- [x] T050 [P] [US4] Port `usePlanWizard` and `usePlanTuner` from the old `src/hooks/` (via `git show`) to `apps/mobile/src/hooks/`, using core for all math and reading `sensitive_warning_ack` from the profile Done; pure rules in `hooks/planWizardLogic.ts` (node:test), the sex comes from the profile (save_plan refuses another), the live preview uses the floor-aware daily change; the tuner saves through `tunedPlan` (core), whose base is the weekly average when cycling
+- [x] T051 [P] [US4] `apps/mobile/src/components/ui/Slider.tsx` and `Segmented.tsx` Done; Slider uses the View's own gesture responder (no native dependency), `adjustable` with increment/decrement; Segmented has tab semantics
+- [x] T052 [US4] Screens `apps/mobile/src/app/plan/wizard.tsx` (4 steps + live preview) and `plan/review.tsx` (calorie and macro sliders, "Kalori sabit", training/rest tabs, "Aktif planım yap" → `savePlan`), components in `apps/mobile/src/components/plan/` Done; the wizard hands its plan to `plan/review?source=wizard` through an in-memory draft; without the param the review tunes the active plan; after saving, `router.dismissTo("/plan")` and a success toast
+- [x] T053 [US4] Sensitive-content notice for 16:8 or a deficit ≥ 750 kcal with the gentler option; acknowledgement saved to `profiles.sensitive_warning_ack` Done; a bottom sheet, "Bana göre değil" keeps classic meals or a 700 kcal deficit; the acknowledgement goes through `profileService.acknowledgeSensitiveWarning`
+- [x] T054 [US4] `apps/mobile/src/app/(tabs)/plan.tsx` (active plan summary, "Planı düzenle", "Yeni plan") and the training/rest day label on the dashboard Done; the plan tab shows the weekly average, the training/rest tiles with today's type outlined, and the routine; the dashboard's training/rest label existed since T038
 
 **Checkpoint**: The plan from the wizard drives the dashboard; the floor holds for every day.
 
