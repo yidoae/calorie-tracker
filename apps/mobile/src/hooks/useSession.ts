@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getSession, onSessionChange, type Session } from "@/services/authService";
 import { getMyProfile, type Profile } from "@/services/profileService";
 import { clearMealDraft } from "./useMealDraft";
+import { clearPlanDraft } from "./usePlanDraft";
 
 /**
  * Where the user is in the app's lifecycle; the root layout routes on this alone
@@ -38,6 +39,7 @@ export function useSessionController(): SessionState {
       if (event === "SIGNED_OUT") {
         queryClient.clear();
         clearMealDraft();
+        clearPlanDraft();
       }
     });
     return () => {
