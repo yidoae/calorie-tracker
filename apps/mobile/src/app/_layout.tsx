@@ -56,6 +56,8 @@ function RootNavigator() {
         <Stack.Screen name="log/search" options={{ presentation: "modal" }} />
         <Stack.Screen name="log/review" />
         <Stack.Screen name="meal/[id]" />
+        <Stack.Screen name="plan/wizard" />
+        <Stack.Screen name="plan/review" />
       </Stack.Protected>
     </Stack>
   );

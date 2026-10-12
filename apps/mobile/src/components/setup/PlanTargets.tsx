@@ -6,6 +6,8 @@ import { colors, radius, space, type } from "@/theme";
 
 interface Props {
   plan: Pick<NutritionPlan, "inputs" | "base" | "strategySummary">;
+  /** The line above the calories; a cycling plan's base is its weekly average. */
+  eyebrow?: string;
 }
 
 const MACROS = [
@@ -17,12 +19,12 @@ const MACROS = [
 const fmt = (n: number) => Math.round(n).toLocaleString(LOCALE);
 
 /** The computed daily targets at the end of the setup: calories, the three macros and the strategy. */
-export default function PlanTargets({ plan }: Props) {
+export default function PlanTargets({ plan, eyebrow = "GÜNLÜK HEDEFİN" }: Props) {
   const goal = GOAL_LABELS[plan.inputs.goal];
   return (
     <View style={styles.wrap}>
-      <View style={styles.hero} accessible accessibilityLabel={`Günlük hedefin ${fmt(plan.base.calories)} kilokalori, ${goal.title}`}>
-        <Text style={styles.eyebrow}>GÜNLÜK HEDEFİN</Text>
+      <View style={styles.hero} accessible accessibilityLabel={`${eyebrow.toLocaleLowerCase("tr-TR")}: ${fmt(plan.base.calories)} kilokalori, ${goal.title}`}>
+        <Text style={styles.eyebrow}>{eyebrow}</Text>
         <Text style={styles.kcal}>{fmt(plan.base.calories)} kcal</Text>
         <Text style={styles.goal}>
           {goal.title} · {goal.hint}
