@@ -8,10 +8,12 @@ import ResetPasswordScreen from "@/app/(auth)/reset-password";
 import SignInScreen from "@/app/(auth)/sign-in";
 import SignUpScreen from "@/app/(auth)/sign-up";
 import WelcomeScreen from "@/app/(auth)/welcome";
+import HistoryScreen from "@/app/(tabs)/history";
 import PlanScreen from "@/app/(tabs)/plan";
 import ProfileScreen from "@/app/(tabs)/profile";
 import TodayScreen from "@/app/(tabs)/today";
 import VerifyEmail from "@/components/auth/VerifyEmail";
+import DayDetailScreen from "@/components/history/DayDetailScreen";
 import FoodSearchScreen from "@/components/meals/FoodSearchScreen";
 import MealDetailScreen from "@/components/meals/MealDetailScreen";
 import MealReviewScreen from "@/components/meals/MealReviewScreen";
@@ -132,6 +134,20 @@ const SCREENS: ScreenEntry[] = [
     status: "ready",
   },
   {
+    id: "history",
+    title: "Geçmiş",
+    note: "Bu ayın takvimi, Pazartesi'den başlar. Öğün girilen her gün o günün kendi hedefine göre işaretlenir: ±%5 içi yeşil, altı mor, üstü kırmızı; kayıtsız günde işaret yok. Bugün çerçeveli, sonraki günler soluk ve kapalı. Oklar ayları değiştirir; bu aydan ileri gidilmez. Bir güne dokununca o gün açılır.",
+    Component: HistoryScreen,
+    status: "ready",
+  },
+  {
+    id: "day-detail",
+    title: "Geçmiş bir gün",
+    note: "Takvimden açılan gün: Bugün ekranındaki halka, makro çubukları ve öğünler, o gün geçerli olan planın hedeflerine göre (döngüde antrenman/dinlenme günü). Öğüne dokununca düzenlenebilir.",
+    Component: () => <DayDetailScreen date={SAMPLE_MEALS[0].localDate} />,
+    status: "ready",
+  },
+  {
     id: "plan",
     title: "Planım",
     note: "Aktif plan: haftalık ortalama, kalori döngüsünde antrenman ve dinlenme günü hedefleri (bugünün türü yeşil çerçeveli), antrenman ve öğün düzeni. “Planı düzenle” ince ayarı, “Yeni plan” sihirbazı açar.",
@@ -207,7 +223,7 @@ export default function PreviewGallery() {
       <SafeAreaProvider>
         <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
           <View style={styles.band}>
-            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 6</Text>
+            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 7</Text>
             <Text style={styles.bandTitle}>Ekran önizlemesi</Text>
             {fontError && <Text style={[styles.bandLead, styles.warning]}>Yazı tipi yüklenemedi: {fontError.message}</Text>}
             <Text style={styles.bandLead}>

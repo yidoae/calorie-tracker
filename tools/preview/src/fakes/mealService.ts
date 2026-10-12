@@ -1,6 +1,10 @@
 // Preview stand-in for apps/mobile/src/services/mealService.ts: a sample day with breakfast and
-// lunch (totals as the database computes them from the items), no network. Changes only wait.
+// lunch (totals as the database computes them from the items), and a month of logged days around
+// the sample plan's targets for the calendar; no network. Changes only wait.
+import { dayKey, monthBounds } from "@calorie/core/dates";
+import { resolveTargets } from "@calorie/core/nutrition/targets";
 import type * as Meals from "@/services/mealService";
+import { getActivePlan } from "./planService";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 900));
 
@@ -50,6 +54,21 @@ export async function logMeal(payload: Parameters<typeof Meals.logMeal>[0]): Ret
 
 export async function getDayMeals(_localDate: string): ReturnType<typeof Meals.getDayMeals> {
   return SAMPLE_MEALS;
+}
+
+/** How each day went against its target, repeating: on target, under, on target, over, not logged, … */
+const DAY_SHARES = [1, 0.82, 1.03, 1.12, null, 0.98, 1.01, 0.9, null];
+
+export async function getMonthTotals(month: Date): ReturnType<typeof Meals.getMonthTotals> {
+  const plan = await getActivePlan();
+  const { from, to } = monthBounds(month);
+  const today = dayKey(new Date());
+  const rows = [];
+  for (let d = new Date(`${from}T12:00:00`); dayKey(d) <= to && dayKey(d) <= today; d.setDate(d.getDate() + 1)) {
+    const share = DAY_SHARES[d.getDate() % DAY_SHARES.length];
+    if (share !== null) rows.push({ localDate: dayKey(d), calories: Math.round(resolveTargets(plan, d).targets.calories * share) });
+  }
+  return rows;
 }
 
 export async function getMeal(mealId: string): ReturnType<typeof Meals.getMeal> {

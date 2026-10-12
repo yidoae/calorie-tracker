@@ -16,7 +16,12 @@ export async function savePlan(plan: Parameters<typeof Plans.savePlan>[0]): Retu
   return { ...plan, id: "00000000-0000-4000-8000-0000000000ab", createdAt: new Date().toISOString() };
 }
 
-export async function getActivePlan(): ReturnType<typeof Plans.getActivePlan> {
+export async function getPlans(): ReturnType<typeof Plans.getPlans> {
+  const plan = await getActivePlan();
+  return plan ? [plan] : [];
+}
+
+export async function getActivePlan(): Promise<NonNullable<Awaited<ReturnType<typeof Plans.getActivePlan>>>> {
   return {
     id: "00000000-0000-4000-8000-0000000000aa",
     createdAt: "2026-10-11T08:00:00.000Z",
