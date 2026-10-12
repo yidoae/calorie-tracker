@@ -26,7 +26,7 @@ Docker. The owner tried parts of the app on an Android phone through Expo Go.
 | 2. US2 setup, targets equal `buildPlan`, resume after kill | ✅ setup completes (double-question bug fixed in `1476c9f`) | ⏳ | Resume after kill not tried on a device |
 | 3. US3 search "tavuğu", 150 g, edit to 200 g, delete; offline save | ✅ search and logging | ⏳ | Edit/delete and airplane mode not tried on a device |
 | 4. US4 wizard with cycling, sensitive notice once | ✅ wizard sliders (2026-10-13) | ⏳ | Notice opens on selection (owner ruling) |
-| 5. US5 calendar marks three days, each day opens | ⏳ | ⏳ | Checked in the preview only |
+| 5. US5 calendar marks three days, each day opens | ✅ history tab (2026-10-13) | ⏳ | |
 | 6. Midnight roll-over | ⏳ | ⏳ | `useToday` timer + foreground refresh; unit-tested helpers only |
 
 ## Deviations from the plan
