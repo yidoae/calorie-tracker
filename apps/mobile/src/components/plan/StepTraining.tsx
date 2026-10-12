@@ -61,7 +61,7 @@ export default function StepTraining({ w }: { w: PlanWizard }) {
                 onPress={() => w.toggleDay(i)}
                 style={[styles.day, on && styles.dayOn, sedentary && styles.dayOff]}
               >
-                <Text style={[styles.dayLabel, on && styles.dayLabelOn, sedentary && styles.dayLabelOff]}>{day}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={[styles.dayLabel, on && styles.dayLabelOn, sedentary && styles.dayLabelOff]}>{day}</Text>
               </Pressable>
             );
           })}
@@ -72,7 +72,8 @@ export default function StepTraining({ w }: { w: PlanWizard }) {
 }
 
 const styles = StyleSheet.create({
-  days: { flexDirection: "row", gap: space(1) },
+  // A narrow gap so seven 44 pt days fit from a 360 pt wide screen up.
+  days: { flexDirection: "row", gap: space(0.5) },
   day: {
     flex: 1,
     minHeight: 44,

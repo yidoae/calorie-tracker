@@ -51,7 +51,8 @@ specs                Spec Kit features; tofuhq-design = design system skill
   React Native imports, tested under node from `apps/mobile/tests` (e.g. `mealLogic.ts`,
   `planWizardLogic.ts`, `historyLogic.ts`, `components/ui/sliderGesture.ts`).
 - **Routing:** the root layout alone decides access with `Stack.Protected` (no session → welcome,
-  unconfirmed e-mail → verify, setup incomplete → `setup/[step]`, else tabs); every signed-in route
+  where sign-up shows the verify state until the link is opened; recovery → reset-password; setup
+  incomplete → `setup/[step]`; else tabs); every signed-in route
   is registered inside the `ready` guard. Deep links use `kaloritakip://`.
 - **Server data:** TanStack Query keys start with the concern and the user id (`["meals", userId,
   …]`, `["activePlan", …]`, `["plans", …]`, `["profile", …]`); a write invalidates its prefix.
