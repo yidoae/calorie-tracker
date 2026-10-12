@@ -4,7 +4,7 @@ import type { Database, Json } from "../src/db/database.types.ts";
 import { buildPlan } from "../src/nutrition/plan.ts";
 import { logMealPayloadSchema } from "../src/schemas/meal.ts";
 import type { PlanInputs } from "../src/schemas/plan.ts";
-import { foodHitRowSchema, loggedMealRowSchema, mealRowSchema, planRowSchema, profileRowSchema } from "../src/schemas/rows.ts";
+import { foodHitRowSchema, loggedMealRowSchema, mealKcalRowSchema, mealRowSchema, planRowSchema, profileRowSchema } from "../src/schemas/rows.ts";
 import type { z } from "../src/schemas/zod.ts";
 
 const MEAL_ID = "6f1c2c47-5d7e-4c7b-9b3e-1f2a3b4c5d6e";
@@ -45,6 +45,7 @@ describe("database rows", () => {
     assert.ok(noDrift<Omit<MealIn, "meal_items">, Row<"meals">>());
     assert.ok(noDrift<Omit<MealIn["meal_items"][number], "foods">, Row<"meal_items">>());
     assert.ok(noDrift<z.input<typeof loggedMealRowSchema>, Row<"meals">>());
+    assert.ok(noDrift<z.input<typeof mealKcalRowSchema>, Row<"meals">>());
   });
 
   it("maps a profile row and keeps unanswered fields null", () => {
@@ -140,6 +141,11 @@ describe("database rows", () => {
       updated_at: "2026-10-11T17:00:00+00:00",
     });
     assert.deepEqual(meal, { id: MEAL_ID, slot: "dinner", localDate: "2026-10-11", totals: { calories: 345.2, protein: 31.8, carbs: 38.4, fat: 12.2 } });
+  });
+
+  it("maps a calendar row and refuses a malformed day", () => {
+    assert.deepEqual(mealKcalRowSchema.parse({ local_date: "2026-10-11", total_kcal: "512.5" }), { localDate: "2026-10-11", calories: 512.5 });
+    assert.equal(mealKcalRowSchema.safeParse({ local_date: "11.10.2026", total_kcal: 1 }).success, false);
   });
 
   it("maps a search hit", () => {

@@ -77,6 +77,12 @@ export const MEAL_PATTERN_LABELS: Record<MealPattern, { title: string; hint: str
 /** Monday-first short weekday names. */
 export const WEEKDAY_SHORT = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"] as const;
 
+/** Monday-first full weekday names. */
+export const WEEKDAY_NAMES = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"] as const;
+
+/** Month names, January first. */
+export const MONTH_NAMES = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"] as const;
+
 export const SLOT_LABELS: Record<MealSlot, string> = {
   breakfast: "Kahvaltı",
   lunch: "Öğle yemeği",

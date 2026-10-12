@@ -1,4 +1,4 @@
-import { SPLIT_LABELS, TRAINING_STYLE_HINTS, TRAINING_STYLE_LABELS, WEEKDAY_SHORT } from "@calorie/core/labels";
+import { SPLIT_LABELS, TRAINING_STYLE_HINTS, TRAINING_STYLE_LABELS, WEEKDAY_NAMES, WEEKDAY_SHORT } from "@calorie/core/labels";
 import { STRENGTH_SPLITS, TRAINING_STYLES } from "@calorie/core/schemas/plan";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import ChoiceCard from "@/components/setup/ChoiceCard";
@@ -8,7 +8,6 @@ import { colors, radius, space, type } from "@/theme";
 import Field from "./Field";
 
 const FREQUENCIES = [2, 3, 4, 5, 6].map((n) => ({ id: n, label: `${n} gün`, accessibilityLabel: `Haftada ${n} gün` }));
-const WEEKDAY_NAMES = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
 
 /** Step 2: training style (with the split for weights), how many days and which ones. */
 export default function StepTraining({ w }: { w: PlanWizard }) {

@@ -154,6 +154,12 @@ export const loggedMealRowSchema = z
   }));
 export type LoggedMeal = z.output<typeof loggedMealRowSchema>;
 
+/** One meal's day and calories (`meals` select `local_date, total_kcal`): what the calendar sums per day. */
+export const mealKcalRowSchema = z
+  .object({ local_date: dayKeySchema, total_kcal: num })
+  .transform((r) => ({ localDate: r.local_date, calories: r.total_kcal }));
+export type MealKcal = z.output<typeof mealKcalRowSchema>;
+
 /** One `search_foods` result: the food, the alias that matched and its values per 100 g. */
 export const foodHitRowSchema = z
   .object({

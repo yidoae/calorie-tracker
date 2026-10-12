@@ -24,6 +24,11 @@ export function addMonths(d: Date, count: number): Date {
   return new Date(d.getFullYear(), d.getMonth() + count, 1);
 }
 
+/** The first and last `YYYY-MM-DD` of the month `d` falls in. */
+export function monthBounds(d: Date): { from: string; to: string } {
+  return { from: dayKey(startOfMonth(d)), to: dayKey(new Date(d.getFullYear(), d.getMonth() + 1, 0)) };
+}
+
 /** The month as a Monday-first grid: `null` pads before the 1st and after the last day. */
 export function monthGrid(month: Date): (Date | null)[] {
   const year = month.getFullYear();
