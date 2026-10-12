@@ -8,17 +8,23 @@ import ResetPasswordScreen from "@/app/(auth)/reset-password";
 import SignInScreen from "@/app/(auth)/sign-in";
 import SignUpScreen from "@/app/(auth)/sign-up";
 import WelcomeScreen from "@/app/(auth)/welcome";
+import PlanScreen from "@/app/(tabs)/plan";
 import ProfileScreen from "@/app/(tabs)/profile";
 import TodayScreen from "@/app/(tabs)/today";
 import VerifyEmail from "@/components/auth/VerifyEmail";
 import FoodSearchScreen from "@/components/meals/FoodSearchScreen";
 import MealDetailScreen from "@/components/meals/MealDetailScreen";
 import MealReviewScreen from "@/components/meals/MealReviewScreen";
+import PlanReviewScreen from "@/components/plan/PlanReviewScreen";
+import PlanWizardScreen from "@/components/plan/PlanWizardScreen";
+import { SensitiveNoticeContent } from "@/components/plan/SensitiveNotice";
 import SetupStepScreen from "@/components/setup/SetupStepScreen";
 import Button from "@/components/ui/Button";
 import MacroBar from "@/components/ui/MacroBar";
 import Ring from "@/components/ui/Ring";
 import Screen from "@/components/ui/Screen";
+import Segmented from "@/components/ui/Segmented";
+import Slider from "@/components/ui/Slider";
 import StateMessage from "@/components/ui/StateMessage";
 import TextField from "@/components/ui/TextField";
 import Toast from "@/components/ui/Toast";
@@ -125,7 +131,29 @@ const SCREENS: ScreenEntry[] = [
     Component: () => <MealDetailScreen mealId={SAMPLE_MEALS[1].id} />,
     status: "ready",
   },
+  {
+    id: "plan",
+    title: "Planım",
+    note: "Aktif plan: haftalık ortalama, kalori döngüsünde antrenman ve dinlenme günü hedefleri (bugünün türü yeşil çerçeveli), antrenman ve öğün düzeni. “Planı düzenle” ince ayarı, “Yeni plan” sihirbazı açar.",
+    Component: PlanScreen,
+    status: "ready",
+  },
+  wizardEntry(0, "Sihirbaz 1: vücut ve hedef", "Aktif planın cevaplarıyla başlar; cinsiyet profilden gelir (güvenli alt sınır ona bağlı). Kalori açığı 750 kcal ve üstüne çekilince önce hassas içerik uyarısı açılır. Üstteki önizleme her cevapta anında güncellenir."),
+  wizardEntry(1, "Sihirbaz 2: antrenman", "Antrenman tarzı, ağırlıkta program tipi, haftada 2–6 gün ve hangi günler. Düşük harekette günler kapanır."),
+  wizardEntry(2, "Sihirbaz 3: beslenme ve öğün düzeni", "Beslenme tarzı, kilo başına yağ (ketojenikte kapalı) ve öğün düzeni. 16:8 seçilince önce hassas içerik uyarısı, sonra yeme penceresi kaydırıcısı."),
+  wizardEntry(3, "Sihirbaz 4: kalori döngüsü", "Döngü açıkken antrenman ve dinlenme günü kalorileri; cevapların özeti. “Planımı oluştur” ince ayarı açar."),
+  {
+    id: "plan-review",
+    title: "İnce ayar",
+    note: "Antrenman/dinlenme sekmeleri, kalori kaydırıcısı (en az güvenli alt sınır) ve “Kalori sabit”: bir makroyu oynatınca diğer ikisi dengelenir, toplam aynı kalır. “Aktif planım yap” planı kaydedip Planım sekmesine döner.",
+    Component: () => <PlanReviewScreen fromWizard={false} />,
+    status: "ready",
+  },
 ];
+
+function wizardEntry(step: number, title: string, note: string): ScreenEntry {
+  return { id: `plan-wizard-${step}`, title, note, Component: () => <PlanWizardScreen initialStep={step} />, status: "ready" };
+}
 
 const PHONE = { width: 390, height: 844 };
 
@@ -179,7 +207,7 @@ export default function PreviewGallery() {
       <SafeAreaProvider>
         <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
           <View style={styles.band}>
-            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 5</Text>
+            <Text style={styles.eyebrow}>KALORİ TAKİP · 001 MOBİL TEMEL · FAZ 6</Text>
             <Text style={styles.bandTitle}>Ekran önizlemesi</Text>
             {fontError && <Text style={[styles.bandLead, styles.warning]}>Yazı tipi yüklenemedi: {fontError.message}</Text>}
             <Text style={styles.bandLead}>
@@ -234,6 +262,18 @@ export default function PreviewGallery() {
                 <MacroBar label="Protein" value={96} target={154} color={colors.macroProtein} />
                 <MacroBar label="Karbonhidrat" value={40} target={86} color={colors.macroCarbs} />
                 <MacroBar label="Yağ" value={90} target={84} color={colors.macroFat} />
+              </Specimen>
+              <Specimen label="Kaydırıcı ve sekmeli seçim">
+                <SliderSample />
+                <SegmentedSample />
+              </Specimen>
+              <Specimen label="Hassas içerik uyarısı: büyük açık (alttan açılır)">
+                <Text style={styles.noticeTitle}>Büyük bir kalori açığı seçiyorsun</Text>
+                <SensitiveNoticeContent kind="deficit" onAccept={() => {}} onDecline={() => {}} />
+              </Specimen>
+              <Specimen label="Hassas içerik uyarısı: 16:8 aralıklı oruç">
+                <Text style={styles.noticeTitle}>Aralıklı oruç herkese uygun değil</Text>
+                <SensitiveNoticeContent kind="fasting" onAccept={() => {}} onDecline={() => {}} />
               </Specimen>
               <Specimen label="Boş durum ve hata durumu">
                 <StateMessage kind="empty" title="Henüz öğün yok" body="İlk öğününü eklemek için + düğmesine dokun." actionLabel="Öğün ekle" onAction={() => {}} />
@@ -294,6 +334,32 @@ function FieldSample({ label, placeholder, unit, initial = "", hint, error }: { 
   return <TextField label={label} value={value} onChangeText={setValue} placeholder={placeholder} unit={unit} hint={hint} error={error} keyboardType={unit ? "decimal-pad" : "default"} />;
 }
 
+function SliderSample() {
+  const [value, setValue] = useState(154);
+  return (
+    <>
+      <Text style={styles.sampleValue}>Protein {value} g</Text>
+      <Slider label="Protein" value={value} min={56} max={224} step={1} onChange={setValue} color={colors.macroProtein} />
+      <Slider label="Kilo başına yağ" value={1.2} min={1} max={1.5} step={0.05} onChange={() => {}} disabled />
+    </>
+  );
+}
+
+function SegmentedSample() {
+  const [value, setValue] = useState<"training" | "rest">("training");
+  return (
+    <Segmented
+      label="Gün tipi"
+      value={value}
+      onChange={setValue}
+      items={[
+        { id: "training", label: "Antrenman · 4 gün" },
+        { id: "rest", label: "Dinlenme · 3 gün" },
+      ]}
+    />
+  );
+}
+
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: colors.ink },
   pageContent: { paddingBottom: space(10) },
@@ -333,6 +399,8 @@ const styles = StyleSheet.create({
   specimenBody: { gap: space(3) },
   rings: { flexDirection: "row", flexWrap: "wrap", gap: space(3) },
   inkSample: { backgroundColor: colors.ink, borderRadius: radius.md, padding: space(3) },
+  noticeTitle: { ...type.displayMd, color: colors.fg },
+  sampleValue: { ...type.bodyStrong, color: colors.fg },
   toastFrame: { height: 92, backgroundColor: colors.surface2, borderRadius: radius.md, overflow: "hidden" },
   swatches: { flexDirection: "row", flexWrap: "wrap", gap: space(3) },
   swatch: { width: 132, gap: space(1) },

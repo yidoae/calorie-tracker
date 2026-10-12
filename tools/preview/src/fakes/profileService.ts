@@ -27,3 +27,8 @@ export async function saveSetupAnswers(userId: string, _answers: SetupAnswers): 
   await wait();
   return { ...SAMPLE_PROFILE, id: userId, onboardingCompleted: false };
 }
+
+export async function acknowledgeSensitiveWarning(userId: string): Promise<Profile> {
+  await wait();
+  return { ...SAMPLE_PROFILE, id: userId, sensitiveWarningAck: true };
+}
