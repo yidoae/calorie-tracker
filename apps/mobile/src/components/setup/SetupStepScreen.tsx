@@ -49,6 +49,7 @@ export default function SetupStepScreen({ step }: { step: SetupStep }) {
   const footer = (
     <View style={styles.footer}>
       <Button
+        testID="setup-next"
         label={step === "summary" ? "Planımı oluştur" : "Devam"}
         loading={s.pending}
         disabled={step === "summary" && !s.plan}
@@ -66,22 +67,23 @@ export default function SetupStepScreen({ step }: { step: SetupStep }) {
         <>
           <Question label="Cinsiyet" error={s.errors.sex}>
             {GENDERS.map((sex) => (
-              <ChoiceCard key={sex} title={SEX_LABELS[sex]} selected={s.draft.sex === sex} onPress={() => s.setField("sex", sex)} />
+              <ChoiceCard key={sex} testID={`setup-sex-${sex}`} title={SEX_LABELS[sex]} selected={s.draft.sex === sex} onPress={() => s.setField("sex", sex)} />
             ))}
           </Question>
-          <TextField label="Yaş" value={s.draft.age} onChangeText={(t) => s.setField("age", t)} keyboardType="number-pad" unit="yaş" error={s.errors.age} />
+          <TextField testID="setup-age" label="Yaş" value={s.draft.age} onChangeText={(t) => s.setField("age", t)} keyboardType="number-pad" unit="yaş" error={s.errors.age} />
         </>
       )}
 
       {step === "body" && (
         <>
-          <TextField label="Boy" value={s.draft.heightCm} onChangeText={(t) => s.setField("heightCm", t)} keyboardType="decimal-pad" unit="cm" error={s.errors.heightCm} />
-          <TextField label="Kilo" value={s.draft.weightKg} onChangeText={(t) => s.setField("weightKg", t)} keyboardType="decimal-pad" unit="kg" error={s.errors.weightKg} />
+          <TextField testID="setup-height" label="Boy" value={s.draft.heightCm} onChangeText={(t) => s.setField("heightCm", t)} keyboardType="decimal-pad" unit="cm" error={s.errors.heightCm} />
+          <TextField testID="setup-weight" label="Kilo" value={s.draft.weightKg} onChangeText={(t) => s.setField("weightKg", t)} keyboardType="decimal-pad" unit="kg" error={s.errors.weightKg} />
         </>
       )}
 
       {step === "goal" && (
         <TextField
+          testID="setup-goal-weight"
           label="Hedef kilo"
           value={s.draft.targetWeightKg}
           onChangeText={(t) => s.setField("targetWeightKg", t)}
@@ -97,6 +99,7 @@ export default function SetupStepScreen({ step }: { step: SetupStep }) {
           {ACTIVITY_LEVEL_KEYS.map((level) => (
             <ChoiceCard
               key={level}
+              testID={`setup-activity-${level}`}
               title={ACTIVITY_LEVEL_LABELS[level].title}
               hint={ACTIVITY_LEVEL_LABELS[level].hint}
               selected={s.draft.activity === level}
@@ -111,6 +114,7 @@ export default function SetupStepScreen({ step }: { step: SetupStep }) {
           {DIET_STYLES.map((style) => (
             <ChoiceCard
               key={style}
+              testID={`setup-diet-${style}`}
               title={DIET_STYLE_LABELS[style]}
               hint={DIET_STYLE_HINTS[style]}
               selected={s.draft.dietStyle === style}

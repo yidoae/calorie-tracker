@@ -22,6 +22,7 @@ export default function SignUp() {
   return (
     <Screen title="Hesap oluştur" lead="E-postan ve bir şifreyle başla.">
       <TextField
+        testID="signup-email"
         label="E-posta"
         value={form.values.email}
         onChangeText={(text) => form.setField("email", text)}
@@ -31,6 +32,7 @@ export default function SignUp() {
         error={form.errors.email}
       />
       <TextField
+        testID="signup-password"
         label="Şifre"
         value={form.values.password}
         onChangeText={(text) => form.setField("password", text)}
@@ -40,7 +42,7 @@ export default function SignUp() {
         error={form.errors.password}
       />
       {form.formError && <FormError message={form.formError.message} />}
-      <Button label="Hesap oluştur" loading={form.pending} onPress={() => void form.submit()} />
+      <Button testID="signup-submit" label="Hesap oluştur" loading={form.pending} onPress={() => void form.submit()} />
       <Button label="Zaten hesabın var mı? Giriş yap" variant="ghost" onPress={() => router.replace("/sign-in")} />
     </Screen>
   );

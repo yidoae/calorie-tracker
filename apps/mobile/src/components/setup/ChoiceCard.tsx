@@ -7,12 +7,15 @@ interface Props {
   hint?: string;
   selected: boolean;
   onPress: () => void;
+  /** Stable id for the Maestro smoke flow (.maestro/smoke.yaml). */
+  testID?: string;
 }
 
 /** One answer of a single-choice question; the selected card gets a thick outline and a tick. */
-export default function ChoiceCard({ title, hint, selected, onPress }: Props) {
+export default function ChoiceCard({ title, hint, selected, onPress, testID }: Props) {
   return (
     <Pressable
+      testID={testID}
       accessibilityRole="radio"
       accessibilityLabel={hint ? `${title}, ${hint}` : title}
       accessibilityState={{ checked: selected }}

@@ -49,7 +49,7 @@ export default function MealReviewScreen() {
   const footer = (
     <View style={styles.footer}>
       {meal.error && <FormError message={meal.error.message} />}
-      <Button label="Kaydet" loading={meal.pending} onPress={() => void onSave()} />
+      <Button testID="meal-save" label="Kaydet" loading={meal.pending} onPress={() => void onSave()} />
       {meal.items.length < MAX_DRAFT_ITEMS && (
         <Button label="Yemek ekle" variant="secondary" onPress={() => router.push({ pathname: "/log/search", params: { adding: "1" } })} />
       )}

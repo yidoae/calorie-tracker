@@ -1,0 +1,108 @@
+# Smoke flow (T057, SC-001–SC-003): sign up with a fresh e-mail → first-time setup → search
+# "tavuk" → 150 g → save → the calorie ring counts the meal.
+#
+# Prerequisites:
+# - A development build of com.kaloritakip.app on the emulator or phone (`maestro test` targets the
+#   app id; Expo Go cannot be targeted).
+# - "Confirm email" OFF on the Supabase project the build points at: every run signs up a new
+#   address and goes straight to the setup.
+# - The curated foods migrations applied: "tavuk" finds "Tavuk göğsü (çiğ)", 120 kcal / 100 g, so
+#   150 g = 180 kcal.
+# Selectors are the testIDs in apps/mobile/src (Button, TextField, ChoiceCard, FoodHitRow, Ring).
+appId: com.kaloritakip.app
+---
+- launchApp:
+    clearState: true
+- evalScript: ${output.email = 'smoke+' + Date.now() + '@example.com'}
+
+# Sign up
+- tapOn:
+    id: welcome-email
+- tapOn:
+    id: signup-email
+- inputText: ${output.email}
+- tapOn:
+    id: signup-password
+- inputText: Smoke-test-2026
+- hideKeyboard
+- tapOn:
+    id: signup-submit
+
+# Setup 1: sex and age
+- extendedWaitUntil:
+    visible:
+      id: setup-sex-male
+    timeout: 20000
+- tapOn:
+    id: setup-sex-male
+- tapOn:
+    id: setup-age
+- inputText: "30"
+- hideKeyboard
+- tapOn:
+    id: setup-next
+
+# Setup 2: height and weight
+- tapOn:
+    id: setup-height
+- inputText: "180"
+- tapOn:
+    id: setup-weight
+- inputText: "90"
+- hideKeyboard
+- tapOn:
+    id: setup-next
+
+# Setup 3: goal weight
+- tapOn:
+    id: setup-goal-weight
+- inputText: "80"
+- hideKeyboard
+- tapOn:
+    id: setup-next
+
+# Setup 4: activity
+- tapOn:
+    id: setup-activity-moderate
+- tapOn:
+    id: setup-next
+
+# Setup 5: diet style
+- tapOn:
+    id: setup-diet-highProtein
+- tapOn:
+    id: setup-next
+
+# Setup 6: summary → "Planımı oluştur"
+- tapOn:
+    id: setup-next
+
+# Bugün → log 150 g of chicken
+- extendedWaitUntil:
+    visible:
+      id: today-add-meal
+    timeout: 20000
+- tapOn:
+    id: today-add-meal
+- tapOn:
+    id: food-search-input
+- inputText: tavuk
+- extendedWaitUntil:
+    visible:
+      id: food-hit-chicken_breast_raw
+    timeout: 10000
+- tapOn:
+    id: food-hit-chicken_breast_raw
+- tapOn:
+    id: draft-grams
+- inputText: "150"
+- hideKeyboard
+- tapOn:
+    id: meal-save
+
+# The ring counts the saved meal (its accessibility label starts "Kalori: <eaten> / <target> kcal").
+- extendedWaitUntil:
+    visible:
+      id: calorie-ring
+      text: "Kalori: 180 / .*"
+    timeout: 10000

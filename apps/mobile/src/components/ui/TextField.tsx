@@ -15,14 +15,17 @@ interface Props {
   secureTextEntry?: boolean;
   autoComplete?: "email" | "password" | "new-password" | "off";
   autoFocus?: boolean;
+  /** Stable id for the Maestro smoke flow (.maestro/smoke.yaml). */
+  testID?: string;
 }
 
-export default function TextField({ label, value, onChangeText, placeholder, error, hint, unit, keyboardType, secureTextEntry, autoComplete = "off", autoFocus }: Props) {
+export default function TextField({ label, value, onChangeText, placeholder, error, hint, unit, keyboardType, secureTextEntry, autoComplete = "off", autoFocus, testID }: Props) {
   return (
     <View style={styles.wrap}>
       <Text style={styles.label}>{label}</Text>
       <View style={[styles.field, error ? styles.fieldError : null]}>
         <TextInput
+          testID={testID}
           accessibilityLabel={label}
           accessibilityHint={error ?? hint}
           value={value}

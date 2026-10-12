@@ -58,7 +58,7 @@ export default function FoodSearchScreen({ adding }: Props) {
 
   return (
     <Screen title="Yemek ara" lead="Ne yediğini yaz, listeden seç." back={{ label: "Kapat", onPress: close, icon: "close" }}>
-      <TextField label="Ne yedin?" value={text} onChangeText={setText} placeholder="ör. tavuk göğsü" autoFocus />
+      <TextField testID="food-search-input" label="Ne yedin?" value={text} onChangeText={setText} placeholder="ör. tavuk göğsü" autoFocus />
       {results}
     </Screen>
   );

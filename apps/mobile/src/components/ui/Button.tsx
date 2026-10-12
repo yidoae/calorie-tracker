@@ -14,14 +14,17 @@ interface Props {
   /** Optional leading icon (e.g. a provider logo). */
   icon?: ReactNode;
   accessibilityHint?: string;
+  /** Stable id for the Maestro smoke flow (.maestro/smoke.yaml). */
+  testID?: string;
 }
 
 /** Lime is the one primary action per screen; disabled states use muted colours, not opacity. */
-export default function Button({ label, onPress, variant = "primary", loading = false, disabled = false, icon, accessibilityHint }: Props) {
+export default function Button({ label, onPress, variant = "primary", loading = false, disabled = false, icon, accessibilityHint, testID }: Props) {
   const inactive = disabled || loading;
   const palette = inactive ? PALETTE.disabled : PALETTE[variant];
   return (
     <Pressable
+      testID={testID}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}

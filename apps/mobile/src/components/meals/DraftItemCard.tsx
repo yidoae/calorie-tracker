@@ -28,6 +28,7 @@ export default function DraftItemCard({ name, typicalPortionG, gramsText, onChan
         </Pressable>
       </View>
       <TextField
+        testID="draft-grams"
         label="Kaç gram yedin?"
         value={gramsText}
         onChangeText={onChangeGrams}

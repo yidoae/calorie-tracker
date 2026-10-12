@@ -10,7 +10,7 @@ import { useDashboard } from "@/hooks/useDashboard";
  */
 export default function Today() {
   const day = useDashboard();
-  const footer = <Button label="Öğün ekle" onPress={() => router.push("/log/search")} />;
+  const footer = <Button testID="today-add-meal" label="Öğün ekle" onPress={() => router.push("/log/search")} />;
 
   return (
     <Screen title="Bugün" lead="Günlük hedeflerin ve öğünlerin." footer={footer}>

@@ -25,6 +25,7 @@ export default function Ring({ value, target, size = 200 }: Props) {
 
   return (
     <View
+      testID="calorie-ring"
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={`Kalori: ${fmt(value)} / ${fmt(target)} kcal, ${status}`}

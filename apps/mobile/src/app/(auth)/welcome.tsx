@@ -18,7 +18,7 @@ export default function Welcome() {
       </View>
       <SafeAreaView edges={["bottom"]} style={styles.panel}>
         <SocialButtons />
-        <Button label="E-postayla devam et" onPress={() => router.push("/sign-up")} />
+        <Button testID="welcome-email" label="E-postayla devam et" onPress={() => router.push("/sign-up")} />
         <Button label="Zaten hesabın var mı? Giriş yap" variant="ghost" onPress={() => router.push("/sign-in")} />
       </SafeAreaView>
     </SafeAreaView>

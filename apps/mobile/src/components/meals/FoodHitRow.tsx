@@ -15,6 +15,7 @@ export default function FoodHitRow({ hit, onPress }: Props) {
   const detail = `100 g: ${formatKcal(hit.per100g.calories)} kcal · porsiyon ~${formatGrams(hit.typicalPortionG)} g`;
   return (
     <Pressable
+      testID={`food-hit-${hit.foodId}`}
       accessibilityRole="button"
       accessibilityLabel={`${hit.name}, ${detail}`}
       accessibilityHint="Gramını yazmak için seç"
