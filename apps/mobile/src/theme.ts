@@ -22,7 +22,8 @@ export const colors = {
   fgSubtle: "#5d6c7b",
   onInk: "#ffffff",
   onInkMuted: "#c8c8c8",
-  accent: "#007aff",
+  /** Links and focus; darker than iOS blue so link text passes 4.5:1 on white and surface3. */
+  accent: "#0062cc",
   cta: "#a8e40f",
   ctaPressed: "#c5f058",
   ctaFg: "#170b21",

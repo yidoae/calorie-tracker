@@ -33,7 +33,7 @@ export default function MonthCalendar({ title, days, canGoForward, onBack, onFor
       </View>
       <View style={styles.row} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
         {WEEKDAY_SHORT.map((name) => (
-          <Text key={name} style={styles.weekday}>
+          <Text key={name} maxFontSizeMultiplier={1.3} style={styles.weekday}>
             {name}
           </Text>
         ))}
@@ -65,7 +65,7 @@ function DayCell({ day, onOpen }: { day: CalendarDay; onOpen: (localDate: string
       onPress={() => onOpen(day.localDate)}
       style={({ pressed }) => [styles.cell, day.isToday && styles.today, pressed && styles.pressed]}
     >
-      <Text style={[styles.number, day.isFuture && styles.future]}>{day.day}</Text>
+      <Text maxFontSizeMultiplier={1.3} style={[styles.number, day.isFuture && styles.future]}>{day.day}</Text>
       <View style={[styles.dot, { backgroundColor: mark?.color ?? colors.transparent }]} />
     </Pressable>
   );

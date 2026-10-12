@@ -23,7 +23,7 @@ export default function DraftItemCard({ name, typicalPortionG, gramsText, onChan
     <View style={styles.card}>
       <View style={styles.head}>
         <Text style={styles.name}>{name}</Text>
-        <Pressable accessibilityRole="button" accessibilityLabel={`${name} öğünden çıkar`} hitSlop={8} onPress={onRemove}>
+        <Pressable accessibilityRole="button" accessibilityLabel={`${name} öğünden çıkar`} hitSlop={11} onPress={onRemove}>
           <Ionicons name="trash-outline" size={22} color={colors.fgMuted} />
         </Pressable>
       </View>

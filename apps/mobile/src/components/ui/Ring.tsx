@@ -50,10 +50,11 @@ export default function Ring({ value, target, size = 200 }: Props) {
           />
         )}
       </Svg>
+      {/* Large text would spill out of the circle; the label above carries the full numbers. */}
       <View style={[StyleSheet.absoluteFill, styles.centre]}>
-        <Text style={[styles.number, over && styles.over]}>{fmt(Math.abs(left))}</Text>
-        <Text style={styles.caption}>{over ? "kcal fazla" : "kcal kaldı"}</Text>
-        <Text style={styles.detail}>
+        <Text maxFontSizeMultiplier={1.2} style={[styles.number, over && styles.over]}>{fmt(Math.abs(left))}</Text>
+        <Text maxFontSizeMultiplier={1.3} style={styles.caption}>{over ? "kcal fazla" : "kcal kaldı"}</Text>
+        <Text maxFontSizeMultiplier={1.3} style={styles.detail}>
           {fmt(value)} / {fmt(target)} kcal
         </Text>
       </View>

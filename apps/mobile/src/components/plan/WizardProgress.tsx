@@ -35,7 +35,7 @@ export default function WizardProgress({ step, canGoTo, onGoTo }: Props) {
                 {done ? (
                   <Ionicons name="checkmark" size={16} color={colors.ctaFg} />
                 ) : (
-                  <Text style={[styles.number, current && styles.currentNumber]}>{i + 1}</Text>
+                  <Text maxFontSizeMultiplier={1.2} style={[styles.number, current && styles.currentNumber]}>{i + 1}</Text>
                 )}
               </View>
             </Pressable>
