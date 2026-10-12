@@ -198,10 +198,10 @@ targets show the training or rest day.
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T057 Maestro smoke flow `.maestro/smoke.yaml`: sign up with a fresh e-mail (confirmation off on the dev project for test addresses), complete setup, search "tavuk", log 150 g, assert the ring value
-- [ ] T058 [P] Rewrite `CLAUDE.md` for the mobile monorepo (layers, commands, conventions, Turkish copy rules) and `README.md` (setup from quickstart.md); remove the Next.js block from `AGENTS.md`
-- [ ] T059 [P] Accessibility pass: labels on icon buttons, touch targets ≥ 44 pt, text contrast on ink and white, dynamic type does not clip the ring or forms
-- [ ] T060 Run the full quickstart.md validation on an Android emulator and an iPhone; record results and any deviations in `specs/001-mobile-foundation/checklists/validation.md`
+- [x] T057 Maestro smoke flow `.maestro/smoke.yaml`: sign up with a fresh e-mail (confirmation off on the dev project for test addresses), complete setup, search "tavuk", log 150 g, assert the ring value Done; written, not run (no emulator here); selectors are testIDs on Button, TextField, ChoiceCard, FoodHitRow and Ring
+- [x] T058 [P] Rewrite `CLAUDE.md` for the mobile monorepo (layers, commands, conventions, Turkish copy rules) and `README.md` (setup from quickstart.md); remove the Next.js block from `AGENTS.md`
+- [x] T059 [P] Accessibility pass: labels on icon buttons, touch targets ≥ 44 pt, text contrast on ink and white, dynamic type does not clip the ring or forms Done; `accent` darkened to pass AA, font scaling capped inside fixed shapes
+- [ ] T060 Run the full quickstart.md validation on an Android emulator and an iPhone; record results and any deviations in `specs/001-mobile-foundation/checklists/validation.md` Open: the checklist records what was verified here and on the owner's phone (Expo Go); the emulator and iPhone runs remain
 
 ---
 

@@ -26,8 +26,8 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 
 ## Progress
 
-001 Phases 1–7 are implemented (accounts, setup, meal logging, plan wizard, history); Phase 8
-(polish) is in progress. On a phone through Expo Go the owner checked sign-up, setup, meal logging
+001 Phases 1–8 are implemented (accounts, setup, meal logging, plan wizard, history, polish);
+only T060, the device validation on an Android emulator and an iPhone, is open. On a phone through Expo Go the owner checked sign-up, setup, meal logging
 and the plan wizard's sliders; Google/Apple sign-in and the full quickstart validation on a
 development build are still open (`specs/001-mobile-foundation/checklists/validation.md`).
 
