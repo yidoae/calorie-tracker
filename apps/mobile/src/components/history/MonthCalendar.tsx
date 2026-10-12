@@ -15,7 +15,7 @@ interface Props {
 }
 
 const MARKS: Record<DayRating, { label: string; color: string }> = {
-  onTarget: { label: "Hedefte (±%5)", color: colors.success },
+  onTarget: { label: "Hedefte (±%5)", color: colors.successText },
   under: { label: "Hedefin altında", color: colors.warningText },
   over: { label: "Hedefin üstünde", color: colors.danger },
 };
@@ -94,7 +94,8 @@ function NavButton({ icon, label, onPress, disabled = false }: NavProps) {
 }
 
 const styles = StyleSheet.create({
-  card: { borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.lg, padding: space(3), gap: space(2) },
+  // Thin side padding so seven 44 pt day cells fit from a 360 pt wide screen up.
+  card: { borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.lg, paddingVertical: space(3), paddingHorizontal: space(1), gap: space(2) },
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   title: { ...type.displayMd, color: colors.fg },
   nav: { width: 44, height: 44, alignItems: "center", justifyContent: "center", borderRadius: radius.pill },
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   number: { ...type.bodyStrong, color: colors.fg },
   future: { color: colors.fgSubtle, fontWeight: "400" },
   dot: { width: 8, height: 8, borderRadius: 4 },
-  legend: { flexDirection: "row", flexWrap: "wrap", gap: space(3), paddingTop: space(2), borderTopWidth: 1, borderTopColor: colors.border },
+  legend: { flexDirection: "row", flexWrap: "wrap", gap: space(3), paddingTop: space(2), paddingHorizontal: space(2), borderTopWidth: 1, borderTopColor: colors.border },
   legendItem: { flexDirection: "row", alignItems: "center", gap: space(1.5) },
   legendText: { ...type.small, color: colors.fgMuted },
 });

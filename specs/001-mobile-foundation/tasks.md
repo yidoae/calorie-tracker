@@ -190,7 +190,7 @@ targets show the training or rest day.
 **Independent Test**: Meals on three days; the calendar marks match ±5 % of each day's target; each day opens.
 
 - [x] T055 [US5] `mealService.getMonthTotals` and `apps/mobile/src/hooks/useMonthCalendar.ts` (per-day sums, core `rateDay` against that day's targets) Done; pure rules in `hooks/historyLogic.ts` (node:test); a day is judged by the last plan saved by the end of that local day (`planService.getPlans`, the plan history), so today matches the dashboard; days before the first plan use the first plan
-- [ ] T056 [US5] `apps/mobile/src/app/(tabs)/history.tsx` (calendar, months back/forward) and `apps/mobile/src/app/day/[date].tsx` (meals and totals vs that day's targets), components in `apps/mobile/src/components/history/` Done; Monday-first grid with a legend, today outlined, no months after the current one, future days not openable; the day screen reuses the dashboard's `DaySummary` and `SlotMeals`; RLS on the month read is covered by `rls.test.sql` ("B sees no meals of others"), no new pgTAP
+- [x] T056 [US5] `apps/mobile/src/app/(tabs)/history.tsx` (calendar, months back/forward) and `apps/mobile/src/app/day/[date].tsx` (meals and totals vs that day's targets), components in `apps/mobile/src/components/history/` Done; Monday-first grid with a legend, today outlined, no months after the current one, future days not openable; the day screen reuses the dashboard's `DaySummary` and `SlotMeals`; RLS on the month read is covered by `rls.test.sql` ("B sees no meals of others"), no new pgTAP
 
 **Checkpoint**: All five stories work independently.
 

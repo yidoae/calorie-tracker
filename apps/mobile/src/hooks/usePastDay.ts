@@ -7,14 +7,14 @@ import { useToday } from "./useToday";
 
 /**
  * A day from the calendar (US5): its meals and totals against that day's own targets. `valid` is
- * false for a malformed or future date in the link; the screen then shows an error instead.
+ * false for a malformed or future date in the link; the screen then shows an error and no meals load.
  */
 export function usePastDay(param: string | undefined) {
   const { localDate: today, timeZone } = useToday();
   const valid = isOpenableDay(param, today);
   const localDate = valid ? param : today;
   const plans = usePlans();
-  const meals = useDayMeals(localDate);
+  const meals = useDayMeals(localDate, valid);
   const list = meals.data ?? [];
 
   return {
