@@ -1,0 +1,41 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {},
+    "apps/mobile": {
+      "entry": [
+        "src/app/**/*.tsx",
+        "tests/**/*.test.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx}",
+        "tests/**/*.ts"
+      ],
+      "ignoreDependencies": [
+        "expo-updates"
+      ]
+    },
+    "packages/core": {
+      "entry": [
+        "src/**/*.ts",
+        "tests/**/*.test.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "tests/**/*.ts"
+      ]
+    },
+    "tools/preview": {
+      "entry": [
+        "scripts/*.mjs",
+        "src/fakes/*.{ts,tsx}"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx}"
+      ],
+      "ignoreDependencies": [
+        "expo-updates"
+      ]
+    }
+  }
+}

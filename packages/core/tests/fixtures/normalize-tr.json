@@ -1,0 +1,19 @@
+[
+  ["İSTANBUL", "istanbul"],
+  ["ISPANAK", "ispanak"],
+  ["ıspanak", "ispanak"],
+  ["Tavuk Göğsü", "tavuk gogsu"],
+  ["ÇİĞ KÖFTE", "cig kofte"],
+  ["Şekerli Üzüm", "sekerli uzum"],
+  ["  Mercimek   çorbası ", "mercimek corbasi"],
+  ["tavuğu", "tavugu"],
+  ["Kâse", "kase"],
+  ["Îmâm bayıldı", "imam bayildi"],
+  ["Ûsküdar", "uskudar"],
+  ["süt\tve\nbal", "sut ve bal"],
+  ["beyaz\u00a0peynir", "beyaz peynir"],
+  ["CAFÉ Ñ", "café ñ"],
+  ["Ayran 200 ml", "ayran 200 ml"],
+  ["", ""],
+  ["   ", ""]
+]

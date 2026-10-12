@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Kalori Takip önizleme",
+    "slug": "kalori-takip-preview",
+    "platforms": [
+      "web"
+    ],
+    "web": {
+      "output": "single",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}

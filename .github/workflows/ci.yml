@@ -1,5 +1,7 @@
-# Runs on every pull request and every push to master: unit tests, types, lint and a production
-# build. The same commands the project asks for before a change is done (see CLAUDE.md).
+# Runs on every pull request and every push to master: types, lint, unused code (knip) and the
+# @calorie/core tests. The pgTAP database tests (supabase/tests/database) run in their own job only
+# when the SUPABASE_DB_URL secret is set, so forks without secrets still pass. Every test file rolls
+# back, so running them against the dev project leaves nothing behind.
 name: CI
 
 on:
@@ -7,7 +9,6 @@ on:
   push:
     branches: [master]
 
-# A newer push to the same branch/PR cancels the run that is still going.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -19,32 +20,30 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      # SQLite file next to prisma/schema.prisma; created by the migrate step below.
-      DATABASE_URL: file:./ci.db
-      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
-      - name: Install (also runs prisma generate)
-        run: npm ci
-
-      - name: Apply database migrations
-        run: npx prisma migrate deploy
-
-      - name: Unit tests
-        run: npm test
-
+      - run: npm ci
       - name: Typecheck
         run: npm run typecheck
-
       - name: Lint
         run: npm run lint
+      - name: Unused files, exports and dependencies
+        run: npm run knip
+      - name: Core tests
+        run: npm test -w @calorie/core
 
-      - name: Build
-        run: npm run build
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.SUPABASE_DB_URL != ''
+      - name: pgTAP tests against the dev project
+        if: env.SUPABASE_DB_URL != ''
+        run: npx --yes supabase@2.120.0 test db --db-url "$SUPABASE_DB_URL"

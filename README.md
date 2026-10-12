@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kalori Takip
 
-## Getting Started
+A Turkish calorie and macro tracker for iOS and Android, built with Expo on Supabase: sign up, a
+short setup that builds your plan, meal logging by food search and grams, a plan wizard with live
+tuning, and a calendar of past days.
 
-First, run the development server:
+## Setup
+
+Prerequisites: Node 22+, npm, a Supabase project (URL + publishable key), and Expo Go or a
+development build on a phone (Google and Apple sign-in need a development build).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install                                    # all workspaces
+cp apps/mobile/.env.example apps/mobile/.env   # EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_KEY
+npx supabase link --project-ref <ref>          # then apply supabase/migrations (see supabase/README.md)
+npm run mobile                                 # Metro; scan the QR code
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Full setup and the manual validation steps:
+[specs/001-mobile-foundation/quickstart.md](specs/001-mobile-foundation/quickstart.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm test                                           # core and app unit/property tests
+npm run typecheck && npm run lint && npm run knip  # types, layer rules, unused code
+npm run preview                                    # screen gallery (tools/preview/dist/artifact.html)
+maestro test .maestro/smoke.yaml                   # smoke flow on a device or emulator
+```
 
-## Learn More
+Database migrations and pgTAP tests: [supabase/README.md](supabase/README.md).
 
-To learn more about Next.js, take a look at the following resources:
+## Where things are written down
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Rules:** `.specify/memory/constitution.md`; features live in `specs/` (Spec Kit).
+- **Architecture and conventions:** `CLAUDE.md`.
+- **Design system:** `tofuhq-design/` and the tokens in `apps/mobile/src/theme.ts`.

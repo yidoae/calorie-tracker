@@ -1,0 +1,30 @@
+{
+  "name": "@calorie/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pure nutrition logic and Zod schemas for the app; no platform imports.",
+  "exports": {
+    "./nutrition/*": "./src/nutrition/*.ts",
+    "./schemas/*": "./src/schemas/*.ts",
+    "./search/*": "./src/search/*.ts",
+    "./dates": "./src/dates.ts",
+    "./labels": "./src/labels.ts"
+  },
+  "scripts": {
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "eslint": "^9.39.5",
+    "fast-check": "^4.10.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "typescript-eslint": "^8.71.1"
+  }
+}

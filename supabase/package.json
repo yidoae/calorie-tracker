@@ -1,0 +1,10 @@
+{
+  "name": "@calorie/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Supabase migrations and the pgTAP database tests (tests/database). Not part of the root npm test: test:db needs Docker and the dev database URL.",
+  "scripts": {
+    "test:db": "npx --yes supabase@2.120.0 test db --db-url \"$SUPABASE_DB_URL\""
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["../../apps/mobile/src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "../../apps/mobile/expo-env.d.ts"]
+}
