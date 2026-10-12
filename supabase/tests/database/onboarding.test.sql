@@ -4,7 +4,7 @@
 -- inside this transaction; nothing persists.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(47);
+select plan(50);
 
 insert into auth.users (id, email) values
   ('a2000000-0000-4000-8000-0000000000a2', 'onboarding-a@test.invalid'),
@@ -157,6 +157,12 @@ select throws_ok(
   $$select public.save_plan(jsonb_set(current_setting('test.cycling_plan')::jsonb, '{cycle,rest}', '{"calories": 1150, "protein": 100, "carbs": 120, "fat": 30}'))$$,
   '23514', 'plan_below_floor', 'save_plan refuses a rest day below the floor');
 select throws_ok(
+  $$select public.save_plan(jsonb_set(current_setting('test.cycling_plan')::jsonb, '{cycle,training}', '{"calories": 1180, "protein": 154, "carbs": 51, "fat": 40}'))$$,
+  '23514', 'plan_below_floor', 'save_plan refuses a training day below the floor (US4: every day of a tuned plan)');
+select throws_ok(
+  $$select public.save_plan(jsonb_set(current_setting('test.cycling_plan')::jsonb, '{base}', '{"calories": 1190, "protein": 154, "carbs": 54, "fat": 40}'))$$,
+  '23514', 'plan_below_floor', 'save_plan refuses a cycling plan whose weekly average is below the floor');
+select throws_ok(
   $$select public.save_plan(jsonb_set(current_setting('test.plan')::jsonb, '{inputs,sex}', '"male"'))$$,
   '22023', 'invalid_plan', 'save_plan refuses a plan for another sex than the profile''s (it would move the floor)');
 select results_eq($$select count(*)::int, count(*) filter (where is_active)::int from public.nutrition_plans$$, $$values (2, 1)$$,
@@ -183,6 +189,10 @@ select lives_ok(
       "fastingWindowStart": 12, "cycling": true},
     "bmr": 1476, "tdee": 1771, "base": {"calories": 1271, "protein": 154, "carbs": 0, "fat": 73}, "cycle": null, "strategySummary": "Test planı."}')$$,
   'save_plan accepts cycling switched on for a sedentary routine (the engine builds no cycle without training days)');
+-- A plan tuned on the review screen (core tunedPlan): the cycle's days with their weekly average as base.
+select lives_ok(
+  $$select public.save_plan(jsonb_set(current_setting('test.cycling_plan')::jsonb, '{base}', '{"calories": 1714, "protein": 154, "carbs": 100, "fat": 78}'))$$,
+  'save_plan accepts a tuned cycling plan whose base is the weekly average');
 select lives_ok(
   $$select public.save_plan('{"inputs": {"sex": "female", "heightCm": 165, "weightKg": 70, "age": 30, "targetWeightKg": null, "goal": "maintain", "intensity": 0,
       "trainingStyle": "strength", "split": "upperLower", "trainingDays": [0, 1, 3, 4], "dietStyle": "highProtein", "fatPerKg": 1.2, "mealPattern": "classic",
@@ -206,7 +216,7 @@ select results_eq(
   $$select user_id, count(*)::int, count(*) filter (where is_active)::int from public.nutrition_plans
      where user_id in ('a2000000-0000-4000-8000-0000000000a2', 'b2000000-0000-4000-8000-0000000000b2')
      group by user_id order by user_id$$,
-  $$values ('a2000000-0000-4000-8000-0000000000a2'::uuid, 5, 1), ('b2000000-0000-4000-8000-0000000000b2'::uuid, 1, 1)$$,
+  $$values ('a2000000-0000-4000-8000-0000000000a2'::uuid, 6, 1), ('b2000000-0000-4000-8000-0000000000b2'::uuid, 1, 1)$$,
   'each user has their own plans with one active plan each; B''s setup did not touch A''s');
 
 select * from finish();
