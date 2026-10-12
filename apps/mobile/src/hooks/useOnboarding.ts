@@ -141,6 +141,7 @@ export function useOnboarding(step: SetupStep) {
       }
     }
     await queryClient.invalidateQueries({ queryKey: ["activePlan"] });
+    await queryClient.invalidateQueries({ queryKey: ["plans"] });
     await queryClient.invalidateQueries({ queryKey: ["profile"] });
   }
 

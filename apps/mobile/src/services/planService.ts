@@ -33,6 +33,13 @@ export async function savePlan(plan: PlanPayload): Promise<NutritionPlan> {
   return planRowSchema.parse(data);
 }
 
+/** All of the user's plans, oldest first: the active one and the history the calendar judges past days by. */
+export async function getPlans(): Promise<NutritionPlan[]> {
+  const { data, error } = await supabase.from("nutrition_plans").select("*").order("created_at");
+  if (error) throw toAppError(error);
+  return planRowSchema.array().parse(data);
+}
+
 /** The signed-in user's active plan; null if there is none (RLS limits the rows to the user's own). */
 export async function getActivePlan(): Promise<NutritionPlan | null> {
   const { data, error } = await supabase.from("nutrition_plans").select("*").eq("is_active", true).maybeSingle();

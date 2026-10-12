@@ -1,10 +1,11 @@
+import { monthBounds } from "@calorie/core/dates";
 import { gramsSchema } from "@calorie/core/schemas/nutrition";
 import { logMealPayloadSchema, type LogMealPayload, type Meal } from "@calorie/core/schemas/meal";
-import { loggedMealRowSchema, mealRowSchema, type LoggedMeal } from "@calorie/core/schemas/rows";
+import { loggedMealRowSchema, mealKcalRowSchema, mealRowSchema, type LoggedMeal, type MealKcal } from "@calorie/core/schemas/rows";
 import { appError, toAppError } from "./errors";
 import { supabase } from "./supabase";
 
-export type { LoggedMeal, Meal };
+export type { LoggedMeal, Meal, MealKcal };
 
 /*
  * Meals (US3, contracts/database-api.md). A new meal and its items are saved in one step by
@@ -34,6 +35,14 @@ export async function getDayMeals(localDate: string): Promise<Meal[]> {
   const { data, error } = await supabase.from("meals").select(MEAL_WITH_ITEMS).eq("local_date", localDate).order("logged_at");
   if (error) throw toAppError(error);
   return mealRowSchema.array().parse(data);
+}
+
+/** Every meal's day and calories in the month `month` falls in (FR-019); the app sums and rates the days. */
+export async function getMonthTotals(month: Date): Promise<MealKcal[]> {
+  const { from, to } = monthBounds(month);
+  const { data, error } = await supabase.from("meals").select("local_date, total_kcal").gte("local_date", from).lte("local_date", to);
+  if (error) throw toAppError(error);
+  return mealKcalRowSchema.array().parse(data);
 }
 
 /** One of the user's meals; null when it does not exist (or is someone else's: RLS hides it). */

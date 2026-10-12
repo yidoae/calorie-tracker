@@ -36,6 +36,7 @@ export function usePlanTuner(plan: NutritionPlan) {
     mutationFn: () => savePlan(planPayloadSchema.parse(result)),
     onSuccess: (saved) => {
       void queryClient.invalidateQueries({ queryKey: ["activePlan"] });
+      void queryClient.invalidateQueries({ queryKey: ["plans"] });
       toast.show("success", "Aktif planın kaydedildi", `${saved.cycle ? "Haftalık ortalama" : "Günlük hedef"} ${saved.base.calories.toLocaleString(LOCALE)} kcal`);
     },
   });
