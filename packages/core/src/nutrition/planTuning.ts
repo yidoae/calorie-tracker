@@ -1,5 +1,6 @@
-import type { DayTargets } from "../schemas/plan.ts";
+import type { DayTargets, NutritionPlan } from "../schemas/plan.ts";
 import { KCAL_PER_GRAM } from "./macros.ts";
+import { calorieFloor } from "./plan.ts";
 
 /*
  * Fine-tuning a day's targets on the review screen. Two modes:
@@ -53,6 +54,33 @@ export function withCalories(day: DayTargets, calories: number, floor: number): 
     carbs: Math.round((budget * carbShare) / KCAL_PER_GRAM.carbs),
     fat: Math.round((budget * (1 - carbShare)) / KCAL_PER_GRAM.fat),
   };
+}
+
+/** The days the review screen tunes: the plan's one day, or its training and rest days when it cycles. */
+export const TUNER_DAYS = ["base", "training", "rest"] as const;
+export type TunerDay = (typeof TUNER_DAYS)[number];
+type TunerDays = Record<TunerDay, DayTargets>;
+
+/** Editable copies of a plan's days; without cycling every tab starts from the base. */
+export function tunerDays(plan: NutritionPlan): TunerDays {
+  return { base: plan.base, training: plan.cycle?.training ?? plan.base, rest: plan.cycle?.rest ?? plan.base };
+}
+
+/**
+ * The weekly average of the training and rest days. Averaging rounded grams can drift from the
+ * calories by more than the database allows, so carbs and fat are re-shared (withCalories) to add up.
+ */
+function weeklyAverage(training: DayTargets, rest: DayTargets, trainingDays: number, floor: number): DayTargets {
+  const avg = (field: keyof DayTargets) => (training[field] * trainingDays + rest[field] * (7 - trainingDays)) / 7;
+  const day = { calories: 0, protein: Math.round(avg("protein")), carbs: avg("carbs"), fat: avg("fat") };
+  return withCalories(day, avg("calories"), floor);
+}
+
+/** The plan with the tuned days; when it cycles, its base becomes the weekly average (what the plan tab shows). */
+export function tunedPlan(plan: NutritionPlan, days: TunerDays): NutritionPlan {
+  if (!plan.cycle) return { ...plan, base: days.base, cycle: null };
+  const base = weeklyAverage(days.training, days.rest, plan.inputs.trainingDays.length, calorieFloor(plan.inputs.sex));
+  return { ...plan, base, cycle: { training: days.training, rest: days.rest } };
 }
 
 /** Slider bounds for a macro in grams (protein relative to body weight), or for calories (from the floor). */

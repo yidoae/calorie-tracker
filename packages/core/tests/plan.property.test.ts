@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import fc from "fast-check";
-import { calorieFloor, formulaPlan } from "../src/nutrition/plan.ts";
-import { energyOf, MACRO_FIELDS, withCalories, withMacro } from "../src/nutrition/planTuning.ts";
+import { buildPlan, calorieFloor, formulaPlan } from "../src/nutrition/plan.ts";
+import { energyOf, MACRO_FIELDS, macroRange, TUNER_DAYS, tunedPlan, tunerDays, withCalories, withMacro } from "../src/nutrition/planTuning.ts";
 import {
   DIET_STYLES,
   INTENSITY_RANGE,
   MEAL_PATTERNS,
+  nutritionPlanSchema,
   PLAN_GOALS,
   planInputsSchema,
   STRENGTH_SPLITS,
@@ -114,6 +115,39 @@ describe("tuning invariants", () => {
           day = m.kind === "macro" ? withMacro(day, m.field, m.grams, m.lock, floor) : withCalories(day, m.calories, floor);
           assertDay(day, floor, m.kind === "macro" ? `${m.field} ${m.lock ? "locked" : "free"}` : "calories");
         }
+      }),
+      { numRuns: 1000 },
+    );
+  });
+
+  // What the review screen can do: pick a day tab, move a slider within its range (macroRange),
+  // with "Kalori sabit" on or off. The saved plan's base is then the weekly average when cycling.
+  const uiMove = fc.record({
+    day: fc.constantFrom(...TUNER_DAYS),
+    field: fc.constantFrom(...MACRO_FIELDS, "calories" as const),
+    share: fc.double({ min: 0, max: 1, noNaN: true }),
+    lock: fc.boolean(),
+  });
+
+  it("any slider moves on the review screen give a plan whose every day, the weekly average included, holds", () => {
+    fc.assert(
+      fc.property(planInputs.map((i) => ({ ...i, cycling: true })), fc.array(uiMove, { maxLength: 16 }), (inputs, moves) => {
+        const floor = calorieFloor(inputs.sex);
+        const plan = buildPlan(inputs, { id: "p", createdAt: "2026-10-12T00:00:00.000Z" });
+        const days = tunerDays(plan);
+        for (const m of moves) {
+          const day = plan.cycle ? m.day : "base";
+          const r = macroRange(m.field, inputs.weightKg, floor);
+          const value = r.min + Math.round(((r.max - r.min) * m.share) / r.step) * r.step;
+          days[day] = m.field === "calories" ? withCalories(days[day], value, floor) : withMacro(days[day], m.field, value, m.lock, floor);
+        }
+        const tuned = tunedPlan(plan, days);
+        assertDay(tuned.base, floor, "weekly average");
+        if (tuned.cycle) {
+          assertDay(tuned.cycle.training, floor, "training");
+          assertDay(tuned.cycle.rest, floor, "rest");
+        }
+        assert.ok(nutritionPlanSchema.safeParse(tuned).success, "the tuned plan still parses");
       }),
       { numRuns: 1000 },
     );

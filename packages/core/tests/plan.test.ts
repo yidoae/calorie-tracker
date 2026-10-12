@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { baseGrams, formulaPlan, LOW_CARB_MAX_G, macrosFor } from "../src/nutrition/plan.ts";
+import { baseGrams, buildPlan, formulaPlan, LOW_CARB_MAX_G, macrosFor } from "../src/nutrition/plan.ts";
+import { tunedPlan, tunerDays } from "../src/nutrition/planTuning.ts";
 import { planInputsSchema, type PlanInputs } from "../src/schemas/plan.ts";
 
 const inputs: PlanInputs = {
@@ -67,5 +68,36 @@ describe("formulaPlan", () => {
     const old: Record<string, unknown> = { ...inputs };
     delete old.fatPerKg;
     assert.equal(planInputsSchema.parse(old).fatPerKg, 1.2);
+  });
+});
+
+describe("tunedPlan", () => {
+  const training = { calories: 1920, protein: 154, carbs: 175, fat: 67 };
+  const rest = { calories: 1440, protein: 154, carbs: 0, fat: 92 };
+  const plan = buildPlan({ ...inputs, cycling: true }, { id: "p", createdAt: "2026-10-12T00:00:00.000Z" });
+
+  it("starts the tuning desk from the plan's days (base for every tab when it does not cycle)", () => {
+    const flat = buildPlan(inputs, { id: "p", createdAt: "2026-10-12T00:00:00.000Z" });
+    assert.deepEqual(tunerDays(flat), { base: flat.base, training: flat.base, rest: flat.base });
+    assert.ok(plan.cycle);
+    assert.deepEqual(tunerDays(plan), { base: plan.base, training: plan.cycle.training, rest: plan.cycle.rest });
+  });
+
+  it("a cycling plan's base becomes the weekly average, nudged so its grams add up to its calories", () => {
+    const tuned = tunedPlan(plan, { base: plan.base, training, rest });
+    assert.deepEqual(tuned.cycle, { training, rest });
+    // (1920·4 + 1440·3) / 7 = 1714.3 kcal; protein stays, carbs and fat share the rest.
+    assert.deepEqual(tuned.base, { calories: 1714, protein: 154, carbs: 100, fat: 78 });
+    assert.ok(Math.abs(kcalOf(tuned.base) - tuned.base.calories) <= 10);
+  });
+
+  it("a plan without cycling keeps the tuned base and no cycle", () => {
+    const flat = buildPlan(inputs, { id: "p", createdAt: "2026-10-12T00:00:00.000Z" });
+    const base = { calories: 2000, protein: 180, carbs: 200, fat: 51 };
+    const tuned = tunedPlan(flat, { base, training, rest });
+    assert.deepEqual(tuned.base, base);
+    assert.equal(tuned.cycle, null);
+    assert.equal(tuned.id, flat.id);
+    assert.deepEqual(tuned.inputs, flat.inputs);
   });
 });
