@@ -1,11 +1,13 @@
 /*
  * npm run build -w fooddata (contracts/pipeline.md): loads the sources and the committed USDA
  * extract, resolves every food's values (USDA entry, printed label, or recipe), runs the build rules
- * and reports every failure. When the list is valid it writes the search-case test, and with
- * `-- --release <version>` the next list migration. The summary and review page come with T030.
+ * and reports every failure. When the list is valid it writes the search-case test, out/foods.txt and
+ * dist/review.html, and with `-- --release <version>` the list migration; `-- --check` writes nothing
+ * and fails when a committed output differs from a fresh build (CI).
  */
-import { readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { searchCasesSql } from "./emit/searchCases.ts";
+import { reviewHtml } from "./emit/review.ts";
 import { listMigrationSql } from "./emit/sql.ts";
 import { summaryText } from "./emit/summary.ts";
 import { cookedWeight, recipePer100, type Per100, type ResolvedYield } from "./recipe.ts";
@@ -64,18 +66,44 @@ if (errors.length > 0) {
 }
 
 const SUPABASE = new URL("../../../supabase/", import.meta.url);
-writeFileSync(new URL("tests/database/search_cases.test.sql", SUPABASE), searchCasesSql(searchCases));
-writeFileSync(new URL("../out/foods.txt", import.meta.url), summaryText(foods));
-console.log(`search cases: ${searchCases.length}`);
+const SUMMARY = new URL("../out/foods.txt", import.meta.url);
+const MIGRATIONS = new URL("migrations/", SUPABASE);
+const read = (url: URL) => (existsSync(url) ? readFileSync(url, "utf8") : "");
+const listFiles = readdirSync(MIGRATIONS).filter((f) => /_food_(release|list)_\d+\.sql$/.test(f)).sort();
+const withdrawnIds = withdrawn.map((w) => w.id);
 
-const at = process.argv.indexOf("--release");
-if (at >= 0) {
-  const version = process.argv[at + 1] ?? "";
-  if (!/^\d{14}$/.test(version)) throw new Error("--release needs a migration version, e.g. 20261020000100");
+/** The list migration for `version`; a rerun with the same version keeps its own number. */
+function listMigration(version: string): [URL, string] {
   // Release 1 came from the retired tools/food-data (20261014000200_food_release_1.sql).
-  // A rerun with the same version rewrites its own file instead of numbering a new list.
-  const previous = readdirSync(new URL("migrations/", SUPABASE)).filter((f) => /_food_(release|list)_\d+\.sql$/.test(f) && !f.startsWith(version)).length;
-  const file = `${version}_food_list_${previous + 1}.sql`;
-  writeFileSync(new URL(`migrations/${file}`, SUPABASE), listMigrationSql(foods, withdrawn.map((w) => w.id), `Food list ${previous + 1}`));
-  console.log(`wrote supabase/migrations/${file}`);
+  const number = listFiles.filter((f) => !f.startsWith(version)).length + 1;
+  return [new URL(`${version}_food_list_${number}.sql`, MIGRATIONS), listMigrationSql(foods, withdrawnIds, `Food list ${number}`)];
+}
+
+const outputs: [URL, string][] = [
+  [new URL("tests/database/search_cases.test.sql", SUPABASE), searchCasesSql(searchCases)],
+  [SUMMARY, summaryText(foods)],
+];
+
+if (process.argv.includes("--check")) {
+  // CI (T031, SC-003): rebuild in memory; every committed output must match byte for byte.
+  const latest = listFiles.filter((f) => f.includes("_food_list_")).at(-1);
+  if (latest) outputs.push(listMigration(latest.slice(0, 14)));
+  const stale = outputs.filter(([url, text]) => read(url) !== text).map(([url]) => url.pathname.slice(url.pathname.indexOf("/supabase/") >= 0 ? url.pathname.indexOf("/supabase/") + 1 : url.pathname.indexOf("/tools/") + 1));
+  if (stale.length > 0) {
+    console.error(`out of date (run npm run build -w fooddata and commit):\n${stale.map((s) => `  ${s}`).join("\n")}`);
+    process.exit(1);
+  }
+  console.log("check: committed outputs match the sources");
+} else {
+  const review = reviewHtml(foods, read(SUMMARY));
+  const at = process.argv.indexOf("--release");
+  if (at >= 0) {
+    const version = process.argv[at + 1] ?? "";
+    if (!/^\d{14}$/.test(version)) throw new Error("--release needs a migration version, e.g. 20261020000100");
+    outputs.push(listMigration(version));
+  }
+  for (const [url, text] of outputs) writeFileSync(url, text);
+  mkdirSync(new URL("../dist/", import.meta.url), { recursive: true });
+  writeFileSync(new URL("../dist/review.html", import.meta.url), review);
+  console.log(`search cases: ${searchCases.length}; wrote ${outputs.length} files and dist/review.html`);
 }

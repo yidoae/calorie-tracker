@@ -81,23 +81,31 @@ Notes from Phase 2 (2026-10-15):
 
 ### Tests for User Story 1
 
-- [ ] T013 [P] [US1] SQL emitter test `tools/fooddata/tests/sql.test.ts`: the upsert covers every column but `id`, aliases and portions are deleted and reinserted only for listed ids, withdrawn ids get `withdrawn = true`, listed ids `false`, the file ends with `validate constraint foods_category_check`, there is no `delete from foods` and no `meal_items`/`meals`, and two runs give identical text
-- [ ] T014 [P] [US1] Search-case emitter test `tools/fooddata/tests/searchCases.test.ts`: one pgTAP check per case for top-3 and a counted check that ≥ 95 % are first (SC-002); stable order
+- [x] T013 [P] [US1] SQL emitter test `tools/fooddata/tests/sql.test.ts`: the upsert covers every column but `id`, aliases and portions are deleted and reinserted only for listed ids, withdrawn ids get `withdrawn = true`, listed ids `false`, the file ends with `validate constraint foods_category_check`, there is no `delete from foods` and no `meal_items`/`meals`, and two runs give identical text
+- [x] T014 [P] [US1] Search-case emitter test `tools/fooddata/tests/searchCases.test.ts`: one pgTAP check per case for top-3 and a counted check that ≥ 95 % are first (SC-002); stable order
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Start from release 1 (`supabase/migrations/20261014000200_food_release_1.sql`, 118 foods incl. the 001 ids, FDC refs and aliases; research §10) and re-source the 79 foods of 001 with their ids kept (FR-006): staples and raw foods to `tools/fooddata/sources/foods/*.ts` with FDC ids; cooked/prepared forms carry their state in the name ("(pişmiş)", "(haşlanmış)"); kaşar, white bread and simit from FDC or a cited label (FR-006); their former `unit_weights` become `portions`
-- [ ] T016 [P] [US1] Raw ingredients by category in `tools/fooddata/sources/foods/{meat,poultry,fish,egg,dairy,legume,grain,bread,vegetable,fruit,nut_seed,oil,sweet,drink,alcohol}.ts`: Turkish names (≤ 80 chars, no brands), ≥ 1 alias each incl. common misspellings and ASCII forms, FDC ids, typical portion and unit portions where natural; alcoholic drinks with alcohol g/100 g (clarify Q3)
-- [ ] T017 [P] [US1] Generic label foods in `tools/fooddata/sources/labels.ts` only where no FDC entry fits (e.g. gofret, lokum): product and date in the reference, generic name (FR-004b)
-- [ ] T018 [P] [US1] ≥ 80 Turkish dishes in `tools/fooddata/sources/recipes/*.ts` (çorbalar, zeytinyağlılar, etli yemekler, baklagiller, pilavlar, hamur işleri, tatlılar, kahvaltılık): ingredients in raw grams from the list, water, `fndds` yield with the closest FNDDS food code (or `usda_meat_yield` for grilled meats), typical portion and "porsiyon"/"kase" portions
-- [ ] T019 [US1] Run `npm run fetch -w fooddata` for every FDC id in T015–T018 and commit `sources/usda/extract.json` and `release.json` with the real file names and hashes
-- [ ] T020 [P] [US1] Draft ≥ 100 everyday searches in `tools/fooddata/sources/search-cases.ts` (staples bare and with suffixes, ASCII spellings, dishes, drinks) → expected food id
-- [ ] T021 [US1] `tools/fooddata/src/emit/sql.ts` and `emit/searchCases.ts`; `build --release <version>` writes `supabase/migrations/<version>_food_list_1.sql` and `supabase/tests/database/search_cases.test.sql`; make T013, T014 pass
-- [ ] T022 [US1] Fix every build failure in the sources until `npm run build -w fooddata` exits 0 with ≥ 450 foods and ≥ 80 dishes (SC-001)
+- [x] T015 [P] [US1] Start from release 1 (`supabase/migrations/20261014000200_food_release_1.sql`, 118 foods incl. the 001 ids, FDC refs and aliases; research §10) and re-source the 79 foods of 001 with their ids kept (FR-006): staples and raw foods to `tools/fooddata/sources/foods/*.ts` with FDC ids; cooked/prepared forms carry their state in the name ("(pişmiş)", "(haşlanmış)"); kaşar, white bread and simit from FDC or a cited label (FR-006); their former `unit_weights` become `portions`
+- [x] T016 [P] [US1] Raw ingredients by category in `tools/fooddata/sources/foods/{meat,poultry,fish,egg,dairy,legume,grain,bread,vegetable,fruit,nut_seed,oil,sweet,drink,alcohol}.ts`: Turkish names (≤ 80 chars, no brands), ≥ 1 alias each incl. common misspellings and ASCII forms, FDC ids, typical portion and unit portions where natural; alcoholic drinks with alcohol g/100 g (clarify Q3)
+- [x] T017 [P] [US1] Generic label foods in `tools/fooddata/sources/labels.ts` only where no FDC entry fits (e.g. gofret, lokum): product and date in the reference, generic name (FR-004b)
+- [x] T018 [P] [US1] ≥ 80 Turkish dishes in `tools/fooddata/sources/recipes/*.ts` (çorbalar, zeytinyağlılar, etli yemekler, baklagiller, pilavlar, hamur işleri, tatlılar, kahvaltılık): ingredients in raw grams from the list, water, `fndds` yield with the closest FNDDS food code (or `usda_meat_yield` for grilled meats), typical portion and "porsiyon"/"kase" portions
+- [x] T019 [US1] Run `npm run fetch -w fooddata` for every FDC id in T015–T018 and commit `sources/usda/extract.json` and `release.json` with the real file names and hashes
+- [x] T020 [P] [US1] Draft ≥ 100 everyday searches in `tools/fooddata/sources/search-cases.ts` (staples bare and with suffixes, ASCII spellings, dishes, drinks) → expected food id
+- [x] T021 [US1] `tools/fooddata/src/emit/sql.ts` and `emit/searchCases.ts`; `build --release <version>` writes `supabase/migrations/<version>_food_list_1.sql` and `supabase/tests/database/search_cases.test.sql`; make T013, T014 pass
+- [x] T022 [US1] Fix every build failure in the sources until `npm run build -w fooddata` exits 0 with ≥ 450 foods and ≥ 80 dishes (SC-001)
 - [ ] T023 [US1] Apply `<version>_food_list_1.sql` to the dev project; run all pgTAP files; tune aliases (never the SQL ranking) until `search_cases.test.sql` passes (SC-002); record the before/after totals of one existing day for SC-007
-- [ ] T024 [US1] Add a "Veri kaynakları" section to `apps/mobile/src/app/(tabs)/profile.tsx` with the research.md §9 text (FR-015) and add it to the preview gallery
+- [x] T024 [US1] Add a "Veri kaynakları" section to `apps/mobile/src/app/(tabs)/profile.tsx` with the research.md §9 text (FR-015) and add it to the preview gallery
 
 **Checkpoint**: US1 independently: the dev project searches the new list; old meals show unchanged totals.
+
+Notes from Phase 3 (2026-10-15):
+- The list is 461 foods: 355 USDA, 2 label (kaşar, sucuk), 104 recipes (95 dishes). Release 1's 92 USDA foods were converted as they were (the fetched values match release 1 exactly); its 24 recipes were rewritten from their names (research §11).
+- Energy rule: ±20 % or ±10 kcal of 4P + 4C + 9F + 7A; spices, dried herbs, cocoa, lemon, vinegar and baking powder carry an `energyException` with the reason (USDA's own energy factors, fibre, acetic acid, minerals).
+- Recipes may be in any category (ayran, baklava, simit) and may use label foods as ingredients, never another recipe.
+- T020: the 116 search cases are a draft for the owner; a local simulation of `search_foods` puts every case first.
+- The generated migration is `20261015000300_food_list_2.sql` (release 1 is list 1); a rerun with the same version rewrites the same bytes.
+- T030 summary and review page, and the T031 `--check` mode, were built here because the list needed them.
 
 ---
 
@@ -129,12 +137,12 @@ Notes from Phase 2 (2026-10-15):
 
 ### Tests for User Story 3
 
-- [ ] T029 [P] [US3] `tools/fooddata/tests/outputs.test.ts`: `foods.txt` line format per contracts/pipeline.md; two builds byte-identical (SC-003); the review HTML contains every food, the category and source filters, and marks a food whose summary line changed
+- [x] T029 [P] [US3] `tools/fooddata/tests/outputs.test.ts`: `foods.txt` line format per contracts/pipeline.md; two builds byte-identical (SC-003); the review HTML contains every food, the category and source filters, and marks a food whose summary line changed
 
 ### Implementation for User Story 3
 
-- [ ] T030 [US3] `tools/fooddata/src/emit/summary.ts` → `tools/fooddata/out/foods.txt` (committed) and `src/emit/review.ts` → `tools/fooddata/dist/review.html` (single file, inline CSS/JS, no network, search box, category and source-kind filters, expandable recipe rows, "değişti" marks against the committed summary); make T029 pass
-- [ ] T031 [US3] `tools/fooddata/src/check.ts` (`npm run check -w fooddata`): rebuild into a temp dir, fail if `out/foods.txt`, `search_cases.test.sql` or the latest `*_food_list_*.sql` differ; add the step to `.github/workflows/ci.yml` in the `check` job
+- [x] T030 [US3] `tools/fooddata/src/emit/summary.ts` → `tools/fooddata/out/foods.txt` (committed) and `src/emit/review.ts` → `tools/fooddata/dist/review.html` (single file, inline CSS/JS, no network, search box, category and source-kind filters, expandable recipe rows, "değişti" marks against the committed summary); make T029 pass
+- [x] T031 [US3] `tools/fooddata/src/check.ts` (`npm run check -w fooddata`): rebuild into a temp dir, fail if `out/foods.txt`, `search_cases.test.sql` or the latest `*_food_list_*.sql` differ; add the step to `.github/workflows/ci.yml` in the `check` job
 - [ ] T032 [US3] Publish `review.html` as a claude.ai artifact for the owner; apply the owner's corrections in the sources (ingredients, names, weighings) and rebuild until sign-off
 
 **Checkpoint**: The owner has signed off the review page (SC-008).

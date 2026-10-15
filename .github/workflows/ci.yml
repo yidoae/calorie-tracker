@@ -1,5 +1,6 @@
 # Runs on every pull request and every push to master: types, lint, unused code (knip) and the
-# unit tests of every workspace (@calorie/core and the app's pure helpers). The pgTAP database tests (supabase/tests/database) run in their own job only
+# unit tests of every workspace (@calorie/core, the app's pure helpers, tools/fooddata) and the food-list
+# check (committed list outputs match their sources). The pgTAP database tests (supabase/tests/database) run in their own job only
 # when the SUPABASE_DB_URL secret is set, so forks without secrets still pass. Every test file rolls
 # back, so running them against the dev project leaves nothing behind.
 name: CI
@@ -33,8 +34,10 @@ jobs:
         run: npm run lint
       - name: Unused files, exports and dependencies
         run: npm run knip
-      - name: Unit tests (core and mobile)
+      - name: Unit tests (core, mobile and the food pipeline)
         run: npm test
+      - name: Food list is built from its sources
+        run: npm run check -w fooddata
 
   database:
     runs-on: ubuntu-latest
