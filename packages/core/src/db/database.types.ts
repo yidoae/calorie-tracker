@@ -40,19 +40,38 @@ export type Database = {
           },
         ]
       }
-      foods: {
+      food_portions: {
         Row: {
-          carbs_per_100g: number
-          category: string
-          fat_per_100g: number
-          id: string
-          kcal_per_100g: number
-          name_tr: string
-          protein_per_100g: number
-          typical_portion_g: number
-          unit_weights: Json
+          food_id: string
+          grams: number
+          position: number
+          unit: string
         }
         Insert: {
+          food_id: string
+          grams: number
+          position?: number
+          unit: string
+        }
+        Update: {
+          food_id?: string
+          grams?: number
+          position?: number
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "food_portions_food_id_fkey"
+            columns: ["food_id"]
+            isOneToOne: false
+            referencedRelation: "foods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      foods: {
+        Row: {
+          alcohol_per_100g: number
           carbs_per_100g: number
           category: string
           fat_per_100g: number
@@ -60,10 +79,27 @@ export type Database = {
           kcal_per_100g: number
           name_tr: string
           protein_per_100g: number
+          searchable: boolean
+          source_kind: string
+          source_ref: string
           typical_portion_g: number
-          unit_weights?: Json
+        }
+        Insert: {
+          alcohol_per_100g?: number
+          carbs_per_100g: number
+          category: string
+          fat_per_100g: number
+          id: string
+          kcal_per_100g: number
+          name_tr: string
+          protein_per_100g: number
+          searchable?: boolean
+          source_kind: string
+          source_ref: string
+          typical_portion_g: number
         }
         Update: {
+          alcohol_per_100g?: number
           carbs_per_100g?: number
           category?: string
           fat_per_100g?: number
@@ -71,8 +107,10 @@ export type Database = {
           kcal_per_100g?: number
           name_tr?: string
           protein_per_100g?: number
+          searchable?: boolean
+          source_kind?: string
+          source_ref?: string
           typical_portion_g?: number
-          unit_weights?: Json
         }
         Relationships: []
       }
@@ -440,6 +478,7 @@ export type Database = {
           kcal_per_100g: number
           matched_alias: string
           name_tr: string
+          portions: Json
           protein_per_100g: number
           score: number
           typical_portion_g: number
