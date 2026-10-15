@@ -27,6 +27,7 @@ const hit = (foodId: string, name: string, kcal: number, protein = 0, carbs = 0,
   matchedAlias: name.toLocaleLowerCase("tr-TR"),
   typicalPortionG: 100,
   per100g: { calories: kcal, protein, carbs, fat },
+  portions: [],
 });
 const CHICKEN = hit("chicken_breast_grilled", "Izgara tavuk göğsü", 165, 31, 0, 3.6);
 const RICE = hit("white_rice", "Pirinç pilavı", 130, 2.7, 28, 0.3);

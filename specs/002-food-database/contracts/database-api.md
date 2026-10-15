@@ -7,7 +7,7 @@ Only what changes from [001 database-api](../../001-mobile-foundation/contracts/
 | Object | select | insert / update / delete |
 |---|---|---|
 | `food_portions` | all rows | none (migrations only) |
-| `foods` new columns (`alcohol_per_100g`, `source_kind`, `source_ref`, `withdrawn`) | yes | none |
+| `foods` new columns (`alcohol_per_100g`, `source_kind`, `source_ref`, `searchable`) | yes | none |
 
 `anon` has no access, as in 001.
 
@@ -19,7 +19,7 @@ protein_per_100g, carbs_per_100g, fat_per_100g, portions, score)`.
 - **New column `portions jsonb`**: the food's unit portions ordered by `position`, as
   `[{"unit": "adet", "grams": 50}, …]`; `[]` when the food has none. Validated in the app by the
   core `foodHitRowSchema` (extended), mapped to `portions: {unit, grams}[]`.
-- **Withdrawn foods** (`withdrawn = true`) are never returned.
+- **Withdrawn foods** (`searchable = false`) are never returned.
 - Ranking, `q` rules, the 50-row cap, errors (`invalid_query`, `not_authenticated`) and the
   `private` body behind a `security invoker` wrapper are unchanged.
 - The return type changes, so the migration drops and recreates both functions and re-applies the
@@ -37,9 +37,8 @@ A day's meals still join `foods(name_tr)`; withdrawn foods stay readable there (
 1. `insert into foods … on conflict (id) do update set` every column but `id`.
 2. `delete from food_aliases where food_id in (<listed ids>)`, then insert the aliases.
 3. `delete from food_portions where food_id in (<listed ids>)`, then insert the portions.
-4. `update foods set withdrawn = true where id in (<withdrawn ids>)`; listed foods get
-   `withdrawn = false`.
-5. `alter table foods validate constraint foods_category_check`.
+4. `update foods set searchable = false where id in (<withdrawn ids>)`; listed foods get
+   `searchable = true`.
 
 It never deletes from `foods` and never writes `meals` or `meal_items`.
 

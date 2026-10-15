@@ -9,8 +9,8 @@ select plan(38);
 insert into auth.users (id, email) values
   ('a0000000-0000-4000-8000-00000000000a', 'rls-a@test.invalid'),
   ('b0000000-0000-4000-8000-00000000000b', 'rls-b@test.invalid');
-insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g)
-  values ('test_rls_food', 'RLS test yemeği', 'mixed', 100, 10, 10, 2.2, 100);
+insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref)
+  values ('test_rls_food', 'RLS test yemeği', 'dish', 100, 10, 10, 2.2, 100, 'usda', 'test');
 insert into public.food_aliases (food_id, alias) values ('test_rls_food', 'rls test');
 insert into public.meals (id, user_id, slot, local_date, time_zone, name)
   values ('c0000000-0000-4000-8000-00000000000c', 'a0000000-0000-4000-8000-00000000000a', 'lunch', '2026-10-09', 'Europe/Istanbul', 'Test öğünü');
@@ -72,8 +72,8 @@ select throws_ok($$update public.profiles set onboarding_completed = true where 
 select results_eq($$select id from public.foods where id = 'test_rls_food'$$, $$values ('test_rls_food'::text)$$, 'signed-in users read foods');
 select results_eq($$select alias from public.food_aliases where food_id = 'test_rls_food'$$, $$values ('rls test'::text)$$, 'signed-in users read food aliases');
 select throws_ok(
-  $$insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g)
-    values ('hack', 'x', 'mixed', 1, 0, 0, 0, 1)$$,
+  $$insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref)
+    values ('hack', 'x', 'dish', 1, 0, 0, 0, 1, 'usda', 'test')$$,
   '42501', null, 'signed-in users cannot add foods');
 select throws_ok($$update public.foods set kcal_per_100g = 1 where id = 'test_rls_food'$$, '42501', null, 'signed-in users cannot change foods');
 select throws_ok($$delete from public.foods where id = 'test_rls_food'$$, '42501', null, 'signed-in users cannot delete foods');
@@ -91,8 +91,8 @@ select throws_ok($$select 1 from public.meal_items$$, '42501', null, 'anonymous 
 select throws_ok($$select 1 from public.foods$$, '42501', null, 'anonymous clients cannot read foods');
 select throws_ok($$select 1 from public.food_aliases$$, '42501', null, 'anonymous clients cannot read food aliases');
 select throws_ok(
-  $$insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g)
-    values ('hack', 'x', 'mixed', 1, 0, 0, 0, 1)$$,
+  $$insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref)
+    values ('hack', 'x', 'dish', 1, 0, 0, 0, 1, 'usda', 'test')$$,
   '42501', null, 'anonymous clients cannot add foods');
 
 reset role;

@@ -158,9 +158,17 @@ describe("database rows", () => {
       protein_per_100g: "31.00",
       carbs_per_100g: "0.00",
       fat_per_100g: "3.60",
+      portions: [{ unit: "adet", grams: 90 }, { unit: "porsiyon", grams: 150.5 }],
     });
     assert.equal(hit.typicalPortionG, 150);
     assert.equal(hit.per100g.calories, 165);
+    assert.deepEqual(hit.portions, [{ unit: "adet", grams: 90 }, { unit: "porsiyon", grams: 150.5 }]);
+  });
+
+  it("refuses a search hit whose portion is not a positive weight", () => {
+    const row = { food_id: "egg", name_tr: "Yumurta", matched_alias: "yumurta", typical_portion_g: 50, kcal_per_100g: 143, protein_per_100g: 12.6, carbs_per_100g: 0.7, fat_per_100g: 9.5 };
+    assert.equal(foodHitRowSchema.safeParse({ ...row, portions: [{ unit: "adet", grams: 0 }] }).success, false);
+    assert.equal(foodHitRowSchema.safeParse({ ...row, portions: [] }).success, true);
   });
 });
 

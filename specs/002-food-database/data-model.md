@@ -11,9 +11,14 @@ read the food tables and never write them, migrations are the only writers.
 `foods.category` (replaces the 8-value 001 check; the app does not read the column today):
 
 `meat`, `poultry`, `fish`, `egg`, `dairy`, `legume`, `grain`, `bread`, `vegetable`, `fruit`,
-`nut_seed`, `oil`, `sweet`, `drink`, `alcohol`, `dish`
+`nut_seed`, `oil`, `sweet`, `drink`, `alcohol`, `dish`, `other` (salt, yeast, protein powder: used by
+release 1)
 
 `foods.source_kind`: `usda`, `recipe`, `label`
+
+The dev project already holds two 002 migrations made outside this plan on 2026-10-14
+(`20261014000100_food_sources`, `20261014000200_food_release_1`: 118 foods, 322 aliases; research
+§10). They are committed verbatim and `20261015000100_food_schema` builds on them.
 
 ### foods (changed)
 
@@ -26,16 +31,13 @@ read the food tables and never write them, migrations are the only writers.
 | protein_per_100g / carbs_per_100g / fat_per_100g | numeric(6,2) | 0–100 | — |
 | alcohol_per_100g | numeric(6,2) not null default 0 | 0–100 | **new** |
 | typical_portion_g | numeric(6,1) | > 0 (build also enforces ≤ 5000) | — |
-| source_kind | text not null | `usda` / `recipe` / `label` | **new** |
-| source_ref | text not null | 1–200 chars: `FDC <id> (<data type>, 2026-04)`, `recipe:<id>`, `label:<product>, <YYYY-MM-DD>` | **new** |
-| withdrawn | boolean not null default false | true = hidden from search, still readable in meals (FR-010) | **new** |
-| unit_weights | jsonb | — | **dropped** (never read; replaced by `food_portions`) |
+| source_kind | text not null | `usda` / `recipe` / `label` | added by `food_sources` (nullable); made required with a check |
+| source_ref | text not null | 1–200 chars: `fdc:<id>`, `recipe:<id>`, `label:<…>` (release 1 format) | added by `food_sources`; made required |
+| searchable | boolean not null default true | false = withdrawn: hidden from search, still readable in meals (FR-010) | from `food_sources` |
+| unit_weights | jsonb | — | **dropped**, its entries moved to `food_portions` with Turkish unit labels |
 
-The schema migration adds the new category check `not valid` (old rows keep their 001 categories
-until the first list migration rewrites them); every generated list migration ends with
-`validate constraint`, which is a no-op once all rows comply. `source_kind` and `source_ref` are
-added with a temporary default (`'usda'`, `'legacy'`) that the first list migration overwrites and
-then drops.
+`food_sources` dropped the 001 category check and release 1 recategorised every food, so the new
+check is added validated.
 
 ### food_portions (new)
 
@@ -67,11 +69,11 @@ Typed TypeScript modules, parsed through Zod schemas on load.
 | Record | Fields | Rules |
 |---|---|---|
 | **UsdaFood** (`foods/*.ts`) | id, name, category, fdcId, aliases[], typicalPortionG, portions? | fdcId present in the extract |
-| **LabelFood** (`labels.ts`) | id, name, category, label {product, date, kcal, protein, carbs, fat, alcohol?}, aliases[], typicalPortionG, portions? | values per 100 g as printed; product name may contain a brand, `name` and aliases may not |
-| **Recipe** (`recipes/*.ts`) | id, name, category `dish`, ingredients[{foodId, grams}], waterG, yield: `{kind: "weighed", grams, date}` \| `{kind: "fndds", foodCode, moisturePct}` \| `{kind: "usda_meat_yield", table, yieldPct}`, aliases[], typicalPortionG, portions? | ingredients are `UsdaFood` ids; cooked weight > 0 and ≤ Σ grams + water |
+| **LabelFood** (`labels.ts`) | id, name, category, label {brand, product, date, kcal, protein, carbs, fat, alcohol?}, aliases[], typicalPortionG, portions? | values per 100 g as printed; the brand stays in the source reference, `name` and aliases must not contain its words |
+| **Recipe** (`recipes/*.ts`) | id, name, category `dish`, ingredients[{foodId, grams}], waterG, yield: `{kind: "weighed", grams, date}` \| `{kind: "fndds", foodCode}` (moisture change read from the extract) \| `{kind: "usda_meat_yield", table, yieldPct}`, aliases[], typicalPortionG, portions? | ingredients are `UsdaFood` ids; cooked weight > 0 and ≤ Σ grams + water |
 | **Withdrawn** (`withdrawn.ts`) | id, reason | id exists in the database (an earlier list) |
 | **SearchCase** (`search-cases.ts`) | query, expectedId | ≥ 100 cases; expectedId in the list |
-| **UsdaExtract** (`usda/extract.json`) | fdcId → {description, dataType, kcal, kcalNutrient, protein, carbs, fat, alcohol} | written by `fetch` only |
+| **UsdaExtract** (`usda/extract.json`) | foods: fdcId → {description, dataType, kcal, kcalNutrient, protein, carbs, fat, alcohol}; fnddsMoisture: food code → {fdcId, description, moisturePct} | written by `fetch` only |
 | **UsdaRelease** (`usda/release.json`) | release label, files[{name, url, sha256}] | written once per pinned release |
 
 Portions in sources: `[{unit: "adet", grams: 50}, …]`, order = chip order.
@@ -79,8 +81,8 @@ Portions in sources: `[{unit: "adet", grams: 50}, …]`, order = chip order.
 ## Build rules (fail with the food's id and the rule)
 
 1. Ids unique across all source files; `^[a-z0-9_]{1,64}$`; the 79 001 ids all present (FR-006).
-2. Name ≤ 80 chars; no brand: the name and aliases must not contain any word of the label's
-   product name that is not in the food's own name.
+2. Name ≤ 80 chars; no brand: the name and aliases of a label food must not contain a word of its
+   `label.brand`.
 3. Every normalised alias (core `normalizeTr`) unique across foods; ≥ 1 alias per food.
 4. Per-100 g values within the column ranges; energy within ±15 % of 4P + 4C + 9F + 7A
    (foods under 20 kcal are exempt: rounding dominates).
@@ -92,5 +94,5 @@ Portions in sources: `[{unit: "adet", grams: 50}, …]`, order = chip order.
 
 ## State transitions
 
-`food`: absent → listed (first list that contains it) → withdrawn (`withdrawn = true` when it leaves
+`food`: absent → listed (first list that contains it) → withdrawn (`searchable = false` when it leaves
 the sources and is listed in `withdrawn.ts`) → listed again (if it returns). Never deleted.

@@ -10,7 +10,7 @@ Grow the food list from 79 to at least 450 generic foods (80+ Turkish dishes) wi
 aliases and unit portions, every value traceable to USDA FoodData Central or a cited label. A new
 never-shipped workspace, `tools/fooddata`, builds the list from typed source files and a committed
 USDA extract into a generated Supabase migration, a diffable text summary and a searchable HTML
-review page; it fails on any data rule. The schema gains alcohol, source and withdrawn columns and a
+review page; it fails on any data rule. The schema (on top of the 118-food release found on dev, research §10) gains an alcohol column and a
 `food_portions` table; `search_foods` returns portions and hides withdrawn foods. The review step
 gets unit chips with a −/+ count stepper; the profile credits USDA. Saved meals never change: items
 already snapshot their values.
@@ -30,7 +30,7 @@ stack. Data: FDC April 2026 release (Foundation, SR Legacy, FNDDS 2021–2023), 
 
 **Testing**: `tools/fooddata`: `node:test` for every build rule and the determinism check; core:
 the extended `foodHitRowSchema`; app: node tests for `portionLogic.ts`; database: pgTAP for the
-schema (RLS on `food_portions`, withdrawn hidden, portions returned) plus the generated
+schema (RLS on `food_portions`, non-searchable hidden, portions returned) plus the generated
 `search_cases.test.sql` (SC-002); Maestro smoke flow extended with a chip tap. CI adds
 `npm run check -w fooddata`.
 
