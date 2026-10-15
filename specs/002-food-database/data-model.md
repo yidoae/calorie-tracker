@@ -70,7 +70,7 @@ Typed TypeScript modules, parsed through Zod schemas on load.
 |---|---|---|
 | **UsdaFood** (`foods/*.ts`) | id, name, category, fdcId, aliases[], typicalPortionG, portions? | fdcId present in the extract |
 | **LabelFood** (`labels.ts`) | id, name, category, label {brand, product, date, kcal, protein, carbs, fat, alcohol?}, aliases[], typicalPortionG, portions? | values per 100 g as printed; the brand stays in the source reference, `name` and aliases must not contain its words |
-| **Recipe** (`recipes/*.ts`) | id, name, category `dish`, ingredients[{foodId, grams}], waterG, yield: `{kind: "weighed", grams, date}` \| `{kind: "fndds", foodCode}` (moisture change read from the extract) \| `{kind: "usda_meat_yield", table, yieldPct}`, aliases[], typicalPortionG, portions? | ingredients are `UsdaFood` ids; cooked weight > 0 and ≤ Σ grams + water |
+| **Recipe** (`recipes/*.ts`) | id, name, category (usually `dish`; ayran, baklava, simit are recipes too), ingredients[{foodId, grams}], waterG, yield: `{kind: "weighed", grams, date}` \| `{kind: "fndds", foodCode}` (moisture change read from the extract) \| `{kind: "usda_meat_yield", table, yieldPct}`, aliases[], typicalPortionG, portions? | ingredients are USDA or label foods, never another recipe; cooked weight > 0 and ≤ Σ grams + water |
 | **Withdrawn** (`withdrawn.ts`) | id, reason | id exists in the database (an earlier list) |
 | **SearchCase** (`search-cases.ts`) | query, expectedId | ≥ 100 cases; expectedId in the list |
 | **UsdaExtract** (`usda/extract.json`) | foods: fdcId → {description, dataType, kcal, kcalNutrient, protein, carbs, fat, alcohol}; fnddsMoisture: food code → {fdcId, description, moisturePct} | written by `fetch` only |
@@ -87,7 +87,7 @@ Portions in sources: `[{unit: "adet", grams: 50}, …]`, order = chip order.
 4. Per-100 g values within the column ranges; energy within ±20 % (at least ±10 kcal) of 4P + 4C + 9F + 7A
    (foods under 20 kcal are exempt: rounding dominates).
 5. Typical portion and unit portions > 0 and ≤ 5000 g; units unique per food.
-6. Recipes: ingredients exist and are `usda` foods; cooked weight rule above.
+6. Recipes: ingredients exist and are USDA or label foods (not recipes); cooked weight rule above.
 7. Bare staple names (owner rule 2026-10-11, FR-005): a food whose name has a state marker
    ("(pişmiş)", "(haşlanmış)", "(kızarmış)", "(ızgara)") must not own the bare alias of its staple.
 8. Counts: ≥ 450 foods and ≥ 80 `dish` foods (SC-001), reported, failing below.

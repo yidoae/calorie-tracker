@@ -43,7 +43,6 @@ export const labelFoodSchema = z.object({
 
 export const recipeSchema = z.object({
   ...base,
-  category: z.literal("dish"),
   ingredients: z.array(z.object({ foodId: z.string(), grams: z.number() })),
   waterG: z.number().default(0),
   yield: z.discriminatedUnion("kind", [

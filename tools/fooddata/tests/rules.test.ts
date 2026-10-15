@@ -95,8 +95,11 @@ describe("build rules", () => {
     assert.deepEqual(check([food(), soup()]), []);
     assert.ok(hasError(check([food(), soup({ ingredients: [{ foodId: "nope", grams: 10 }] })]), "lentil_soup", "nope"));
     assert.ok(hasError(check([food(), soup({ cookedG: 1001 })]), "lentil_soup", "cooked"));
+    // A label food may be an ingredient (kaşar in tost); another recipe may not.
     const label = food({ id: "wafer", name: "Gofret", category: "sweet", sourceKind: "label", brand: "X", aliases: ["gofret"], portions: [] });
-    assert.ok(hasError(check([label, soup({ ingredients: [{ foodId: "wafer", grams: 10 }] })]), "lentil_soup", "wafer"));
+    assert.deepEqual(check([food(), label, soup({ ingredients: [{ foodId: "wafer", grams: 200 }] })]), []);
+    const pilaf = food({ id: "pilaf", name: "Pilav", category: "dish", sourceKind: "recipe", aliases: ["pilav"], portions: [] });
+    assert.ok(hasError(check([pilaf, soup({ ingredients: [{ foodId: "pilaf", grams: 10 }] })]), "lentil_soup", "pilaf"));
   });
 
   it("keeps bare staple names on the raw or dry food (FR-005)", () => {

@@ -311,6 +311,16 @@
       "fat": 53.01,
       "alcohol": 0
     },
+    "168627": {
+      "description": "Beef, variety meats and by-products, liver, cooked, pan-fried",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 175,
+      "protein": 26.52,
+      "carbs": 5.16,
+      "fat": 4.68,
+      "alcohol": 0
+    },
     "168726": {
       "description": "Beef, top sirloin, steak, separable lean and fat, trimmed to 1/8\" fat, all grades, raw",
       "dataType": "sr_legacy_food",
@@ -1231,6 +1241,16 @@
       "fat": 1.16,
       "alcohol": 0
     },
+    "170287": {
+      "description": "Bulgur, cooked",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 83,
+      "protein": 3.08,
+      "carbs": 18.58,
+      "fat": 0.24,
+      "alcohol": 0
+    },
     "170317": {
       "description": "Pizza, cheese topping, regular crust, frozen, cooked",
       "dataType": "sr_legacy_food",
@@ -1661,6 +1681,16 @@
       "fat": 0.93,
       "alcohol": 0
     },
+    "171204": {
+      "description": "Beef, chuck for stew, separable lean and fat, select, cooked, braised",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 186,
+      "protein": 32.29,
+      "carbs": 0,
+      "fat": 6.34,
+      "alcohol": 0
+    },
     "171241": {
       "description": "Cheese, gouda",
       "dataType": "sr_legacy_food",
@@ -1949,6 +1979,16 @@
       "protein": 18.59,
       "carbs": 0,
       "fat": 15,
+      "alcohol": 0
+    },
+    "171799": {
+      "description": "Beef, ground, 80% lean meat / 20% fat, crumbles, cooked, pan-browned",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 272,
+      "protein": 27,
+      "carbs": 0,
+      "fat": 17.36,
       "alcohol": 0
     },
     "171816": {
@@ -2269,6 +2309,16 @@
       "protein": 20.38,
       "carbs": 1.78,
       "fat": 5.02,
+      "alcohol": 0
+    },
+    "172544": {
+      "description": "Lamb, ground, cooked, broiled",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 283,
+      "protein": 24.75,
+      "carbs": 0,
+      "fat": 19.65,
       "alcohol": 0
     },
     "172678": {
@@ -2601,6 +2651,16 @@
       "fat": 4.32,
       "alcohol": 0
     },
+    "173694": {
+      "description": "Fish, sea bass, mixed species, cooked, dry heat",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 124,
+      "protein": 23.63,
+      "carbs": 0,
+      "fat": 2.56,
+      "alcohol": 0
+    },
     "173698": {
       "description": "Fish, snapper, mixed species, raw",
       "dataType": "sr_legacy_food",
@@ -2821,6 +2881,16 @@
       "fat": 2.24,
       "alcohol": 0
     },
+    "174217": {
+      "description": "Mollusks, mussel, blue, cooked, moist heat",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 172,
+      "protein": 23.8,
+      "carbs": 7.39,
+      "fat": 4.48,
+      "alcohol": 0
+    },
     "174218": {
       "description": "Mollusks, octopus, common, raw",
       "dataType": "sr_legacy_food",
@@ -2899,6 +2969,16 @@
       "protein": 16.56,
       "carbs": 0,
       "fat": 23.41,
+      "alcohol": 0
+    },
+    "174460": {
+      "description": "Lamb, New Zealand, imported, leg chop/steak, bone-in, separable lean and fat, cooked, fast fried",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 212,
+      "protein": 24.26,
+      "carbs": 0.04,
+      "fat": 12.76,
       "alcohol": 0
     },
     "174673": {
@@ -3119,6 +3199,16 @@
       "protein": 18.6,
       "carbs": 0,
       "fat": 13.89,
+      "alcohol": 0
+    },
+    "175120": {
+      "description": "Fish, mackerel, Atlantic, cooked, dry heat",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 262,
+      "protein": 23.85,
+      "carbs": 0,
+      "fat": 17.81,
       "alcohol": 0
     },
     "175139": {
@@ -3462,5 +3552,116 @@
       "alcohol": 0
     }
   },
-  "fnddsMoisture": {}
+  "fnddsMoisture": {
+    "27162040": {
+      "fdcId": 2706470,
+      "description": "Spaghetti sauce with meat",
+      "moisturePct": 0
+    },
+    "41601010": {
+      "fdcId": 2707453,
+      "description": "Soup, bean",
+      "moisturePct": 0
+    },
+    "41603010": {
+      "fdcId": 2707462,
+      "description": "Soup, lentil",
+      "moisturePct": 0
+    },
+    "56130000": {
+      "fdcId": 2708357,
+      "description": "Pasta, cooked",
+      "moisturePct": 0
+    },
+    "56205004": {
+      "fdcId": 2708405,
+      "description": "Rice, white, cooked, made with butter",
+      "moisturePct": 0
+    },
+    "56207120": {
+      "fdcId": 2708439,
+      "description": "Bulgur, fat added",
+      "moisturePct": 0
+    },
+    "58130011": {
+      "fdcId": 2708750,
+      "description": "Lasagna with meat",
+      "moisturePct": -11
+    },
+    "58161510": {
+      "fdcId": 2709064,
+      "description": "Grape leaves stuffed with rice",
+      "moisturePct": 0
+    },
+    "58162120": {
+      "fdcId": 2709074,
+      "description": "Stuffed pepper, with rice, meatless",
+      "moisturePct": -7
+    },
+    "58403040": {
+      "fdcId": 2709149,
+      "description": "Soup, chicken noodle",
+      "moisturePct": 0
+    },
+    "71801000": {
+      "fdcId": 2709556,
+      "description": "Soup, potato",
+      "moisturePct": 0
+    },
+    "72125221": {
+      "fdcId": 2709621,
+      "description": "Spinach, fresh, cooked, fat added, NS as to fat type",
+      "moisturePct": -15
+    },
+    "74601000": {
+      "fdcId": 2709757,
+      "description": "Soup, tomato",
+      "moisturePct": 0
+    },
+    "75100750": {
+      "fdcId": 2709766,
+      "description": "Artichoke",
+      "moisturePct": 0
+    },
+    "75205021": {
+      "fdcId": 2709852,
+      "description": "Green beans, fresh, cooked, no added fat",
+      "moisturePct": -4
+    },
+    "75211031": {
+      "fdcId": 2709891,
+      "description": "Cabbage, green, cooked with oil",
+      "moisturePct": -4
+    },
+    "75215020": {
+      "fdcId": 2709906,
+      "description": "Celery, cooked",
+      "moisturePct": -7
+    },
+    "75217020": {
+      "fdcId": 2709930,
+      "description": "Eggplant, cooked, fat added",
+      "moisturePct": -7
+    },
+    "75218400": {
+      "fdcId": 2709935,
+      "description": "Leeks",
+      "moisturePct": -7
+    },
+    "75220011": {
+      "fdcId": 2709944,
+      "description": "Okra, fresh, cooked, no added fat",
+      "moisturePct": -7
+    },
+    "75224000": {
+      "fdcId": 2709958,
+      "description": "Green peas, cooked, from restaurant",
+      "moisturePct": -4
+    },
+    "75649110": {
+      "fdcId": 2710113,
+      "description": "Soup, vegetable",
+      "moisturePct": 0
+    }
+  }
 }

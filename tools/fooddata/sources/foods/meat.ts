@@ -17,4 +17,9 @@ export default [
   { id: "lamb_liver_raw", name: "Kuzu ciğeri (çiğ)", category: "meat", fdcId: 172531, aliases: ["kuzu ciğeri"], typicalPortionG: 150 },
   { id: "frankfurter", name: "Sosis (dana)", category: "meat", fdcId: 323121, aliases: ["sosis","dana sosis"], typicalPortionG: 50, portions: [{ unit: "adet", grams: 45 }] },
   { id: "salami", name: "Salam (dana)", category: "meat", fdcId: 172935, aliases: ["salam","dana salam"], typicalPortionG: 30, portions: [{ unit: "dilim", grams: 10 }] },
+  { id: "beef_mince_cooked", name: "Kıyma (kavrulmuş)", category: "meat", fdcId: 171799, aliases: ["kavrulmuş kıyma","pişmiş kıyma"], typicalPortionG: 100 },
+  { id: "beef_stew_cooked", name: "Dana kuşbaşı (pişmiş)", category: "meat", fdcId: 171204, aliases: ["pişmiş kuşbaşı","haşlanmış et","et haşlama"], typicalPortionG: 120 },
+  { id: "lamb_mince_cooked", name: "Kuzu kıyma (pişmiş)", category: "meat", fdcId: 172544, aliases: ["pişmiş kuzu kıyma"], typicalPortionG: 100 },
+  { id: "lamb_leg_cooked", name: "Kuzu eti (pişmiş)", category: "meat", fdcId: 174460, aliases: ["pişmiş kuzu","kuzu tandır eti","kuzu kızartma"], typicalPortionG: 150 },
+  { id: "beef_liver_cooked", name: "Ciğer tava (pişmiş)", category: "meat", fdcId: 168627, aliases: ["ciğer tava","pişmiş ciğer"], typicalPortionG: 150 },
 ];

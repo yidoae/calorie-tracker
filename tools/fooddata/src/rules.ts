@@ -103,7 +103,7 @@ export function checkFoods(foods: ResolvedFood[], ctx: RuleContext): string[] {
     for (const i of ingredients) {
       const ingredient = byId.get(i.foodId);
       if (!ingredient) errors.push(`${f.id}: ingredient "${i.foodId}" is not in the list`);
-      else if (ingredient.sourceKind !== "usda") errors.push(`${f.id}: ingredient "${i.foodId}" must be a USDA food, not ${ingredient.sourceKind}`);
+      else if (ingredient.sourceKind === "recipe") errors.push(`${f.id}: ingredient "${i.foodId}" is itself a recipe; use its raw ingredients`);
     }
     const pot = ingredients.reduce((sum, i) => sum + i.grams, 0) + waterG;
     if (!(cookedG > 0 && cookedG <= pot)) errors.push(`${f.id}: cooked weight ${cookedG} g must be above 0 and at most ingredients + water (${pot} g)`);

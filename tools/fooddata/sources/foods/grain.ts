@@ -29,4 +29,5 @@ export default [
   { id: "rice_cakes", name: "Pirinç patlağı", category: "grain", fdcId: 170250, aliases: ["pirinç patlağı","pirinç keki"], typicalPortionG: 18, portions: [{ unit: "adet", grams: 9 }] },
   { id: "crackers", name: "Kraker", category: "grain", fdcId: 174982, aliases: ["kraker","tuzlu kraker"], typicalPortionG: 30, portions: [{ unit: "adet", grams: 3 }] },
   { id: "potato_chips", name: "Cips (patates)", category: "grain", fdcId: 169677, aliases: ["cips","patates cipsi"], typicalPortionG: 30, portions: [{ unit: "paket", grams: 40 }] },
+  { id: "bulgur_cooked", name: "Bulgur (haşlanmış, sade)", category: "grain", fdcId: 170287, aliases: ["haşlanmış bulgur","sade bulgur"], typicalPortionG: 150, portions: [{ unit: "kase", grams: 180 }] },
 ];

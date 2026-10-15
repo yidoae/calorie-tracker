@@ -23,4 +23,7 @@ export default [
   { id: "mussel_raw", name: "Midye (çiğ)", category: "fish", fdcId: 174216, aliases: ["midye"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 10 }] },
   { id: "octopus_raw", name: "Ahtapot (çiğ)", category: "fish", fdcId: 174218, aliases: ["ahtapot"], typicalPortionG: 150 },
   { id: "crab_raw", name: "Yengeç (çiğ)", category: "fish", fdcId: 174204, aliases: ["yengeç","yengeç eti"], typicalPortionG: 100 },
+  { id: "sea_bass_cooked", name: "Levrek ızgara", category: "fish", fdcId: 173694, aliases: ["levrek ızgara","fırın levrek","ızgara balık"], typicalPortionG: 200 },
+  { id: "mackerel_cooked", name: "Uskumru ızgara", category: "fish", fdcId: 175120, aliases: ["uskumru ızgara","balık ekmek balığı"], typicalPortionG: 150 },
+  { id: "mussel_cooked", name: "Midye (pişmiş)", category: "fish", fdcId: 174217, aliases: ["pişmiş midye","midye buğulama"], typicalPortionG: 100 },
 ];
