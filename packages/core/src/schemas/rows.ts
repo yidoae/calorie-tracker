@@ -160,7 +160,7 @@ export const mealKcalRowSchema = z
   .transform((r) => ({ localDate: r.local_date, calories: r.total_kcal }));
 export type MealKcal = z.output<typeof mealKcalRowSchema>;
 
-/** One `search_foods` result: the food, the alias that matched and its values per 100 g. */
+/** One `search_foods` result: the food, the alias that matched, its values per 100 g and its unit portions in chip order. */
 export const foodHitRowSchema = z
   .object({
     food_id: z.string(),
@@ -171,6 +171,7 @@ export const foodHitRowSchema = z
     protein_per_100g: num,
     carbs_per_100g: num,
     fat_per_100g: num,
+    portions: z.array(z.object({ unit: z.string().min(1), grams: num.pipe(z.number().positive().max(5000)) })),
   })
   .transform((r) => ({
     foodId: r.food_id,
@@ -178,5 +179,6 @@ export const foodHitRowSchema = z
     matchedAlias: r.matched_alias,
     typicalPortionG: r.typical_portion_g,
     per100g: { calories: r.kcal_per_100g, protein: r.protein_per_100g, carbs: r.carbs_per_100g, fat: r.fat_per_100g },
+    portions: r.portions,
   }));
 export type FoodHit = z.output<typeof foodHitRowSchema>;

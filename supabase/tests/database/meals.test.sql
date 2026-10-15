@@ -14,9 +14,9 @@ update public.profiles set onboarding_completed = true, time_zone = 'Europe/Ista
  where id in ('a4000000-0000-4000-8000-0000000000a4', 'b4000000-0000-4000-8000-0000000000b4');
 
 -- Two foods with odd values so rounding shows.
-insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g) values
-  ('test_meal_a', 'Öğün testi A', 'mixed', 123.45, 10.5, 20.25, 3.33, 100),
-  ('test_meal_b', 'Öğün testi B', 'mixed', 200, 20, 10, 9, 100);
+insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref) values
+  ('test_meal_a', 'Öğün testi A', 'dish', 123.45, 10.5, 20.25, 3.33, 100, 'usda', 'test'),
+  ('test_meal_b', 'Öğün testi B', 'dish', 200, 20, 10, 9, 100, 'usda', 'test');
 
 -- Today in the user's time zone, and a payload that also sends nutrition values the database must ignore.
 select set_config('test.today', (now() at time zone 'Europe/Istanbul')::date::text, true);

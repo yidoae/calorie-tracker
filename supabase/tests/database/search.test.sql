@@ -11,11 +11,11 @@ insert into auth.users (id, email) values ('a3000000-0000-4000-8000-0000000000a3
 
 -- Made-up foods, so the curated seed cannot interfere with the ranking checks: one alias equal to
 -- the query, one starting with it, one only similar (trigram similarity 0.5), one unrelated.
-insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g) values
-  ('test_srch_exact', 'Kumkuat', 'fruit', 71, 1.9, 15.9, 0.9, 100),
-  ('test_srch_prefix', 'Kumkuatlı tart', 'mixed', 300, 4, 40, 14, 120),
-  ('test_srch_trgm', 'Kumkat reçeli', 'fruit', 250, 0.3, 62, 0.1, 20),
-  ('test_srch_other', 'Zerdeçal', 'mixed', 312, 9.7, 67, 3.3, 5);
+insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref) values
+  ('test_srch_exact', 'Kumkuat', 'fruit', 71, 1.9, 15.9, 0.9, 100, 'usda', 'test'),
+  ('test_srch_prefix', 'Kumkuatlı tart', 'dish', 300, 4, 40, 14, 120, 'usda', 'test'),
+  ('test_srch_trgm', 'Kumkat reçeli', 'fruit', 250, 0.3, 62, 0.1, 20, 'usda', 'test'),
+  ('test_srch_other', 'Zerdeçal', 'dish', 312, 9.7, 67, 3.3, 5, 'usda', 'test');
 insert into public.food_aliases (food_id, alias) values
   ('test_srch_exact', 'kumkuat'),
   ('test_srch_exact', 'kumkuat taze'),
@@ -23,8 +23,8 @@ insert into public.food_aliases (food_id, alias) values
   ('test_srch_trgm', 'kumkat'),
   ('test_srch_other', 'zerdeçal');
 -- Sixty foods that all start with the same word, for the result caps.
-insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g)
-  select 'test_srch_cap_' || i, 'Kapaklı ' || i, 'mixed', 100, 1, 1, 1, 100 from generate_series(1, 60) i;
+insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref)
+  select 'test_srch_cap_' || i, 'Kapaklı ' || i, 'dish', 100, 1, 1, 1, 100, 'usda', 'test' from generate_series(1, 60) i;
 insert into public.food_aliases (food_id, alias) select 'test_srch_cap_' || i, 'kapaklı ' || i from generate_series(1, 60) i;
 
 -- The API surface.

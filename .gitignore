@@ -29,3 +29,6 @@ supabase/.branches/
 *.tsbuildinfo
 npm-debug.log*
 coverage/
+
+# fooddata: USDA downloads (re-fetched from sources/usda/release.json)
+tools/fooddata/.cache/

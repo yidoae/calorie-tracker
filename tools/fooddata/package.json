@@ -1,0 +1,24 @@
+{
+  "name": "fooddata",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Builds the food list from versioned sources and a USDA FoodData Central extract (specs/002-food-database). Never shipped.",
+  "scripts": {
+    "fetch": "tsx src/fetch.ts",
+    "build": "tsx src/build.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@calorie/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "eslint": "^9.39.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "typescript-eslint": "^8.71.1"
+  }
+}

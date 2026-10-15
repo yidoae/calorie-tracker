@@ -14,8 +14,8 @@ select is((select count(*)::int from public.profiles where id = 'f0000000-0000-4
 select is((select onboarding_completed from public.profiles where id = 'f0000000-0000-4000-8000-00000000000f'), false, 'the new profile has not completed onboarding');
 
 -- Seed a food (odd values so rounding shows), an alias and a meal as the migration owner.
-insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g)
-  values ('test_trg_food', 'Trigger test yemeği', 'mixed', 123.45, 10.5, 20.25, 3.33, 100);
+insert into public.foods (id, name_tr, category, kcal_per_100g, protein_per_100g, carbs_per_100g, fat_per_100g, typical_portion_g, source_kind, source_ref)
+  values ('test_trg_food', 'Trigger test yemeği', 'dish', 123.45, 10.5, 20.25, 3.33, 100, 'usda', 'test');
 insert into public.food_aliases (food_id, alias) values ('test_trg_food', '  Tavuk   Göğsü ');
 insert into public.meals (id, user_id, slot, local_date, time_zone, name)
   values ('c0000000-0000-4000-8000-0000000000c1', 'f0000000-0000-4000-8000-00000000000f', 'dinner', '2026-10-11', 'Europe/Istanbul', 'Akşam yemeği');

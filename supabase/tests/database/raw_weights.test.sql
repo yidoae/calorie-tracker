@@ -27,8 +27,9 @@ select is((select food_id from public.search_foods('ızgara tavuk') limit 1), 'c
 select ok(exists (select 1 from public.search_foods('pirinç') where food_id = 'white_rice'), 'cooked rice is also listed for "pirinç"');
 
 -- Plausible raw values: dry staples far denser than their cooked forms, macros adding up.
-select ok((select kcal_per_100g from public.foods where id = 'rice_raw') > 2.5 * (select kcal_per_100g from public.foods where id = 'white_rice'),
-  'raw rice has more than 2.5× the kcal of cooked rice per 100 g');
+-- white_rice is release 1's pilav recipe (cooked with fat), so the ratio is lower than for boiled rice.
+select ok((select kcal_per_100g from public.foods where id = 'rice_raw') > 2 * (select kcal_per_100g from public.foods where id = 'white_rice'),
+  'raw rice has more than 2× the kcal of rice pilav per 100 g');
 select ok((select kcal_per_100g from public.foods where id = 'pasta_dry') > 2 * (select kcal_per_100g from public.foods where id = 'spaghetti'),
   'dry pasta has more than 2× the kcal of cooked pasta per 100 g');
 select is_empty(
@@ -50,7 +51,7 @@ select is_empty(
   'the raw staples say (çiğ…) or (kuru) in their names');
 
 reset role;
-select is((select count(*)::int from public.foods where id !~ '^test_'), 88, 'the curated list has 88 foods');
+select is((select count(*)::int from public.foods where id !~ '^test_'), 118, 'the curated list has release 1''s 118 foods');
 
 select * from finish();
 rollback;

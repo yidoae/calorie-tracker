@@ -1,6 +1,8 @@
 <!--
 Sync Impact Report
-- Version change: 2.0.0 → 2.0.1 (PATCH: the web preview tool is named as review-only).
+- Version change: 2.0.1 → 2.0.2 (PATCH: Food data no longer lists TürKomp; the owner declined its
+  paid commercial licence on 2026-10-13, spec 002).
+- Previous: 2.0.0 → 2.0.1 (PATCH: the web preview tool is named as review-only).
 - Previous: 1.0.0 → 2.0.0 (MAJOR: the product becomes a native mobile app; layers, stack,
   auth and the server boundary are redefined)
 - Modified principles:
@@ -141,9 +143,9 @@ sign-in) are used through a development build.
 **Design:** the tofuhq look (ink header band, lime primary action, 4 px grid) carried over as theme
 tokens in the app; components never hard-code a colour that is not a token.
 
-**Food data:** a `foods` table with aliases and portions, sourced from TürKomp (licence to be
-confirmed), USDA FoodData Central and Open Food Facts; users' own foods live in the same table with
-an owner.
+**Food data:** a `foods` table with aliases and portions, sourced from USDA FoodData Central and
+Open Food Facts; TürKomp is not used (its commercial use needs a paid licence, owner decision
+2026-10-13). Users' own foods live in the same table with an owner.
 
 ## Development Workflow
 
@@ -164,4 +166,4 @@ Every plan produced by `/speckit-plan` includes a constitution check; a deviatio
 in the plan's complexity tracking or the plan is revised. `CLAUDE.md` holds day-to-day guidance and
 must not contradict this document.
 
-**Version**: 2.0.1 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-09
+**Version**: 2.0.2 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-15

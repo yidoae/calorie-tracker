@@ -25,6 +25,17 @@
         "tests/**/*.ts"
       ]
     },
+    "tools/fooddata": {
+      "entry": [
+        "sources/**/*.ts",
+        "tests/**/*.test.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "sources/**/*.ts",
+        "tests/**/*.ts"
+      ]
+    },
     "tools/preview": {
       "entry": [
         "scripts/*.mjs",
