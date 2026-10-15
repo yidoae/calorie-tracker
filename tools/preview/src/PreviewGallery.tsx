@@ -122,7 +122,7 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "log-review",
     title: "Kontrol et",
-    note: "Seçilen her yemeğin gram alanı boş başlar ve doldurulmadan kaydedilmez (0 < g ≤ 5.000). Kalori ve makrolar yazdıkça güncellenir; öğün saate göre seçili gelir. Kaydedilemezse girilenler kalır.",
+    note: "Seçilen her yemeğin gram alanı boş başlar ve doldurulmadan kaydedilmez (0 < g ≤ 5.000). Porsiyonu olan yemekte birim çipine dokununca gram yazılır, −/+ adedi değiştirir (örnekte 2 adet yumurta). Kalori ve makrolar yazdıkça güncellenir; öğün saate göre seçili gelir. Kaydedilemezse girilenler kalır.",
     Component: ReviewSample,
     status: "ready",
   },
@@ -177,16 +177,18 @@ const SAMPLE_SESSION = {
   user: { id: "00000000-0000-4000-8000-000000000001", email: "ayse@ornek.com", identities: [{ provider: "email" }, { provider: "google" }] },
 } as unknown as Session;
 
-/** The review step with two picked foods: one with its grams typed, one still empty. */
+/** The review step with three foods: grams typed, still empty, and two eggs from the portion shortcut (002 US2). */
 function ReviewSample() {
-  const { draft, addFood, setGrams } = useMealDraft();
+  const { draft, addFood, setGrams, setPortion } = useMealDraft();
   const seeded = draft.items.length > 0;
   useEffect(() => {
     if (seeded) return;
     addFood(SAMPLE_HITS[0]);
     addFood(SAMPLE_HITS[3]);
+    addFood(SAMPLE_HITS[7]);
     setGrams("item-1", "200");
-  }, [seeded, addFood, setGrams]);
+    setPortion("item-3", { unit: "adet", count: 2 });
+  }, [seeded, addFood, setGrams, setPortion]);
   return <MealReviewScreen />;
 }
 

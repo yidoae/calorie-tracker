@@ -106,3 +106,26 @@ appId: com.kaloritakip.app
       id: calorie-ring
       text: "Kalori: 180 / .*"
     timeout: 10000
+
+# 002 US2: log two eggs with the portion shortcut (1 adet = 50 g, "+" makes it 2 → 100 g, 143 kcal).
+- tapOn:
+    id: today-add-meal
+- tapOn:
+    id: food-search-input
+- inputText: yumurta
+- extendedWaitUntil:
+    visible:
+      id: food-hit-egg
+    timeout: 10000
+- tapOn:
+    id: food-hit-egg
+- tapOn:
+    id: portion-adet
+- tapOn: "Bir artır"
+- tapOn:
+    id: meal-save
+- extendedWaitUntil:
+    visible:
+      id: calorie-ring
+      text: "Kalori: 323 / .*"
+    timeout: 10000

@@ -17,7 +17,7 @@ import { useToday } from "./useToday";
  * day, so the dashboard shows it right away.
  */
 export function useLogMeal() {
-  const { draft, setGrams, removeItem, setSlot, clear } = useMealDraft();
+  const { draft, setGrams, setPortion, removeItem, setSlot, clear } = useMealDraft();
   const day = useToday();
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -57,6 +57,7 @@ export function useLogMeal() {
     ready: draftReady(draft),
     showErrors,
     setGrams,
+    setPortion,
     removeItem,
     setSlot,
     save,

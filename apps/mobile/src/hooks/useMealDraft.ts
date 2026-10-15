@@ -1,7 +1,8 @@
 import type { MealSlot } from "@calorie/core/schemas/meal";
 import { useSyncExternalStore } from "react";
 import type { FoodHit } from "@/services/foodService";
-import { addFood, EMPTY_DRAFT, removeDraftItem, setDraftGrams, setDraftSlot, type MealDraft } from "./mealLogic";
+import { addFood, EMPTY_DRAFT, removeDraftItem, setDraftGrams, setDraftPortion, setDraftSlot, type MealDraft } from "./mealLogic";
+import type { PortionPick } from "./portionLogic";
 
 /*
  * The meal being logged, shared by the search and review screens. It lives in memory until the
@@ -31,6 +32,7 @@ export function useMealDraft() {
     draft: current,
     addFood: (food: FoodHit) => update(addFood(draft, food)),
     setGrams: (key: string, text: string) => update(setDraftGrams(draft, key, text)),
+    setPortion: (key: string, pick: PortionPick) => update(setDraftPortion(draft, key, pick)),
     removeItem: (key: string) => update(removeDraftItem(draft, key)),
     setSlot: (slot: MealSlot) => update(setDraftSlot(draft, slot)),
     clear: clearMealDraft,

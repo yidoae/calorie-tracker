@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
 import { gramsError, MAX_DRAFT_ITEMS } from "@/hooks/mealLogic";
+import { pickUnit, stepPick } from "@/hooks/portionLogic";
 import { useLogMeal } from "@/hooks/useLogMeal";
 import { colors, radius, space, type } from "@/theme";
 import DraftItemCard from "./DraftItemCard";
@@ -68,6 +69,10 @@ export default function MealReviewScreen() {
           macros={item.macros}
           error={meal.showErrors || item.gramsText.trim() !== "" ? gramsError(item.gramsText) : null}
           onRemove={() => meal.removeItem(item.key)}
+          portions={item.food.portions}
+          portion={item.portion}
+          onPickPortion={(unit) => meal.setPortion(item.key, pickUnit(unit))}
+          onStepPortion={(delta) => item.portion && meal.setPortion(item.key, stepPick(item.food.portions, item.portion, delta))}
         />
       ))}
 

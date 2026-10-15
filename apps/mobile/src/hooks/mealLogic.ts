@@ -3,6 +3,7 @@ import { itemMacros, parseGrams, roundMacros, sumMacros, totalOfItems } from "@c
 import { MEAL_SLOTS, type LogMealPayload, type Meal, type MealSlot } from "@calorie/core/schemas/meal";
 import type { Macros } from "@calorie/core/schemas/nutrition";
 import type { FoodHit } from "@calorie/core/schemas/rows";
+import { gramsForPick, type PortionPick } from "./portionLogic";
 
 /*
  * Pure logic behind logging a meal (US3): the draft the review step edits, the log_meal payload
@@ -16,6 +17,8 @@ export interface DraftItem {
   key: string;
   food: FoodHit;
   gramsText: string;
+  /** The portion shortcut that wrote the grams (002 US2); cleared when the user types. */
+  portion: PortionPick | null;
 }
 
 /** The meal being put together: `slot` stays null until the user picks one (FR-014). */
@@ -32,11 +35,19 @@ export const MAX_DRAFT_ITEMS = 30;
 
 export function addFood(draft: MealDraft, food: FoodHit): MealDraft {
   if (draft.items.length >= MAX_DRAFT_ITEMS) return draft;
-  return { ...draft, items: [...draft.items, { key: `item-${draft.nextKey}`, food, gramsText: "" }], nextKey: draft.nextKey + 1 };
+  return { ...draft, items: [...draft.items, { key: `item-${draft.nextKey}`, food, gramsText: "", portion: null }], nextKey: draft.nextKey + 1 };
 }
 
 export function setDraftGrams(draft: MealDraft, key: string, gramsText: string): MealDraft {
-  return { ...draft, items: draft.items.map((item) => (item.key === key ? { ...item, gramsText } : item)) };
+  return { ...draft, items: draft.items.map((item) => (item.key === key ? { ...item, gramsText, portion: null } : item)) };
+}
+
+/** Writes the grams of a portion pick (unit × count) into the item and remembers the pick. */
+export function setDraftPortion(draft: MealDraft, key: string, pick: PortionPick): MealDraft {
+  return {
+    ...draft,
+    items: draft.items.map((item) => (item.key === key ? { ...item, gramsText: gramsForPick(item.food.portions, pick), portion: pick } : item)),
+  };
 }
 
 export function removeDraftItem(draft: MealDraft, key: string): MealDraft {

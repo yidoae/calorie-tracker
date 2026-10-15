@@ -117,13 +117,13 @@ Notes from Phase 3 (2026-10-15):
 
 ### Tests for User Story 2
 
-- [ ] T025 [P] [US2] `apps/mobile/tests/portionLogic.test.ts` (fail first): selecting a unit gives count 1 and its grams; "+"/"−" change the count by one, never below 1; grams = unit × count rounded to 0.1 g; "+" disabled when the next count passes 5000 g; typing grams clears the selection; formatted with a Turkish decimal comma like the field
+- [x] T025 [P] [US2] `apps/mobile/tests/portionLogic.test.ts` (fail first): selecting a unit gives count 1 and its grams; "+"/"−" change the count by one, never below 1; grams = unit × count rounded to 0.1 g; "+" disabled when the next count passes 5000 g; typing grams clears the selection; formatted with a Turkish decimal comma like the field
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] `apps/mobile/src/hooks/portionLogic.ts` (no React Native imports) to make T025 pass; wire selection state into the meal draft in `apps/mobile/src/hooks/useMealDraft.ts`
-- [ ] T027 [US2] `apps/mobile/src/components/meals/PortionPicker.tsx`: unit chips in source order and the stepper ("Bir azalt" / "Bir artır" labels, count announced, ≥ 44 pt targets, colours from `theme.ts`, no lime) per contracts/screens.md; render it in `DraftItemCard.tsx` under the gram field when `portions.length > 0`, else keep the typical-portion hint
-- [ ] T028 [US2] Preview: add the card with chips and with "adet" at count 2 to `tools/preview/src/PreviewGallery.tsx`; extend `.maestro/smoke.yaml` with a chip tap before saving
+- [x] T026 [US2] `apps/mobile/src/hooks/portionLogic.ts` (no React Native imports) to make T025 pass; wire selection state into the meal draft in `apps/mobile/src/hooks/useMealDraft.ts`
+- [x] T027 [US2] `apps/mobile/src/components/meals/PortionPicker.tsx`: unit chips in source order and the stepper ("Bir azalt" / "Bir artır" labels, count announced, ≥ 44 pt targets, colours from `theme.ts`, no lime) per contracts/screens.md; render it in `DraftItemCard.tsx` under the gram field when `portions.length > 0`, else keep the typical-portion hint
+- [x] T028 [US2] Preview: add the card with chips and with "adet" at count 2 to `tools/preview/src/PreviewGallery.tsx`; extend `.maestro/smoke.yaml` with a chip tap before saving
 
 **Checkpoint**: US2 works on Expo Go with foods that have portions and without.
 

@@ -2,9 +2,11 @@ import type { Macros } from "@calorie/core/schemas/nutrition";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import TextField from "@/components/ui/TextField";
+import type { Portion, PortionPick } from "@/hooks/portionLogic";
 import { colors, radius, space, type } from "@/theme";
 import { formatGrams } from "./format";
 import MacroLine from "./MacroLine";
+import PortionPicker from "./PortionPicker";
 
 interface Props {
   name: string;
@@ -15,10 +17,15 @@ interface Props {
   macros: Macros | null;
   error: string | null;
   onRemove: () => void;
+  /** The food's unit portions (002 US2); the shortcuts show only when there are some. */
+  portions: Portion[];
+  portion: PortionPick | null;
+  onPickPortion: (unit: string) => void;
+  onStepPortion: (delta: 1 | -1) => void;
 }
 
-/** One food of the meal under review: an empty gram field the user must fill (FR-013) and its live nutrition. */
-export default function DraftItemCard({ name, typicalPortionG, gramsText, onChangeGrams, macros, error, onRemove }: Props) {
+/** One food of the meal under review: an empty gram field the user must fill (FR-013), portion shortcuts and its live nutrition. */
+export default function DraftItemCard({ name, typicalPortionG, gramsText, onChangeGrams, macros, error, onRemove, portions, portion, onPickPortion, onStepPortion }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.head}>
@@ -38,6 +45,7 @@ export default function DraftItemCard({ name, typicalPortionG, gramsText, onChan
         hint={`Tipik porsiyon yaklaşık ${formatGrams(typicalPortionG)} g; tarttığın ya da tahmin ettiğin miktarı yaz.`}
         error={error}
       />
+      {portions.length > 0 && <PortionPicker portions={portions} pick={portion} onPick={onPickPortion} onStep={onStepPortion} />}
       {macros ? <MacroLine macros={macros} /> : <Text style={styles.pending}>Gramı yazınca kalori ve makrolar görünür.</Text>}
     </View>
   );
