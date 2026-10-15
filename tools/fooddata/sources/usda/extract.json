@@ -1,6 +1,16 @@
 {
   "release": "FoodData Central: Foundation 2026-04-30, SR Legacy 2018-04, Survey (FNDDS) 2024-10-31",
   "foods": {
+    "167535": {
+      "description": "Tortillas, ready-to-bake or -fry, flour, shelf stable",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 297,
+      "protein": 8.01,
+      "carbs": 49.27,
+      "fat": 7.58,
+      "alcohol": 0
+    },
     "167575": {
       "description": "Ice creams, vanilla",
       "dataType": "sr_legacy_food",
@@ -119,6 +129,16 @@
       "protein": 12.49,
       "carbs": 60.49,
       "fat": 21.52,
+      "alcohol": 0
+    },
+    "168013": {
+      "description": "Bread, multi-grain (includes whole-grain)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 265,
+      "protein": 13.36,
+      "carbs": 43.34,
+      "fat": 4.23,
       "alcohol": 0
     },
     "168153": {
@@ -251,6 +271,16 @@
       "fat": 0.15,
       "alcohol": 0
     },
+    "168556": {
+      "description": "Catsup",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 101,
+      "protein": 1.04,
+      "carbs": 27.4,
+      "fat": 0.1,
+      "alcohol": 0
+    },
     "168558": {
       "description": "Pickles, cucumber, dill or kosher dill",
       "dataType": "sr_legacy_food",
@@ -310,6 +340,16 @@
       "carbs": 1.64,
       "fat": 0,
       "alcohol": 3.1
+    },
+    "168775": {
+      "description": "Gelatin desserts, dry mix",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 381,
+      "protein": 7.8,
+      "carbs": 90.5,
+      "fat": 0,
+      "alcohol": 0
     },
     "168820": {
       "description": "Molasses",
@@ -1501,6 +1541,36 @@
       "fat": 1.02,
       "alcohol": 0
     },
+    "170923": {
+      "description": "Spices, cumin seed",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 375,
+      "protein": 17.81,
+      "carbs": 44.24,
+      "fat": 22.27,
+      "alcohol": 0
+    },
+    "170932": {
+      "description": "Spices, pepper, red or cayenne",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 318,
+      "protein": 12.01,
+      "carbs": 56.63,
+      "fat": 17.27,
+      "alcohol": 0
+    },
+    "170938": {
+      "description": "Spices, thyme, dried",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 276,
+      "protein": 9.11,
+      "carbs": 63.94,
+      "fat": 7.43,
+      "alcohol": 0
+    },
     "171009": {
       "description": "Salad dressing, mayonnaise, regular",
       "dataType": "sr_legacy_food",
@@ -1581,6 +1651,16 @@
       "fat": 8.1,
       "alcohol": 0
     },
+    "171186": {
+      "description": "Sauce, hot chile, sriracha",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 93,
+      "protein": 1.93,
+      "carbs": 19.16,
+      "fat": 0.93,
+      "alcohol": 0
+    },
     "171241": {
       "description": "Cheese, gouda",
       "dataType": "sr_legacy_food",
@@ -1649,6 +1729,36 @@
       "protein": 9,
       "carbs": 3.98,
       "fat": 5,
+      "alcohol": 0
+    },
+    "171320": {
+      "description": "Spices, cinnamon, ground",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 247,
+      "protein": 3.99,
+      "carbs": 80.59,
+      "fat": 1.24,
+      "alcohol": 0
+    },
+    "171328": {
+      "description": "Spices, oregano, dried",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 265,
+      "protein": 9,
+      "carbs": 68.92,
+      "fat": 4.28,
+      "alcohol": 0
+    },
+    "171329": {
+      "description": "Spices, paprika",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 282,
+      "protein": 14.14,
+      "carbs": 53.99,
+      "fat": 12.89,
       "alcohol": 0
     },
     "171413": {
@@ -1729,6 +1839,16 @@
       "protein": 19.66,
       "carbs": 0,
       "fat": 7.66,
+      "alcohol": 0
+    },
+    "171579": {
+      "description": "Sauce, pesto, ready-to-serve, refrigerated",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 418,
+      "protein": 9.83,
+      "carbs": 10.09,
+      "fat": 37.6,
       "alcohol": 0
     },
     "171646": {
@@ -2001,6 +2121,16 @@
       "fat": 1.12,
       "alcohol": 0
     },
+    "172239": {
+      "description": "Spearmint, dried",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 285,
+      "protein": 19.93,
+      "carbs": 52.04,
+      "fat": 6.03,
+      "alcohol": 0
+    },
     "172336": {
       "description": "Oil, canola",
       "dataType": "sr_legacy_food",
@@ -2141,6 +2271,26 @@
       "fat": 5.02,
       "alcohol": 0
     },
+    "172678": {
+      "description": "Bread, oatmeal",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 269,
+      "protein": 8.4,
+      "carbs": 48.5,
+      "fat": 4.4,
+      "alcohol": 0
+    },
+    "172684": {
+      "description": "Bread, rye",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 259,
+      "protein": 8.5,
+      "carbs": 48.3,
+      "fat": 3.3,
+      "alcohol": 0
+    },
     "172688": {
       "description": "Bread, whole-wheat, commercially prepared",
       "dataType": "sr_legacy_food",
@@ -2199,6 +2349,16 @@
       "protein": 9.77,
       "carbs": 50.12,
       "fat": 3.91,
+      "alcohol": 0
+    },
+    "172803": {
+      "description": "Leavening agents, baking powder, double-acting, sodium aluminum sulfate",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 53,
+      "protein": 0,
+      "carbs": 27.7,
+      "fat": 0,
       "alcohol": 0
     },
     "172935": {
@@ -2368,6 +2528,16 @@
       "kcal": 0,
       "protein": 0,
       "carbs": 0,
+      "fat": 0,
+      "alcohol": 0
+    },
+    "173469": {
+      "description": "Vinegar, cider",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 21,
+      "protein": 0,
+      "carbs": 0.93,
       "fat": 0,
       "alcohol": 0
     },
@@ -2701,6 +2871,16 @@
       "fat": 19.94,
       "alcohol": 0
     },
+    "174278": {
+      "description": "Soy sauce made from soy (tamari)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 60,
+      "protein": 10.51,
+      "carbs": 5.57,
+      "fat": 0.1,
+      "alcohol": 0
+    },
     "174342": {
       "description": "Lamb, New Zealand, imported, leg chop/steak, bone-in, separable lean and fat, raw",
       "dataType": "sr_legacy_food",
@@ -2799,6 +2979,36 @@
       "protein": 0,
       "carbs": 10.36,
       "fat": 0.25,
+      "alcohol": 0
+    },
+    "174899": {
+      "description": "Bagels, plain, enriched, with calcium propionate (includes onion, poppy, sesame)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 264,
+      "protein": 10.56,
+      "carbs": 52.38,
+      "fat": 1.32,
+      "alcohol": 0
+    },
+    "174915": {
+      "description": "Bread, pita, white, enriched",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 275,
+      "protein": 9.1,
+      "carbs": 55.7,
+      "fat": 1.2,
+      "alcohol": 0
+    },
+    "174916": {
+      "description": "Bread, pita, whole-wheat",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 262,
+      "protein": 9.8,
+      "carbs": 55.89,
+      "fat": 1.71,
       "alcohol": 0
     },
     "174924": {
@@ -3141,6 +3351,16 @@
       "fat": 10.4,
       "alcohol": 0
     },
+    "326698": {
+      "description": "Mustard, prepared, yellow",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 61,
+      "protein": 4.25,
+      "carbs": 5.3,
+      "fat": 3.38,
+      "alcohol": 0
+    },
     "326905": {
       "description": "Figs, dried, uncooked",
       "dataType": "foundation_food",
@@ -3189,6 +3409,16 @@
       "protein": 0,
       "carbs": 0.84,
       "fat": 99.1,
+      "alcohol": 0
+    },
+    "332282": {
+      "description": "Sauce, pasta, spaghetti/marinara, ready-to-serve",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 45,
+      "protein": 1.41,
+      "carbs": 8.05,
+      "fat": 1.48,
       "alcohol": 0
     },
     "333374": {
