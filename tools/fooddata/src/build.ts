@@ -73,7 +73,8 @@ if (at >= 0) {
   const version = process.argv[at + 1] ?? "";
   if (!/^\d{14}$/.test(version)) throw new Error("--release needs a migration version, e.g. 20261020000100");
   // Release 1 came from the retired tools/food-data (20261014000200_food_release_1.sql).
-  const previous = readdirSync(new URL("migrations/", SUPABASE)).filter((f) => /_food_(release|list)_\d+\.sql$/.test(f)).length;
+  // A rerun with the same version rewrites its own file instead of numbering a new list.
+  const previous = readdirSync(new URL("migrations/", SUPABASE)).filter((f) => /_food_(release|list)_\d+\.sql$/.test(f) && !f.startsWith(version)).length;
   const file = `${version}_food_list_${previous + 1}.sql`;
   writeFileSync(new URL(`migrations/${file}`, SUPABASE), listMigrationSql(foods, withdrawn.map((w) => w.id), `Food list ${previous + 1}`));
   console.log(`wrote supabase/migrations/${file}`);

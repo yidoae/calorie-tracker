@@ -8,7 +8,7 @@ import { useSignOut } from "@/hooks/useAuthActions";
 import { useSession } from "@/hooks/useSession";
 import { colors, type } from "@/theme";
 
-/** Account and sign-out (US1, FR-005). */
+/** Account, the food data credit (002 FR-015) and sign-out (US1, FR-005). */
 export default function Profile() {
   const { session } = useSession();
   const { signOut, pending } = useSignOut();
@@ -18,6 +18,12 @@ export default function Profile() {
   return (
     <Screen title="Profil" lead="Hesabın ve giriş yöntemlerin.">
       <AccountSummary email={user?.email ?? null} providers={user?.identities?.map((identity) => identity.provider) ?? []} />
+      <Text style={styles.heading} accessibilityRole="header">
+        VERİ KAYNAKLARI
+      </Text>
+      <Text style={styles.body}>
+        Besin değerleri: USDA FoodData Central (kamu malı, CC0). Türk yemekleri USDA verileriyle tariflerden hesaplanır.
+      </Text>
       <Button label="Çıkış yap" variant="secondary" onPress={() => setConfirming(true)} />
       <Sheet visible={confirming} title="Çıkış yapılsın mı?" onClose={() => setConfirming(false)}>
         <Text style={styles.body}>
@@ -31,5 +37,6 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
+  heading: { ...type.label, color: colors.fgMuted },
   body: { ...type.body, color: colors.fgMuted },
 });
