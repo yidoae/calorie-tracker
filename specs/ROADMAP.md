@@ -6,7 +6,7 @@ Features in the order they are specified and built (Spec Kit). Each one is a sep
 | # | Feature | What the user gets | Depends on |
 |---|---------|--------------------|------------|
 | 001 | Mobile foundation | Expo app for iOS and Android; account with e-mail, Apple, Google; first-time setup; plan wizard; logging by food search; dashboard; past days | — |
-| 002 | Food database | TürKomp / USDA / Open Food Facts foods with aliases and portions; barcode scanning; own foods; saved meals | 001 |
+| 002 | Food database | Part A (done, `specs/002-food-database/`): 461 USDA-sourced foods and recipes (95 Turkish dishes) with aliases and portion shortcuts, built by `tools/fooddata`. Part B: barcode scanning (Open Food Facts). Part C: own foods, saved meals. TürKomp is not used | 001 |
 | 003 | AI logging | One hosted vision model behind an Edge Function, chosen on a food eval set; photo, label and text-description logging (Calyra-style). Owner's decision (2026-10-09): start with Gemini (paid tier for users; free tier only for development); candidates 3.1 Flash-Lite, 3 Flash, 3.5 Flash-Lite | 001, 002 |
 | 004 | Tracking | Weight and BMI, water, intermittent fasting with reminders, progress and trends, titled plan periods | 001 |
 | 005 | Account and stores | Data export, account deletion, privacy policy, store listings, EAS builds and submission | 001–004 |

@@ -15,8 +15,9 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 - **Constitution wins:** `.specify/memory/constitution.md` (v2.0.1) over this file.
 - **Roadmap:** `specs/ROADMAP.md`: 001 mobile foundation → 002 food database + barcode → 003 AI
   logging → 004 tracking → 005 account and stores → 006 subscription (RevenueCat).
-- **Current feature:** `specs/002-food-database/` part A (spec, plan, research, data model,
-  contracts, quickstart; `tasks.md` next). 001 (`specs/001-mobile-foundation/`) is done except T060. Authority inside a feature: spec/plan/research/data-model and
+- **Current feature:** `specs/002-food-database/` part A: implemented (461 foods, portion chips,
+  review page); open are the owner's sign-off of the review page (T032), the device checks
+  (T035–T036) and, in 001, T060. Authority inside a feature: spec/plan/research/data-model and
   `contracts/` > `tasks.md` > this file.
 - **AI (003):** one hosted vision model behind one Edge Function; the owner chose **Gemini**. No
   on-device or in-process models, no Ollama.
@@ -38,6 +39,7 @@ apps/mobile          Expo app (src/app routes, components, hooks, providers, ser
 packages/core        @calorie/core: pure nutrition logic + Zod schemas + generated DB types
 supabase             migrations, pgTAP tests (supabase/README.md)
 tools/preview        screen gallery on react-native-web with fake services (never shipped)
+tools/fooddata       food list pipeline: sources + USDA extract → list migration, foods.txt, review.html (never shipped)
 specs                Spec Kit features; tofuhq-design = design system skill
 ```
 
@@ -84,7 +86,16 @@ npm test                    # core (node:test + fast-check) and the app's pure h
 npm run typecheck && npm run lint && npm run knip
 npm run preview             # builds tools/preview/dist/artifact.html
 cd apps/mobile && npx expo export --platform android --output-dir <tmp>   # proves the bundle builds
+npm run fetch -w fooddata   # once per pinned USDA release: refreshes sources/usda/extract.json (network)
+npm run build -w fooddata   # food rules, out/foods.txt, dist/review.html, search_cases.test.sql
+npm run build -w fooddata -- --release <YYYYMMDDHHMMSS>   # also writes the next *_food_list_<n>.sql
+npm run check -w fooddata   # CI: committed list outputs match their sources
 ```
+
+**Food list** (spec 002): edit `tools/fooddata/sources/` (USDA foods by category with FDC ids,
+`labels.ts`, recipes, `search-cases.ts`), never the generated `*_food_list_*.sql`, `foods.txt` or
+`search_cases.test.sql`. Recipes follow the FNDDS formulation of the closest dish (research §11).
+Saved meals keep their values: items snapshot per-100 g values on insert.
 
 Expo specifics for agents: `apps/mobile/AGENTS.md` (versioned SDK 57 docs, `npx expo install`).
 Typed routes come from `.expo/types/router.d.ts`, which a short `npx expo start` regenerates after a

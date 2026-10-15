@@ -26,7 +26,12 @@ npm test                                           # core and app unit/property 
 npm run typecheck && npm run lint && npm run knip  # types, layer rules, unused code
 npm run preview                                    # screen gallery (tools/preview/dist/artifact.html)
 maestro test .maestro/smoke.yaml                   # smoke flow on a device or emulator
+npm run build -w fooddata                          # food list: rules, summary, review page
+npm run check -w fooddata                          # committed food list matches its sources
 ```
+
+Food values come from USDA FoodData Central (public domain, CC0); Turkish dishes are computed from
+recipes of USDA ingredients. TürKomp is not used.
 
 Database migrations and pgTAP tests: [supabase/README.md](supabase/README.md).
 
