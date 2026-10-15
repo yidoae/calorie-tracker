@@ -1,0 +1,12 @@
+// poultry: raw and plain foods with USDA FoodData Central ids (values come from sources/usda/extract.json).
+export default [
+  { id: "chicken_boiled", name: "Haşlama tavuk", category: "poultry", fdcId: 171478, aliases: ["didiklenmiş tavuk","haşlama tavuk","haşlanmış tavuk","pilav üstü tavuk","tavuk haşlama"], typicalPortionG: 150 },
+  { id: "chicken_breast_grilled", name: "Izgara tavuk göğsü", category: "poultry", fdcId: 171477, aliases: ["grilled chicken","piliç","tavuk fileto","tavuk şiş","ızgara tavuk","ızgara tavuk göğsü"], typicalPortionG: 150 },
+  { id: "chicken_breast_raw", name: "Tavuk göğsü (çiğ)", category: "poultry", fdcId: 171077, aliases: ["chicken","raw chicken","tavuk","tavuk göğsü","çiğ tavuk","çiğ tavuk göğsü"], typicalPortionG: 200 },
+  { id: "chicken_roast", name: "Fırın tavuk (derili)", category: "poultry", fdcId: 171450, aliases: ["bütün tavuk","derili tavuk","fırın tavuk","fırında tavuk","roast chicken"], typicalPortionG: 180 },
+  { id: "chicken_thigh", name: "Tavuk but (derisiz, ızgara)", category: "poultry", fdcId: 172388, aliases: ["baget","tavuk baget","tavuk pirzola","ızgara tavuk but"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 90 }] },
+  { id: "chicken_thigh_raw", name: "Tavuk but (çiğ, derisiz)", category: "poultry", fdcId: 173627, aliases: ["chicken thigh","tavuk but","çiğ tavuk but"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 110 }] },
+  { id: "chicken_wing", name: "Tavuk kanat (fırında)", category: "poultry", fdcId: 173630, aliases: ["chicken wings","kanat","tavuk kanat"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 35 }] },
+  { id: "fried_chicken", name: "Kızarmış tavuk (panelenmiş)", category: "poultry", fdcId: 171475, aliases: ["kızarmış tavuk","nugget","pane tavuk","tavuk kızartma","tavuk şnitzel","çıtır tavuk"], typicalPortionG: 150 },
+  { id: "turkey", name: "Hindi füme", category: "poultry", fdcId: 172941, aliases: ["hindi","hindi füme"], typicalPortionG: 45, portions: [{ unit: "dilim", grams: 16 }] },
+];

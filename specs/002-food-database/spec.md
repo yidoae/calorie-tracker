@@ -106,7 +106,7 @@ shipped list, and the review table lists every food with its source, kcal and po
 - A USDA entry used by the list is missing in the pinned USDA release: the build fails and names it.
 - A portion would exceed the gram limit (5000 g) or be zero: the build fails.
 - A food's energy disagrees with 4 kcal/g protein + 4 kcal/g carbohydrate + 9 kcal/g fat + 7 kcal/g
-  alcohol by more than 15 %: the build fails and names the food (USDA rounding and fibre stay
+  alcohol by more than 20 % (or 10 kcal, whichever is larger): the build fails and names the food (USDA's food-specific Atwater factors and fibre stay
   inside that margin).
 - A search matches dozens of foods ("et"): results stay ordered by match quality, raw/staple forms
   first, and the list stays short enough to scan (as today).

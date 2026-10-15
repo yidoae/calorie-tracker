@@ -1,9 +1,12 @@
 /*
  * npm run build -w fooddata (contracts/pipeline.md): loads the sources and the committed USDA
  * extract, resolves every food's values (USDA entry, printed label, or recipe), runs the build rules
- * and reports every failure. Writing the list migration, summary and review page comes with the
- * user-story tasks (T021, T030).
+ * and reports every failure. When the list is valid it writes the search-case test, and with
+ * `-- --release <version>` the next list migration. The summary and review page come with T030.
  */
+import { readdirSync, writeFileSync } from "node:fs";
+import { searchCasesSql } from "./emit/searchCases.ts";
+import { listMigrationSql } from "./emit/sql.ts";
 import { cookedWeight, recipePer100, type Per100, type ResolvedYield } from "./recipe.ts";
 import { checkFoods, type ResolvedFood } from "./rules.ts";
 import { loadExtract, loadSources } from "./sources.ts";
@@ -11,7 +14,7 @@ import { loadExtract, loadSources } from "./sources.ts";
 const MIN_FOODS = 450;
 const MIN_DISHES = 80;
 
-const { usda, labels, recipes, legacyIds } = await loadSources();
+const { usda, labels, recipes, withdrawn, searchCases, legacyIds } = await loadSources();
 const extract = loadExtract();
 const errors: string[] = [];
 const zero: Per100 = { kcal: 0, protein: 0, carbs: 0, fat: 0, alcohol: 0 };
@@ -47,9 +50,27 @@ for (const r of recipes) {
 }
 
 errors.push(...checkFoods(foods, { legacyIds, minFoods: MIN_FOODS, minDishes: MIN_DISHES }));
+const ids = new Set(foods.map((f) => f.id));
+for (const c of searchCases) if (!ids.has(c.expectedId)) errors.push(`search case "${c.query}": ${c.expectedId} is not in the list`);
+for (const w of withdrawn) if (ids.has(w.id)) errors.push(`${w.id}: listed and withdrawn at once`);
 const dishes = foods.filter((f) => f.category === "dish").length;
 console.log(`${foods.length} foods (${usda.length} USDA, ${recipes.length} recipe, ${labels.length} label), ${dishes} dishes`);
 if (errors.length > 0) {
   console.error(`${errors.length} problem(s):\n${errors.map((e) => `  ${e}`).join("\n")}`);
   process.exit(1);
+}
+
+const SUPABASE = new URL("../../../supabase/", import.meta.url);
+writeFileSync(new URL("tests/database/search_cases.test.sql", SUPABASE), searchCasesSql(searchCases));
+console.log(`search cases: ${searchCases.length}`);
+
+const at = process.argv.indexOf("--release");
+if (at >= 0) {
+  const version = process.argv[at + 1] ?? "";
+  if (!/^\d{14}$/.test(version)) throw new Error("--release needs a migration version, e.g. 20261020000100");
+  // Release 1 came from the retired tools/food-data (20261014000200_food_release_1.sql).
+  const previous = readdirSync(new URL("migrations/", SUPABASE)).filter((f) => /_food_(release|list)_\d+\.sql$/.test(f)).length;
+  const file = `${version}_food_list_${previous + 1}.sql`;
+  writeFileSync(new URL(`migrations/${file}`, SUPABASE), listMigrationSql(foods, withdrawn.map((w) => w.id), `Food list ${previous + 1}`));
+  console.log(`wrote supabase/migrations/${file}`);
 }

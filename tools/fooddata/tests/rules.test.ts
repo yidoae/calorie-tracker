@@ -58,11 +58,14 @@ describe("build rules", () => {
     assert.ok(hasError(check([food({ per100: { kcal: 143, protein: -1, carbs: 0.7, fat: 9.5, alcohol: 0 } })]), "egg_raw", "protein"));
   });
 
-  it("refuses energy more than 15 % off 4P + 4C + 9F + 7A, counting alcohol", () => {
+  it("refuses energy more than 20 % (or 10 kcal) off 4P + 4C + 9F + 7A, counting alcohol", () => {
     assert.ok(hasError(check([food({ per100: { kcal: 200, protein: 12.6, carbs: 0.7, fat: 9.5, alcohol: 0 } })]), "egg_raw", "energy"));
     // Beer: 43 kcal from 0.5 g protein, 3.6 g carbs and 3.9 g alcohol (≈ 43.7 kcal).
     const beer = food({ id: "beer", name: "Bira", category: "alcohol", per100: { kcal: 43, protein: 0.5, carbs: 3.6, fat: 0, alcohol: 3.9 }, aliases: ["bira"], portions: [] });
     assert.deepEqual(check([beer]), []);
+    // Broccoli: USDA 34 kcal against 41 from 4/4/9 (fibre in carbs); within 10 kcal.
+    const broccoli = food({ id: "broccoli", name: "Brokoli", category: "vegetable", per100: { kcal: 34, protein: 2.8, carbs: 6.6, fat: 0.4, alcohol: 0 }, aliases: ["brokoli"], portions: [] });
+    assert.deepEqual(check([broccoli]), []);
     // Under 20 kcal rounding dominates: tea is exempt.
     const tea = food({ id: "tea", name: "Çay", category: "drink", per100: { kcal: 1, protein: 0, carbs: 0.3, fat: 0, alcohol: 0 }, aliases: ["çay"], portions: [] });
     assert.deepEqual(check([tea]), []);

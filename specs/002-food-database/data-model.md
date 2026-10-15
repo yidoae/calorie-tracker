@@ -84,7 +84,7 @@ Portions in sources: `[{unit: "adet", grams: 50}, …]`, order = chip order.
 2. Name ≤ 80 chars; no brand: the name and aliases of a label food must not contain a word of its
    `label.brand`.
 3. Every normalised alias (core `normalizeTr`) unique across foods; ≥ 1 alias per food.
-4. Per-100 g values within the column ranges; energy within ±15 % of 4P + 4C + 9F + 7A
+4. Per-100 g values within the column ranges; energy within ±20 % (at least ±10 kcal) of 4P + 4C + 9F + 7A
    (foods under 20 kcal are exempt: rounding dominates).
 5. Typical portion and unit portions > 0 and ≤ 5000 g; units unique per food.
 6. Recipes: ingredients exist and are `usda` foods; cooked weight rule above.

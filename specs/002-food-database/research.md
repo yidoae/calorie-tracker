@@ -112,7 +112,7 @@ Decisions behind [plan.md](./plan.md), made on 2026-10-15 against the clarified
     drop `unit_weights` (never read; replaced by `food_portions`).
   - New `food_portions (food_id, unit, grams, position)`: ordered unit portions with a CHECK on
     grams (0 < g ≤ 5000), readable by signed-in users, written only by migrations.
-  - The energy consistency rule (spec edge case: ±15 % of 4P + 4C + 9F + 7A) lives in the build,
+  - The energy consistency rule (spec edge case: ±20 %, at least ±10 kcal, of 4P + 4C + 9F + 7A; USDA uses food-specific Atwater factors and counts fibre in carbohydrate) lives in the build,
     not as a table CHECK: label sources can legally round, and a CHECK would make a bad label
     unloadable instead of reported by name.
 - **Alcohol in meals**: `meal_items` keeps snapshotting kcal/P/C/F only. Alcohol's energy is already

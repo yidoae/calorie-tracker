@@ -1,0 +1,23 @@
+// vegetable: raw and plain foods with USDA FoodData Central ids (values come from sources/usda/extract.json).
+export default [
+  { id: "broccoli", name: "Brokoli", category: "vegetable", fdcId: 170379, aliases: ["broccoli","brokoli"], typicalPortionG: 100 },
+  { id: "carrot", name: "Havuç", category: "vegetable", fdcId: 170393, aliases: ["carrot","havuç"], typicalPortionG: 60, portions: [{ unit: "adet", grams: 61 }] },
+  { id: "corn", name: "Mısır (çiğ)", category: "vegetable", fdcId: 169998, aliases: ["corn","mısır"], typicalPortionG: 80 },
+  { id: "corn_boiled", name: "Mısır (haşlanmış)", category: "vegetable", fdcId: 169999, aliases: ["haşlanmış mısır","konserve mısır","közde mısır"], typicalPortionG: 100 },
+  { id: "cucumber", name: "Salatalık", category: "vegetable", fdcId: 168409, aliases: ["hıyar","salatalık"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 150 }] },
+  { id: "eggplant", name: "Patlıcan", category: "vegetable", fdcId: 169228, aliases: ["patlıcan"], typicalPortionG: 250, portions: [{ unit: "adet", grams: 250 }] },
+  { id: "fries", name: "Patates kızartması", category: "vegetable", fdcId: 170698, aliases: ["cips patates","fries","kızartma patates","patates kızartması"], typicalPortionG: 120 },
+  { id: "garlic", name: "Sarımsak", category: "vegetable", fdcId: 169230, aliases: ["diş sarımsak","sarımsak"], typicalPortionG: 5, portions: [{ unit: "adet", grams: 3 }] },
+  { id: "green_beans", name: "Taze fasulye (çiğ)", category: "vegetable", fdcId: 169961, aliases: ["green beans","taze fasulye"], typicalPortionG: 150 },
+  { id: "green_pepper", name: "Yeşil biber", category: "vegetable", fdcId: 170427, aliases: ["sivri biber","yeşil biber","çarliston biber"], typicalPortionG: 50, portions: [{ unit: "adet", grams: 25 }] },
+  { id: "greens", name: "Yeşil salata", category: "vegetable", fdcId: 169249, aliases: ["karışık yeşillik","marul","roka","salad","salata","yeşil salata","yeşillik"], typicalPortionG: 100, portions: [{ unit: "kase", grams: 100 }] },
+  { id: "onion", name: "Soğan", category: "vegetable", fdcId: 170000, aliases: ["kuru soğan","soğan"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 110 }] },
+  { id: "potato", name: "Patates (haşlanmış)", category: "vegetable", fdcId: 170440, aliases: ["haşlanmış patates","patates püresi"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 170 }] },
+  { id: "potato_raw", name: "Patates (çiğ)", category: "vegetable", fdcId: 170026, aliases: ["patates","potato","çiğ patates"], typicalPortionG: 200, portions: [{ unit: "adet", grams: 170 }] },
+  { id: "red_pepper", name: "Kırmızı biber", category: "vegetable", fdcId: 170108, aliases: ["biber","kapya biber","kırmızı biber"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 120 }] },
+  { id: "sweet_potato", name: "Tatlı patates (çiğ)", category: "vegetable", fdcId: 168482, aliases: ["sweet potato","tatlı patates"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 150 }] },
+  { id: "sweet_potato_baked", name: "Tatlı patates (fırında)", category: "vegetable", fdcId: 168483, aliases: ["fırın tatlı patates","fırında tatlı patates"], typicalPortionG: 150 },
+  { id: "tomato", name: "Domates", category: "vegetable", fdcId: 170457, aliases: ["domates","tomato"], typicalPortionG: 120, portions: [{ unit: "adet", grams: 120 }] },
+  { id: "tomato_paste", name: "Domates salçası", category: "vegetable", fdcId: 170459, aliases: ["domates salçası","salça"], typicalPortionG: 16, portions: [{ unit: "yemek kaşığı", grams: 16 }] },
+  { id: "zucchini", name: "Kabak", category: "vegetable", fdcId: 169291, aliases: ["kabak","sakız kabağı"], typicalPortionG: 200, portions: [{ unit: "adet", grams: 196 }] },
+];

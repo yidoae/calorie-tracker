@@ -30,7 +30,10 @@ export interface RuleContext {
 
 const ID = /^[a-z0-9_]{1,64}$/;
 const MAX_GRAMS = 5000;
-const ENERGY_TOLERANCE = 0.15;
+// USDA computes energy with food-specific Atwater factors and counts fibre in carbohydrate, so plain
+// 4/4/9/7 overshoots vegetables by up to ~20 %. The rule is there to catch typos, not rounding.
+const ENERGY_TOLERANCE = 0.2;
+const ENERGY_MIN_DIFF_KCAL = 10;
 // Below this, label and USDA rounding outweighs the macros (tea, coffee, water).
 const ENERGY_EXEMPT_KCAL = 20;
 const RANGES: Record<keyof Per100, number> = { kcal: 900, protein: 100, carbs: 100, fat: 100, alcohol: 100 };
@@ -77,8 +80,8 @@ export function checkFoods(foods: ResolvedFood[], ctx: RuleContext): string[] {
     }
     const { kcal, protein, carbs, fat, alcohol } = f.per100;
     const expected = 4 * protein + 4 * carbs + 9 * fat + 7 * alcohol;
-    if (kcal >= ENERGY_EXEMPT_KCAL && Math.abs(kcal - expected) > ENERGY_TOLERANCE * kcal) {
-      fail(`energy ${kcal} kcal is more than 15 % off 4P + 4C + 9F + 7A = ${expected.toFixed(1)} kcal`);
+    if (kcal >= ENERGY_EXEMPT_KCAL && Math.abs(kcal - expected) > Math.max(ENERGY_TOLERANCE * kcal, ENERGY_MIN_DIFF_KCAL)) {
+      fail(`energy ${kcal} kcal is more than 20 % (or 10 kcal) off 4P + 4C + 9F + 7A = ${expected.toFixed(1)} kcal`);
     }
 
     if (!(f.typicalPortionG > 0 && f.typicalPortionG <= MAX_GRAMS)) fail(`typical portion must be 0–${MAX_GRAMS} g (${f.typicalPortionG})`);

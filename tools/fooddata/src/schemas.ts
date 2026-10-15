@@ -75,4 +75,5 @@ export const usdaReleaseSchema = z.object({
 
 export type Portion = z.output<typeof portion>;
 export type UsdaExtract = z.output<typeof usdaExtractSchema>;
+export type SearchCase = z.output<typeof searchCaseSchema>;
 export type Category = (typeof CATEGORIES)[number];
