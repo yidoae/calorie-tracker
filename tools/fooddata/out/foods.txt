@@ -1,0 +1,1256 @@
+adana_kebap | Adana kebap | dish | recipe:adana_kebap | 273.22 kcal P23.70 C0.96 F18.79 A0.00 | typ 180.0 g | şiş 90.0 g
+    lamb_mince_cooked 900.0 g
+    red_pepper 80.0 g
+    paprika 8.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 948.1 g (FNDDS 27430610, moisture -5 %)
+ali_nazik | Ali nazik | dish | recipe:ali_nazik | 113.75 kcal P6.99 C4.22 F7.77 A0.00 | typ 300.0 g | porsiyon 300.0 g
+    eggplant 600.0 g
+    yogurt 400.0 g
+    garlic 10.0 g
+    lamb_mince_cooked 300.0 g
+    butter 40.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1358.0 g (FNDDS 77316600, moisture 0 %)
+almond_milk | Badem sütü (şekersiz) | drink | fdc:174832 | 15.00 kcal P0.40 C1.31 F0.96 A0.00 | typ 200.0 g | su bardağı 200.0 g
+almonds | Badem | nut_seed | fdc:170567 | 579.00 kcal P21.15 C21.55 F49.93 A0.00 | typ 30.0 g | adet 1.2 g; avuç 30.0 g
+almonds_roasted | Badem (kavrulmuş, tuzlu) | nut_seed | fdc:323294 | 620.00 kcal P20.40 C16.20 F57.80 A0.00 | typ 30.0 g | avuç 30.0 g
+anchovy_raw | Hamsi (çiğ) | fish | fdc:174182 | 131.00 kcal P20.35 C0.00 F4.84 A0.00 | typ 150.0 g
+apple | Elma | fruit | fdc:171688 | 52.00 kcal P0.26 C13.81 F0.17 A0.00 | typ 180.0 g | adet 180.0 g
+apple_juice | Elma suyu | drink | fdc:167771 | 46.00 kcal P0.10 C11.30 F0.13 A0.00 | typ 200.0 g | su bardağı 200.0 g
+apple_pie | Elmalı turta | sweet | fdc:175011 | 237.00 kcal P1.90 C34.00 F11.00 A0.00 | typ 120.0 g | dilim 120.0 g
+apricot | Kayısı | fruit | fdc:171697 | 48.00 kcal P1.40 C11.12 F0.39 A0.00 | typ 105.0 g | adet 35.0 g
+apricot_dried | Kuru kayısı | fruit | fdc:173941 | 241.00 kcal P3.39 C62.64 F0.51 A0.00 | typ 40.0 g | adet 8.0 g
+artichoke | Enginar | vegetable | fdc:169205 | 47.00 kcal P3.27 C10.51 F0.15 A0.00 | typ 120.0 g | adet 120.0 g
+artichoke_olive | Zeytinyağlı enginar | dish | recipe:artichoke_olive | 83.00 kcal P2.09 C9.38 F4.77 A0.00 | typ 200.0 g | adet 180.0 g
+    artichoke 720.0 g
+    potato_raw 200.0 g
+    carrot 150.0 g
+    peas_frozen 100.0 g
+    onion 100.0 g
+    oil 80.0 g
+    lemon_juice 40.0 g
+    dill 20.0 g
+    sugar 10.0 g
+    salt 8.0 g
+    water 300.0 g → cooked 1728.0 g (FNDDS 75100750, moisture 0 %)
+arugula | Roka | vegetable | fdc:169387 | 25.00 kcal P2.58 C3.65 F0.66 A0.00 | typ 30.0 g | demet 50.0 g
+asparagus | Kuşkonmaz | vegetable | fdc:168389 | 20.00 kcal P2.20 C3.88 F0.12 A0.00 | typ 100.0 g
+avocado | Avokado | fruit | fdc:171705 | 160.00 kcal P2.00 C8.53 F14.66 A0.00 | typ 75.0 g | adet 150.0 g
+ayran | Ayran | drink | recipe:ayran | 30.35 kcal P1.73 C2.32 F1.62 A0.00 | typ 200.0 g | su bardağı 200.0 g
+    yogurt 500.0 g
+    salt 5.0 g
+    water 500.0 g → cooked 1005.0 g (FNDDS 58175110, moisture 0 %)
+bagel | Bagel | bread | fdc:174899 | 264.00 kcal P10.56 C52.38 F1.32 A0.00 | typ 100.0 g | adet 100.0 g
+baked_pasta | Fırın makarna | dish | recipe:baked_pasta | 169.53 kcal P6.82 C21.14 F6.22 A0.00 | typ 250.0 g | dilim 200.0 g
+    spaghetti 700.0 g
+    milk 400.0 g
+    egg 100.0 g
+    white_cheese 100.0 g
+    butter 30.0 g
+    flour 20.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1206.8 g (FNDDS 58130011, moisture -11 %)
+baking_powder | Kabartma tozu | other | fdc:172803 | 53.00 kcal P0.00 C27.70 F0.00 A0.00 | typ 5.0 g | paket 10.0 g
+    energy exception: USDA carbohydrate by difference includes mineral salts that give no energy
+baklava | Baklava (cevizli) | sweet | recipe:baklava | 411.71 kcal P4.35 C46.98 F24.34 A0.00 | typ 90.0 g | adet 30.0 g; dilim 30.0 g
+    phyllo 500.0 g
+    walnuts 300.0 g
+    butter 300.0 g
+    sugar 600.0 g
+    lemon_juice 15.0 g
+    water 450.0 g → cooked 1926.9 g (FNDDS 53441110, moisture -11 %)
+banana | Muz | fruit | fdc:173944 | 89.00 kcal P1.09 C22.84 F0.33 A0.00 | typ 120.0 g | adet 120.0 g
+barbunya_olive | Zeytinyağlı barbunya | dish | recipe:barbunya_olive | 102.79 kcal P3.49 C11.29 F5.03 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    pinto_beans_dry 250.0 g
+    onion 120.0 g
+    carrot 100.0 g
+    tomato 200.0 g
+    oil 80.0 g
+    garlic 10.0 g
+    salt 8.0 g
+    water 900.0 g → cooked 1668.0 g (FNDDS 41601010, moisture 0 %)
+barley | Arpa (kuru) | grain | fdc:170284 | 352.00 kcal P9.91 C77.72 F1.16 A0.00 | typ 60.0 g
+bean_soup | Kuru fasulye çorbası | dish | recipe:bean_soup | 64.42 kcal P2.68 C9.25 F2.04 A0.00 | typ 250.0 g | kase 250.0 g
+    white_beans_boiled 500.0 g
+    onion 100.0 g
+    carrot 80.0 g
+    tomato_paste 25.0 g
+    oil 30.0 g
+    salt 8.0 g
+    water 900.0 g → cooked 1643.0 g (FNDDS 41601010, moisture 0 %)
+beef_liver_cooked | Ciğer tava (pişmiş) | meat | fdc:168627 | 175.00 kcal P26.52 C5.16 F4.68 A0.00 | typ 150.0 g
+beef_liver_raw | Dana ciğeri (çiğ) | meat | fdc:169451 | 135.00 kcal P20.36 C3.89 F3.63 A0.00 | typ 150.0 g
+beef_mince_cooked | Kıyma (kavrulmuş) | meat | fdc:171799 | 272.00 kcal P27.00 C0.00 F17.36 A0.00 | typ 100.0 g
+beef_mince_lean_raw | Yağsız kıyma (çiğ) | meat | fdc:171790 | 137.00 kcal P21.41 C0.00 F5.00 A0.00 | typ 125.0 g
+beef_mince_raw | Kıyma (çiğ, orta yağlı) | meat | fdc:171796 | 215.00 kcal P18.59 C0.00 F15.00 A0.00 | typ 125.0 g
+beef_patty | Hamburger köftesi (pişmiş) | meat | fdc:174032 | 250.00 kcal P25.93 C0.00 F15.41 A0.00 | typ 110.0 g | adet 110.0 g
+beef_raw | Dana eti (çiğ, yağsız) | meat | fdc:171816 | 135.00 kcal P22.91 C0.00 F4.09 A0.00 | typ 150.0 g
+beef_sirloin_raw | Dana antrikot (çiğ, yağlı) | meat | fdc:168726 | 201.00 kcal P20.30 C0.00 F12.71 A0.00 | typ 150.0 g
+beef_stew_cooked | Dana kuşbaşı (pişmiş) | meat | fdc:171204 | 186.00 kcal P32.29 C0.00 F6.34 A0.00 | typ 120.0 g
+beef_stew_raw | Dana kuşbaşı (çiğ, sote/haşlamalık) | meat | fdc:170809 | 124.00 kcal P21.90 C0.21 F3.99 A0.00 | typ 150.0 g
+beef_tbone_raw | Dana pirzola / T-bone (çiğ) | meat | fdc:172118 | 223.00 kcal P20.11 C0.00 F15.18 A0.00 | typ 250.0 g
+beer | Bira | alcohol | fdc:168746 | 43.00 kcal P0.46 C3.55 F0.00 A3.90 | typ 500.0 g | kutu 330.0 g; şişe 500.0 g; bardak 400.0 g
+beer_light | Bira (light) | alcohol | fdc:168749 | 29.00 kcal P0.24 C1.64 F0.00 A3.10 | typ 330.0 g | kutu 330.0 g
+beet | Pancar | vegetable | fdc:169145 | 43.00 kcal P1.61 C9.56 F0.17 A0.00 | typ 100.0 g | adet 80.0 g
+berries | Orman meyveleri | fruit | fdc:171711 | 57.00 kcal P0.74 C14.49 F0.33 A0.00 | typ 100.0 g | kase 120.0 g
+black_beans_dry | Siyah fasulye (kuru) | legume | fdc:173734 | 341.00 kcal P21.60 C62.36 F1.42 A0.00 | typ 60.0 g
+blackberries | Böğürtlen | fruit | fdc:173946 | 43.00 kcal P1.39 C9.61 F0.49 A0.00 | typ 100.0 g | kase 145.0 g
+bluefish_raw | Lüfer (çiğ) | fish | fdc:171949 | 124.00 kcal P20.04 C0.00 F4.24 A0.00 | typ 200.0 g
+bolognese | Kıymalı sos | dish | recipe:bolognese | 119.39 kcal P8.88 C4.47 F7.39 A0.00 | typ 150.0 g
+    beef_mince_cooked 300.0 g
+    onion 150.0 g
+    tomato_canned 400.0 g
+    tomato_paste 30.0 g
+    carrot 80.0 g
+    oil 20.0 g
+    garlic 10.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 996.0 g (FNDDS 27162040, moisture 0 %)
+borek | Peynirli tepsi böreği | dish | recipe:borek | 296.73 kcal P8.83 C24.20 F18.14 A0.00 | typ 150.0 g | dilim 100.0 g
+    phyllo 500.0 g
+    white_cheese 300.0 g
+    milk 250.0 g
+    egg 150.0 g
+    oil 100.0 g
+    parsley 30.0 g
+    water 0.0 g → cooked 1197.0 g (FNDDS 58124250, moisture -10 %)
+bread_crumbs | Galeta unu | grain | fdc:174928 | 395.00 kcal P13.35 C71.98 F5.30 A0.00 | typ 20.0 g | yemek kaşığı 7.0 g
+broccoli | Brokoli | vegetable | fdc:170379 | 34.00 kcal P2.82 C6.64 F0.37 A0.00 | typ 100.0 g
+broccoli_soup | Kremalı brokoli çorbası | dish | recipe:broccoli_soup | 41.21 kcal P1.75 C4.54 F2.04 A0.00 | typ 250.0 g | kase 250.0 g
+    broccoli 500.0 g
+    onion 80.0 g
+    butter 25.0 g
+    flour 25.0 g
+    milk 400.0 g
+    salt 8.0 g
+    water 700.0 g → cooked 1738.0 g (FNDDS 75649110, moisture 0 %)
+brown_rice | Esmer pirinç (çiğ) | grain | fdc:169703 | 367.00 kcal P7.54 C76.25 F3.20 A0.00 | typ 80.0 g | yemek kaşığı 13.0 g
+brown_rice_cooked | Esmer pirinç (haşlanmış) | grain | fdc:169704 | 123.00 kcal P2.74 C25.58 F0.97 A0.00 | typ 150.0 g | kase 150.0 g
+brown_sugar | Esmer şeker | sweet | fdc:168833 | 380.00 kcal P0.12 C98.09 F0.00 A0.00 | typ 10.0 g | çay kaşığı 4.0 g; yemek kaşığı 12.0 g
+brussels_sprouts | Brüksel lahanası | vegetable | fdc:170383 | 43.00 kcal P3.38 C8.95 F0.30 A0.00 | typ 100.0 g
+buckwheat | Karabuğday (kuru) | grain | fdc:170685 | 346.00 kcal P11.73 C74.95 F2.71 A0.00 | typ 60.0 g
+bulgur | Bulgur pilavı (pişmiş) | dish | recipe:bulgur | 104.44 kcal P2.74 C16.40 F3.77 A0.00 | typ 150.0 g | yemek kaşığı 15.0 g; kase 150.0 g
+    bulgur_cooked 900.0 g
+    onion 80.0 g
+    green_pepper 50.0 g
+    tomato_paste 25.0 g
+    butter 30.0 g
+    oil 15.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1108.0 g (FNDDS 56207120, moisture 0 %)
+bulgur_cooked | Bulgur (haşlanmış, sade) | grain | fdc:170287 | 83.00 kcal P3.08 C18.58 F0.24 A0.00 | typ 150.0 g | kase 180.0 g
+bulgur_dry | Bulgur (kuru) | grain | fdc:170688 | 342.00 kcal P12.29 C75.87 F1.33 A0.00 | typ 80.0 g | yemek kaşığı 12.0 g
+bun | Hamburger ekmeği | bread | fdc:172796 | 279.00 kcal P9.77 C50.12 F3.91 A0.00 | typ 90.0 g | adet 90.0 g
+butter | Tereyağı | dairy | fdc:173430 | 717.00 kcal P0.85 C0.06 F81.11 A0.00 | typ 10.0 g | çay kaşığı 5.0 g; yemek kaşığı 14.2 g
+butter_cookies | Bisküvi (tereyağlı) | sweet | fdc:174950 | 467.00 kcal P6.10 C68.90 F18.80 A0.00 | typ 30.0 g | adet 6.0 g
+buttermilk | Yayık ayranı (az yağlı) | dairy | fdc:2259792 | 42.92 kcal P3.46 C4.81 F1.08 A0.00 | typ 200.0 g | su bardağı 200.0 g
+cabbage | Beyaz lahana | vegetable | fdc:169975 | 25.00 kcal P1.28 C5.80 F0.10 A0.00 | typ 100.0 g
+cabbage_red | Mor lahana | vegetable | fdc:169977 | 31.00 kcal P1.43 C7.37 F0.16 A0.00 | typ 100.0 g
+cabbage_sarma_olive | Zeytinyağlı lahana sarması | dish | recipe:cabbage_sarma_olive | 110.97 kcal P1.66 C14.26 F5.44 A0.00 | typ 200.0 g | adet 40.0 g
+    cabbage 800.0 g
+    rice_raw 250.0 g
+    onion 200.0 g
+    oil 100.0 g
+    tomato_paste 20.0 g
+    mint 10.0 g
+    salt 10.0 g
+    water 500.0 g → cooked 1890.0 g (FNDDS 58161510, moisture 0 %)
+cacik | Cacık | dish | recipe:cacik | 46.00 kcal P2.04 C3.70 F2.74 A0.00 | typ 200.0 g | kase 200.0 g
+    yogurt 500.0 g
+    cucumber 250.0 g
+    garlic 8.0 g
+    dried_mint 2.0 g
+    oil 10.0 g
+    salt 5.0 g
+    water 200.0 g → cooked 975.0 g (FNDDS 58175110, moisture 0 %)
+canola_oil | Kanola yağı | oil | fdc:172336 | 884.00 kcal P0.00 C0.00 F100.00 A0.00 | typ 10.0 g | yemek kaşığı 14.0 g
+cantaloupe | Kavun | fruit | fdc:169092 | 34.00 kcal P0.84 C8.16 F0.19 A0.00 | typ 200.0 g | dilim 150.0 g
+carrot | Havuç | vegetable | fdc:170393 | 41.00 kcal P0.93 C9.58 F0.24 A0.00 | typ 60.0 g | adet 61.0 g
+carrot_tarator | Havuç tarator | dish | recipe:carrot_tarator | 120.17 kcal P4.63 C7.32 F8.51 A0.00 | typ 100.0 g | yemek kaşığı 25.0 g
+    carrot 400.0 g
+    yogurt_greek 300.0 g
+    garlic 6.0 g
+    oil 30.0 g
+    walnuts 30.0 g
+    salt 4.0 g
+    water 0.0 g → cooked 770.0 g (FNDDS 58175110, moisture 0 %)
+cashews | Kaju (kavrulmuş) | nut_seed | fdc:170571 | 574.00 kcal P15.31 C32.69 F46.35 A0.00 | typ 30.0 g | avuç 30.0 g
+cauliflower | Karnabahar | vegetable | fdc:169986 | 25.00 kcal P1.92 C4.97 F0.28 A0.00 | typ 150.0 g
+cayenne | Acı toz biber | other | fdc:170932 | 318.00 kcal P12.01 C56.63 F17.27 A0.00 | typ 1.0 g | çay kaşığı 1.8 g
+    energy exception: Spice: about 27 g fibre per 100 g in USDA carbohydrate, so 4/4/9 overstates energy
+celeriac | Kereviz | vegetable | fdc:170400 | 42.00 kcal P1.50 C9.20 F0.30 A0.00 | typ 150.0 g
+celeriac_olive | Zeytinyağlı kereviz | dish | recipe:celeriac_olive | 83.51 kcal P1.22 C9.69 F4.84 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    celeriac 800.0 g
+    carrot 150.0 g
+    potato_raw 150.0 g
+    onion 100.0 g
+    oil 70.0 g
+    lemon_juice 40.0 g
+    orange_juice 100.0 g
+    sugar 10.0 g
+    salt 8.0 g
+    water 200.0 g → cooked 1514.0 g (FNDDS 75215020, moisture -7 %)
+celery | Sap kereviz | vegetable | fdc:169988 | 14.00 kcal P0.69 C2.97 F0.17 A0.00 | typ 40.0 g | sap 40.0 g
+cheddar | Çedar peyniri | dairy | fdc:328637 | 408.00 kcal P23.30 C2.44 F34.00 A0.00 | typ 30.0 g | dilim 20.0 g
+cheese_pide | Kaşarlı pide | dish | recipe:cheese_pide | 301.46 kcal P11.84 C34.18 F12.70 A0.00 | typ 250.0 g | dilim 60.0 g; adet 250.0 g
+    flour 500.0 g
+    yeast 10.0 g
+    oil 30.0 g
+    kasar_cheese 300.0 g
+    egg 50.0 g
+    butter 30.0 g
+    salt 10.0 g
+    water 300.0 g → cooked 1131.6 g (FNDDS 51101050, moisture -8 %)
+cherries | Kiraz | fruit | fdc:171719 | 63.00 kcal P1.06 C16.01 F0.20 A0.00 | typ 150.0 g | kase 150.0 g; adet 8.0 g
+cherry_tomato | Çeri domates | vegetable | fdc:321360 | 27.00 kcal P0.83 C5.51 F0.63 A0.00 | typ 80.0 g | adet 10.0 g
+chestnuts_roasted | Kestane (kavrulmuş) | nut_seed | fdc:170190 | 245.00 kcal P3.17 C52.96 F2.20 A0.00 | typ 50.0 g | adet 8.0 g
+chia | Chia tohumu | nut_seed | fdc:170554 | 486.00 kcal P16.54 C42.12 F30.74 A0.00 | typ 15.0 g | yemek kaşığı 12.0 g
+chicken_boiled | Haşlama tavuk | poultry | fdc:171478 | 151.00 kcal P28.98 C0.00 F3.03 A0.00 | typ 150.0 g
+chicken_breast_grilled | Izgara tavuk göğsü | poultry | fdc:171477 | 165.00 kcal P31.02 C0.00 F3.57 A0.00 | typ 150.0 g
+chicken_breast_raw | Tavuk göğsü (çiğ) | poultry | fdc:171077 | 120.00 kcal P22.50 C0.00 F2.62 A0.00 | typ 200.0 g
+chicken_doner | Tavuk döner | dish | recipe:chicken_doner | 206.77 kcal P23.16 C0.58 F11.85 A0.00 | typ 150.0 g
+    chicken_thigh 900.0 g
+    yogurt 60.0 g
+    oil 40.0 g
+    tomato_paste 15.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 973.8 g (FNDDS 27341020, moisture -5 %)
+chicken_drumstick_raw | Tavuk baget (çiğ, derili) | poultry | fdc:172373 | 161.00 kcal P18.08 C0.11 F9.20 A0.00 | typ 150.0 g | adet 110.0 g
+chicken_giblets_raw | Tavuk taşlık (çiğ) | poultry | fdc:171057 | 124.00 kcal P17.88 C1.80 F4.47 A0.00 | typ 100.0 g
+chicken_liver_raw | Tavuk ciğeri (çiğ) | poultry | fdc:171060 | 119.00 kcal P16.92 C0.73 F4.83 A0.00 | typ 100.0 g
+chicken_mince_raw | Tavuk kıyma (çiğ) | poultry | fdc:171116 | 143.00 kcal P17.44 C0.04 F8.10 A0.00 | typ 125.0 g
+chicken_noodle_soup | Şehriyeli tavuk çorbası | dish | recipe:chicken_noodle_soup | 32.28 kcal P2.89 C2.82 F0.99 A0.00 | typ 250.0 g | kase 250.0 g
+    chicken_boiled 150.0 g
+    pasta_dry 60.0 g
+    carrot 50.0 g
+    butter 15.0 g
+    lemon_juice 15.0 g
+    salt 8.0 g
+    water 1500.0 g → cooked 1798.0 g (FNDDS 58403040, moisture 0 %)
+chicken_rice | Tavuklu pilav | dish | recipe:chicken_rice | 154.93 kcal P9.22 C19.86 F3.82 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    rice_boiled 700.0 g
+    chicken_boiled 250.0 g
+    butter 35.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 993.0 g (FNDDS 56205004, moisture 0 %)
+chicken_roast | Fırın tavuk (derili) | poultry | fdc:171450 | 239.00 kcal P27.30 C0.00 F13.60 A0.00 | typ 180.0 g
+chicken_saute | Tavuk sote | dish | recipe:chicken_saute | 104.33 kcal P12.53 C3.36 F4.50 A0.00 | typ 250.0 g | kase 250.0 g
+    chicken_breast_grilled 500.0 g
+    green_pepper 150.0 g
+    red_pepper 150.0 g
+    tomato 250.0 g
+    onion 150.0 g
+    mushroom 150.0 g
+    oil 40.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1328.1 g (FNDDS 27341020, moisture -5 %)
+chicken_shish | Tavuk şiş | dish | recipe:chicken_shish | 182.90 kcal P29.38 C0.59 F6.16 A0.00 | typ 180.0 g | şiş 90.0 g
+    chicken_breast_grilled 900.0 g
+    yogurt 60.0 g
+    oil 25.0 g
+    tomato_paste 15.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 959.5 g (FNDDS 27341020, moisture -5 %)
+chicken_thigh | Tavuk but (derisiz, ızgara) | poultry | fdc:172388 | 179.00 kcal P24.76 C0.00 F8.15 A0.00 | typ 150.0 g | adet 90.0 g
+chicken_thigh_raw | Tavuk but (çiğ, derisiz) | poultry | fdc:173627 | 121.00 kcal P19.66 C0.00 F4.12 A0.00 | typ 150.0 g | adet 110.0 g
+chicken_whole_raw | Bütün tavuk (çiğ, derili) | poultry | fdc:171447 | 215.00 kcal P18.60 C0.00 F15.06 A0.00 | typ 200.0 g
+chicken_wing | Tavuk kanat (fırında) | poultry | fdc:173630 | 254.00 kcal P23.79 C0.00 F16.87 A0.00 | typ 150.0 g | adet 35.0 g
+chicken_wing_raw | Tavuk kanat (çiğ) | poultry | fdc:172390 | 191.00 kcal P17.52 C0.00 F12.85 A0.00 | typ 150.0 g | adet 45.0 g
+chickpea_rice | Nohutlu pilav | dish | recipe:chickpea_rice | 157.90 kcal P3.78 C26.74 F3.80 A0.00 | typ 200.0 g | kase 200.0 g
+    rice_boiled 800.0 g
+    chickpeas_boiled 200.0 g
+    butter 40.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1048.0 g (FNDDS 56205004, moisture 0 %)
+chickpea_stew | Etli nohut | dish | recipe:chickpea_stew | 125.77 kcal P7.83 C15.97 F3.76 A0.00 | typ 250.0 g | kase 250.0 g
+    chickpeas_boiled 900.0 g
+    beef_stew_cooked 150.0 g
+    onion 150.0 g
+    tomato_paste 40.0 g
+    oil 30.0 g
+    salt 10.0 g
+    water 400.0 g → cooked 1680.0 g (FNDDS 41601010, moisture 0 %)
+chickpeas | Nohut (kuru) | legume | fdc:173756 | 378.00 kcal P20.47 C62.95 F6.04 A0.00 | typ 60.0 g | yemek kaşığı 12.5 g
+chickpeas_boiled | Nohut (haşlanmış) | legume | fdc:173757 | 164.00 kcal P8.86 C27.42 F2.59 A0.00 | typ 150.0 g
+chili_green | Acı biber | vegetable | fdc:170497 | 40.00 kcal P2.00 C9.46 F0.20 A0.00 | typ 20.0 g | adet 10.0 g
+chocolate_cake | Çikolatalı pasta | sweet | fdc:174934 | 389.00 kcal P3.48 C52.84 F20.05 A0.00 | typ 100.0 g | dilim 100.0 g
+chocolate_milk_bar | Sütlü çikolata | sweet | fdc:167587 | 535.00 kcal P7.65 C59.40 F29.66 A0.00 | typ 30.0 g | kare 6.0 g; tablet 80.0 g
+chocolate_pudding | Kakaolu puding | sweet | recipe:chocolate_pudding | 124.02 kcal P3.03 C20.68 F3.94 A0.00 | typ 150.0 g | kase 150.0 g
+    milk 1000.0 g
+    sugar 150.0 g
+    cornstarch 45.0 g
+    cocoa_powder 30.0 g
+    butter 15.0 g
+    water 0.0 g → cooked 1240.0 g (FNDDS 13200110, moisture 0 %)
+cig_kofte | Çiğ köfte (etsiz) | dish | recipe:cig_kofte | 202.23 kcal P5.41 C33.55 F6.74 A0.00 | typ 150.0 g | adet 25.0 g; dürüm 250.0 g
+    bulgur_dry 500.0 g
+    onion 200.0 g
+    tomato_paste 80.0 g
+    paprika 40.0 g
+    molasses 30.0 g
+    lemon_juice 30.0 g
+    oil 80.0 g
+    parsley 60.0 g
+    salt 10.0 g
+    water 350.0 g → cooked 1380.0 g (FNDDS 58175110, moisture 0 %)
+cilbir | Çılbır | dish | recipe:cilbir | 141.15 kcal P6.67 C3.77 F11.14 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    egg_poached 100.0 g
+    yogurt 150.0 g
+    garlic 5.0 g
+    butter 20.0 g
+    paprika 2.0 g
+    water 0.0 g → cooked 277.0 g (FNDDS 31103010, moisture 0 %)
+cinnamon | Tarçın | other | fdc:171320 | 247.00 kcal P3.99 C80.59 F1.24 A0.00 | typ 2.0 g | çay kaşığı 2.6 g
+    energy exception: Spice: more than half of USDA carbohydrate is fibre, so 4/4/9 overstates energy
+coban_salata | Çoban salata | dish | recipe:coban_salata | 46.32 kcal P0.84 C4.36 F3.25 A0.00 | typ 200.0 g | kase 200.0 g
+    tomato 400.0 g
+    cucumber 300.0 g
+    green_pepper 100.0 g
+    onion 80.0 g
+    parsley 30.0 g
+    oil 30.0 g
+    lemon_juice 30.0 g
+    salt 5.0 g
+    water 0.0 g → cooked 975.0 g (FNDDS 58175110, moisture 0 %)
+cocoa_powder | Kakao (şekersiz) | sweet | fdc:169593 | 228.00 kcal P19.60 C57.90 F13.70 A0.00 | typ 10.0 g | yemek kaşığı 6.0 g
+    energy exception: Most of USDA cocoa carbohydrate is fibre (about 37 g per 100 g), which yields far less than 4 kcal/g
+coconut | Hindistan cevizi (taze) | fruit | fdc:170169 | 354.00 kcal P3.33 C15.23 F33.49 A0.00 | typ 30.0 g
+coconut_oil | Hindistan cevizi yağı | oil | fdc:330458 | 833.00 kcal P0.00 C0.84 F99.10 A0.00 | typ 10.0 g | yemek kaşığı 13.6 g
+cod_raw | Morina (çiğ) | fish | fdc:171955 | 82.00 kcal P17.81 C0.00 F0.67 A0.00 | typ 150.0 g
+coffee | Filtre kahve (şekersiz) | drink | fdc:171890 | 1.00 kcal P0.12 C0.00 F0.02 A0.00 | typ 240.0 g | kupa 240.0 g
+cola | Kola | drink | fdc:174852 | 42.00 kcal P0.00 C10.36 F0.25 A0.00 | typ 330.0 g | kutu 330.0 g; su bardağı 200.0 g
+cola_zero | Kola (şekersiz) | drink | fdc:174850 | 1.00 kcal P0.12 C0.12 F0.00 A0.00 | typ 330.0 g | kutu 330.0 g
+cookies_choc_chip | Damla çikolatalı kurabiye | sweet | fdc:172715 | 451.00 kcal P5.97 C67.49 F17.91 A0.00 | typ 30.0 g | adet 12.0 g
+corn | Mısır (çiğ) | vegetable | fdc:169998 | 86.00 kcal P3.27 C18.70 F1.35 A0.00 | typ 80.0 g
+corn_boiled | Mısır (haşlanmış) | vegetable | fdc:169999 | 96.00 kcal P3.41 C20.98 F1.50 A0.00 | typ 100.0 g
+corn_canned | Konserve mısır | vegetable | fdc:169216 | 79.00 kcal P2.41 C19.44 F0.50 A0.00 | typ 80.0 g | yemek kaşığı 15.0 g
+corn_oil | Mısırözü yağı | oil | fdc:171029 | 900.00 kcal P0.00 C0.00 F100.00 A0.00 | typ 10.0 g | yemek kaşığı 13.5 g; çay kaşığı 4.5 g
+cornmeal | Mısır unu | grain | fdc:169697 | 362.00 kcal P8.12 C76.89 F3.59 A0.00 | typ 50.0 g | su bardağı 140.0 g
+cornstarch | Mısır nişastası | grain | fdc:169698 | 381.00 kcal P0.26 C91.27 F0.05 A0.00 | typ 10.0 g | yemek kaşığı 8.0 g
+cottage_cheese | Lor peyniri | dairy | fdc:172179 | 98.00 kcal P11.12 C3.38 F4.30 A0.00 | typ 50.0 g | yemek kaşığı 20.0 g
+couscous_cooked | Kuskus (pişmiş) | grain | fdc:169700 | 112.00 kcal P3.79 C23.22 F0.16 A0.00 | typ 150.0 g | kase 160.0 g
+couscous_dry | Kuskus (kuru) | grain | fdc:169699 | 376.00 kcal P12.76 C77.43 F0.64 A0.00 | typ 60.0 g
+crab_raw | Yengeç (çiğ) | fish | fdc:174204 | 87.00 kcal P18.06 C0.04 F1.08 A0.00 | typ 100.0 g
+crackers | Kraker | grain | fdc:174982 | 510.00 kcal P6.64 C61.30 F26.43 A0.00 | typ 30.0 g | adet 3.0 g
+cranberry_juice | Kızılcık suyu | drink | fdc:171903 | 54.00 kcal P0.00 C13.52 F0.10 A0.00 | typ 200.0 g | su bardağı 200.0 g
+cream_cheese | Krem peynir | dairy | fdc:173418 | 350.00 kcal P6.15 C5.52 F34.44 A0.00 | typ 30.0 g | yemek kaşığı 15.0 g
+cream_heavy | Krema (sıvı, %36) | dairy | fdc:170859 | 340.00 kcal P2.84 C2.84 F36.08 A0.00 | typ 30.0 g | yemek kaşığı 15.0 g
+cream_light | Krema (light) | dairy | fdc:170858 | 292.00 kcal P2.17 C2.96 F30.91 A0.00 | typ 30.0 g | yemek kaşığı 15.0 g
+croissant | Kruvasan | sweet | fdc:174987 | 406.00 kcal P8.20 C45.80 F21.00 A0.00 | typ 60.0 g | adet 60.0 g
+cucumber | Salatalık | vegetable | fdc:168409 | 15.00 kcal P0.65 C3.63 F0.11 A0.00 | typ 150.0 g | adet 150.0 g
+cumin | Kimyon | other | fdc:170923 | 375.00 kcal P17.81 C44.24 F22.27 A0.00 | typ 2.0 g | çay kaşığı 2.0 g
+dark_chocolate | Bitter çikolata (%70-85) | sweet | fdc:170273 | 598.00 kcal P7.79 C45.90 F42.63 A0.00 | typ 25.0 g | kare 6.0 g
+dates | Hurma | fruit | fdc:171726 | 282.00 kcal P2.45 C75.03 F0.39 A0.00 | typ 40.0 g | adet 8.0 g
+dates_medjool | Medjool hurma | fruit | fdc:168191 | 277.00 kcal P1.81 C74.97 F0.15 A0.00 | typ 48.0 g | adet 24.0 g
+dill | Dereotu | vegetable | fdc:172233 | 43.00 kcal P3.46 C7.02 F1.12 A0.00 | typ 10.0 g | demet 50.0 g
+doner | Et döner | dish | recipe:doner | 243.86 kcal P28.20 C0.58 F14.19 A0.00 | typ 150.0 g
+    beef_stew_cooked 600.0 g
+    beef_mince_cooked 300.0 g
+    butter 60.0 g
+    onion 60.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 978.5 g (FNDDS 27410250, moisture -5 %)
+doner_wrap | Dürüm döner | dish | recipe:doner_wrap | 194.10 kcal P13.86 C14.46 F8.73 A0.00 | typ 250.0 g | adet 250.0 g
+    chicken_thigh 120.0 g
+    lavash 70.0 g
+    tomato 30.0 g
+    lettuce_romaine 15.0 g
+    onion 15.0 g
+    mayonnaise 10.0 g
+    water 0.0 g → cooked 260.0 g (FNDDS 27516010, moisture 0 %)
+donut | Donut | sweet | fdc:174992 | 426.00 kcal P5.20 C50.80 F22.90 A0.00 | typ 60.0 g | adet 60.0 g
+dried_cranberries | Kuru turna yemişi | fruit | fdc:171723 | 308.00 kcal P0.17 C82.80 F1.09 A0.00 | typ 30.0 g
+dried_mint | Kuru nane | other | fdc:172239 | 285.00 kcal P19.93 C52.04 F6.03 A0.00 | typ 1.0 g | çay kaşığı 0.5 g
+    energy exception: Dried herb: about 30 g fibre per 100 g in USDA carbohydrate, so 4/4/9 overstates energy
+egg | Yumurta | egg | fdc:171287 | 143.00 kcal P12.56 C0.72 F9.51 A0.00 | typ 100.0 g | adet 50.0 g
+egg_boiled | Haşlanmış yumurta | egg | fdc:173424 | 155.00 kcal P12.58 C1.12 F10.61 A0.00 | typ 100.0 g | adet 50.0 g
+egg_fried | Omlet / sahanda yumurta | egg | fdc:173423 | 196.00 kcal P13.61 C0.83 F14.84 A0.00 | typ 120.0 g | adet 60.0 g
+egg_poached | Poşe yumurta | egg | fdc:172186 | 143.00 kcal P12.51 C0.71 F9.47 A0.00 | typ 50.0 g | adet 50.0 g
+egg_quail | Bıldırcın yumurtası | egg | fdc:172191 | 158.00 kcal P13.05 C0.41 F11.09 A0.00 | typ 45.0 g | adet 9.0 g
+egg_scrambled | Çırpılmış yumurta (pişmiş) | egg | fdc:172187 | 149.00 kcal P9.99 C1.61 F10.98 A0.00 | typ 120.0 g
+egg_white | Yumurta beyazı | egg | fdc:172183 | 52.00 kcal P10.90 C0.73 F0.17 A0.00 | typ 33.0 g | adet 33.0 g
+egg_yolk | Yumurta sarısı | egg | fdc:172184 | 322.00 kcal P15.86 C3.59 F26.54 A0.00 | typ 17.0 g | adet 17.0 g
+eggplant | Patlıcan | vegetable | fdc:169228 | 25.00 kcal P0.98 C5.88 F0.18 A0.00 | typ 250.0 g | adet 250.0 g
+energy_drink | Enerji içeceği | drink | fdc:174171 | 46.00 kcal P0.25 C12.08 F0.08 A0.00 | typ 250.0 g | kutu 250.0 g
+ezogelin_soup | Ezogelin çorbası | dish | recipe:ezogelin_soup | 59.63 kcal P2.65 C9.33 F1.53 A0.00 | typ 250.0 g | kase 250.0 g
+    lentils_dry 150.0 g
+    bulgur_dry 40.0 g
+    rice_raw 30.0 g
+    onion 100.0 g
+    butter 30.0 g
+    tomato_paste 30.0 g
+    dried_mint 3.0 g
+    paprika 3.0 g
+    salt 10.0 g
+    water 1400.0 g → cooked 1796.0 g (FNDDS 41603010, moisture 0 %)
+falafel | Falafel | dish | recipe:falafel | 246.85 kcal P6.62 C23.02 F14.90 A0.00 | typ 100.0 g | adet 17.0 g
+    chickpeas_boiled 600.0 g
+    onion 100.0 g
+    parsley 40.0 g
+    garlic 10.0 g
+    flour 40.0 g
+    cumin 5.0 g
+    sunflower_oil 120.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 923.0 g (FNDDS 41209000, moisture 0 %)
+fava_dry | Kuru bakla | legume | fdc:175205 | 341.00 kcal P26.12 C58.29 F1.53 A0.00 | typ 60.0 g
+fig | İncir | fruit | fdc:173021 | 74.00 kcal P0.75 C19.18 F0.30 A0.00 | typ 100.0 g | adet 50.0 g
+fig_dried | Kuru incir | fruit | fdc:326905 | 249.00 kcal P3.30 C63.90 F0.92 A0.00 | typ 40.0 g | adet 20.0 g
+flaxseed | Keten tohumu | nut_seed | fdc:169414 | 534.00 kcal P18.29 C28.88 F42.16 A0.00 | typ 10.0 g | yemek kaşığı 10.0 g
+flounder_raw | Dil balığı (çiğ) | fish | fdc:174196 | 70.00 kcal P12.41 C0.00 F1.93 A0.00 | typ 150.0 g
+flour | Buğday unu | grain | fdc:168894 | 364.00 kcal P10.33 C76.31 F0.98 A0.00 | typ 30.0 g | yemek kaşığı 8.0 g; su bardağı 125.0 g
+flour_whole | Tam buğday unu | grain | fdc:168944 | 332.00 kcal P9.61 C74.48 F1.95 A0.00 | typ 50.0 g | su bardağı 120.0 g; yemek kaşığı 8.0 g
+frankfurter | Sosis (dana) | meat | fdc:323121 | 314.00 kcal P11.70 C2.89 F28.00 A0.00 | typ 50.0 g | adet 45.0 g
+fried_chicken | Kızarmış tavuk (panelenmiş) | poultry | fdc:171475 | 260.00 kcal P24.84 C8.99 F13.20 A0.00 | typ 150.0 g
+fries | Patates kızartması | vegetable | fdc:170698 | 312.00 kcal P3.43 C41.44 F14.73 A0.00 | typ 120.0 g
+fruit_nectar | Meyve nektarı (şeftali) | drink | fdc:168185 | 50.00 kcal P0.21 C11.93 F0.51 A0.00 | typ 200.0 g | kutu 200.0 g
+garlic | Sarımsak | vegetable | fdc:169230 | 149.00 kcal P6.36 C33.06 F0.50 A0.00 | typ 5.0 g | adet 3.0 g
+gavurdagi | Gavurdağı salatası | dish | recipe:gavurdagi | 122.74 kcal P2.01 C7.22 F10.39 A0.00 | typ 200.0 g | kase 200.0 g
+    tomato 400.0 g
+    onion 100.0 g
+    green_pepper 100.0 g
+    parsley 30.0 g
+    walnuts 60.0 g
+    oil 40.0 g
+    molasses 20.0 g
+    lemon_juice 20.0 g
+    salt 5.0 g
+    water 0.0 g → cooked 775.0 g (FNDDS 58175110, moisture 0 %)
+ginger | Taze zencefil | vegetable | fdc:169231 | 80.00 kcal P1.82 C17.77 F0.75 A0.00 | typ 5.0 g
+goat_cheese | Keçi peyniri | dairy | fdc:173435 | 264.00 kcal P18.52 C0.00 F21.08 A0.00 | typ 30.0 g
+gouda | Gouda peyniri | dairy | fdc:171241 | 356.00 kcal P24.94 C2.22 F27.44 A0.00 | typ 30.0 g | dilim 20.0 g
+gozleme | Peynirli gözleme | dish | recipe:gozleme | 282.47 kcal P8.84 C36.52 F10.93 A0.00 | typ 200.0 g | adet 200.0 g
+    flour 500.0 g
+    white_cheese 300.0 g
+    parsley 30.0 g
+    butter 60.0 g
+    salt 6.0 g
+    water 280.0 g → cooked 1081.9 g (FNDDS 51101050, moisture -8 %)
+granola | Granola | grain | fdc:171646 | 489.00 kcal P13.67 C53.88 F24.31 A0.00 | typ 50.0 g | kase 60.0 g
+grape_juice | Üzüm suyu | drink | fdc:173041 | 60.00 kcal P0.37 C14.77 F0.13 A0.00 | typ 200.0 g | su bardağı 200.0 g
+grape_leaves | Asma yaprağı | vegetable | fdc:168575 | 93.00 kcal P5.60 C17.31 F2.12 A0.00 | typ 30.0 g
+grapefruit | Greyfurt | fruit | fdc:174673 | 42.00 kcal P0.77 C10.66 F0.14 A0.00 | typ 250.0 g | adet 250.0 g
+grapes | Üzüm | fruit | fdc:174683 | 69.00 kcal P0.72 C18.10 F0.16 A0.00 | typ 150.0 g | salkım 150.0 g; kase 150.0 g
+green_beans | Taze fasulye (çiğ) | vegetable | fdc:169961 | 31.00 kcal P1.83 C6.97 F0.22 A0.00 | typ 150.0 g
+green_beans_frozen | Dondurulmuş taze fasulye | vegetable | fdc:169962 | 33.00 kcal P1.79 C7.54 F0.21 A0.00 | typ 150.0 g
+green_beans_olive | Zeytinyağlı taze fasulye | dish | recipe:green_beans_olive | 74.55 kcal P1.27 C6.15 F5.55 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    green_beans 800.0 g
+    onion 150.0 g
+    tomato 300.0 g
+    oil 80.0 g
+    sugar 10.0 g
+    salt 8.0 g
+    water 200.0 g → cooked 1486.1 g (FNDDS 75205021, moisture -4 %)
+green_pepper | Yeşil biber | vegetable | fdc:170427 | 20.00 kcal P0.86 C4.64 F0.17 A0.00 | typ 50.0 g | adet 25.0 g
+greens | Yeşil salata | vegetable | fdc:169249 | 15.00 kcal P1.36 C2.87 F0.15 A0.00 | typ 100.0 g | kase 100.0 g
+haddock_raw | Berlam (çiğ) | fish | fdc:333374 | 74.00 kcal P16.30 C0.00 F0.45 A0.00 | typ 150.0 g
+halva | Tahin helvası | sweet | fdc:167996 | 469.00 kcal P12.49 C60.49 F21.52 A0.00 | typ 40.0 g | dilim 40.0 g
+hamburger | Hamburger | dish | recipe:hamburger | 230.69 kcal P14.22 C19.85 F10.09 A0.00 | typ 220.0 g | adet 220.0 g
+    bun 90.0 g
+    beef_patty 100.0 g
+    tomato 20.0 g
+    lettuce_romaine 10.0 g
+    pickles 10.0 g
+    ketchup 10.0 g
+    mayonnaise 8.0 g
+    water 0.0 g → cooked 248.0 g (FNDDS 27510521, moisture 0 %)
+hard_candy | Şeker (akide, bonbon) | sweet | fdc:167990 | 394.00 kcal P0.00 C98.00 F0.20 A0.00 | typ 10.0 g | adet 6.0 g
+haydari | Haydari | dish | recipe:haydari | 146.68 kcal P9.00 C4.35 F10.49 A0.00 | typ 60.0 g | yemek kaşığı 20.0 g
+    yogurt_greek 400.0 g
+    white_cheese 60.0 g
+    garlic 8.0 g
+    dill 10.0 g
+    mint 5.0 g
+    oil 20.0 g
+    salt 3.0 g
+    water 0.0 g → cooked 506.0 g (FNDDS 58175110, moisture 0 %)
+hazelnut_oil | Fındık yağı | oil | fdc:171427 | 884.00 kcal P0.00 C0.00 F100.00 A0.00 | typ 10.0 g | yemek kaşığı 13.6 g
+hazelnuts | Fındık | nut_seed | fdc:170581 | 628.00 kcal P14.95 C16.70 F60.75 A0.00 | typ 30.0 g | avuç 30.0 g; adet 1.5 g
+honey | Bal | sweet | fdc:169640 | 304.00 kcal P0.30 C82.40 F0.00 A0.00 | typ 20.0 g | çay kaşığı 7.0 g; yemek kaşığı 21.0 g
+honeydew | Kış kavunu | fruit | fdc:169911 | 36.00 kcal P0.54 C9.09 F0.14 A0.00 | typ 200.0 g | dilim 150.0 g
+hot_sauce | Acı sos | other | fdc:171186 | 93.00 kcal P1.93 C19.16 F0.93 A0.00 | typ 10.0 g | çay kaşığı 6.0 g
+hummus | Humus | legume | fdc:172454 | 177.00 kcal P4.86 C20.12 F8.59 A0.00 | typ 60.0 g | yemek kaşığı 15.0 g
+hunkar_begendi | Hünkar beğendi | dish | recipe:hunkar_begendi | 107.85 kcal P7.06 C5.52 F6.64 A0.00 | typ 300.0 g | porsiyon 300.0 g
+    lamb_leg_cooked 400.0 g
+    eggplant 700.0 g
+    milk 400.0 g
+    butter 60.0 g
+    flour 40.0 g
+    kasar_cheese 60.0 g
+    tomato 200.0 g
+    onion 100.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 1970.0 g (FNDDS 77316600, moisture 0 %)
+ic_pilav | İç pilav | dish | recipe:ic_pilav | 166.95 kcal P2.79 C26.35 F5.61 A0.00 | typ 150.0 g | kase 150.0 g
+    rice_boiled 800.0 g
+    pine_nuts 30.0 g
+    raisins 30.0 g
+    onion 80.0 g
+    butter 40.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 988.0 g (FNDDS 56205004, moisture 0 %)
+ice_cream_vanilla | Dondurma (vanilyalı) | dairy | fdc:167575 | 207.00 kcal P3.50 C23.60 F11.00 A0.00 | typ 70.0 g | top 70.0 g
+imam_bayildi | İmam bayıldı | dish | recipe:imam_bayildi | 108.46 kcal P1.05 C6.91 F9.09 A0.00 | typ 250.0 g | adet 220.0 g
+    eggplant 1000.0 g
+    onion 300.0 g
+    tomato 300.0 g
+    garlic 20.0 g
+    oil 150.0 g
+    parsley 20.0 g
+    sugar 10.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 1683.3 g (FNDDS 75217020, moisture -7 %)
+instant_coffee | Hazır kahve (toz) | drink | fdc:171893 | 353.00 kcal P12.20 C75.40 F0.50 A0.00 | typ 2.0 g | çay kaşığı 2.0 g
+irmik_helvasi | İrmik helvası | sweet | recipe:irmik_helvasi | 243.91 kcal P4.21 C35.46 F9.80 A0.00 | typ 100.0 g | kase 120.0 g
+    semolina 300.0 g
+    butter 120.0 g
+    milk 500.0 g
+    sugar 250.0 g
+    pine_nuts 30.0 g
+    water 200.0 g → cooked 1400.0 g (FNDDS 13210410, moisture 0 %)
+iskender | İskender | dish | recipe:iskender | 189.24 kcal P14.47 C15.06 F8.00 A0.00 | typ 350.0 g
+    beef_stew_cooked 150.0 g
+    pita 100.0 g
+    yogurt 100.0 g
+    butter 25.0 g
+    tomato_paste 15.0 g
+    tomato 40.0 g
+    water 0.0 g → cooked 430.0 g (FNDDS 27516010, moisture 0 %)
+jam | Reçel | sweet | fdc:169641 | 278.00 kcal P0.37 C68.86 F0.07 A0.00 | typ 20.0 g | yemek kaşığı 20.0 g; çay kaşığı 7.0 g
+jelly_mix | Jöle (toz) | other | fdc:168775 | 381.00 kcal P7.80 C90.50 F0.00 A0.00 | typ 20.0 g
+kale | Kara lahana | vegetable | fdc:168421 | 35.00 kcal P2.92 C4.42 F1.49 A0.00 | typ 100.0 g
+karniyarik | Karnıyarık | dish | recipe:karniyarik | 108.06 kcal P4.19 C4.88 F8.31 A0.00 | typ 300.0 g | adet 250.0 g
+    eggplant 1000.0 g
+    beef_mince_cooked 250.0 g
+    onion 200.0 g
+    tomato 300.0 g
+    green_pepper 100.0 g
+    tomato_paste 20.0 g
+    oil 120.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 2000.0 g (FNDDS 77316600, moisture 0 %)
+kasar_cheese | Kaşar peyniri | dairy | label:Pınar Taze Kaşar Peyniri, 2026-10-14 | 343.00 kcal P25.00 C1.00 F26.50 A0.00 | typ 30.0 g | dilim 20.0 g
+kefir | Kefir | dairy | fdc:170904 | 43.00 kcal P3.79 C4.77 F1.02 A0.00 | typ 250.0 g | su bardağı 200.0 g
+ketchup | Ketçap | other | fdc:168556 | 101.00 kcal P1.04 C27.40 F0.10 A0.00 | typ 15.0 g | yemek kaşığı 17.0 g
+kidney_beans_boiled | Kırmızı fasulye (haşlanmış) | legume | fdc:173792 | 127.00 kcal P8.67 C22.80 F0.50 A0.00 | typ 150.0 g
+kidney_beans_dry | Kırmızı fasulye (kuru) | legume | fdc:173744 | 337.00 kcal P22.53 C61.29 F1.06 A0.00 | typ 60.0 g
+kisir | Kısır | dish | recipe:kisir | 116.59 kcal P2.67 C14.98 F5.92 A0.00 | typ 200.0 g | kase 200.0 g
+    bulgur_cooked 700.0 g
+    tomato_paste 40.0 g
+    onion 80.0 g
+    spring_onion 60.0 g
+    parsley 60.0 g
+    mint 20.0 g
+    lemon_juice 40.0 g
+    oil 60.0 g
+    paprika 5.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1071.0 g (FNDDS 58175110, moisture 0 %)
+kiwi | Kivi | fruit | fdc:168153 | 61.00 kcal P1.14 C14.66 F0.52 A0.00 | typ 75.0 g | adet 75.0 g
+kofte | Köfte (ızgara) | dish | recipe:kofte | 267.16 kcal P24.88 C4.66 F15.82 A0.00 | typ 150.0 g | adet 25.0 g
+    beef_mince_cooked 900.0 g
+    onion 100.0 g
+    bread_crumbs 50.0 g
+    cumin 4.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 1010.8 g (FNDDS 27410250, moisture -5 %)
+kuru_fasulye | Kuru fasulye (etli) | dish | recipe:kuru_fasulye | 118.26 kcal P7.43 C15.11 F3.40 A0.00 | typ 250.0 g | kase 250.0 g
+    white_beans_boiled 900.0 g
+    beef_stew_cooked 150.0 g
+    onion 150.0 g
+    tomato_paste 40.0 g
+    oil 30.0 g
+    butter 15.0 g
+    salt 10.0 g
+    water 400.0 g → cooked 1695.0 g (FNDDS 41601010, moisture 0 %)
+lahmacun | Lahmacun | dish | recipe:lahmacun | 184.85 kcal P7.57 C27.56 F4.71 A0.00 | typ 140.0 g | adet 140.0 g
+    flour 500.0 g
+    yeast 10.0 g
+    beef_mince_raw 300.0 g
+    onion 150.0 g
+    tomato 200.0 g
+    green_pepper 100.0 g
+    parsley 30.0 g
+    tomato_paste 30.0 g
+    paprika 5.0 g
+    oil 20.0 g
+    salt 12.0 g
+    water 300.0 g → cooked 1524.4 g (FNDDS 51101050, moisture -8 %)
+lamb_chop_raw | Kuzu pirzola (çiğ) | meat | fdc:172517 | 298.00 kcal P15.40 C0.22 F26.19 A0.00 | typ 150.0 g | adet 60.0 g
+lamb_leg_cooked | Kuzu eti (pişmiş) | meat | fdc:174460 | 212.00 kcal P24.26 C0.04 F12.76 A0.00 | typ 150.0 g
+lamb_leg_raw | Kuzu but (çiğ) | meat | fdc:174342 | 206.00 kcal P18.64 C0.13 F14.52 A0.00 | typ 150.0 g
+lamb_liver_raw | Kuzu ciğeri (çiğ) | meat | fdc:172531 | 139.00 kcal P20.38 C1.78 F5.02 A0.00 | typ 150.0 g
+lamb_mince_cooked | Kuzu kıyma (pişmiş) | meat | fdc:172544 | 283.00 kcal P24.75 C0.00 F19.65 A0.00 | typ 100.0 g
+lamb_mince_raw | Kuzu kıyma (çiğ) | meat | fdc:174370 | 282.00 kcal P16.56 C0.00 F23.41 A0.00 | typ 125.0 g
+lamb_shish | Kuzu şiş | dish | recipe:lamb_shish | 217.07 kcal P22.96 C0.82 F13.61 A0.00 | typ 180.0 g | şiş 80.0 g
+    lamb_leg_cooked 900.0 g
+    onion 80.0 g
+    oil 15.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 954.8 g (FNDDS 27430610, moisture -5 %)
+lamb_shoulder_raw | Kuzu kol (çiğ) | meat | fdc:175262 | 272.00 kcal P16.16 C0.24 F22.89 A0.00 | typ 150.0 g
+lavash | Lavaş | bread | fdc:167535 | 297.00 kcal P8.01 C49.27 F7.58 A0.00 | typ 70.0 g | adet 70.0 g
+leek | Pırasa | vegetable | fdc:169246 | 61.00 kcal P1.50 C14.15 F0.30 A0.00 | typ 150.0 g | adet 90.0 g
+leek_olive | Zeytinyağlı pırasa | dish | recipe:leek_olive | 108.28 kcal P1.30 C13.63 F5.83 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    leek 800.0 g
+    carrot 150.0 g
+    rice_raw 40.0 g
+    oil 70.0 g
+    lemon_juice 20.0 g
+    sugar 10.0 g
+    salt 8.0 g
+    water 250.0 g → cooked 1253.6 g (FNDDS 75218400, moisture -7 %)
+lemon | Limon | fruit | fdc:167746 | 29.00 kcal P1.10 C9.32 F0.30 A0.00 | typ 60.0 g | adet 85.0 g
+    energy exception: USDA counts citric acid and fibre in carbohydrate; lemon energy is lower than 4 kcal per gram of it
+lemon_juice | Limon suyu | vegetable | fdc:167747 | 22.00 kcal P0.35 C6.90 F0.24 A0.00 | typ 15.0 g | yemek kaşığı 15.0 g
+lemon_soda | Limonlu gazoz | drink | fdc:173205 | 41.00 kcal P0.09 C10.42 F0.00 A0.00 | typ 330.0 g | kutu 330.0 g
+lentil_soup | Mercimek çorbası | dish | recipe:lentil_soup | 58.49 kcal P2.88 C9.02 F1.40 A0.00 | typ 250.0 g | kase 250.0 g
+    lentils_dry 200.0 g
+    onion 100.0 g
+    carrot 60.0 g
+    potato_raw 100.0 g
+    butter 30.0 g
+    flour 15.0 g
+    tomato_paste 20.0 g
+    salt 10.0 g
+    water 1400.0 g → cooked 1935.0 g (FNDDS 41603010, moisture 0 %)
+lentils | Yeşil mercimek (haşlanmış) | legume | fdc:172421 | 116.00 kcal P9.02 C20.13 F0.38 A0.00 | typ 150.0 g
+lentils_dry | Mercimek (kuru) | legume | fdc:172420 | 352.00 kcal P24.63 C63.35 F1.06 A0.00 | typ 60.0 g | yemek kaşığı 12.0 g
+lettuce_iceberg | Aysberg marul | vegetable | fdc:169248 | 14.00 kcal P0.90 C2.97 F0.14 A0.00 | typ 50.0 g
+lettuce_romaine | Marul | vegetable | fdc:327923 | 17.00 kcal P1.24 C3.24 F0.26 A0.00 | typ 50.0 g | yaprak 10.0 g
+liqueur | Likör | alcohol | fdc:173665 | 308.00 kcal P0.10 C32.20 F0.30 A26.00 | typ 40.0 g | kadeh 40.0 g
+lokma | Lokma | sweet | recipe:lokma | 399.74 kcal P3.30 C61.81 F16.02 A0.00 | typ 100.0 g | adet 15.0 g
+    flour 500.0 g
+    yeast 10.0 g
+    sunflower_oil 250.0 g
+    sugar 600.0 g
+    lemon_juice 15.0 g
+    water 900.0 g → cooked 1592.5 g (FNDDS 53415110, moisture -30 %)
+loquat | Yeni dünya | fruit | fdc:169908 | 47.00 kcal P0.43 C12.14 F0.20 A0.00 | typ 100.0 g | adet 20.0 g
+macadamia | Makadamya | nut_seed | fdc:2515378 | 668.54 kcal P7.79 C24.09 F64.93 A0.00 | typ 30.0 g
+mackerel_cooked | Uskumru ızgara | fish | fdc:175120 | 262.00 kcal P23.85 C0.00 F17.81 A0.00 | typ 150.0 g
+mackerel_raw | Uskumru (çiğ) | fish | fdc:175119 | 205.00 kcal P18.60 C0.00 F13.89 A0.00 | typ 150.0 g | adet 250.0 g
+mango | Mango | fruit | fdc:169910 | 60.00 kcal P0.82 C14.98 F0.38 A0.00 | typ 200.0 g | adet 300.0 g
+manti | Mantı (yoğurtlu) | dish | recipe:manti | 161.31 kcal P7.19 C15.79 F7.70 A0.00 | typ 250.0 g | tabak 250.0 g
+    noodles_cooked 600.0 g
+    beef_mince_cooked 150.0 g
+    onion 40.0 g
+    yogurt 220.0 g
+    garlic 8.0 g
+    butter 45.0 g
+    paprika 3.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1072.0 g (FNDDS 56130000, moisture 0 %)
+maple_syrup | Akçaağaç şurubu | sweet | fdc:169661 | 260.00 kcal P0.04 C67.04 F0.06 A0.00 | typ 20.0 g | yemek kaşığı 20.0 g
+margarine | Margarin | oil | fdc:172346 | 717.00 kcal P0.16 C0.70 F80.71 A0.00 | typ 10.0 g | yemek kaşığı 14.0 g
+marinara | Domates sosu (hazır) | other | fdc:332282 | 45.00 kcal P1.41 C8.05 F1.48 A0.00 | typ 100.0 g | yemek kaşığı 16.0 g
+marshmallow | Marshmallow | sweet | fdc:167995 | 318.00 kcal P1.80 C81.30 F0.20 A0.00 | typ 20.0 g | adet 7.0 g
+mayonnaise | Mayonez | oil | fdc:171009 | 680.00 kcal P0.96 C0.57 F74.85 A0.00 | typ 15.0 g | yemek kaşığı 14.0 g
+meat_green_beans | Etli taze fasulye | dish | recipe:meat_green_beans | 63.91 kcal P5.33 C5.29 F2.87 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    green_beans 800.0 g
+    beef_stew_cooked 200.0 g
+    onion 150.0 g
+    tomato 250.0 g
+    tomato_paste 20.0 g
+    oil 30.0 g
+    salt 8.0 g
+    water 200.0 g → cooked 1575.1 g (FNDDS 27411100, moisture -5 %)
+meat_okra | Etli bamya | dish | recipe:meat_okra | 62.47 kcal P4.42 C4.79 F3.28 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    okra 600.0 g
+    lamb_leg_cooked 200.0 g
+    onion 120.0 g
+    tomato 300.0 g
+    butter 25.0 g
+    lemon_juice 30.0 g
+    salt 8.0 g
+    water 250.0 g → cooked 1456.4 g (FNDDS 27330060, moisture -5 %)
+meat_peas | Etli bezelye | dish | recipe:meat_peas | 90.62 kcal P6.87 C9.46 F3.04 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    peas_frozen 600.0 g
+    beef_stew_cooked 200.0 g
+    potato_raw 200.0 g
+    carrot 120.0 g
+    onion 100.0 g
+    tomato_paste 25.0 g
+    oil 30.0 g
+    salt 8.0 g
+    water 300.0 g → cooked 1503.9 g (FNDDS 27411100, moisture -5 %)
+meat_pepper_dolma | Etli biber dolması | dish | recipe:meat_pepper_dolma | 99.80 kcal P4.49 C10.22 F4.59 A0.00 | typ 250.0 g | adet 120.0 g
+    green_pepper 600.0 g
+    beef_mince_raw 300.0 g
+    rice_raw 150.0 g
+    onion 150.0 g
+    tomato 150.0 g
+    tomato_paste 25.0 g
+    oil 30.0 g
+    mint 5.0 g
+    salt 8.0 g
+    water 400.0 g → cooked 1690.7 g (FNDDS 58162110, moisture -7 %)
+meat_sarma | Etli yaprak sarma | dish | recipe:meat_sarma | 150.42 kcal P7.28 C15.59 F6.66 A0.00 | typ 200.0 g | adet 25.0 g
+    grape_leaves 250.0 g
+    beef_mince_raw 400.0 g
+    rice_raw 200.0 g
+    onion 200.0 g
+    tomato_paste 25.0 g
+    oil 30.0 g
+    mint 5.0 g
+    salt 8.0 g
+    water 500.0 g → cooked 1456.2 g (FNDDS 27315270, moisture -10 %)
+menemen | Menemen | dish | recipe:menemen | 86.94 kcal P4.12 C3.35 F6.50 A0.00 | typ 250.0 g
+    egg 300.0 g
+    tomato 500.0 g
+    green_pepper 150.0 g
+    onion 80.0 g
+    oil 40.0 g
+    salt 5.0 g
+    water 0.0 g → cooked 1075.0 g (FNDDS 32130010, moisture 0 %)
+mercimek_koftesi | Mercimek köftesi | dish | recipe:mercimek_koftesi | 123.10 kcal P4.98 C15.89 F5.04 A0.00 | typ 150.0 g | adet 25.0 g
+    red_lentils_boiled 500.0 g
+    bulgur_cooked 400.0 g
+    onion 150.0 g
+    tomato_paste 40.0 g
+    oil 60.0 g
+    spring_onion 60.0 g
+    parsley 40.0 g
+    lemon_juice 20.0 g
+    cumin 4.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1282.0 g (FNDDS 58175110, moisture 0 %)
+milk | Süt (tam yağlı) | dairy | fdc:171265 | 61.00 kcal P3.15 C4.80 F3.25 A0.00 | typ 200.0 g | su bardağı 200.0 g
+milk_chocolate | Kakaolu süt | dairy | fdc:173450 | 78.00 kcal P2.99 C12.13 F1.90 A0.00 | typ 200.0 g | kutu 200.0 g
+milk_evaporated | Kondanse olmayan buharlaştırılmış süt | dairy | fdc:172194 | 134.00 kcal P6.81 C10.04 F7.56 A0.00 | typ 30.0 g
+milk_goat | Keçi sütü | dairy | fdc:171278 | 69.00 kcal P3.56 C4.45 F4.14 A0.00 | typ 200.0 g | su bardağı 200.0 g
+milk_low | Süt (az yağlı, %1) | dairy | fdc:322228 | 43.00 kcal P3.38 C5.19 F0.95 A0.00 | typ 200.0 g | su bardağı 200.0 g
+milk_semi | Süt (yarım yağlı) | dairy | fdc:321359 | 50.00 kcal P3.35 C4.91 F1.90 A0.00 | typ 200.0 g | su bardağı 200.0 g
+milk_skim | Süt (yağsız) | dairy | fdc:322559 | 34.00 kcal P3.43 C4.89 F0.08 A0.00 | typ 200.0 g | su bardağı 200.0 g
+minced_borek | Kıymalı börek | dish | recipe:minced_borek | 288.43 kcal P11.23 C23.54 F16.24 A0.00 | typ 150.0 g | dilim 100.0 g
+    phyllo 500.0 g
+    beef_mince_cooked 300.0 g
+    onion 150.0 g
+    milk 200.0 g
+    egg 100.0 g
+    oil 100.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1220.4 g (FNDDS 58124250, moisture -10 %)
+minced_potato | Kıymalı patates | dish | recipe:minced_potato | 105.67 kcal P4.85 C10.69 F4.97 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    potato_raw 800.0 g
+    beef_mince_cooked 200.0 g
+    onion 150.0 g
+    tomato_paste 30.0 g
+    green_pepper 80.0 g
+    oil 40.0 g
+    salt 8.0 g
+    water 300.0 g → cooked 1527.6 g (FNDDS 27411100, moisture -5 %)
+minced_spinach | Kıymalı ıspanak | dish | recipe:minced_spinach | 92.88 kcal P6.48 C6.34 F5.09 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    spinach_raw 1000.0 g
+    beef_mince_cooked 200.0 g
+    onion 150.0 g
+    rice_raw 40.0 g
+    tomato_paste 20.0 g
+    oil 30.0 g
+    salt 8.0 g
+    water 150.0 g → cooked 1358.3 g (FNDDS 72125221, moisture -15 %)
+mint | Taze nane | vegetable | fdc:173475 | 44.00 kcal P3.29 C8.41 F0.73 A0.00 | typ 5.0 g | demet 30.0 g
+molasses | Pekmez | sweet | fdc:168820 | 290.00 kcal P0.00 C74.73 F0.10 A0.00 | typ 20.0 g | yemek kaşığı 20.0 g
+mozzarella | Mozzarella | dairy | fdc:170845 | 299.00 kcal P22.17 C2.40 F22.14 A0.00 | typ 30.0 g | dilim 20.0 g
+mozzarella_light | Mozzarella (yarım yağlı) | dairy | fdc:170847 | 254.00 kcal P24.26 C2.77 F15.92 A0.00 | typ 30.0 g
+muhallebi | Muhallebi | sweet | recipe:muhallebi | 119.16 kcal P2.76 C21.22 F2.68 A0.00 | typ 150.0 g | kase 150.0 g
+    milk 1000.0 g
+    sugar 150.0 g
+    cornstarch 50.0 g
+    flour 20.0 g
+    water 0.0 g → cooked 1220.0 g (FNDDS 13210410, moisture 0 %)
+mulberries | Dut | fruit | fdc:169913 | 43.00 kcal P1.44 C9.80 F0.39 A0.00 | typ 100.0 g | kase 140.0 g
+multigrain_bread | Tahıllı ekmek | bread | fdc:168013 | 265.00 kcal P13.36 C43.34 F4.23 A0.00 | typ 50.0 g | dilim 30.0 g
+mung_beans_dry | Maş fasulyesi (kuru) | legume | fdc:174256 | 347.00 kcal P23.86 C62.62 F1.15 A0.00 | typ 60.0 g
+musakka | Patlıcan musakka | dish | recipe:musakka | 98.92 kcal P4.19 C4.24 F7.52 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    eggplant 900.0 g
+    beef_mince_cooked 250.0 g
+    onion 150.0 g
+    tomato 300.0 g
+    green_pepper 80.0 g
+    oil 100.0 g
+    salt 10.0 g
+    water 150.0 g → cooked 1940.0 g (FNDDS 77316600, moisture 0 %)
+mushroom | Mantar | vegetable | fdc:169251 | 22.00 kcal P3.09 C3.26 F0.34 A0.00 | typ 100.0 g | adet 18.0 g
+mushroom_soup | Kremalı mantar çorbası | dish | recipe:mushroom_soup | 62.40 kcal P1.94 C3.97 F4.56 A0.00 | typ 250.0 g | kase 250.0 g
+    mushroom 400.0 g
+    onion 80.0 g
+    butter 30.0 g
+    flour 30.0 g
+    milk 400.0 g
+    cream_heavy 100.0 g
+    salt 8.0 g
+    water 600.0 g → cooked 1648.0 g (FNDDS 75649110, moisture 0 %)
+mussel_cooked | Midye (pişmiş) | fish | fdc:174217 | 172.00 kcal P23.80 C7.39 F4.48 A0.00 | typ 100.0 g
+mussel_raw | Midye (çiğ) | fish | fdc:174216 | 86.00 kcal P11.90 C3.69 F2.24 A0.00 | typ 100.0 g | adet 10.0 g
+mustard | Hardal | other | fdc:326698 | 61.00 kcal P4.25 C5.30 F3.38 A0.00 | typ 10.0 g | çay kaşığı 5.0 g
+nectarine | Nektarin | fruit | fdc:169914 | 44.00 kcal P1.06 C10.55 F0.32 A0.00 | typ 140.0 g | adet 140.0 g
+noodles | Erişte (kuru) | grain | fdc:169731 | 384.00 kcal P14.16 C71.27 F4.44 A0.00 | typ 80.0 g
+noodles_cooked | Erişte (haşlanmış) | grain | fdc:168919 | 138.00 kcal P4.54 C25.16 F2.07 A0.00 | typ 200.0 g | kase 160.0 g
+nougat | Nuga (bademli) | sweet | fdc:169060 | 398.00 kcal P3.33 C92.39 F1.67 A0.00 | typ 30.0 g
+oat_bread | Yulaflı ekmek | bread | fdc:172678 | 269.00 kcal P8.40 C48.50 F4.40 A0.00 | typ 50.0 g | dilim 30.0 g
+oatmeal_cookies | Yulaflı kurabiye | sweet | fdc:172725 | 450.00 kcal P6.20 C68.70 F18.10 A0.00 | typ 30.0 g | adet 15.0 g
+oats | Yulaf lapası (suyla) | grain | fdc:173905 | 71.00 kcal P2.54 C12.00 F1.52 A0.00 | typ 240.0 g | kase 240.0 g
+oats_dry | Yulaf ezmesi | grain | fdc:173904 | 379.00 kcal P13.15 C67.70 F6.52 A0.00 | typ 40.0 g | yemek kaşığı 8.0 g; kase 40.0 g
+octopus_raw | Ahtapot (çiğ) | fish | fdc:174218 | 82.00 kcal P14.91 C2.20 F1.04 A0.00 | typ 150.0 g
+oil | Zeytinyağı | oil | fdc:171413 | 884.00 kcal P0.00 C0.00 F100.00 A0.00 | typ 10.0 g | çay kaşığı 4.5 g; yemek kaşığı 13.5 g
+okra | Bamya | vegetable | fdc:169260 | 33.00 kcal P1.93 C7.45 F0.19 A0.00 | typ 150.0 g
+okra_olive | Zeytinyağlı bamya | dish | recipe:okra_olive | 71.57 kcal P1.32 C5.89 F5.32 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    okra 700.0 g
+    onion 150.0 g
+    tomato 300.0 g
+    oil 70.0 g
+    lemon_juice 30.0 g
+    salt 8.0 g
+    water 200.0 g → cooked 1355.9 g (FNDDS 75220011, moisture -7 %)
+olives | Zeytin | oil | fdc:169094 | 116.00 kcal P0.84 C6.04 F10.90 A0.00 | typ 30.0 g | adet 4.0 g
+olives_green | Yeşil zeytin | oil | fdc:169096 | 145.00 kcal P1.03 C3.84 F15.32 A0.00 | typ 30.0 g | adet 4.0 g
+onion | Soğan | vegetable | fdc:170000 | 40.00 kcal P1.10 C9.34 F0.10 A0.00 | typ 100.0 g | adet 110.0 g
+orange | Portakal | fruit | fdc:169097 | 47.00 kcal P0.94 C11.75 F0.12 A0.00 | typ 150.0 g | adet 150.0 g
+orange_juice | Portakal suyu (taze) | drink | fdc:169098 | 45.00 kcal P0.70 C10.40 F0.20 A0.00 | typ 200.0 g | su bardağı 200.0 g
+oregano | Mercanköşk (oregano) | other | fdc:171328 | 265.00 kcal P9.00 C68.92 F4.28 A0.00 | typ 1.0 g | çay kaşığı 1.0 g
+    energy exception: Dried herb: about 43 g fibre per 100 g in USDA carbohydrate, so 4/4/9 overstates energy
+orman_kebabi | Orman kebabı | dish | recipe:orman_kebabi | 123.31 kcal P9.80 C7.18 F6.33 A0.00 | typ 300.0 g | porsiyon 300.0 g
+    lamb_leg_cooked 500.0 g
+    potato_raw 300.0 g
+    carrot 150.0 g
+    peas_frozen 150.0 g
+    onion 150.0 g
+    butter 30.0 g
+    salt 8.0 g
+    water 200.0 g → cooked 1413.6 g (FNDDS 27330060, moisture -5 %)
+oven_chicken_potato | Fırında patatesli tavuk | dish | recipe:oven_chicken_potato | 125.82 kcal P9.67 C8.78 F5.77 A0.00 | typ 350.0 g | porsiyon 350.0 g
+    chicken_thigh 600.0 g
+    potato_raw 700.0 g
+    onion 150.0 g
+    green_pepper 100.0 g
+    tomato 200.0 g
+    oil 50.0 g
+    tomato_paste 20.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 1738.5 g (FNDDS 27341020, moisture -5 %)
+paprika | Toz kırmızı biber / pul biber | other | fdc:171329 | 282.00 kcal P14.14 C53.99 F12.89 A0.00 | typ 2.0 g | çay kaşığı 2.0 g
+    energy exception: Spice: about a third of USDA carbohydrate is fibre, so 4/4/9 overstates energy
+parmesan | Parmesan (rendelenmiş) | dairy | fdc:325036 | 421.00 kcal P29.60 C12.40 F28.00 A0.00 | typ 10.0 g | yemek kaşığı 5.0 g
+parsley | Maydanoz | vegetable | fdc:170416 | 36.00 kcal P2.97 C6.33 F0.79 A0.00 | typ 10.0 g | demet 60.0 g; yemek kaşığı 4.0 g
+pasta_bolognese | Kıymalı makarna | dish | recipe:pasta_bolognese | 149.82 kcal P7.52 C19.18 F4.58 A0.00 | typ 300.0 g | tabak 300.0 g
+    spaghetti 600.0 g
+    beef_mince_cooked 150.0 g
+    tomato_canned 200.0 g
+    onion 60.0 g
+    oil 15.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1031.0 g (FNDDS 56130000, moisture 0 %)
+pasta_dry | Makarna (kuru) | grain | fdc:169736 | 371.00 kcal P13.04 C74.67 F1.51 A0.00 | typ 80.0 g
+pasta_plain | Tereyağlı makarna | dish | recipe:pasta_plain | 189.14 kcal P6.11 C27.57 F5.84 A0.00 | typ 250.0 g | tabak 250.0 g
+    spaghetti 800.0 g
+    butter 40.0 g
+    white_cheese 60.0 g
+    salt 4.0 g
+    water 0.0 g → cooked 904.0 g (FNDDS 56130000, moisture 0 %)
+pasta_tomato | Salçalı makarna | dish | recipe:pasta_tomato | 177.98 kcal P5.50 C29.09 F4.25 A0.00 | typ 250.0 g | tabak 250.0 g
+    spaghetti 800.0 g
+    tomato_paste 40.0 g
+    oil 30.0 g
+    garlic 10.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 886.0 g (FNDDS 56130000, moisture 0 %)
+pasta_whole_dry | Tam buğday makarna (kuru) | grain | fdc:169738 | 352.00 kcal P13.87 C73.37 F2.93 A0.00 | typ 80.0 g
+peach | Şeftali | fruit | fdc:169928 | 39.00 kcal P0.91 C9.54 F0.25 A0.00 | typ 150.0 g | adet 150.0 g
+peanut_butter | Fıstık ezmesi | nut_seed | fdc:172470 | 598.00 kcal P22.21 C22.31 F51.36 A0.00 | typ 32.0 g | yemek kaşığı 16.0 g
+peanuts_raw | Yer fıstığı (çiğ) | nut_seed | fdc:172430 | 567.00 kcal P25.80 C16.13 F49.24 A0.00 | typ 30.0 g
+peanuts_roasted | Yer fıstığı (kavrulmuş, tuzlu) | nut_seed | fdc:174262 | 587.00 kcal P24.35 C21.26 F49.66 A0.00 | typ 30.0 g | avuç 30.0 g
+pear | Armut | fruit | fdc:169118 | 57.00 kcal P0.36 C15.23 F0.14 A0.00 | typ 180.0 g | adet 180.0 g
+peas | Bezelye | vegetable | fdc:170419 | 81.00 kcal P5.42 C14.45 F0.40 A0.00 | typ 80.0 g
+peas_frozen | Dondurulmuş bezelye | vegetable | fdc:170016 | 77.00 kcal P5.22 C13.62 F0.40 A0.00 | typ 80.0 g
+peas_olive | Zeytinyağlı bezelye | dish | recipe:peas_olive | 95.84 kcal P2.95 C10.47 F4.97 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    peas_frozen 700.0 g
+    potato_raw 200.0 g
+    carrot 150.0 g
+    onion 100.0 g
+    oil 70.0 g
+    dill 15.0 g
+    salt 8.0 g
+    water 300.0 g → cooked 1481.3 g (FNDDS 75224000, moisture -4 %)
+pepper_dolma_olive | Zeytinyağlı biber dolması | dish | recipe:pepper_dolma_olive | 131.17 kcal P1.78 C16.24 F6.80 A0.00 | typ 200.0 g | adet 100.0 g
+    green_pepper 600.0 g
+    rice_raw 250.0 g
+    onion 250.0 g
+    oil 100.0 g
+    pine_nuts 15.0 g
+    raisins 15.0 g
+    tomato 150.0 g
+    mint 10.0 g
+    salt 8.0 g
+    water 400.0 g → cooked 1672.1 g (FNDDS 58162120, moisture -7 %)
+pepper_yellow | Sarı biber | vegetable | fdc:169383 | 27.00 kcal P1.00 C6.32 F0.21 A0.00 | typ 100.0 g | adet 180.0 g
+persimmon | Trabzon hurması | fruit | fdc:169941 | 70.00 kcal P0.58 C18.59 F0.19 A0.00 | typ 170.0 g | adet 170.0 g
+pesto | Pesto sos | other | fdc:171579 | 418.00 kcal P9.83 C10.09 F37.60 A0.00 | typ 15.0 g | yemek kaşığı 16.0 g
+phyllo | Yufka | bread | fdc:172791 | 299.00 kcal P7.10 C52.60 F6.00 A0.00 | typ 50.0 g
+pickles | Turşu (salatalık) | vegetable | fdc:168558 | 12.00 kcal P0.50 C2.41 F0.30 A0.00 | typ 50.0 g | adet 35.0 g
+pide | Kıymalı pide | dish | recipe:pide | 212.86 kcal P7.81 C28.32 F7.31 A0.00 | typ 250.0 g | dilim 60.0 g; adet 250.0 g
+    flour 500.0 g
+    yeast 10.0 g
+    oil 30.0 g
+    beef_mince_raw 300.0 g
+    onion 150.0 g
+    tomato 150.0 g
+    green_pepper 80.0 g
+    butter 30.0 g
+    salt 12.0 g
+    water 300.0 g → cooked 1437.0 g (FNDDS 51101050, moisture -8 %)
+pine_nuts | Çam fıstığı | nut_seed | fdc:170591 | 673.00 kcal P13.69 C13.08 F68.37 A0.00 | typ 10.0 g | yemek kaşığı 9.0 g
+pineapple | Ananas | fruit | fdc:169124 | 50.00 kcal P0.54 C13.12 F0.12 A0.00 | typ 150.0 g | dilim 80.0 g
+pinto_beans_dry | Barbunya (kuru) | legume | fdc:175199 | 347.00 kcal P21.42 C62.55 F1.23 A0.00 | typ 60.0 g
+pisi | Pişi | dish | recipe:pisi | 465.84 kcal P7.75 C56.58 F22.89 A0.00 | typ 80.0 g | adet 40.0 g
+    flour 500.0 g
+    yeast 10.0 g
+    sunflower_oil 150.0 g
+    salt 8.0 g
+    water 300.0 g → cooked 677.6 g (FNDDS 53415110, moisture -30 %)
+pistachios | Antep fıstığı (kavrulmuş) | nut_seed | fdc:170185 | 572.00 kcal P21.05 C28.28 F45.82 A0.00 | typ 30.0 g | avuç 30.0 g
+pita | Pita ekmeği | bread | fdc:174915 | 275.00 kcal P9.10 C55.70 F1.20 A0.00 | typ 60.0 g | adet 60.0 g
+pita_whole | Tam buğday pita | bread | fdc:174916 | 262.00 kcal P9.80 C55.89 F1.71 A0.00 | typ 60.0 g | adet 60.0 g
+piyaz | Piyaz | dish | recipe:piyaz | 148.99 kcal P6.17 C16.14 F7.01 A0.00 | typ 200.0 g | kase 200.0 g
+    white_beans_boiled 600.0 g
+    onion 150.0 g
+    tomato 150.0 g
+    parsley 40.0 g
+    egg_boiled 100.0 g
+    oil 50.0 g
+    vinegar 30.0 g
+    tahini 30.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1156.0 g (FNDDS 58175110, moisture 0 %)
+pizza | Pizza (peynirli) | dish | fdc:170317 | 268.00 kcal P10.36 C29.02 F12.28 A0.00 | typ 220.0 g | dilim 110.0 g
+plum | Erik | fruit | fdc:169949 | 46.00 kcal P0.70 C11.42 F0.28 A0.00 | typ 120.0 g | adet 40.0 g
+pogaca | Peynirli poğaça | dish | recipe:pogaca | 393.37 kcal P9.19 C39.91 F21.78 A0.00 | typ 70.0 g | adet 70.0 g
+    flour 500.0 g
+    yogurt 150.0 g
+    oil 120.0 g
+    butter 50.0 g
+    egg 50.0 g
+    white_cheese 200.0 g
+    baking_powder 10.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1001.0 g (FNDDS 51101050, moisture -8 %)
+pomegranate | Nar | fruit | fdc:169134 | 83.00 kcal P1.67 C18.70 F1.17 A0.00 | typ 150.0 g | adet 280.0 g; kase 150.0 g
+pomegranate_juice | Nar suyu | drink | fdc:167787 | 54.00 kcal P0.15 C13.13 F0.29 A0.00 | typ 200.0 g | su bardağı 200.0 g
+potato | Patates (haşlanmış) | vegetable | fdc:170440 | 86.00 kcal P1.71 C20.01 F0.10 A0.00 | typ 150.0 g | adet 170.0 g
+potato_chips | Cips (patates) | grain | fdc:169677 | 532.00 kcal P6.39 C53.83 F33.98 A0.00 | typ 30.0 g | paket 40.0 g
+potato_gozleme | Patatesli gözleme | dish | recipe:potato_gozleme | 204.54 kcal P4.68 C36.93 F4.10 A0.00 | typ 200.0 g | adet 200.0 g
+    flour 500.0 g
+    potato 500.0 g
+    onion 100.0 g
+    paprika 5.0 g
+    butter 60.0 g
+    salt 8.0 g
+    water 280.0 g → cooked 1336.8 g (FNDDS 51101050, moisture -8 %)
+potato_omelet | Patatesli omlet | dish | recipe:potato_omelet | 147.17 kcal P6.81 C8.52 F9.49 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    egg 200.0 g
+    potato 150.0 g
+    onion 40.0 g
+    oil 20.0 g
+    salt 3.0 g
+    water 0.0 g → cooked 413.0 g (FNDDS 32130010, moisture 0 %)
+potato_raw | Patates (çiğ) | vegetable | fdc:170026 | 77.00 kcal P2.05 C17.49 F0.09 A0.00 | typ 200.0 g | adet 170.0 g
+potato_salad | Patates salatası | dish | recipe:potato_salad | 117.55 kcal P1.66 C17.00 F5.14 A0.00 | typ 200.0 g | kase 200.0 g
+    potato 800.0 g
+    spring_onion 60.0 g
+    parsley 40.0 g
+    dill 15.0 g
+    oil 50.0 g
+    lemon_juice 30.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1001.0 g (FNDDS 71601010, moisture 0 %)
+potato_soup | Patates çorbası | dish | recipe:potato_soup | 48.64 kcal P1.24 C7.11 F1.82 A0.00 | typ 250.0 g | kase 250.0 g
+    potato_raw 600.0 g
+    onion 100.0 g
+    carrot 80.0 g
+    butter 30.0 g
+    milk 300.0 g
+    salt 8.0 g
+    water 800.0 g → cooked 1918.0 g (FNDDS 71801000, moisture 0 %)
+powdered_sugar | Pudra şekeri | sweet | fdc:169656 | 389.00 kcal P0.00 C99.77 F0.00 A0.00 | typ 10.0 g | yemek kaşığı 8.0 g
+protein_powder | Protein tozu | other | fdc:173180 | 352.00 kcal P78.13 C6.25 F1.56 A0.00 | typ 30.0 g | ölçek 30.0 g
+prunes | Kuru erik | fruit | fdc:168162 | 240.00 kcal P2.18 C63.88 F0.38 A0.00 | typ 40.0 g | adet 10.0 g
+pumpkin | Bal kabağı | vegetable | fdc:168448 | 26.00 kcal P1.00 C6.50 F0.10 A0.00 | typ 150.0 g
+pumpkin_seeds | Kabak çekirdeği (iç) | nut_seed | fdc:170556 | 559.00 kcal P30.23 C10.71 F49.05 A0.00 | typ 30.0 g | avuç 25.0 g
+purslane | Semizotu | vegetable | fdc:169274 | 20.00 kcal P2.03 C3.39 F0.36 A0.00 | typ 100.0 g
+quince | Ayva | fruit | fdc:168163 | 57.00 kcal P0.40 C15.30 F0.10 A0.00 | typ 200.0 g | adet 250.0 g
+quinoa_cooked | Kinoa (haşlanmış) | grain | fdc:168917 | 120.00 kcal P4.40 C21.30 F1.92 A0.00 | typ 150.0 g | kase 185.0 g
+quinoa_dry | Kinoa (çiğ) | grain | fdc:168874 | 368.00 kcal P14.12 C64.16 F6.07 A0.00 | typ 60.0 g
+radish | Turp | vegetable | fdc:169276 | 16.00 kcal P0.68 C3.40 F0.10 A0.00 | typ 50.0 g | adet 5.0 g
+raisins | Kuru üzüm | fruit | fdc:168166 | 296.00 kcal P2.52 C78.47 F0.54 A0.00 | typ 30.0 g | yemek kaşığı 10.0 g
+raki | Rakı (%45) | alcohol | fdc:171920 | 263.00 kcal P0.00 C0.00 F0.00 A37.90 | typ 70.0 g | tek 35.0 g; duble 70.0 g
+raspberries | Ahududu | fruit | fdc:2263888 | 51.41 kcal P1.01 C12.90 F0.19 A0.00 | typ 100.0 g | kase 125.0 g
+red_lentils_boiled | Mercimek (haşlanmış, sade) | legume | fdc:175254 | 114.00 kcal P9.02 C19.54 F0.38 A0.00 | typ 150.0 g
+red_pepper | Kırmızı biber | vegetable | fdc:170108 | 26.00 kcal P0.99 C6.03 F0.30 A0.00 | typ 100.0 g | adet 120.0 g
+revani | Revani | sweet | recipe:revani | 238.75 kcal P4.03 C41.65 F6.52 A0.00 | typ 100.0 g | dilim 80.0 g
+    semolina 200.0 g
+    flour 100.0 g
+    egg 200.0 g
+    sugar 450.0 g
+    yogurt 150.0 g
+    oil 80.0 g
+    baking_powder 10.0 g
+    water 450.0 g → cooked 1640.0 g (FNDDS 53118100, moisture 0 %)
+rice_boiled | Pirinç (haşlanmış, sade) | grain | fdc:168878 | 130.00 kcal P2.69 C28.17 F0.28 A0.00 | typ 150.0 g | kase 160.0 g
+rice_cakes | Pirinç patlağı | grain | fdc:170250 | 387.00 kcal P8.20 C81.50 F2.80 A0.00 | typ 18.0 g | adet 9.0 g
+rice_raw | Pirinç (çiğ) | grain | fdc:168877 | 365.00 kcal P7.13 C79.95 F0.66 A0.00 | typ 80.0 g | yemek kaşığı 13.0 g
+ricotta | Ricotta | dairy | fdc:323444 | 157.00 kcal P7.81 C6.86 F11.00 A0.00 | typ 50.0 g
+rye_bread | Çavdar ekmeği | bread | fdc:172684 | 259.00 kcal P8.50 C48.30 F3.30 A0.00 | typ 50.0 g | dilim 30.0 g
+rye_flour | Çavdar unu | grain | fdc:168885 | 325.00 kcal P15.91 C68.63 F2.22 A0.00 | typ 50.0 g
+salami | Salam (dana) | meat | fdc:172935 | 261.00 kcal P12.60 C1.90 F22.20 A0.00 | typ 30.0 g | dilim 10.0 g
+salmon | Somon (çiğ) | fish | fdc:175167 | 208.00 kcal P20.42 C0.00 F13.42 A0.00 | typ 150.0 g
+salmon_cooked | Somon (pişmiş) | fish | fdc:175168 | 206.00 kcal P22.10 C0.00 F12.35 A0.00 | typ 150.0 g
+salt | Tuz | other | fdc:173468 | 0.00 kcal P0.00 C0.00 F0.00 A0.00 | typ 2.0 g | çay kaşığı 6.0 g
+sardine_canned | Sardalya (konserve, yağlı) | fish | fdc:175139 | 208.00 kcal P24.62 C0.00 F11.45 A0.00 | typ 90.0 g | kutu 90.0 g
+sarma_olive | Zeytinyağlı yaprak sarma | dish | recipe:sarma_olive | 171.73 kcal P2.69 C21.43 F8.81 A0.00 | typ 150.0 g | adet 20.0 g
+    grape_leaves 250.0 g
+    rice_raw 300.0 g
+    onion 300.0 g
+    oil 120.0 g
+    pine_nuts 20.0 g
+    raisins 20.0 g
+    mint 10.0 g
+    parsley 30.0 g
+    lemon_juice 40.0 g
+    sugar 10.0 g
+    salt 10.0 g
+    water 500.0 g → cooked 1610.0 g (FNDDS 58161510, moisture 0 %)
+sauerkraut | Lahana turşusu | vegetable | fdc:169279 | 19.00 kcal P0.91 C4.28 F0.14 A0.00 | typ 100.0 g
+sea_bass_cooked | Levrek ızgara | fish | fdc:173694 | 124.00 kcal P23.63 C0.00 F2.56 A0.00 | typ 200.0 g
+sea_bass_raw | Levrek (çiğ) | fish | fdc:175142 | 97.00 kcal P18.43 C0.00 F2.00 A0.00 | typ 200.0 g | adet 350.0 g
+sea_bream_raw | Çipura (çiğ) | fish | fdc:173698 | 100.00 kcal P20.51 C0.00 F1.34 A0.00 | typ 200.0 g | adet 350.0 g
+semisweet_chocolate | Bitter çikolata (%50) | sweet | fdc:167976 | 480.00 kcal P4.20 C63.90 F30.00 A0.00 | typ 30.0 g | kare 6.0 g
+semolina | İrmik | grain | fdc:169715 | 360.00 kcal P12.68 C72.83 F1.05 A0.00 | typ 40.0 g | yemek kaşığı 12.0 g
+sesame | Susam | nut_seed | fdc:170150 | 573.00 kcal P17.73 C23.45 F49.67 A0.00 | typ 10.0 g | yemek kaşığı 9.0 g
+shortening | Bitkisel katı yağ | oil | fdc:173584 | 884.00 kcal P0.00 C0.00 F99.97 A0.00 | typ 10.0 g
+shrimp | Karides (çiğ) | fish | fdc:175179 | 85.00 kcal P20.10 C0.00 F0.51 A0.00 | typ 120.0 g
+shrimp_cooked | Karides (pişmiş) | fish | fdc:175180 | 99.00 kcal P23.98 C0.20 F0.28 A0.00 | typ 120.0 g
+sigara_boregi | Sigara böreği | dish | recipe:sigara_boregi | 420.18 kcal P9.08 C28.28 F30.14 A0.00 | typ 120.0 g | adet 30.0 g
+    phyllo 400.0 g
+    white_cheese 300.0 g
+    parsley 30.0 g
+    sunflower_oil 150.0 g
+    water 0.0 g → cooked 792.0 g (FNDDS 58124250, moisture -10 %)
+simit | Simit | bread | recipe:simit | 295.82 kcal P7.43 C51.49 F6.68 A0.00 | typ 120.0 g | adet 120.0 g
+    flour 500.0 g
+    yeast 10.0 g
+    molasses 80.0 g
+    sesame 80.0 g
+    oil 15.0 g
+    salt 10.0 g
+    water 280.0 g → cooked 897.0 g (FNDDS 51101050, moisture -8 %)
+smoked_salmon | Füme somon | fish | fdc:173687 | 117.00 kcal P18.28 C0.00 F4.32 A0.00 | typ 50.0 g
+soda_water | Maden suyu / soda | drink | fdc:174842 | 0.00 kcal P0.00 C0.00 F0.00 A0.00 | typ 200.0 g | şişe 200.0 g
+sour_cherries | Vişne | fruit | fdc:173954 | 50.00 kcal P1.00 C12.18 F0.30 A0.00 | typ 150.0 g | kase 150.0 g
+sour_cream | Ekşi krema | dairy | fdc:171257 | 198.00 kcal P2.44 C4.63 F19.35 A0.00 | typ 30.0 g | yemek kaşığı 12.0 g
+soy_milk | Soya sütü | drink | fdc:172446 | 54.00 kcal P3.27 C6.28 F1.75 A0.00 | typ 200.0 g | su bardağı 200.0 g
+soy_sauce | Soya sosu | other | fdc:174278 | 60.00 kcal P10.51 C5.57 F0.10 A0.00 | typ 15.0 g | yemek kaşığı 16.0 g
+soybeans_dry | Soya fasulyesi (kuru) | legume | fdc:174270 | 446.00 kcal P36.49 C30.16 F19.94 A0.00 | typ 60.0 g
+spaghetti | Makarna (haşlanmış) | grain | fdc:169737 | 158.00 kcal P5.80 C30.86 F0.93 A0.00 | typ 200.0 g | kase 180.0 g
+spinach_borek | Ispanaklı börek | dish | recipe:spinach_borek | 214.47 kcal P6.11 C20.57 F12.10 A0.00 | typ 150.0 g | dilim 100.0 g
+    phyllo 500.0 g
+    spinach_raw 500.0 g
+    onion 100.0 g
+    white_cheese 150.0 g
+    milk 200.0 g
+    egg 100.0 g
+    oil 100.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1490.4 g (FNDDS 58124250, moisture -10 %)
+spinach_olive | Zeytinyağlı ıspanak | dish | recipe:spinach_olive | 83.39 kcal P2.84 C7.70 F5.27 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    spinach_raw 1000.0 g
+    onion 150.0 g
+    rice_raw 50.0 g
+    tomato_paste 20.0 g
+    oil 60.0 g
+    salt 8.0 g
+    water 150.0 g → cooked 1222.3 g (FNDDS 72125221, moisture -15 %)
+spinach_raw | Ispanak (çiğ) | vegetable | fdc:168462 | 23.00 kcal P2.86 C3.63 F0.39 A0.00 | typ 100.0 g | kase 30.0 g
+spirits | Sert içki (votka, viski, cin, rom) | alcohol | fdc:174815 | 231.00 kcal P0.00 C0.00 F0.00 A33.40 | typ 40.0 g | shot 40.0 g
+sponge_cake | Pandispanya | sweet | fdc:172706 | 290.00 kcal P5.40 C61.00 F2.70 A0.00 | typ 60.0 g | dilim 60.0 g
+spring_onion | Taze soğan | vegetable | fdc:170005 | 32.00 kcal P1.83 C7.34 F0.19 A0.00 | typ 30.0 g | adet 15.0 g
+squid_raw | Kalamar (çiğ) | fish | fdc:174223 | 92.00 kcal P15.58 C3.08 F1.38 A0.00 | typ 150.0 g
+steak | Biftek (pişmiş) | meat | fdc:169457 | 212.00 kcal P29.33 C0.00 F9.67 A0.00 | typ 150.0 g
+stir_fry_veg | Sebze sote | dish | recipe:stir_fry_veg | 68.03 kcal P1.65 C5.86 F4.80 A0.00 | typ 150.0 g
+    zucchini 300.0 g
+    carrot 200.0 g
+    broccoli 200.0 g
+    red_pepper 150.0 g
+    onion 100.0 g
+    mushroom 150.0 g
+    oil 50.0 g
+    salt 6.0 g
+    water 0.0 g → cooked 1109.8 g (FNDDS 75211031, moisture -4 %)
+strawberries | Çilek | fruit | fdc:167762 | 32.00 kcal P0.67 C7.68 F0.30 A0.00 | typ 150.0 g | kase 150.0 g
+su_boregi | Su böreği | dish | recipe:su_boregi | 303.19 kcal P9.76 C28.86 F16.33 A0.00 | typ 150.0 g | dilim 120.0 g
+    flour 500.0 g
+    egg 250.0 g
+    white_cheese 350.0 g
+    butter 150.0 g
+    parsley 30.0 g
+    salt 6.0 g
+    water 250.0 g → cooked 1382.4 g (FNDDS 58124250, moisture -10 %)
+sucuk | Sucuk | meat | label:Pınar Klasik Kangal Sucuk, 2026-10-14 | 428.00 kcal P16.00 C1.00 F40.00 A0.00 | typ 40.0 g | dilim 10.0 g
+sucuklu_yumurta | Sucuklu yumurta | dish | recipe:sucuklu_yumurta | 246.82 kcal P12.97 C0.77 F21.08 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    egg 150.0 g
+    sucuk 60.0 g
+    butter 10.0 g
+    water 0.0 g → cooked 220.0 g (FNDDS 32130010, moisture 0 %)
+sugar | Toz şeker | sweet | fdc:169655 | 387.00 kcal P0.00 C99.98 F0.00 A0.00 | typ 5.0 g | çay kaşığı 4.2 g; yemek kaşığı 12.0 g
+sunflower_oil | Ayçiçek yağı | oil | fdc:171025 | 884.00 kcal P0.00 C0.00 F100.00 A0.00 | typ 10.0 g | çay kaşığı 4.5 g; yemek kaşığı 13.6 g
+sunflower_seeds | Ay çekirdeği (iç) | nut_seed | fdc:170562 | 584.00 kcal P20.78 C20.00 F51.46 A0.00 | typ 30.0 g | avuç 25.0 g
+sutlac | Sütlaç | sweet | recipe:sutlac | 108.44 kcal P2.56 C19.57 F2.27 A0.00 | typ 200.0 g | kase 200.0 g
+    milk 1000.0 g
+    rice_raw 80.0 g
+    sugar 150.0 g
+    cornstarch 25.0 g
+    water 200.0 g → cooked 1455.0 g (FNDDS 13210410, moisture 0 %)
+sweet_potato | Tatlı patates (çiğ) | vegetable | fdc:168482 | 86.00 kcal P1.57 C20.12 F0.05 A0.00 | typ 150.0 g | adet 150.0 g
+sweet_potato_baked | Tatlı patates (fırında) | vegetable | fdc:168483 | 90.00 kcal P2.01 C20.71 F0.15 A0.00 | typ 150.0 g
+tahini | Tahin | nut_seed | fdc:168604 | 592.00 kcal P17.40 C21.50 F53.01 A0.00 | typ 15.0 g | yemek kaşığı 15.0 g
+tangerine | Mandalina | fruit | fdc:169105 | 53.00 kcal P0.81 C13.34 F0.31 A0.00 | typ 90.0 g | adet 88.0 g
+tantuni | Tantuni | dish | recipe:tantuni | 211.70 kcal P16.40 C16.10 F9.26 A0.00 | typ 200.0 g | adet 200.0 g
+    beef_stew_cooked 100.0 g
+    lavash 70.0 g
+    oil 10.0 g
+    tomato 30.0 g
+    onion 20.0 g
+    parsley 5.0 g
+    water 0.0 g → cooked 235.0 g (FNDDS 27516010, moisture 0 %)
+tas_kebabi | Tas kebabı | dish | recipe:tas_kebabi | 108.76 kcal P12.41 C6.07 F4.09 A0.00 | typ 250.0 g | porsiyon 250.0 g
+    beef_stew_cooked 500.0 g
+    potato_raw 300.0 g
+    onion 200.0 g
+    tomato 200.0 g
+    tomato_paste 30.0 g
+    butter 30.0 g
+    salt 8.0 g
+    water 200.0 g → cooked 1394.6 g (FNDDS 27411100, moisture -5 %)
+tea | Çay (şekersiz) | drink | fdc:173227 | 1.00 kcal P0.00 C0.30 F0.00 A0.00 | typ 100.0 g | ince belli bardak 100.0 g; kupa 250.0 g
+thyme | Kekik (kuru) | other | fdc:170938 | 276.00 kcal P9.11 C63.94 F7.43 A0.00 | typ 1.0 g | çay kaşığı 1.0 g
+    energy exception: Dried herb: about 37 g fibre per 100 g in USDA carbohydrate, so 4/4/9 overstates energy
+tilapia_raw | Tilapya (çiğ) | fish | fdc:175176 | 96.00 kcal P20.08 C0.00 F1.70 A0.00 | typ 150.0 g
+toast_bread | Tost ekmeği (paket) | bread | fdc:174924 | 266.00 kcal P8.85 C49.42 F3.33 A0.00 | typ 50.0 g | dilim 25.0 g
+tofu | Tofu | legume | fdc:172448 | 78.00 kcal P9.04 C2.85 F4.17 A0.00 | typ 100.0 g
+tomato | Domates | vegetable | fdc:170457 | 18.00 kcal P0.88 C3.89 F0.20 A0.00 | typ 120.0 g | adet 120.0 g
+tomato_bulgur | Domatesli bulgur pilavı | dish | recipe:tomato_bulgur | 89.01 kcal P2.49 C14.77 F2.83 A0.00 | typ 150.0 g | kase 150.0 g
+    bulgur_cooked 800.0 g
+    tomato 200.0 g
+    tomato_paste 30.0 g
+    onion 80.0 g
+    oil 30.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 1148.0 g (FNDDS 56207120, moisture 0 %)
+tomato_canned | Konserve domates | vegetable | fdc:170051 | 16.00 kcal P0.79 C3.47 F0.25 A0.00 | typ 100.0 g
+tomato_paste | Domates salçası | vegetable | fdc:170459 | 82.00 kcal P4.32 C18.91 F0.47 A0.00 | typ 16.0 g | yemek kaşığı 16.0 g
+tomato_soup | Domates çorbası | dish | recipe:tomato_soup | 36.21 kcal P1.06 C4.08 F1.94 A0.00 | typ 250.0 g | kase 250.0 g
+    tomato 800.0 g
+    tomato_paste 30.0 g
+    flour 30.0 g
+    butter 30.0 g
+    milk 200.0 g
+    salt 8.0 g
+    water 600.0 g → cooked 1698.0 g (FNDDS 74601000, moisture 0 %)
+tost | Kaşarlı tost | dish | recipe:tost | 294.55 kcal P12.59 C27.28 F14.96 A0.00 | typ 130.0 g | adet 130.0 g
+    toast_bread 70.0 g
+    kasar_cheese 40.0 g
+    butter 8.0 g
+    tomato 12.0 g
+    water 0.0 g → cooked 130.0 g (FNDDS 14640000, moisture 0 %)
+trout_raw | Alabalık (çiğ) | fish | fdc:173717 | 141.00 kcal P19.94 C0.00 F6.18 A0.00 | typ 200.0 g | adet 300.0 g
+tuna | Ton balığı (suda) | fish | fdc:171986 | 116.00 kcal P25.51 C0.00 F0.82 A0.00 | typ 100.0 g | kutu 120.0 g
+tuna_fresh_raw | Taze ton balığı (çiğ) | fish | fdc:175159 | 109.00 kcal P24.40 C0.00 F0.49 A0.00 | typ 150.0 g
+tuna_oil | Ton balığı (yağlı) | fish | fdc:173708 | 198.00 kcal P29.13 C0.00 F8.21 A0.00 | typ 100.0 g | kutu 120.0 g
+turkey | Hindi füme | poultry | fdc:172941 | 106.00 kcal P14.81 C2.20 F3.77 A0.00 | typ 45.0 g | dilim 16.0 g
+turkey_breast_raw | Hindi göğsü (çiğ) | poultry | fdc:171098 | 114.00 kcal P23.66 C0.14 F1.48 A0.00 | typ 150.0 g
+turkey_mince_raw | Hindi kıyma (çiğ) | poultry | fdc:171505 | 148.00 kcal P19.66 C0.00 F7.66 A0.00 | typ 125.0 g
+turkey_sausage | Hindi sosis | poultry | fdc:325992 | 169.00 kcal P16.70 C0.93 F10.40 A0.00 | typ 50.0 g | adet 25.0 g
+turlu | Türlü | dish | recipe:turlu | 67.43 kcal P4.31 C5.86 F3.33 A0.00 | typ 300.0 g | porsiyon 300.0 g
+    eggplant 300.0 g
+    zucchini 300.0 g
+    green_beans 200.0 g
+    potato_raw 250.0 g
+    green_pepper 120.0 g
+    tomato 300.0 g
+    onion 150.0 g
+    beef_stew_cooked 200.0 g
+    oil 50.0 g
+    salt 10.0 g
+    water 200.0 g → cooked 1976.0 g (FNDDS 27411100, moisture -5 %)
+turnip | Şalgam (sebze) | vegetable | fdc:170465 | 28.00 kcal P0.90 C6.43 F0.10 A0.00 | typ 100.0 g
+urfa_kebap | Urfa kebap | dish | recipe:urfa_kebap | 274.22 kcal P23.78 C0.79 F18.81 A0.00 | typ 180.0 g | şiş 90.0 g
+    lamb_mince_cooked 900.0 g
+    onion 80.0 g
+    salt 10.0 g
+    water 0.0 g → cooked 940.5 g (FNDDS 27430610, moisture -5 %)
+vanilla_wafers | Gofret (sade) | sweet | fdc:174973 | 441.00 kcal P5.00 C73.60 F15.20 A0.00 | typ 30.0 g | adet 10.0 g
+veal_mince_raw | Dana kıyma (çiğ, yağlı) | meat | fdc:175290 | 197.00 kcal P18.58 C0.00 F13.06 A0.00 | typ 125.0 g
+vegetable_soup | Sebze çorbası | dish | recipe:vegetable_soup | 30.01 kcal P0.70 C4.04 F1.37 A0.00 | typ 250.0 g | kase 250.0 g
+    potato_raw 200.0 g
+    carrot 150.0 g
+    zucchini 150.0 g
+    onion 100.0 g
+    peas_frozen 80.0 g
+    tomato_paste 20.0 g
+    oil 25.0 g
+    salt 8.0 g
+    water 1200.0 g → cooked 1933.0 g (FNDDS 75649110, moisture 0 %)
+vermicelli_rice | Şehriyeli pilav | dish | recipe:vermicelli_rice | 156.62 kcal P2.92 C27.03 F3.76 A0.00 | typ 150.0 g | kase 150.0 g
+    rice_boiled 800.0 g
+    spaghetti 100.0 g
+    butter 40.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 948.0 g (FNDDS 56205004, moisture 0 %)
+vinegar | Sirke | other | fdc:173469 | 21.00 kcal P0.00 C0.93 F0.00 A0.00 | typ 15.0 g | yemek kaşığı 15.0 g
+    energy exception: Vinegar energy comes from acetic acid, which 4/4/9/7 does not count
+walnuts | Ceviz | nut_seed | fdc:170187 | 654.00 kcal P15.23 C13.71 F65.21 A0.00 | typ 30.0 g | adet 5.0 g; avuç 30.0 g
+water | Su | drink | fdc:174158 | 0.00 kcal P0.00 C0.00 F0.00 A0.00 | typ 200.0 g | su bardağı 200.0 g; şişe 500.0 g
+watermelon | Karpuz | fruit | fdc:167765 | 30.00 kcal P0.61 C7.55 F0.15 A0.00 | typ 300.0 g | dilim 300.0 g
+white_beans_boiled | Kuru fasulye (haşlanmış, sade) | legume | fdc:173794 | 140.00 kcal P8.23 C26.05 F0.62 A0.00 | typ 150.0 g
+white_beans_dry | Kuru fasulye (kuru, pişmemiş) | legume | fdc:175202 | 333.00 kcal P23.36 C60.27 F0.85 A0.00 | typ 60.0 g | yemek kaşığı 12.6 g
+white_bread | Beyaz ekmek | bread | recipe:white_bread | 240.00 kcal P6.88 C50.26 F0.67 A0.00 | typ 50.0 g | dilim 30.0 g
+    flour 1000.0 g
+    yeast 20.0 g
+    salt 18.0 g
+    water 620.0 g → cooked 1525.4 g (FNDDS 51101050, moisture -8 %)
+white_cheese | Beyaz peynir | dairy | fdc:173420 | 265.00 kcal P14.21 C3.88 F21.49 A0.00 | typ 30.0 g | dilim 30.0 g
+white_rice | Pirinç pilavı (pişmiş) | dish | recipe:white_rice | 165.05 kcal P2.55 C26.33 F5.19 A0.00 | typ 150.0 g | yemek kaşığı 15.0 g; kase 150.0 g
+    rice_boiled 900.0 g
+    butter 40.0 g
+    oil 15.0 g
+    salt 8.0 g
+    water 0.0 g → cooked 963.0 g (FNDDS 56205004, moisture 0 %)
+whole_wheat_bread | Tam buğday ekmeği | bread | fdc:172688 | 252.00 kcal P12.45 C42.71 F3.50 A0.00 | typ 60.0 g | dilim 30.0 g
+wine_dessert | Tatlı şarap | alcohol | fdc:173176 | 160.00 kcal P0.20 C13.69 F0.00 A15.30 | typ 90.0 g | kadeh 90.0 g
+wine_red | Kırmızı şarap | alcohol | fdc:173190 | 85.00 kcal P0.07 C2.61 F0.00 A10.60 | typ 150.0 g | kadeh 150.0 g
+wine_white | Beyaz şarap | alcohol | fdc:174837 | 82.00 kcal P0.07 C2.60 F0.00 A10.30 | typ 150.0 g | kadeh 150.0 g
+yayla_soup | Yayla çorbası | dish | recipe:yayla_soup | 52.58 kcal P1.78 C5.81 F2.47 A0.00 | typ 250.0 g | kase 250.0 g
+    yogurt 500.0 g
+    rice_raw 60.0 g
+    egg_yolk 17.0 g
+    flour 20.0 g
+    butter 20.0 g
+    dried_mint 3.0 g
+    salt 8.0 g
+    water 900.0 g → cooked 1528.0 g (FNDDS 75649110, moisture 0 %)
+yeast | Yaş maya | other | fdc:175042 | 105.00 kcal P8.40 C18.10 F1.90 A0.00 | typ 10.0 g
+yogurt | Yoğurt (tam yağlı) | dairy | fdc:171284 | 61.00 kcal P3.47 C4.66 F3.25 A0.00 | typ 150.0 g | yemek kaşığı 20.0 g; kase 200.0 g
+yogurt_greek | Süzme yoğurt | dairy | fdc:171304 | 97.00 kcal P9.00 C3.98 F5.00 A0.00 | typ 150.0 g | yemek kaşığı 20.0 g; kase 200.0 g
+yogurt_greek_nonfat | Süzme yoğurt (yağsız) | dairy | fdc:330137 | 61.00 kcal P10.30 C3.64 F0.37 A0.00 | typ 150.0 g | yemek kaşığı 25.0 g
+yogurt_low | Yoğurt (az yağlı) | dairy | fdc:170886 | 63.00 kcal P5.25 C7.04 F1.55 A0.00 | typ 150.0 g | kase 150.0 g; yemek kaşığı 20.0 g
+yogurt_skim | Yoğurt (yağsız) | dairy | fdc:170887 | 56.00 kcal P5.73 C7.68 F0.18 A0.00 | typ 150.0 g | kase 150.0 g
+zucchini | Kabak | vegetable | fdc:169291 | 17.00 kcal P1.21 C3.11 F0.32 A0.00 | typ 200.0 g | adet 196.0 g
+zucchini_olive | Zeytinyağlı kabak | dish | recipe:zucchini_olive | 69.32 kcal P1.26 C6.05 F4.81 A0.00 | typ 200.0 g | porsiyon 200.0 g
+    zucchini 800.0 g
+    onion 150.0 g
+    tomato 200.0 g
+    rice_raw 40.0 g
+    oil 60.0 g
+    dill 20.0 g
+    salt 8.0 g
+    water 100.0 g → cooked 1322.9 g (FNDDS 75211031, moisture -4 %)

@@ -7,6 +7,7 @@
 import { readdirSync, writeFileSync } from "node:fs";
 import { searchCasesSql } from "./emit/searchCases.ts";
 import { listMigrationSql } from "./emit/sql.ts";
+import { summaryText } from "./emit/summary.ts";
 import { cookedWeight, recipePer100, type Per100, type ResolvedYield } from "./recipe.ts";
 import { checkFoods, type ResolvedFood } from "./rules.ts";
 import { loadExtract, loadSources } from "./sources.ts";
@@ -31,6 +32,8 @@ for (const f of labels) {
   foods.push({ ...f, sourceKind: "label", sourceRef: `label:${brand} ${product}, ${date}`, brand, per100 });
 }
 const byId = new Map(foods.map((f) => [f.id, f]));
+const yieldNote = (y: ResolvedYield) =>
+  y.kind === "weighed" ? `weighed ${y.date}` : y.kind === "fndds" ? `FNDDS ${y.foodCode}, moisture ${y.moisturePct} %` : `${y.table}, yield ${y.yieldPct} %`;
 for (const r of recipes) {
   let resolved: ResolvedYield;
   if (r.yield.kind === "fndds") {
@@ -45,7 +48,7 @@ for (const r of recipes) {
     sourceKind: "recipe",
     sourceRef: `recipe:${r.id}`,
     per100: cookedG > 0 ? recipePer100(parts, cookedG) : zero,
-    recipe: { ingredients: r.ingredients, waterG: r.waterG, cookedG },
+    recipe: { ingredients: r.ingredients, waterG: r.waterG, cookedG, yieldNote: yieldNote(resolved) },
   });
 }
 
@@ -62,6 +65,7 @@ if (errors.length > 0) {
 
 const SUPABASE = new URL("../../../supabase/", import.meta.url);
 writeFileSync(new URL("tests/database/search_cases.test.sql", SUPABASE), searchCasesSql(searchCases));
+writeFileSync(new URL("../out/foods.txt", import.meta.url), summaryText(foods));
 console.log(`search cases: ${searchCases.length}`);
 
 const at = process.argv.indexOf("--release");

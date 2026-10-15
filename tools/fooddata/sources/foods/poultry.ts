@@ -1,7 +1,7 @@
 // poultry: raw and plain foods with USDA FoodData Central ids (values come from sources/usda/extract.json).
 export default [
   { id: "chicken_boiled", name: "Haşlama tavuk", category: "poultry", fdcId: 171478, aliases: ["didiklenmiş tavuk","haşlama tavuk","haşlanmış tavuk","pilav üstü tavuk","tavuk haşlama"], typicalPortionG: 150 },
-  { id: "chicken_breast_grilled", name: "Izgara tavuk göğsü", category: "poultry", fdcId: 171477, aliases: ["grilled chicken","piliç","tavuk fileto","tavuk şiş","ızgara tavuk","ızgara tavuk göğsü"], typicalPortionG: 150 },
+  { id: "chicken_breast_grilled", name: "Izgara tavuk göğsü", category: "poultry", fdcId: 171477, aliases: ["grilled chicken","piliç","tavuk fileto","ızgara tavuk","ızgara tavuk göğsü"], typicalPortionG: 150 },
   { id: "chicken_breast_raw", name: "Tavuk göğsü (çiğ)", category: "poultry", fdcId: 171077, aliases: ["chicken","raw chicken","tavuk","tavuk göğsü","çiğ tavuk","çiğ tavuk göğsü"], typicalPortionG: 200 },
   { id: "chicken_roast", name: "Fırın tavuk (derili)", category: "poultry", fdcId: 171450, aliases: ["bütün tavuk","derili tavuk","fırın tavuk","fırında tavuk","roast chicken"], typicalPortionG: 180 },
   { id: "chicken_thigh", name: "Tavuk but (derisiz, ızgara)", category: "poultry", fdcId: 172388, aliases: ["baget","tavuk baget","tavuk pirzola","ızgara tavuk but"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 90 }] },

@@ -20,7 +20,7 @@ export interface ResolvedFood {
   brand?: string;
   /** A reviewed reason to skip the energy check (USDA values that 4/4/9/7 cannot reproduce). */
   energyException?: string;
-  recipe?: { ingredients: { foodId: string; grams: number }[]; waterG: number; cookedG: number };
+  recipe?: { ingredients: { foodId: string; grams: number }[]; waterG: number; cookedG: number; yieldNote: string };
 }
 
 export interface RuleContext {

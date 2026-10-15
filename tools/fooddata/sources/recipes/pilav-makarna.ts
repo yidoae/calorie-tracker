@@ -63,7 +63,7 @@ export default [
   },
   {
     id: "manti", name: "Mantı (yoğurtlu)", category: "dish", aliases: ["mantı","yoğurtlu mantı","kayseri mantısı"], typicalPortionG: 250, portions: [{ unit: "tabak", grams: 250 }],
-    ingredients: [{ foodId: "noodles_cooked", grams: 500 }, { foodId: "beef_mince_cooked", grams: 120 }, { foodId: "onion", grams: 40 }, { foodId: "yogurt", grams: 300 }, { foodId: "garlic", grams: 8 }, { foodId: "butter", grams: 30 }, { foodId: "paprika", grams: 3 }, { foodId: "salt", grams: 6 }],
+    ingredients: [{ foodId: "noodles_cooked", grams: 600 }, { foodId: "beef_mince_cooked", grams: 150 }, { foodId: "onion", grams: 40 }, { foodId: "yogurt", grams: 220 }, { foodId: "garlic", grams: 8 }, { foodId: "butter", grams: 45 }, { foodId: "paprika", grams: 3 }, { foodId: "salt", grams: 6 }],
     yield: { kind: "fndds", foodCode: 56130000 },
   },
 ];

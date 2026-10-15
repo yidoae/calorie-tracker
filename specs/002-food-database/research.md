@@ -148,3 +148,17 @@ Decisions behind [plan.md](./plan.md), made on 2026-10-15 against the clarified
   `food_portions`); release 1's 118 foods and their FDC ids are the starting data for US1 (T015).
 - **Lost**: the 24 recipes' ingredient lists and the label details exist only as their final values;
   T018 rewrites those recipes so the build can recompute them.
+
+## 11. Recipes in practice (2026-10-15)
+
+- FNDDS formulations mostly start from cooked ingredients: rice, bulgur, pasta and legume dishes,
+  soups, puddings and kabobs report a moisture change of 0 % to −5 %. A recipe is therefore written
+  the way FNDDS writes the matching dish: from the USDA cooked grain, legume or meat when FNDDS does
+  (pilav = cooked rice + butter; kebap = cooked lamb mince), and from raw ingredients plus water only
+  where FNDDS measures a real moisture change (zeytinyağlılar −4 to −15 %, dolma −7 to −10 %, baked
+  dough −8 to −11 %). For soups `waterG` is the water left in the finished pot.
+- The protein-ratio yield (`usda_meat_yield`) was tried for grilled meat and dropped: it keeps all
+  the fat in the meat, so Adana came out at 383 kcal per 100 g instead of about 280. The kind stays
+  available for an owner-supplied yield.
+- The 24 recipes of release 1 were rewritten from their names; their new values stay within about
+  20 % of release 1, and the review page shows both.

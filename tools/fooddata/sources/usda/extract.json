@@ -3553,9 +3553,79 @@
     }
   },
   "fnddsMoisture": {
+    "13200110": {
+      "fdcId": 2705679,
+      "description": "Pudding, chocolate, NFS",
+      "moisturePct": 0
+    },
+    "13210410": {
+      "fdcId": 2705685,
+      "description": "Pudding, rice",
+      "moisturePct": 0
+    },
+    "14640000": {
+      "fdcId": 2705794,
+      "description": "Cheese sandwich, NFS",
+      "moisturePct": 0
+    },
     "27162040": {
       "fdcId": 2706470,
       "description": "Spaghetti sauce with meat",
+      "moisturePct": 0
+    },
+    "27315270": {
+      "fdcId": 2706621,
+      "description": "Stuffed grape leaves with beef and rice",
+      "moisturePct": -10
+    },
+    "27330060": {
+      "fdcId": 2706657,
+      "description": "Lamb or mutton, rice, and vegetables including carrots, broccoli, and/or dark-green leafy; tomato-based sauce",
+      "moisturePct": -5
+    },
+    "27341020": {
+      "fdcId": 2706668,
+      "description": "Chicken or turkey, potatoes, and vegetables excluding carrots, broccoli, and dark-green leafy; no sauce",
+      "moisturePct": -5
+    },
+    "27410250": {
+      "fdcId": 2706730,
+      "description": "Beef shish kabob with vegetables, excluding potatoes",
+      "moisturePct": -5
+    },
+    "27411100": {
+      "fdcId": 2706731,
+      "description": "Beef with vegetables including carrots, broccoli, and/or dark-green leafy; no potatoes, tomato-based sauce",
+      "moisturePct": -5
+    },
+    "27430610": {
+      "fdcId": 2706780,
+      "description": "Lamb shish kabob with vegetables, excluding potatoes",
+      "moisturePct": -5
+    },
+    "27510521": {
+      "fdcId": 2706920,
+      "description": "Hamburger, NFS",
+      "moisturePct": 0
+    },
+    "27516010": {
+      "fdcId": 2706962,
+      "description": "Gyro sandwich",
+      "moisturePct": 0
+    },
+    "31103010": {
+      "fdcId": 2707154,
+      "description": "Egg, whole, boiled or poached",
+      "moisturePct": 0
+    },
+    "32130010": {
+      "fdcId": 2707200,
+      "description": "Egg omelet or scrambled egg, made with oil",
+      "moisturePct": 0
+    },
+    "41209000": {
+      "fdcId": 2707408,
+      "description": "Falafel",
       "moisturePct": 0
     },
     "41601010": {
@@ -3567,6 +3637,26 @@
       "fdcId": 2707462,
       "description": "Soup, lentil",
       "moisturePct": 0
+    },
+    "51101050": {
+      "fdcId": 2707600,
+      "description": "Bread, white, made from home recipe or purchased at a bakery",
+      "moisturePct": -8
+    },
+    "53118100": {
+      "fdcId": 2707886,
+      "description": "Cake, sponge",
+      "moisturePct": 0
+    },
+    "53415110": {
+      "fdcId": 2708024,
+      "description": "Fritter, plain",
+      "moisturePct": -30
+    },
+    "53441110": {
+      "fdcId": 2708044,
+      "description": "Baklava",
+      "moisturePct": -11
     },
     "56130000": {
       "fdcId": 2708357,
@@ -3583,6 +3673,11 @@
       "description": "Bulgur, fat added",
       "moisturePct": 0
     },
+    "58124250": {
+      "fdcId": 2708729,
+      "description": "Spanakopita",
+      "moisturePct": -10
+    },
     "58130011": {
       "fdcId": 2708750,
       "description": "Lasagna with meat",
@@ -3593,14 +3688,29 @@
       "description": "Grape leaves stuffed with rice",
       "moisturePct": 0
     },
+    "58162110": {
+      "fdcId": 2709073,
+      "description": "Stuffed pepper, with rice and meat",
+      "moisturePct": -7
+    },
     "58162120": {
       "fdcId": 2709074,
       "description": "Stuffed pepper, with rice, meatless",
       "moisturePct": -7
     },
+    "58175110": {
+      "fdcId": 2709131,
+      "description": "Tabbouleh",
+      "moisturePct": 0
+    },
     "58403040": {
       "fdcId": 2709149,
       "description": "Soup, chicken noodle",
+      "moisturePct": 0
+    },
+    "71601010": {
+      "fdcId": 2709532,
+      "description": "Potato salad with egg, made with mayonnaise",
       "moisturePct": 0
     },
     "71801000": {
@@ -3661,6 +3771,11 @@
     "75649110": {
       "fdcId": 2710113,
       "description": "Soup, vegetable",
+      "moisturePct": 0
+    },
+    "77316600": {
+      "fdcId": 2710144,
+      "description": "Eggplant and meat casserole",
       "moisturePct": 0
     }
   }

@@ -90,7 +90,7 @@ describe("build rules", () => {
         sourceKind: "recipe",
         aliases: ["mercimek çorbası"],
         per100: { kcal: 56, protein: 3.5, carbs: 9, fat: 0.8, alcohol: 0 },
-        recipe: { ingredients: [{ foodId: "egg_raw", grams: 200 }], waterG: 800, cookedG: 900, ...over },
+        recipe: { ingredients: [{ foodId: "egg_raw", grams: 200 }], waterG: 800, cookedG: 900, yieldNote: "test", ...over },
       });
     assert.deepEqual(check([food(), soup()]), []);
     assert.ok(hasError(check([food(), soup({ ingredients: [{ foodId: "nope", grams: 10 }] })]), "lentil_soup", "nope"));
