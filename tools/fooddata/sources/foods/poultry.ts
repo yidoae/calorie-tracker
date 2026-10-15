@@ -9,4 +9,13 @@ export default [
   { id: "chicken_wing", name: "Tavuk kanat (fırında)", category: "poultry", fdcId: 173630, aliases: ["chicken wings","kanat","tavuk kanat"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 35 }] },
   { id: "fried_chicken", name: "Kızarmış tavuk (panelenmiş)", category: "poultry", fdcId: 171475, aliases: ["kızarmış tavuk","nugget","pane tavuk","tavuk kızartma","tavuk şnitzel","çıtır tavuk"], typicalPortionG: 150 },
   { id: "turkey", name: "Hindi füme", category: "poultry", fdcId: 172941, aliases: ["hindi","hindi füme"], typicalPortionG: 45, portions: [{ unit: "dilim", grams: 16 }] },
+  { id: "chicken_drumstick_raw", name: "Tavuk baget (çiğ, derili)", category: "poultry", fdcId: 172373, aliases: ["çiğ baget","derili baget"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 110 }] },
+  { id: "chicken_wing_raw", name: "Tavuk kanat (çiğ)", category: "poultry", fdcId: 172390, aliases: ["çiğ kanat"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 45 }] },
+  { id: "chicken_whole_raw", name: "Bütün tavuk (çiğ, derili)", category: "poultry", fdcId: 171447, aliases: ["çiğ bütün tavuk","derili tavuk eti"], typicalPortionG: 200 },
+  { id: "chicken_mince_raw", name: "Tavuk kıyma (çiğ)", category: "poultry", fdcId: 171116, aliases: ["tavuk kıyma","tavuk kıyması"], typicalPortionG: 125 },
+  { id: "chicken_liver_raw", name: "Tavuk ciğeri (çiğ)", category: "poultry", fdcId: 171060, aliases: ["tavuk ciğeri"], typicalPortionG: 100 },
+  { id: "chicken_giblets_raw", name: "Tavuk taşlık (çiğ)", category: "poultry", fdcId: 171057, aliases: ["taşlık","tavuk taşlık"], typicalPortionG: 100 },
+  { id: "turkey_breast_raw", name: "Hindi göğsü (çiğ)", category: "poultry", fdcId: 171098, aliases: ["hindi göğsü","hindi eti"], typicalPortionG: 150 },
+  { id: "turkey_mince_raw", name: "Hindi kıyma (çiğ)", category: "poultry", fdcId: 171505, aliases: ["hindi kıyma"], typicalPortionG: 125 },
+  { id: "turkey_sausage", name: "Hindi sosis", category: "poultry", fdcId: 325992, aliases: ["hindi sosis"], typicalPortionG: 50, portions: [{ unit: "adet", grams: 25 }] },
 ];

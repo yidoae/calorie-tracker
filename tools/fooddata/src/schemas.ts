@@ -19,6 +19,8 @@ const base = {
   aliases: z.array(z.string()),
   typicalPortionG: z.number(),
   portions: z.array(portion).default([]),
+  /** Why this food's energy may sit outside the 4/4/9/7 check (shown in the review). */
+  energyException: z.string().min(10).optional(),
 };
 
 export const usdaFoodSchema = z.object({ ...base, fdcId: z.number().int() });

@@ -18,6 +18,8 @@ export interface ResolvedFood {
   aliases: string[];
   /** Label foods: the brand, kept out of the name and aliases. */
   brand?: string;
+  /** A reviewed reason to skip the energy check (USDA values that 4/4/9/7 cannot reproduce). */
+  energyException?: string;
   recipe?: { ingredients: { foodId: string; grams: number }[]; waterG: number; cookedG: number };
 }
 
@@ -80,7 +82,7 @@ export function checkFoods(foods: ResolvedFood[], ctx: RuleContext): string[] {
     }
     const { kcal, protein, carbs, fat, alcohol } = f.per100;
     const expected = 4 * protein + 4 * carbs + 9 * fat + 7 * alcohol;
-    if (kcal >= ENERGY_EXEMPT_KCAL && Math.abs(kcal - expected) > Math.max(ENERGY_TOLERANCE * kcal, ENERGY_MIN_DIFF_KCAL)) {
+    if (!f.energyException && kcal >= ENERGY_EXEMPT_KCAL && Math.abs(kcal - expected) > Math.max(ENERGY_TOLERANCE * kcal, ENERGY_MIN_DIFF_KCAL)) {
       fail(`energy ${kcal} kcal is more than 20 % (or 10 kcal) off 4P + 4C + 9F + 7A = ${expected.toFixed(1)} kcal`);
     }
 

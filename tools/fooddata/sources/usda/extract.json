@@ -1,6 +1,36 @@
 {
   "release": "FoodData Central: Foundation 2026-04-30, SR Legacy 2018-04, Survey (FNDDS) 2024-10-31",
   "foods": {
+    "167575": {
+      "description": "Ice creams, vanilla",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 207,
+      "protein": 3.5,
+      "carbs": 23.6,
+      "fat": 11,
+      "alcohol": 0
+    },
+    "167746": {
+      "description": "Lemons, raw, without peel",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 29,
+      "protein": 1.1,
+      "carbs": 9.32,
+      "fat": 0.3,
+      "alcohol": 0
+    },
+    "167747": {
+      "description": "Lemon juice, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 22,
+      "protein": 0.35,
+      "carbs": 6.9,
+      "fat": 0.24,
+      "alcohol": 0
+    },
     "167762": {
       "description": "Strawberries, raw",
       "dataType": "sr_legacy_food",
@@ -11,6 +41,76 @@
       "fat": 0.3,
       "alcohol": 0
     },
+    "167765": {
+      "description": "Watermelon, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 30,
+      "protein": 0.61,
+      "carbs": 7.55,
+      "fat": 0.15,
+      "alcohol": 0
+    },
+    "168153": {
+      "description": "Kiwifruit, green, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 61,
+      "protein": 1.14,
+      "carbs": 14.66,
+      "fat": 0.52,
+      "alcohol": 0
+    },
+    "168162": {
+      "description": "Plums, dried (prunes), uncooked",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 240,
+      "protein": 2.18,
+      "carbs": 63.88,
+      "fat": 0.38,
+      "alcohol": 0
+    },
+    "168163": {
+      "description": "Quinces, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 57,
+      "protein": 0.4,
+      "carbs": 15.3,
+      "fat": 0.1,
+      "alcohol": 0
+    },
+    "168166": {
+      "description": "Raisins, seeded",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 296,
+      "protein": 2.52,
+      "carbs": 78.47,
+      "fat": 0.54,
+      "alcohol": 0
+    },
+    "168191": {
+      "description": "Dates, medjool",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 277,
+      "protein": 1.81,
+      "carbs": 74.97,
+      "fat": 0.15,
+      "alcohol": 0
+    },
+    "168389": {
+      "description": "Asparagus, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 20,
+      "protein": 2.2,
+      "carbs": 3.88,
+      "fat": 0.12,
+      "alcohol": 0
+    },
     "168409": {
       "description": "Cucumber, with peel, raw",
       "dataType": "sr_legacy_food",
@@ -19,6 +119,36 @@
       "protein": 0.65,
       "carbs": 3.63,
       "fat": 0.11,
+      "alcohol": 0
+    },
+    "168421": {
+      "description": "Kale, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 35,
+      "protein": 2.92,
+      "carbs": 4.42,
+      "fat": 1.49,
+      "alcohol": 0
+    },
+    "168448": {
+      "description": "Pumpkin, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 26,
+      "protein": 1,
+      "carbs": 6.5,
+      "fat": 0.1,
+      "alcohol": 0
+    },
+    "168462": {
+      "description": "Spinach, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 23,
+      "protein": 2.86,
+      "carbs": 3.63,
+      "fat": 0.39,
       "alcohol": 0
     },
     "168482": {
@@ -39,6 +169,26 @@
       "protein": 2.01,
       "carbs": 20.71,
       "fat": 0.15,
+      "alcohol": 0
+    },
+    "168558": {
+      "description": "Pickles, cucumber, dill or kosher dill",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 12,
+      "protein": 0.5,
+      "carbs": 2.41,
+      "fat": 0.3,
+      "alcohol": 0
+    },
+    "168575": {
+      "description": "Grape leaves, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 93,
+      "protein": 5.6,
+      "carbs": 17.31,
+      "fat": 2.12,
       "alcohol": 0
     },
     "168726": {
@@ -91,6 +241,16 @@
       "fat": 2.07,
       "alcohol": 0
     },
+    "169092": {
+      "description": "Melons, cantaloupe, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 34,
+      "protein": 0.84,
+      "carbs": 8.16,
+      "fat": 0.19,
+      "alcohol": 0
+    },
     "169094": {
       "description": "Olives, ripe, canned (small-extra large)",
       "dataType": "sr_legacy_food",
@@ -121,6 +281,66 @@
       "fat": 0.31,
       "alcohol": 0
     },
+    "169118": {
+      "description": "Pears, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 57,
+      "protein": 0.36,
+      "carbs": 15.23,
+      "fat": 0.14,
+      "alcohol": 0
+    },
+    "169124": {
+      "description": "Pineapple, raw, all varieties",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 50,
+      "protein": 0.54,
+      "carbs": 13.12,
+      "fat": 0.12,
+      "alcohol": 0
+    },
+    "169134": {
+      "description": "Pomegranates, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 83,
+      "protein": 1.67,
+      "carbs": 18.7,
+      "fat": 1.17,
+      "alcohol": 0
+    },
+    "169145": {
+      "description": "Beets, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 1.61,
+      "carbs": 9.56,
+      "fat": 0.17,
+      "alcohol": 0
+    },
+    "169205": {
+      "description": "Artichokes, (globe or french), raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 47,
+      "protein": 3.27,
+      "carbs": 10.51,
+      "fat": 0.15,
+      "alcohol": 0
+    },
+    "169216": {
+      "description": "Corn, sweet, yellow, canned, vacuum pack, regular pack",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 79,
+      "protein": 2.41,
+      "carbs": 19.44,
+      "fat": 0.5,
+      "alcohol": 0
+    },
     "169228": {
       "description": "Eggplant, raw",
       "dataType": "sr_legacy_food",
@@ -141,6 +361,36 @@
       "fat": 0.5,
       "alcohol": 0
     },
+    "169231": {
+      "description": "Ginger root, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 80,
+      "protein": 1.82,
+      "carbs": 17.77,
+      "fat": 0.75,
+      "alcohol": 0
+    },
+    "169246": {
+      "description": "Leeks, (bulb and lower leaf-portion), raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 61,
+      "protein": 1.5,
+      "carbs": 14.15,
+      "fat": 0.3,
+      "alcohol": 0
+    },
+    "169248": {
+      "description": "Lettuce, iceberg (includes crisphead types), raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 14,
+      "protein": 0.9,
+      "carbs": 2.97,
+      "fat": 0.14,
+      "alcohol": 0
+    },
     "169249": {
       "description": "Lettuce, green leaf, raw",
       "dataType": "sr_legacy_food",
@@ -151,6 +401,56 @@
       "fat": 0.15,
       "alcohol": 0
     },
+    "169251": {
+      "description": "Mushrooms, white, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 22,
+      "protein": 3.09,
+      "carbs": 3.26,
+      "fat": 0.34,
+      "alcohol": 0
+    },
+    "169260": {
+      "description": "Okra, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 33,
+      "protein": 1.93,
+      "carbs": 7.45,
+      "fat": 0.19,
+      "alcohol": 0
+    },
+    "169274": {
+      "description": "Purslane, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 20,
+      "protein": 2.03,
+      "carbs": 3.39,
+      "fat": 0.36,
+      "alcohol": 0
+    },
+    "169276": {
+      "description": "Radishes, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 16,
+      "protein": 0.68,
+      "carbs": 3.4,
+      "fat": 0.1,
+      "alcohol": 0
+    },
+    "169279": {
+      "description": "Sauerkraut, canned, solids and liquids",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 19,
+      "protein": 0.91,
+      "carbs": 4.28,
+      "fat": 0.14,
+      "alcohol": 0
+    },
     "169291": {
       "description": "Squash, summer, zucchini, includes skin, raw",
       "dataType": "sr_legacy_food",
@@ -159,6 +459,36 @@
       "protein": 1.21,
       "carbs": 3.11,
       "fat": 0.32,
+      "alcohol": 0
+    },
+    "169383": {
+      "description": "Peppers, sweet, yellow, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 27,
+      "protein": 1,
+      "carbs": 6.32,
+      "fat": 0.21,
+      "alcohol": 0
+    },
+    "169387": {
+      "description": "Arugula, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 25,
+      "protein": 2.58,
+      "carbs": 3.65,
+      "fat": 0.66,
+      "alcohol": 0
+    },
+    "169451": {
+      "description": "Beef, variety meats and by-products, liver, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 135,
+      "protein": 20.36,
+      "carbs": 3.89,
+      "fat": 3.63,
       "alcohol": 0
     },
     "169457": {
@@ -251,6 +581,86 @@
       "fat": 0.93,
       "alcohol": 0
     },
+    "169908": {
+      "description": "Loquats, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 47,
+      "protein": 0.43,
+      "carbs": 12.14,
+      "fat": 0.2,
+      "alcohol": 0
+    },
+    "169910": {
+      "description": "Mangos, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 60,
+      "protein": 0.82,
+      "carbs": 14.98,
+      "fat": 0.38,
+      "alcohol": 0
+    },
+    "169911": {
+      "description": "Melons, honeydew, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 36,
+      "protein": 0.54,
+      "carbs": 9.09,
+      "fat": 0.14,
+      "alcohol": 0
+    },
+    "169913": {
+      "description": "Mulberries, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 1.44,
+      "carbs": 9.8,
+      "fat": 0.39,
+      "alcohol": 0
+    },
+    "169914": {
+      "description": "Nectarines, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 44,
+      "protein": 1.06,
+      "carbs": 10.55,
+      "fat": 0.32,
+      "alcohol": 0
+    },
+    "169928": {
+      "description": "Peaches, yellow, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 39,
+      "protein": 0.91,
+      "carbs": 9.54,
+      "fat": 0.25,
+      "alcohol": 0
+    },
+    "169941": {
+      "description": "Persimmons, japanese, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 70,
+      "protein": 0.58,
+      "carbs": 18.59,
+      "fat": 0.19,
+      "alcohol": 0
+    },
+    "169949": {
+      "description": "Plums, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 46,
+      "protein": 0.7,
+      "carbs": 11.42,
+      "fat": 0.28,
+      "alcohol": 0
+    },
     "169961": {
       "description": "Beans, snap, green, raw",
       "dataType": "sr_legacy_food",
@@ -259,6 +669,56 @@
       "protein": 1.83,
       "carbs": 6.97,
       "fat": 0.22,
+      "alcohol": 0
+    },
+    "169962": {
+      "description": "Beans, snap, green, frozen, all styles, unprepared (Includes foods for USDA's Food Distribution Program)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 33,
+      "protein": 1.79,
+      "carbs": 7.54,
+      "fat": 0.21,
+      "alcohol": 0
+    },
+    "169975": {
+      "description": "Cabbage, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 25,
+      "protein": 1.28,
+      "carbs": 5.8,
+      "fat": 0.1,
+      "alcohol": 0
+    },
+    "169977": {
+      "description": "Cabbage, red, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 31,
+      "protein": 1.43,
+      "carbs": 7.37,
+      "fat": 0.16,
+      "alcohol": 0
+    },
+    "169986": {
+      "description": "Cauliflower, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 25,
+      "protein": 1.92,
+      "carbs": 4.97,
+      "fat": 0.28,
+      "alcohol": 0
+    },
+    "169988": {
+      "description": "Celery, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 14,
+      "protein": 0.69,
+      "carbs": 2.97,
+      "fat": 0.17,
       "alcohol": 0
     },
     "169998": {
@@ -291,6 +751,26 @@
       "fat": 0.1,
       "alcohol": 0
     },
+    "170005": {
+      "description": "Onions, spring or scallions (includes tops and bulb), raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 32,
+      "protein": 1.83,
+      "carbs": 7.34,
+      "fat": 0.19,
+      "alcohol": 0
+    },
+    "170016": {
+      "description": "Peas, green, frozen, unprepared (Includes foods for USDA's Food Distribution Program)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 77,
+      "protein": 5.22,
+      "carbs": 13.62,
+      "fat": 0.4,
+      "alcohol": 0
+    },
     "170026": {
       "description": "Potatoes, flesh and skin, raw",
       "dataType": "sr_legacy_food",
@@ -299,6 +779,16 @@
       "protein": 2.05,
       "carbs": 17.49,
       "fat": 0.09,
+      "alcohol": 0
+    },
+    "170051": {
+      "description": "Tomatoes, red, ripe, canned, packed in tomato juice",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 16,
+      "protein": 0.79,
+      "carbs": 3.47,
+      "fat": 0.25,
       "alcohol": 0
     },
     "170108": {
@@ -319,6 +809,16 @@
       "protein": 17.73,
       "carbs": 23.45,
       "fat": 49.67,
+      "alcohol": 0
+    },
+    "170169": {
+      "description": "Nuts, coconut meat, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 354,
+      "protein": 3.33,
+      "carbs": 15.23,
+      "fat": 33.49,
       "alcohol": 0
     },
     "170187": {
@@ -351,6 +851,16 @@
       "fat": 0.37,
       "alcohol": 0
     },
+    "170383": {
+      "description": "Brussels sprouts, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 3.38,
+      "carbs": 8.95,
+      "fat": 0.3,
+      "alcohol": 0
+    },
     "170393": {
       "description": "Carrots, raw",
       "dataType": "sr_legacy_food",
@@ -359,6 +869,36 @@
       "protein": 0.93,
       "carbs": 9.58,
       "fat": 0.24,
+      "alcohol": 0
+    },
+    "170400": {
+      "description": "Celeriac, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 42,
+      "protein": 1.5,
+      "carbs": 9.2,
+      "fat": 0.3,
+      "alcohol": 0
+    },
+    "170416": {
+      "description": "Parsley, fresh",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 36,
+      "protein": 2.97,
+      "carbs": 6.33,
+      "fat": 0.79,
+      "alcohol": 0
+    },
+    "170419": {
+      "description": "Peas, green, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 81,
+      "protein": 5.42,
+      "carbs": 14.45,
+      "fat": 0.4,
       "alcohol": 0
     },
     "170427": {
@@ -401,6 +941,26 @@
       "fat": 0.47,
       "alcohol": 0
     },
+    "170465": {
+      "description": "Turnips, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 28,
+      "protein": 0.9,
+      "carbs": 6.43,
+      "fat": 0.1,
+      "alcohol": 0
+    },
+    "170497": {
+      "description": "Peppers, hot chili, green, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 40,
+      "protein": 2,
+      "carbs": 9.46,
+      "fat": 0.2,
+      "alcohol": 0
+    },
     "170567": {
       "description": "Nuts, almonds",
       "dataType": "sr_legacy_food",
@@ -431,6 +991,86 @@
       "fat": 14.73,
       "alcohol": 0
     },
+    "170809": {
+      "description": "Beef, chuck for stew, separable lean and fat, select, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 124,
+      "protein": 21.9,
+      "carbs": 0.21,
+      "fat": 3.99,
+      "alcohol": 0
+    },
+    "170845": {
+      "description": "Cheese, mozzarella, whole milk",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 299,
+      "protein": 22.17,
+      "carbs": 2.4,
+      "fat": 22.14,
+      "alcohol": 0
+    },
+    "170847": {
+      "description": "Cheese, mozzarella, part skim milk",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 254,
+      "protein": 24.26,
+      "carbs": 2.77,
+      "fat": 15.92,
+      "alcohol": 0
+    },
+    "170858": {
+      "description": "Cream, fluid, light whipping",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 292,
+      "protein": 2.17,
+      "carbs": 2.96,
+      "fat": 30.91,
+      "alcohol": 0
+    },
+    "170859": {
+      "description": "Cream, fluid, heavy whipping",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 340,
+      "protein": 2.84,
+      "carbs": 2.84,
+      "fat": 36.08,
+      "alcohol": 0
+    },
+    "170886": {
+      "description": "Yogurt, plain, low fat",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 63,
+      "protein": 5.25,
+      "carbs": 7.04,
+      "fat": 1.55,
+      "alcohol": 0
+    },
+    "170887": {
+      "description": "Yogurt, plain, skim milk",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 56,
+      "protein": 5.73,
+      "carbs": 7.68,
+      "fat": 0.18,
+      "alcohol": 0
+    },
+    "170904": {
+      "description": "Kefir, lowfat, plain, LIFEWAY",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 3.79,
+      "carbs": 4.77,
+      "fat": 1.02,
+      "alcohol": 0
+    },
     "171025": {
       "description": "Oil, sunflower, linoleic, (approx. 65%)",
       "dataType": "sr_legacy_food",
@@ -439,6 +1079,26 @@
       "protein": 0,
       "carbs": 0,
       "fat": 100,
+      "alcohol": 0
+    },
+    "171057": {
+      "description": "Chicken, broilers or fryers, giblets, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 124,
+      "protein": 17.88,
+      "carbs": 1.8,
+      "fat": 4.47,
+      "alcohol": 0
+    },
+    "171060": {
+      "description": "Chicken, liver, all classes, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 119,
+      "protein": 16.92,
+      "carbs": 0.73,
+      "fat": 4.83,
       "alcohol": 0
     },
     "171077": {
@@ -451,6 +1111,46 @@
       "fat": 2.62,
       "alcohol": 0
     },
+    "171098": {
+      "description": "Turkey, whole, breast, meat only, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 114,
+      "protein": 23.66,
+      "carbs": 0.14,
+      "fat": 1.48,
+      "alcohol": 0
+    },
+    "171116": {
+      "description": "Chicken, ground, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 143,
+      "protein": 17.44,
+      "carbs": 0.04,
+      "fat": 8.1,
+      "alcohol": 0
+    },
+    "171241": {
+      "description": "Cheese, gouda",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 356,
+      "protein": 24.94,
+      "carbs": 2.22,
+      "fat": 27.44,
+      "alcohol": 0
+    },
+    "171257": {
+      "description": "Cream, sour, cultured",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 198,
+      "protein": 2.44,
+      "carbs": 4.63,
+      "fat": 19.35,
+      "alcohol": 0
+    },
     "171265": {
       "description": "Milk, whole, 3.25% milkfat, with added vitamin D",
       "dataType": "sr_legacy_food",
@@ -459,6 +1159,16 @@
       "protein": 3.15,
       "carbs": 4.8,
       "fat": 3.25,
+      "alcohol": 0
+    },
+    "171278": {
+      "description": "Milk, goat, fluid, with added vitamin D",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 69,
+      "protein": 3.56,
+      "carbs": 4.45,
+      "fat": 4.14,
       "alcohol": 0
     },
     "171284": {
@@ -501,6 +1211,16 @@
       "fat": 100,
       "alcohol": 0
     },
+    "171447": {
+      "description": "Chicken, broilers or fryers, meat and skin, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 215,
+      "protein": 18.6,
+      "carbs": 0,
+      "fat": 15.06,
+      "alcohol": 0
+    },
     "171450": {
       "description": "Chicken, broilers or fryers, meat and skin, cooked, roasted",
       "dataType": "sr_legacy_food",
@@ -541,6 +1261,16 @@
       "fat": 3.03,
       "alcohol": 0
     },
+    "171505": {
+      "description": "Turkey, Ground, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 148,
+      "protein": 19.66,
+      "carbs": 0,
+      "fat": 7.66,
+      "alcohol": 0
+    },
     "171688": {
       "description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
       "dataType": "sr_legacy_food",
@@ -549,6 +1279,16 @@
       "protein": 0.26,
       "carbs": 13.81,
       "fat": 0.17,
+      "alcohol": 0
+    },
+    "171697": {
+      "description": "Apricots, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 48,
+      "protein": 1.4,
+      "carbs": 11.12,
+      "fat": 0.39,
       "alcohol": 0
     },
     "171705": {
@@ -569,6 +1309,36 @@
       "protein": 0.74,
       "carbs": 14.49,
       "fat": 0.33,
+      "alcohol": 0
+    },
+    "171719": {
+      "description": "Cherries, sweet, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 63,
+      "protein": 1.06,
+      "carbs": 16.01,
+      "fat": 0.2,
+      "alcohol": 0
+    },
+    "171723": {
+      "description": "Cranberries, dried, sweetened (Includes foods for USDA's Food Distribution Program)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 308,
+      "protein": 0.17,
+      "carbs": 82.8,
+      "fat": 1.09,
+      "alcohol": 0
+    },
+    "171726": {
+      "description": "Dates, deglet noor",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 282,
+      "protein": 2.45,
+      "carbs": 75.03,
+      "fat": 0.39,
       "alcohol": 0
     },
     "171790": {
@@ -601,6 +1371,26 @@
       "fat": 4.09,
       "alcohol": 0
     },
+    "171949": {
+      "description": "Fish, bluefish, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 124,
+      "protein": 20.04,
+      "carbs": 0,
+      "fat": 4.24,
+      "alcohol": 0
+    },
+    "171955": {
+      "description": "Fish, cod, Atlantic, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 82,
+      "protein": 17.81,
+      "carbs": 0,
+      "fat": 0.67,
+      "alcohol": 0
+    },
     "171986": {
       "description": "Fish, tuna, light, canned in water, without salt, drained solids",
       "dataType": "sr_legacy_food",
@@ -611,6 +1401,106 @@
       "fat": 0.82,
       "alcohol": 0
     },
+    "172118": {
+      "description": "Beef, short loin, t-bone steak, separable lean and fat, trimmed to 1/8\" fat, all grades, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 223,
+      "protein": 20.11,
+      "carbs": 0,
+      "fat": 15.18,
+      "alcohol": 0
+    },
+    "172179": {
+      "description": "Cheese, cottage, creamed, large or small curd",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 98,
+      "protein": 11.12,
+      "carbs": 3.38,
+      "fat": 4.3,
+      "alcohol": 0
+    },
+    "172183": {
+      "description": "Egg, white, raw, fresh",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 52,
+      "protein": 10.9,
+      "carbs": 0.73,
+      "fat": 0.17,
+      "alcohol": 0
+    },
+    "172184": {
+      "description": "Egg, yolk, raw, fresh",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 322,
+      "protein": 15.86,
+      "carbs": 3.59,
+      "fat": 26.54,
+      "alcohol": 0
+    },
+    "172186": {
+      "description": "Egg, whole, cooked, poached",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 143,
+      "protein": 12.51,
+      "carbs": 0.71,
+      "fat": 9.47,
+      "alcohol": 0
+    },
+    "172187": {
+      "description": "Egg, whole, cooked, scrambled",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 149,
+      "protein": 9.99,
+      "carbs": 1.61,
+      "fat": 10.98,
+      "alcohol": 0
+    },
+    "172191": {
+      "description": "Egg, quail, whole, fresh, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 158,
+      "protein": 13.05,
+      "carbs": 0.41,
+      "fat": 11.09,
+      "alcohol": 0
+    },
+    "172194": {
+      "description": "Milk, canned, evaporated, with added vitamin A",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 134,
+      "protein": 6.81,
+      "carbs": 10.04,
+      "fat": 7.56,
+      "alcohol": 0
+    },
+    "172233": {
+      "description": "Dill weed, fresh",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 3.46,
+      "carbs": 7.02,
+      "fat": 1.12,
+      "alcohol": 0
+    },
+    "172373": {
+      "description": "Chicken, broilers or fryers, drumstick, meat and skin, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 161,
+      "protein": 18.08,
+      "carbs": 0.11,
+      "fat": 9.2,
+      "alcohol": 0
+    },
     "172388": {
       "description": "Chicken, broilers or fryers, thigh, meat only, cooked, roasted",
       "dataType": "sr_legacy_food",
@@ -619,6 +1509,16 @@
       "protein": 24.76,
       "carbs": 0,
       "fat": 8.15,
+      "alcohol": 0
+    },
+    "172390": {
+      "description": "Chicken, broilers or fryers, wing, meat and skin, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 191,
+      "protein": 17.52,
+      "carbs": 0,
+      "fat": 12.85,
       "alcohol": 0
     },
     "172420": {
@@ -651,6 +1551,26 @@
       "fat": 8.59,
       "alcohol": 0
     },
+    "172517": {
+      "description": "Lamb, New Zealand, imported, loin chop, separable lean and fat, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 298,
+      "protein": 15.4,
+      "carbs": 0.22,
+      "fat": 26.19,
+      "alcohol": 0
+    },
+    "172531": {
+      "description": "Lamb, variety meats and by-products, liver, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 139,
+      "protein": 20.38,
+      "carbs": 1.78,
+      "fat": 5.02,
+      "alcohol": 0
+    },
     "172688": {
       "description": "Bread, whole-wheat, commercially prepared",
       "dataType": "sr_legacy_food",
@@ -681,6 +1601,16 @@
       "fat": 3.91,
       "alcohol": 0
     },
+    "172935": {
+      "description": "Salami, cooked, beef",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 261,
+      "protein": 12.6,
+      "carbs": 1.9,
+      "fat": 22.2,
+      "alcohol": 0
+    },
     "172941": {
       "description": "Turkey breast, sliced, prepackaged",
       "dataType": "sr_legacy_food",
@@ -691,6 +1621,16 @@
       "fat": 3.77,
       "alcohol": 0
     },
+    "173021": {
+      "description": "Figs, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 74,
+      "protein": 0.75,
+      "carbs": 19.18,
+      "fat": 0.3,
+      "alcohol": 0
+    },
     "173180": {
       "description": "Beverages, Protein powder whey based",
       "dataType": "sr_legacy_food",
@@ -699,6 +1639,16 @@
       "protein": 78.13,
       "carbs": 6.25,
       "fat": 1.56,
+      "alcohol": 0
+    },
+    "173418": {
+      "description": "Cheese, cream",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 350,
+      "protein": 6.15,
+      "carbs": 5.52,
+      "fat": 34.44,
       "alcohol": 0
     },
     "173420": {
@@ -741,6 +1691,26 @@
       "fat": 81.11,
       "alcohol": 0
     },
+    "173435": {
+      "description": "Cheese, goat, soft type",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 264,
+      "protein": 18.52,
+      "carbs": 0,
+      "fat": 21.08,
+      "alcohol": 0
+    },
+    "173450": {
+      "description": "Milk, chocolate, fluid, commercial, reduced fat, with added calcium",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 78,
+      "protein": 2.99,
+      "carbs": 12.13,
+      "fat": 1.9,
+      "alcohol": 0
+    },
     "173468": {
       "description": "Salt, table",
       "dataType": "sr_legacy_food",
@@ -749,6 +1719,16 @@
       "protein": 0,
       "carbs": 0,
       "fat": 0,
+      "alcohol": 0
+    },
+    "173475": {
+      "description": "Spearmint, fresh",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 44,
+      "protein": 3.29,
+      "carbs": 8.41,
+      "fat": 0.73,
       "alcohol": 0
     },
     "173627": {
@@ -771,6 +1751,26 @@
       "fat": 16.87,
       "alcohol": 0
     },
+    "173687": {
+      "description": "Fish, salmon, chinook, smoked",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 117,
+      "protein": 18.28,
+      "carbs": 0,
+      "fat": 4.32,
+      "alcohol": 0
+    },
+    "173698": {
+      "description": "Fish, snapper, mixed species, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 100,
+      "protein": 20.51,
+      "carbs": 0,
+      "fat": 1.34,
+      "alcohol": 0
+    },
     "173708": {
       "description": "Fish, tuna, light, canned in oil, drained solids",
       "dataType": "sr_legacy_food",
@@ -779,6 +1779,16 @@
       "protein": 29.13,
       "carbs": 0,
       "fat": 8.21,
+      "alcohol": 0
+    },
+    "173717": {
+      "description": "Fish, trout, rainbow, farmed, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 141,
+      "protein": 19.94,
+      "carbs": 0,
+      "fat": 6.18,
       "alcohol": 0
     },
     "173756": {
@@ -821,6 +1831,16 @@
       "fat": 1.52,
       "alcohol": 0
     },
+    "173941": {
+      "description": "Apricots, dried, sulfured, uncooked",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 241,
+      "protein": 3.39,
+      "carbs": 62.64,
+      "fat": 0.51,
+      "alcohol": 0
+    },
     "173944": {
       "description": "Bananas, raw",
       "dataType": "sr_legacy_food",
@@ -831,6 +1851,26 @@
       "fat": 0.33,
       "alcohol": 0
     },
+    "173946": {
+      "description": "Blackberries, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 1.39,
+      "carbs": 9.61,
+      "fat": 0.49,
+      "alcohol": 0
+    },
+    "173954": {
+      "description": "Cherries, sour, red, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 50,
+      "protein": 1,
+      "carbs": 12.18,
+      "fat": 0.3,
+      "alcohol": 0
+    },
     "174032": {
       "description": "Beef, ground, 85% lean meat / 15% fat, patty, cooked, broiled",
       "dataType": "sr_legacy_food",
@@ -839,6 +1879,106 @@
       "protein": 25.93,
       "carbs": 0,
       "fat": 15.41,
+      "alcohol": 0
+    },
+    "174182": {
+      "description": "Fish, anchovy, european, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 131,
+      "protein": 20.35,
+      "carbs": 0,
+      "fat": 4.84,
+      "alcohol": 0
+    },
+    "174196": {
+      "description": "Fish, flatfish (flounder and sole species), raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 70,
+      "protein": 12.41,
+      "carbs": 0,
+      "fat": 1.93,
+      "alcohol": 0
+    },
+    "174204": {
+      "description": "Crustaceans, crab, blue, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 87,
+      "protein": 18.06,
+      "carbs": 0.04,
+      "fat": 1.08,
+      "alcohol": 0
+    },
+    "174216": {
+      "description": "Mollusks, mussel, blue, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 86,
+      "protein": 11.9,
+      "carbs": 3.69,
+      "fat": 2.24,
+      "alcohol": 0
+    },
+    "174218": {
+      "description": "Mollusks, octopus, common, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 82,
+      "protein": 14.91,
+      "carbs": 2.2,
+      "fat": 1.04,
+      "alcohol": 0
+    },
+    "174223": {
+      "description": "Mollusks, squid, mixed species, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 92,
+      "protein": 15.58,
+      "carbs": 3.08,
+      "fat": 1.38,
+      "alcohol": 0
+    },
+    "174342": {
+      "description": "Lamb, New Zealand, imported, leg chop/steak, bone-in, separable lean and fat, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 206,
+      "protein": 18.64,
+      "carbs": 0.13,
+      "fat": 14.52,
+      "alcohol": 0
+    },
+    "174370": {
+      "description": "Lamb, ground, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 282,
+      "protein": 16.56,
+      "carbs": 0,
+      "fat": 23.41,
+      "alcohol": 0
+    },
+    "174673": {
+      "description": "Grapefruit, raw, pink and red, all areas",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 42,
+      "protein": 0.77,
+      "carbs": 10.66,
+      "fat": 0.14,
+      "alcohol": 0
+    },
+    "174683": {
+      "description": "Grapes, red or green (European type, such as Thompson seedless), raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 69,
+      "protein": 0.72,
+      "carbs": 18.1,
+      "fat": 0.16,
       "alcohol": 0
     },
     "174924": {
@@ -871,6 +2011,46 @@
       "fat": 1.9,
       "alcohol": 0
     },
+    "175119": {
+      "description": "Fish, mackerel, Atlantic, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 205,
+      "protein": 18.6,
+      "carbs": 0,
+      "fat": 13.89,
+      "alcohol": 0
+    },
+    "175139": {
+      "description": "Fish, sardine, Atlantic, canned in oil, drained solids with bone",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 208,
+      "protein": 24.62,
+      "carbs": 0,
+      "fat": 11.45,
+      "alcohol": 0
+    },
+    "175142": {
+      "description": "Fish, sea bass, mixed species, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 97,
+      "protein": 18.43,
+      "carbs": 0,
+      "fat": 2,
+      "alcohol": 0
+    },
+    "175159": {
+      "description": "Fish, tuna, fresh, yellowfin, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 109,
+      "protein": 24.4,
+      "carbs": 0,
+      "fat": 0.49,
+      "alcohol": 0
+    },
     "175167": {
       "description": "Fish, salmon, Atlantic, farmed, raw",
       "dataType": "sr_legacy_food",
@@ -889,6 +2069,16 @@
       "protein": 22.1,
       "carbs": 0,
       "fat": 12.35,
+      "alcohol": 0
+    },
+    "175176": {
+      "description": "Fish, tilapia, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 96,
+      "protein": 20.08,
+      "carbs": 0,
+      "fat": 1.7,
       "alcohol": 0
     },
     "175179": {
@@ -919,6 +2109,176 @@
       "protein": 23.36,
       "carbs": 60.27,
       "fat": 0.85,
+      "alcohol": 0
+    },
+    "175262": {
+      "description": "Lamb, New Zealand, imported, square-cut shoulder, separable lean and fat, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 272,
+      "protein": 16.16,
+      "carbs": 0.24,
+      "fat": 22.89,
+      "alcohol": 0
+    },
+    "175290": {
+      "description": "Veal, ground, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 197,
+      "protein": 18.58,
+      "carbs": 0,
+      "fat": 13.06,
+      "alcohol": 0
+    },
+    "321359": {
+      "description": "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 50,
+      "protein": 3.35,
+      "carbs": 4.91,
+      "fat": 1.9,
+      "alcohol": 0
+    },
+    "321360": {
+      "description": "Tomatoes, grape, raw",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 27,
+      "protein": 0.83,
+      "carbs": 5.51,
+      "fat": 0.63,
+      "alcohol": 0
+    },
+    "322228": {
+      "description": "Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 43,
+      "protein": 3.38,
+      "carbs": 5.19,
+      "fat": 0.95,
+      "alcohol": 0
+    },
+    "322559": {
+      "description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 34,
+      "protein": 3.43,
+      "carbs": 4.89,
+      "fat": 0.08,
+      "alcohol": 0
+    },
+    "323121": {
+      "description": "Frankfurter, beef, unheated",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 314,
+      "protein": 11.7,
+      "carbs": 2.89,
+      "fat": 28,
+      "alcohol": 0
+    },
+    "323444": {
+      "description": "Cheese, ricotta, whole milk",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 157,
+      "protein": 7.81,
+      "carbs": 6.86,
+      "fat": 11,
+      "alcohol": 0
+    },
+    "325036": {
+      "description": "Cheese, parmesan, grated",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 421,
+      "protein": 29.6,
+      "carbs": 12.4,
+      "fat": 28,
+      "alcohol": 0
+    },
+    "325992": {
+      "description": "Sausage, turkey, breakfast links, mild, raw",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 169,
+      "protein": 16.7,
+      "carbs": 0.93,
+      "fat": 10.4,
+      "alcohol": 0
+    },
+    "326905": {
+      "description": "Figs, dried, uncooked",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 249,
+      "protein": 3.3,
+      "carbs": 63.9,
+      "fat": 0.92,
+      "alcohol": 0
+    },
+    "327923": {
+      "description": "Lettuce, cos or romaine, raw",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 17,
+      "protein": 1.24,
+      "carbs": 3.24,
+      "fat": 0.26,
+      "alcohol": 0
+    },
+    "328637": {
+      "description": "Cheese, cheddar",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 408,
+      "protein": 23.3,
+      "carbs": 2.44,
+      "fat": 34,
+      "alcohol": 0
+    },
+    "330137": {
+      "description": "Yogurt, Greek, plain, nonfat",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 61,
+      "protein": 10.3,
+      "carbs": 3.64,
+      "fat": 0.37,
+      "alcohol": 0
+    },
+    "333374": {
+      "description": "Fish, haddock, raw",
+      "dataType": "foundation_food",
+      "kcalNutrient": "1008",
+      "kcal": 74,
+      "protein": 16.3,
+      "carbs": 0,
+      "fat": 0.45,
+      "alcohol": 0
+    },
+    "2259792": {
+      "description": "Buttermilk, low fat",
+      "dataType": "foundation_food",
+      "kcalNutrient": "2048",
+      "kcal": 42.9180362,
+      "protein": 3.464978,
+      "carbs": 4.811522,
+      "fat": 1.081,
+      "alcohol": 0
+    },
+    "2263888": {
+      "description": "Raspberries, raw",
+      "dataType": "foundation_food",
+      "kcalNutrient": "2048",
+      "kcal": 51.412425,
+      "protein": 1.008125,
+      "carbs": 12.904375,
+      "fat": 0.1875,
       "alcohol": 0
     }
   },

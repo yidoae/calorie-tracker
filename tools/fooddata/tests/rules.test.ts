@@ -66,6 +66,10 @@ describe("build rules", () => {
     // Broccoli: USDA 34 kcal against 41 from 4/4/9 (fibre in carbs); within 10 kcal.
     const broccoli = food({ id: "broccoli", name: "Brokoli", category: "vegetable", per100: { kcal: 34, protein: 2.8, carbs: 6.6, fat: 0.4, alcohol: 0 }, aliases: ["brokoli"], portions: [] });
     assert.deepEqual(check([broccoli]), []);
+    // A reviewed exception skips the check (lemon: citric acid and fibre in USDA carbohydrate).
+    const lemon = food({ id: "lemon", name: "Limon", category: "fruit", per100: { kcal: 29, protein: 1.1, carbs: 9.32, fat: 0.3, alcohol: 0 }, aliases: ["limon"], portions: [] });
+    assert.ok(hasError(check([lemon]), "lemon", "energy"));
+    assert.deepEqual(check([{ ...lemon, energyException: "citric acid counted in carbohydrate" }]), []);
     // Under 20 kcal rounding dominates: tea is exempt.
     const tea = food({ id: "tea", name: "Çay", category: "drink", per100: { kcal: 1, protein: 0, carbs: 0.3, fat: 0, alcohol: 0 }, aliases: ["çay"], portions: [] });
     assert.deepEqual(check([tea]), []);
