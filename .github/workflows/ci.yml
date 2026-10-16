@@ -1,5 +1,6 @@
 # Runs on every pull request and every push to master: types, lint, unused code (knip) and the
-# unit tests of every workspace (@calorie/core, the app's pure helpers, tools/fooddata) and the food-list
+# unit tests of every workspace (@calorie/core, the app's pure helpers, tools/fooddata), the Edge Function
+# tests (Deno) and the food-list
 # check (committed list outputs match their sources). The pgTAP database tests (supabase/tests/database) run in their own job only
 # when the SUPABASE_DB_URL secret is set, so forks without secrets still pass. Every test file rolls
 # back, so running them against the dev project leaves nothing behind.
@@ -38,6 +39,11 @@ jobs:
         run: npm test
       - name: Food list is built from its sources
         run: npm run check -w fooddata
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Edge Function tests (Deno)
+        run: npm run test:functions -w @calorie/db
 
   database:
     runs-on: ubuntu-latest

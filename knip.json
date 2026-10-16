@@ -48,5 +48,8 @@
         "expo-updates"
       ]
     }
-  }
+  },
+  "ignore": [
+    "supabase/functions/**"
+  ]
 }
