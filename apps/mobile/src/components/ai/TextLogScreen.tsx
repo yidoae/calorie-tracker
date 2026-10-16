@@ -41,6 +41,7 @@ export default function TextLogScreen() {
   const footer = (
     <View style={styles.footer}>
       {ai.error && <FormError message={ai.error.message} />}
+      {ai.error && <Button label="Ara" variant="ghost" onPress={() => router.replace("/log/search")} />}
       <AllowanceLine line={allowance.line} />
       <Button label="Kontrol et" onPress={check} disabled={empty || ai.pending} />
       <Button

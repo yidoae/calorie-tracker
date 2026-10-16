@@ -15,8 +15,8 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 - **Constitution wins:** `.specify/memory/constitution.md` (v2.0.1) over this file.
 - **Roadmap:** `specs/ROADMAP.md`: 001 mobile foundation → 002 food database + barcode → 003 AI
   logging → 004 tracking → 005 account and stores → 006 subscription (RevenueCat).
-- **Current feature:** `specs/003-ai-logging/` (branch `003-ai-logging`): spec, clarifications and
-  plan done; next `/speckit-tasks`. Photo and text logging through one `ai-log` Edge Function
+- **Current feature:** `specs/003-ai-logging/` (branch `003-ai-logging`): spec, plan and tasks done;
+  implementation under way (tasks.md); photo and text logging through one `ai-log` Edge Function
   (Gemini, food ids as a schema enum), a daily allowance of 5 in `ai_requests`, an on-device text
   preview in `@calorie/core`, and `tools/aieval` on the owner's 30 weighed meals. 002 part A is
   done; in 001, T060 is open. Authority inside a feature: spec/plan/research/data-model and
@@ -41,7 +41,9 @@ apps/mobile          Expo app (src/app routes, components, hooks, providers, ser
 packages/core        @calorie/core: pure nutrition logic + Zod schemas + generated DB types
 supabase             migrations, pgTAP tests (supabase/README.md)
 tools/preview        screen gallery on react-native-web with fake services (never shipped)
-tools/fooddata       food list pipeline: sources + USDA extract → list migration, foods.txt, review.html (never shipped)
+tools/fooddata       food list pipeline: sources + USDA extract → list migration, foods.txt/json, review.html (never shipped)
+tools/aieval         AI logging evaluation: phrase set, owner's weighed photos, model reports (never shipped)
+supabase/functions   Edge Functions (Deno); _shared/ai is the only code that calls the AI vendor
 specs                Spec Kit features; tofuhq-design = design system skill
 ```
 
@@ -92,12 +94,23 @@ npm run fetch -w fooddata   # once per pinned USDA release: refreshes sources/us
 npm run build -w fooddata   # food rules, out/foods.txt, dist/review.html, search_cases.test.sql
 npm run build -w fooddata -- --release <YYYYMMDDHHMMSS>   # also writes the next *_food_list_<n>.sql
 npm run check -w fooddata   # CI: committed list outputs match their sources
+npm run eval:text -w aieval # CI: the text preview on the phrase set (≥ 90 %)
+npm run test:functions -w @calorie/db   # Edge Function lint, check and Deno tests (needs Deno)
+GEMINI_API_KEY=… npm run eval -w aieval -- --model <id>   # model report in tools/aieval/out
 ```
 
 **Food list** (spec 002): edit `tools/fooddata/sources/` (USDA foods by category with FDC ids,
 `labels.ts`, recipes, `search-cases.ts`), never the generated `*_food_list_*.sql`, `foods.txt` or
 `search_cases.test.sql`. Recipes follow the FNDDS formulation of the closest dish (research §11).
-Saved meals keep their values: items snapshot per-100 g values on insert.
+Saved meals keep their values: items snapshot per-100 g values on insert. A new portion unit must
+also go into `packages/core/src/text/units.ts` (the text preview reads units from there; the build
+fails otherwise).
+
+**AI logging** (spec 003): the app never calls the vendor; `services/aiService.ts` calls the
+`ai-log` function, which returns food ids and grams only (values per 100 g always come from
+`foods`). Every AI path fills the meal draft and ends on the review step; estimated grams are
+marked and unmatched things are never saved. The text preview (`@calorie/core/text/parseMeal` +
+`hooks/textPreviewLogic.ts`) needs no model and no allowance.
 
 Expo specifics for agents: `apps/mobile/AGENTS.md` (versioned SDK 57 docs, `npx expo install`).
 Typed routes come from `.expo/types/router.d.ts`, which a short `npx expo start` regenerates after a

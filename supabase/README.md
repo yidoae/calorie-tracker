@@ -54,6 +54,26 @@ fail before the migration is applied.
   (`…pooler.supabase.com:5432`): the direct `db.<ref>.supabase.co` host is IPv6-only and GitHub
   runners have no IPv6.
 
+## Edge Functions
+
+`functions/` (Deno 2), one per folder; `functions/_shared/ai/` is the AI boundary (constitution V):
+the prompt, the response schema with our food ids as an enum, the Gemini `generateContent` call
+and the output checks, in plain TypeScript so `tools/aieval` scores the same code.
+
+- **ai-log** (003, [contract](../specs/003-ai-logging/contracts/ai-log.md)): photo or text →
+  foods and grams, with the daily allowance in `ai_requests` (`ai_claim` / `ai_finish`, service
+  role only). `verify_jwt` on (`config.toml`).
+- **Secrets** (dashboard → Edge Functions → Secrets, or MCP `create_edge_function_secret`; never in
+  the repository): `GEMINI_API_KEY` (dev: a free-tier key; production: the paid key before
+  TestFlight) and `GEMINI_MODEL` (default `gemini-3.5-flash-lite`; set to the model the evaluation
+  chose, `tools/aieval/out/*.md`). `SUPABASE_URL`, `SUPABASE_ANON_KEY` and
+  `SUPABASE_SERVICE_ROLE_KEY` come with the runtime.
+- **Tests**: `npm run test:functions -w @calorie/db` (needs Deno: `npm install -g deno`): `deno
+  lint`, `deno check` and the Deno tests with a fake model and database. CI runs them.
+- **Deploy**: `npx supabase functions deploy ai-log --project-ref hhymtqbugbeiqszcpyai`, or MCP
+  `deploy_edge_function` with `ai-log/*.ts`, `_shared/ai/*.ts` and `deno.json` (entrypoint
+  `ai-log/index.ts`, `verify_jwt` true).
+
 ## Auth (dashboard setup for US1)
 
 The app signs in with e-mail and password, Google and (iOS) Apple, all through `supabase-js`

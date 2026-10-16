@@ -28,6 +28,8 @@ npm run preview                                    # screen gallery (tools/previ
 maestro test .maestro/smoke.yaml                   # smoke flow on a device or emulator
 npm run build -w fooddata                          # food list: rules, summary, review page
 npm run check -w fooddata                          # committed food list matches its sources
+npm run eval:text -w aieval                        # text preview on the phrase set (AI logging)
+npm run test:functions -w @calorie/db              # Edge Function tests (Deno)
 ```
 
 Food values come from USDA FoodData Central (public domain, CC0); Turkish dishes are computed from
