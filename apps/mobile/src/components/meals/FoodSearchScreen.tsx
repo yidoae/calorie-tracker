@@ -70,6 +70,9 @@ export default function FoodSearchScreen({ adding, resolve, initialText = "" }: 
         <View style={styles.ai}>
           <View style={styles.aiButtons}>
             <View style={styles.aiButton}>
+              <Button label="Fotoğrafla" variant="secondary" onPress={() => router.push("/log/photo")} />
+            </View>
+            <View style={styles.aiButton}>
               <Button label="Yazarak" variant="secondary" onPress={() => router.push("/log/text")} />
             </View>
           </View>

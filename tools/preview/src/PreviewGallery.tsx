@@ -12,6 +12,8 @@ import HistoryScreen from "@/app/(tabs)/history";
 import PlanScreen from "@/app/(tabs)/plan";
 import ProfileScreen from "@/app/(tabs)/profile";
 import TodayScreen from "@/app/(tabs)/today";
+import PhotoCapture from "@/components/ai/PhotoCapture";
+import TextLogScreen from "@/components/ai/TextLogScreen";
 import VerifyEmail from "@/components/auth/VerifyEmail";
 import DayDetailScreen from "@/components/history/DayDetailScreen";
 import FoodSearchScreen from "@/components/meals/FoodSearchScreen";
@@ -122,8 +124,22 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "log-review",
     title: "Kontrol et",
-    note: "Seçilen her yemeğin gram alanı boş başlar ve doldurulmadan kaydedilmez (0 < g ≤ 5.000). Porsiyonu olan yemekte birim çipine dokununca gram yazılır, −/+ adedi değiştirir (örnekte 2 adet yumurta). Kalori ve makrolar yazdıkça güncellenir; öğün saate göre seçili gelir. Kaydedilemezse girilenler kalır.",
+    note: "Seçilen her yemeğin gram alanı boş başlar ve doldurulmadan kaydedilmez (0 < g ≤ 5.000). Porsiyonu olan yemekte birim çipine dokununca gram yazılır, −/+ adedi değiştirir (örnekte 2 adet yumurta). Kalori ve makrolar yazdıkça güncellenir; öğün saate göre seçili gelir. Kaydedilemezse girilenler kalır. 003: AI'ın önerdiği gramlar “Tahmini gram” notuyla gelir (örnekte çorba); listede bulunamayanlar “Eşleşmeyenler”de, “Ara” doğru yemeği seçtirir, seçilmeyen kaydedilmez.",
     Component: ReviewSample,
+    status: "ready",
+  },
+  {
+    id: "log-photo",
+    title: "Fotoğrafla",
+    note: "003: fotoğraf çek ya da galeriden seç; telefonda küçültülür, saklanmaz. “Analiz et” bir AI hakkı kullanır (alttaki satır kalan hakkı gösterir) ve Kontrol et'e geçer. Yemek bulunamazsa ya da AI çalışmazsa “Yazarak ekle” ve “Ara” çıkar.",
+    Component: PhotoCapture,
+    status: "ready",
+  },
+  {
+    id: "log-text",
+    title: "Yazarak ekle",
+    note: "003: “2 yumurta, yarım simit, mercimek çorbası” yaz: önizleme yazdıkça telefonda hesaplanır (yumurta 2 × 50 g, simit 120 g'ın yarısı, çorba tahmini bir kase). “Kontrol et” AI hakkı kullanmaz; “AI ile analiz et” bir hak kullanır.",
+    Component: TextLogScreen,
     status: "ready",
   },
   {
@@ -177,9 +193,13 @@ const SAMPLE_SESSION = {
   user: { id: "00000000-0000-4000-8000-000000000001", email: "ayse@ornek.com", identities: [{ provider: "email" }, { provider: "google" }] },
 } as unknown as Session;
 
-/** The review step with three foods: grams typed, still empty, and two eggs from the portion shortcut (002 US2). */
+/**
+ * The review step with three foods (grams typed, still empty, two eggs from the portion shortcut,
+ * 002 US2) plus what an AI analysis adds (003): an estimated soup and an unmatched entry. One
+ * sample, because every screen of the gallery shares the one meal draft.
+ */
 function ReviewSample() {
-  const { draft, addFood, setGrams, setPortion } = useMealDraft();
+  const { draft, addFood, setGrams, setPortion, fillFromAi } = useMealDraft();
   const seeded = draft.items.length > 0;
   useEffect(() => {
     if (seeded) return;
@@ -188,7 +208,8 @@ function ReviewSample() {
     addFood(SAMPLE_HITS[7]);
     setGrams("item-1", "200");
     setPortion("item-3", { unit: "adet", count: 2 });
-  }, [seeded, addFood, setGrams, setPortion]);
+    fillFromAi([{ food: SAMPLE_HITS[6], grams: 250, estimated: true }], [{ description: "turşu suyu", grams: 200 }]);
+  }, [seeded, addFood, setGrams, setPortion, fillFromAi]);
   return <MealReviewScreen />;
 }
 

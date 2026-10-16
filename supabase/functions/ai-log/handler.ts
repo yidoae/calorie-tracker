@@ -5,7 +5,7 @@ import { validateAnswer } from "../_shared/ai/validate.ts";
 /*
  * POST /functions/v1/ai-log (specs/003-ai-logging/contracts/ai-log.md). Order: size → user →
  * body → image → claim (allowance, retries) → model → checks → finish. Everything that touches
- * the database or the model comes in through `Deps`, so index.test.ts runs it with fakes.
+ * the database or the model comes in through `Deps`, so handler.test.ts runs it with fakes.
  */
 
 export const MAX_BODY_BYTES = 1_500_000;

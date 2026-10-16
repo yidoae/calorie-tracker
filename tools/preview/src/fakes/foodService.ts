@@ -29,3 +29,7 @@ export async function search(q: string): Promise<FoodHit[]> {
     return alias ? [{ ...hit, matchedAlias: alias }] : [];
   });
 }
+
+export async function byIds(ids: readonly string[]): Promise<FoodHit[]> {
+  return ids.flatMap((id) => SAMPLE_HITS.find((h) => h.foodId === id) ?? []);
+}

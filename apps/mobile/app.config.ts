@@ -42,6 +42,14 @@ const config: ExpoConfig = {
     "expo-secure-store",
     "expo-apple-authentication",
     "expo-localization",
+    [
+      "expo-image-picker",
+      {
+        cameraPermission: "Yemeğinin fotoğrafını çekmek için kameraya erişim gerekiyor.",
+        photosPermission: "Galeriden yemek fotoğrafı seçmek için fotoğraflarına erişim gerekiyor.",
+        microphonePermission: false,
+      },
+    ],
     ["expo-splash-screen", { backgroundColor: "#170b21", image: "./assets/images/splash-icon.png", imageWidth: 76 }],
     ...googleSignInPlugin,
   ],
