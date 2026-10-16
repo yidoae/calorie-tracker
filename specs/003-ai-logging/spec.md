@@ -8,6 +8,15 @@
 
 **Input**: User description: "003 AI logging for the store MVP: log a meal from a photo or from a short Turkish text description through one hosted vision model (Gemini) behind our server; the model only proposes foods from our food list and approximate grams, the user confirms the grams on the existing review step. Free with a per-user daily AI quota (start at 5 a day). When the model is unavailable, logging still works through search and an on-device text preview. Label reading and barcode come with own foods later."
 
+## Clarifications
+
+### Session 2026-10-16
+
+- Q: Is the photo kept after the analysis? → A: No; it is discarded after the analysis and the meal keeps only its foods and grams.
+- Q: What uses up the daily AI allowance? → A: Each photo analysis and each text analysis the user explicitly sends to the AI uses one; the on-device text preview never does.
+- Q: When does the AI analyse typed text? → A: Only when the user taps "AI ile analiz et"; never automatically, not even when the preview cannot match a phrase.
+- Q: Who builds the photo evaluation set? → A: The owner photographs and weighs 30 home meals over 2–3 weeks; the model is chosen on that set.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Log a meal from a photo (Priority: P1)
@@ -145,8 +154,10 @@ allowance is back after the user's local midnight.
 - **FR-008**: Each parsed phrase MUST be matched to our foods through the same food search the app
   already uses, and weights MUST come from the stated amount times our portion weights, or from the
   food's typical portion (marked as an estimate) when no amount is stated.
-- **FR-009**: The user MUST be able to send the text for AI analysis, which returns foods and grams
-  under the same rules as FR-003 and ends on the review step as in FR-004.
+- **FR-009**: The user MUST be able to send the text for AI analysis with an explicit "AI ile analiz
+  et" action, which returns foods and grams under the same rules as FR-003 and ends on the review
+  step as in FR-004. The app MUST NOT call the AI for text on its own, including when the preview
+  leaves a phrase unmatched; the user can save from the preview without using an AI log.
 - **FR-010**: Parsing MUST respect Turkish negation suffixes (-sız/-siz/-suz/-süz) so that
   "şekersiz", "yağsız" select the matching food rather than the negated ingredient.
 
@@ -160,8 +171,9 @@ allowance is back after the user's local midnight.
 
 **Allowance and availability**
 
-- **FR-013**: Each user MUST have a daily allowance of AI analyses (photo or text), starting at 5,
-  enforced on the server and resetting at midnight in the user's own time zone.
+- **FR-013**: Each user MUST have a daily allowance of AI analyses, starting at 5, enforced on the
+  server and resetting at midnight in the user's own time zone. Each photo analysis and each text
+  analysis sent with "AI ile analiz et" uses one; the on-device preview uses none.
 - **FR-014**: An analysis that fails, times out, finds no food, or is a retry of the same request
   MUST NOT use up the allowance.
 - **FR-015**: The app MUST show the remaining allowance before the user sends a photo or text, and a
@@ -230,7 +242,8 @@ allowance is back after the user's local midnight.
   with its own storage and privacy review.
 - The review step, food search, portions, the 5000 g per-item limit and meal slots from 001 and 002
   are reused unchanged; the AI paths only fill the review step.
-- The evaluation set starts with at least 30 photos of real Turkish meals weighed by the owner and
-  at least 100 phrases, and grows when the model or the prompt changes.
+- The owner builds the photo evaluation set: 30 home meals, each weighed per food on a kitchen scale
+  and photographed, collected over 2–3 weeks while the rest of 003 is built; the phrase set (at
+  least 100 phrases) is written in the repository. Both grow when the model or the prompt changes.
 - Users are on a phone with a camera and mobile data; analysis needs a connection, the text preview
   does not.

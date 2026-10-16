@@ -33,7 +33,7 @@
 
 - The model vendor (Gemini) appears only in Assumptions as the owner's recorded decision; the
   requirements speak of "the model" and "one server-side boundary" (constitution V).
-- Defaults taken without asking (owner rule: decide and report): photos are not stored (FR-005),
-  text limited to 300 characters (FR-006), failed / empty / retried analyses do not count (FR-014),
-  allowance resets at the user's local midnight (FR-013), evaluation set starts at 30 photos and
-  100 phrases. `/speckit-clarify` can revisit any of them.
+- Clarified 2026-10-16 (spec § Clarifications): photos are not stored, photo and sent-to-AI text use the
+  allowance (the preview never does), text goes to the AI only on "AI ile analiz et", and the owner
+  weighs and photographs 30 home meals for the evaluation set. Remaining defaults: 300-character
+  text limit, failed / empty / retried analyses do not count, reset at the user's local midnight.
