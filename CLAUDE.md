@@ -15,9 +15,11 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 - **Constitution wins:** `.specify/memory/constitution.md` (v2.0.1) over this file.
 - **Roadmap:** `specs/ROADMAP.md`: 001 mobile foundation → 002 food database + barcode → 003 AI
   logging → 004 tracking → 005 account and stores → 006 subscription (RevenueCat).
-- **Current feature:** `specs/002-food-database/` part A: done (461 foods on dev, portion chips,
-  owner sign-off, phone validation in `checklists/validation.md`); next in the store MVP is 003.
-  In 001, T060 is open. Authority inside a feature: spec/plan/research/data-model and
+- **Current feature:** `specs/003-ai-logging/` (branch `003-ai-logging`): spec, clarifications and
+  plan done; next `/speckit-tasks`. Photo and text logging through one `ai-log` Edge Function
+  (Gemini, food ids as a schema enum), a daily allowance of 5 in `ai_requests`, an on-device text
+  preview in `@calorie/core`, and `tools/aieval` on the owner's 30 weighed meals. 002 part A is
+  done; in 001, T060 is open. Authority inside a feature: spec/plan/research/data-model and
   `contracts/` > `tasks.md` > this file.
 - **AI (003):** one hosted vision model behind one Edge Function; the owner chose **Gemini**. No
   on-device or in-process models, no Ollama.
