@@ -144,7 +144,8 @@ Notes from Phase 3 (2026-10-15):
 
 - [x] T030 [US3] `tools/fooddata/src/emit/summary.ts` → `tools/fooddata/out/foods.txt` (committed) and `src/emit/review.ts` → `tools/fooddata/dist/review.html` (single file, inline CSS/JS, no network, search box, category and source-kind filters, expandable recipe rows, "değişti" marks against the committed summary); make T029 pass
 - [x] T031 [US3] `tools/fooddata/src/check.ts` (`npm run check -w fooddata`): rebuild into a temp dir, fail if `out/foods.txt`, `search_cases.test.sql` or the latest `*_food_list_*.sql` differ; add the step to `.github/workflows/ci.yml` in the `check` job
-- [ ] T032 [US3] Publish `review.html` as a claude.ai artifact for the owner; apply the owner's corrections in the sources (ingredients, names, weighings) and rebuild until sign-off
+- [x] T032 [US3] Publish `review.html` as a claude.ai artifact for the owner; apply the owner's corrections in the sources (ingredients, names, weighings) and rebuild until sign-off
+  - Signed off by the owner on 2026-10-16 with no corrections (artifact https://claude.ai/artifact/NUtbxvmgGSoeQ2JPUofiKM, list 2 as on dev).
 
 **Checkpoint**: The owner has signed off the review page (SC-008).
 
