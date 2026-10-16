@@ -37,7 +37,8 @@ export function previewLine(parsed: ParsedPhrase, hits: readonly FoodHit[]): Pre
   const { amount, unit, unitKind } = parsed;
   if (amount === null) return { phrase: parsed.phrase, food, grams: round(food.typicalPortionG), estimated: true };
   if (unitKind === "gram") return { phrase: parsed.phrase, food, grams: round(amount), estimated: false };
-  const portion = unit === null ? food.portions[0] : food.portions.find((p) => p.unit === unit);
+  // A bare count means pieces: "10 kiraz" is ten cherries, not ten bowls.
+  const portion = unit === null ? (food.portions.find((p) => p.unit === "adet") ?? food.portions[0]) : food.portions.find((p) => p.unit === unit);
   if (portion) return { phrase: parsed.phrase, food, grams: round(amount * portion.grams), estimated: false };
   return { phrase: parsed.phrase, food, grams: round(amount * food.typicalPortionG), estimated: true };
 }

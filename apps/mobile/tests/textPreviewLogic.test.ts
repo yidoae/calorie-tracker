@@ -37,6 +37,11 @@ describe("text preview: one phrase and its hits", () => {
     assert.equal(previewLine(phrase("yarım simit"), [SIMIT])?.grams, 60);
   });
 
+  it("a bare count prefers the adet portion over the first one", () => {
+    const CHERRIES = hit("cherries", "Kiraz", 150, [{ unit: "kase", grams: 150 }, { unit: "adet", grams: 8 }]);
+    assert.equal(previewLine(phrase("10 kiraz"), [CHERRIES])?.grams, 80);
+  });
+
   it("no amount: the typical portion, marked as an estimate", () => {
     assert.deepEqual(previewLine(phrase("mercimek çorbası"), [SOUP]), { phrase: "mercimek çorbası", food: SOUP, grams: 250, estimated: true });
   });

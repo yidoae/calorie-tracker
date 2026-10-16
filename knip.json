@@ -47,6 +47,15 @@
       "ignoreDependencies": [
         "expo-updates"
       ]
+    },
+    "tools/aieval": {
+      "entry": [
+        "tests/**/*.test.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "tests/**/*.ts"
+      ]
     }
   },
   "ignore": [

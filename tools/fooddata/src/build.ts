@@ -6,6 +6,7 @@
  * and fails when a committed output differs from a fresh build (CI).
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { foodsJson } from "./emit/json.ts";
 import { searchCasesSql } from "./emit/searchCases.ts";
 import { reviewHtml } from "./emit/review.ts";
 import { listMigrationSql } from "./emit/sql.ts";
@@ -83,6 +84,7 @@ function listMigration(version: string): [URL, string] {
 const outputs: [URL, string][] = [
   [new URL("tests/database/search_cases.test.sql", SUPABASE), searchCasesSql(searchCases)],
   [SUMMARY, summaryText(foods)],
+  [new URL("../out/foods.json", import.meta.url), foodsJson(foods)],
 ];
 
 if (process.argv.includes("--check")) {

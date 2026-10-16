@@ -1,0 +1,24 @@
+{
+  "name": "aieval",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Scores the AI logging paths on committed Turkish meals and phrases (specs/003-ai-logging/contracts/aieval.md). Never shipped.",
+  "scripts": {
+    "eval": "tsx src/eval.ts",
+    "eval:text": "tsx src/evalText.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@calorie/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "eslint": "^9.39.5",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "typescript-eslint": "^8.71.1"
+  }
+}

@@ -39,6 +39,8 @@ jobs:
         run: npm test
       - name: Food list is built from its sources
         run: npm run check -w fooddata
+      - name: Text preview scores at least 90 % on the phrase set (003)
+        run: npm run eval:text -w aieval
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x

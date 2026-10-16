@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { parseMeal } from "../src/text/parseMeal.ts";
 
 // The portion unit labels of the food list (002); the app passes them in.
-const UNITS = ["adet", "dilim", "kase", "su bardağı", "yemek kaşığı", "çay kaşığı", "porsiyon", "tabak", "avuç", "kutu", "şişe", "bardak", "kadeh"];
+const UNITS = ["adet", "dilim", "kase", "su bardağı", "yemek kaşığı", "çay kaşığı", "porsiyon", "tabak", "avuç", "kutu", "şiş", "şişe", "bardak", "kadeh", "dürüm"];
 const one = (text: string) => {
   const parsed = parseMeal(text, UNITS);
   assert.equal(parsed.length, 1, `one phrase in "${text}"`);
@@ -56,6 +56,14 @@ test("portion units, also with suffixes and two words", () => {
   assert.deepEqual(brief("yarım tabağı pilav"), [["pilav", 0.5, "tabak", "portion"]]);
   assert.deepEqual(brief("2 tane yumurta"), [["yumurta", 2, "adet", "portion"]]);
   assert.deepEqual(brief("1 kaşık bal"), [["bal", 1, "yemek kaşığı", "portion"]]);
+});
+
+test("an exact unit beats a shorter one it starts with", () => {
+  assert.deepEqual(brief("bir şişe su"), [["su", 1, "şişe", "portion"]]);
+});
+
+test("a unit word alone is the food", () => {
+  assert.deepEqual(brief("1 dürüm"), [["dürüm", 1, null, null]]);
 });
 
 test("negation words stay out of the query and are kept", () => {

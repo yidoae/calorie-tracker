@@ -95,7 +95,9 @@ function readUnit(tokens: string[], i: number, units: string[]): { unit: string 
       return { unit, gramFactor: null, next: i + words.length };
     }
   }
-  const single = units.find((u) => !u.includes(" ") && sameUnitWord(t, u));
+  // An exact label first, then the longest one the word starts with: "şişe" is şişe, not şiş.
+  const singles = units.filter((u) => !u.includes(" "));
+  const single = singles.find((u) => u === t) ?? singles.filter((u) => sameUnitWord(t, u)).sort((a, b) => b.length - a.length)[0];
   if (single) return { unit: single, gramFactor: null, next: i + 1 };
   if (t in UNIT_SYNONYMS) return { unit: UNIT_SYNONYMS[t], gramFactor: null, next: i + 1 };
   return null;
@@ -137,6 +139,12 @@ function parsePhrase(phrase: string, units: string[]): ParsedPhrase | null {
     else words.push(t);
   }
 
+  // "1 dürüm": the unit word is the food itself when nothing else is left to search for.
+  if (words.length === 0 && unit !== null && unitKind === "portion") {
+    words.push(unit);
+    unit = null;
+    unitKind = null;
+  }
   const query = words.join(" ");
   if (!query) return null;
   return { phrase, query, amount: amount === null ? null : Math.round(amount * 1000) / 1000, unit, unitKind, negated };
