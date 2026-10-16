@@ -94,7 +94,7 @@ Notes from Phase 2 (2026-10-15):
 - [x] T020 [P] [US1] Draft ≥ 100 everyday searches in `tools/fooddata/sources/search-cases.ts` (staples bare and with suffixes, ASCII spellings, dishes, drinks) → expected food id
 - [x] T021 [US1] `tools/fooddata/src/emit/sql.ts` and `emit/searchCases.ts`; `build --release <version>` writes `supabase/migrations/<version>_food_list_1.sql` and `supabase/tests/database/search_cases.test.sql`; make T013, T014 pass
 - [x] T022 [US1] Fix every build failure in the sources until `npm run build -w fooddata` exits 0 with ≥ 450 foods and ≥ 80 dishes (SC-001)
-- [ ] T023 [US1] Apply `<version>_food_list_1.sql` to the dev project; run all pgTAP files; tune aliases (never the SQL ranking) until `search_cases.test.sql` passes (SC-002); record the before/after totals of one existing day for SC-007
+- [x] T023 [US1] Apply `<version>_food_list_1.sql` to the dev project; run all pgTAP files; tune aliases (never the SQL ranking) until `search_cases.test.sql` passes (SC-002); record the before/after totals of one existing day for SC-007
 - [x] T024 [US1] Add a "Veri kaynakları" section to `apps/mobile/src/app/(tabs)/profile.tsx` with the research.md §9 text (FR-015) and add it to the preview gallery
 
 **Checkpoint**: US1 independently: the dev project searches the new list; old meals show unchanged totals.
@@ -106,6 +106,7 @@ Notes from Phase 3 (2026-10-15):
 - T020: the 116 search cases are a draft for the owner; a local simulation of `search_foods` puts every case first.
 - The generated migration is `20261015000300_food_list_2.sql` (release 1 is list 1); a rerun with the same version rewrites the same bytes.
 - T030 summary and review page, and the T031 `--check` mode, were built here because the list needed them.
+- T023 (2026-10-16): the MCP refuses any `delete`, so the foods were upserted and the aliases and portions staged through `execute_sql`, each table checked by checksum against the file (461 / 961 / 383 rows match), and the owner ran the swap in the dashboard; version `20261015000300 food_list_2` is recorded. On dev: all 116 search cases first (`search_cases`), `search` 24/24, `raw_weights` 19/19 after its count moved from 118 to 461. The other files cover schema and RLS that the list does not change and contain `delete`, which the MCP refuses; their data checks (unit labels, no orphan aliases or portions) pass. SC-007: the existing day is unchanged (1 meal, 412.5 kcal, P 77.5 / C 0 / F 9). Security advisor: only the Auth leaked-password warning.
 
 ---
 

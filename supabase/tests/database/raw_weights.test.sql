@@ -51,7 +51,7 @@ select is_empty(
   'the raw staples say (çiğ…) or (kuru) in their names');
 
 reset role;
-select is((select count(*)::int from public.foods where id !~ '^test_'), 118, 'the curated list has release 1''s 118 foods');
+select is((select count(*)::int from public.foods where id !~ '^test_'), 461, 'the curated list has food list 2''s 461 foods');
 
 select * from finish();
 rollback;
