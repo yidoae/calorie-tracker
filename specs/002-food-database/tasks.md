@@ -155,8 +155,8 @@ Notes from Phase 3 (2026-10-15):
 
 - [x] T033 [P] Update `CLAUDE.md` (layout gains `tools/fooddata`; commands `fetch`/`build`/`check`; "Database" notes that food lists ship as generated migrations, never hand-edited) and `README.md` (food data commands, USDA credit)
 - [x] T034 [P] Update `specs/ROADMAP.md`: 002 part A done; parts B (barcode / Open Food Facts) and C (own foods, saved meals) next
-- [ ] T035 Measure search latency on a phone over the dev project (SC-006, quickstart step 5.6) and record it in `specs/002-food-database/checklists/validation.md`
-- [ ] T036 Run the full [quickstart.md](./quickstart.md) and record results in `specs/002-food-database/checklists/validation.md`; `npm test && npm run typecheck && npm run lint && npm run knip && npm run check -w fooddata` green
+- [x] T035 Measure search latency on a phone over the dev project (SC-006, quickstart step 5.6) and record it in `specs/002-food-database/checklists/validation.md`
+- [x] T036 Run the full [quickstart.md](./quickstart.md) and record results in `specs/002-food-database/checklists/validation.md`; `npm test && npm run typecheck && npm run lint && npm run knip && npm run check -w fooddata` green
 
 ---
 

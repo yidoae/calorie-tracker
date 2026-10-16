@@ -15,9 +15,9 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 - **Constitution wins:** `.specify/memory/constitution.md` (v2.0.1) over this file.
 - **Roadmap:** `specs/ROADMAP.md`: 001 mobile foundation → 002 food database + barcode → 003 AI
   logging → 004 tracking → 005 account and stores → 006 subscription (RevenueCat).
-- **Current feature:** `specs/002-food-database/` part A: implemented (461 foods, portion chips,
-  review page); open are the owner's sign-off of the review page (T032), the device checks
-  (T035–T036) and, in 001, T060. Authority inside a feature: spec/plan/research/data-model and
+- **Current feature:** `specs/002-food-database/` part A: done (461 foods on dev, portion chips,
+  owner sign-off, phone validation in `checklists/validation.md`); next in the store MVP is 003.
+  In 001, T060 is open. Authority inside a feature: spec/plan/research/data-model and
   `contracts/` > `tasks.md` > this file.
 - **AI (003):** one hosted vision model behind one Edge Function; the owner chose **Gemini**. No
   on-device or in-process models, no Ollama.
