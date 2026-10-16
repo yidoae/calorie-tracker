@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_requests: {
+        Row: {
+          created_at: string
+          error: string | null
+          finished_at: string | null
+          id: string
+          input_tokens: number | null
+          kind: string
+          latency_ms: number | null
+          local_date: string
+          model: string | null
+          output_tokens: number | null
+          request_key: string
+          result: Json | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          input_tokens?: number | null
+          kind: string
+          latency_ms?: number | null
+          local_date: string
+          model?: string | null
+          output_tokens?: number | null
+          request_key: string
+          result?: Json | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          input_tokens?: number | null
+          kind?: string
+          latency_ms?: number | null
+          local_date?: string
+          model?: string | null
+          output_tokens?: number | null
+          request_key?: string
+          result?: Json | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       food_aliases: {
         Row: {
           alias: string
@@ -370,6 +421,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ai_allowance: {
+        Args: never
+        Returns: {
+          limit: number
+          resets_at: string
+          used: number
+        }[]
+      }
+      ai_claim: {
+        Args: { kind: string; request_key: string; user_id: string }
+        Returns: Json
+      }
+      ai_finish: {
+        Args: {
+          error: string
+          id: string
+          input_tokens: number
+          latency_ms: number
+          model: string
+          output_tokens: number
+          result: Json
+          status: string
+        }
+        Returns: undefined
+      }
       check_plan_day: {
         Args: {
           carbs: number
