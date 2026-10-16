@@ -68,7 +68,8 @@ if (errors.length > 0) {
 const SUPABASE = new URL("../../../supabase/", import.meta.url);
 const SUMMARY = new URL("../out/foods.txt", import.meta.url);
 const MIGRATIONS = new URL("migrations/", SUPABASE);
-const read = (url: URL) => (existsSync(url) ? readFileSync(url, "utf8") : "");
+// A Windows checkout (core.autocrlf) has CRLF files; compare their content, not their line endings.
+const read = (url: URL) => (existsSync(url) ? readFileSync(url, "utf8").replace(/\r\n/g, "\n") : "");
 const listFiles = readdirSync(MIGRATIONS).filter((f) => /_food_(release|list)_\d+\.sql$/.test(f)).sort();
 const withdrawnIds = withdrawn.map((w) => w.id);
 

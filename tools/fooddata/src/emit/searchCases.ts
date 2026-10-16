@@ -9,7 +9,7 @@ import type { SearchCase } from "../schemas.ts";
 const str = (s: string) => `'${s.replaceAll("'", "''")}'`;
 
 export function searchCasesSql(cases: SearchCase[]): string {
-  const sorted = [...cases].sort((a, b) => a.query.localeCompare(b.query));
+  const sorted = [...cases].sort((a, b) => a.query.localeCompare(b.query, "tr"));
   const firstNeeded = Math.ceil(sorted.length * 0.95);
   const top3 = sorted.map(
     (c) => `select ok(${str(c.expectedId)} in (select food_id from public.search_foods(${str(searchQuery(c.query))}, 3)), ${str(`"${c.query}" finds ${c.expectedId} in the top 3`)});`,
