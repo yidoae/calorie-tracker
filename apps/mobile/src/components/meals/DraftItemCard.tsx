@@ -22,10 +22,12 @@ interface Props {
   portion: PortionPick | null;
   onPickPortion: (unit: string) => void;
   onStepPortion: (delta: 1 | -1) => void;
+  /** The grams are an AI or typical-portion estimate (003): marked until the user sets them. */
+  estimated: boolean;
 }
 
 /** One food of the meal under review: an empty gram field the user must fill (FR-013), portion shortcuts and its live nutrition. */
-export default function DraftItemCard({ name, typicalPortionG, gramsText, onChangeGrams, macros, error, onRemove, portions, portion, onPickPortion, onStepPortion }: Props) {
+export default function DraftItemCard({ name, typicalPortionG, gramsText, onChangeGrams, macros, error, onRemove, portions, portion, onPickPortion, onStepPortion, estimated }: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.head}>
@@ -42,7 +44,11 @@ export default function DraftItemCard({ name, typicalPortionG, gramsText, onChan
         placeholder="Gram"
         unit="g"
         keyboardType="decimal-pad"
-        hint={`Tipik porsiyon yaklaşık ${formatGrams(typicalPortionG)} g; tarttığın ya da tahmin ettiğin miktarı yaz.`}
+        hint={
+          estimated
+            ? "Tahmini gram: kontrol et, gerekirse düzelt."
+            : `Tipik porsiyon yaklaşık ${formatGrams(typicalPortionG)} g; tarttığın ya da tahmin ettiğin miktarı yaz.`
+        }
         error={error}
       />
       {portions.length > 0 && <PortionPicker portions={portions} pick={portion} onPick={onPickPortion} onStep={onStepPortion} />}

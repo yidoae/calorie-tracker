@@ -182,3 +182,29 @@ export const foodHitRowSchema = z
     portions: r.portions,
   }));
 export type FoodHit = z.output<typeof foodHitRowSchema>;
+
+/**
+ * A food read by id (003: the foods an AI analysis proposed), with its portions embedded, as the
+ * same FoodHit the search returns; the alias is the food's own name.
+ */
+export const foodByIdRowSchema = z
+  .object({
+    id: z.string(),
+    name_tr: z.string(),
+    typical_portion_g: num,
+    kcal_per_100g: num,
+    protein_per_100g: num,
+    carbs_per_100g: num,
+    fat_per_100g: num,
+    food_portions: z.array(z.object({ unit: z.string().min(1), grams: num.pipe(z.number().positive().max(5000)), position: z.number().int() })),
+  })
+  .transform(
+    (r): FoodHit => ({
+      foodId: r.id,
+      name: r.name_tr,
+      matchedAlias: r.name_tr,
+      typicalPortionG: r.typical_portion_g,
+      per100g: { calories: r.kcal_per_100g, protein: r.protein_per_100g, carbs: r.carbs_per_100g, fat: r.fat_per_100g },
+      portions: [...r.food_portions].sort((a, b) => a.position - b.position).map(({ unit, grams }) => ({ unit, grams })),
+    }),
+  );

@@ -17,7 +17,7 @@ import { useToday } from "./useToday";
  * day, so the dashboard shows it right away.
  */
 export function useLogMeal() {
-  const { draft, setGrams, setPortion, removeItem, setSlot, clear } = useMealDraft();
+  const { draft, setGrams, setPortion, removeItem, setSlot, dismissUnmatched, clear } = useMealDraft();
   const day = useToday();
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -52,6 +52,9 @@ export function useLogMeal() {
 
   return {
     items: draft.items.map((item) => ({ ...item, macros: draftItemMacros(item) })),
+    /** What the AI saw but could not map (003); the user searches for each or dismisses it. */
+    unmatched: draft.unmatched,
+    dismissUnmatched,
     slot: draft.slot ?? defaultSlot,
     totals: draftTotals(draft),
     ready: draftReady(draft),

@@ -15,11 +15,14 @@ interface Props {
   secureTextEntry?: boolean;
   autoComplete?: "email" | "password" | "new-password" | "off";
   autoFocus?: boolean;
+  /** Several lines and a character limit, for free text (003 meal description). */
+  multiline?: boolean;
+  maxLength?: number;
   /** Stable id for the Maestro smoke flow (.maestro/smoke.yaml). */
   testID?: string;
 }
 
-export default function TextField({ label, value, onChangeText, placeholder, error, hint, unit, keyboardType, secureTextEntry, autoComplete = "off", autoFocus, testID }: Props) {
+export default function TextField({ label, value, onChangeText, placeholder, error, hint, unit, keyboardType, secureTextEntry, autoComplete = "off", autoFocus, multiline, maxLength, testID }: Props) {
   return (
     <View style={styles.wrap}>
       <Text style={styles.label}>{label}</Text>
@@ -37,6 +40,8 @@ export default function TextField({ label, value, onChangeText, placeholder, err
           autoComplete={autoComplete}
           autoCapitalize="none"
           autoFocus={autoFocus}
+          multiline={multiline}
+          maxLength={maxLength}
           style={styles.input}
         />
         {unit && <Text style={styles.unit}>{unit}</Text>}

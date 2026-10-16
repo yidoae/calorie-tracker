@@ -19,34 +19,79 @@ export interface DraftItem {
   gramsText: string;
   /** The portion shortcut that wrote the grams (002 US2); cleared when the user types. */
   portion: PortionPick | null;
+  /** The grams came from the AI or a typical portion (003); cleared when the user sets them. */
+  estimated: boolean;
+}
+
+/** Something the AI saw but could not map to a food (003 FR-003); never saved. */
+interface UnmatchedEntry {
+  key: string;
+  description: string;
+  grams?: number;
 }
 
 /** The meal being put together: `slot` stays null until the user picks one (FR-014). */
 export interface MealDraft {
   slot: MealSlot | null;
   items: DraftItem[];
+  unmatched: UnmatchedEntry[];
   nextKey: number;
 }
 
-export const EMPTY_DRAFT: MealDraft = { slot: null, items: [], nextKey: 1 };
+export const EMPTY_DRAFT: MealDraft = { slot: null, items: [], unmatched: [], nextKey: 1 };
 
 /** Most items in one meal; log_meal refuses more. */
 export const MAX_DRAFT_ITEMS = 30;
 
-export function addFood(draft: MealDraft, food: FoodHit): MealDraft {
+function appendItem(draft: MealDraft, food: FoodHit, gramsText: string, estimated: boolean): MealDraft {
   if (draft.items.length >= MAX_DRAFT_ITEMS) return draft;
-  return { ...draft, items: [...draft.items, { key: `item-${draft.nextKey}`, food, gramsText: "", portion: null }], nextKey: draft.nextKey + 1 };
+  return { ...draft, items: [...draft.items, { key: `item-${draft.nextKey}`, food, gramsText, portion: null, estimated }], nextKey: draft.nextKey + 1 };
+}
+
+/** Grams as the gram field shows them: Turkish decimal comma. */
+const gramsText = (grams: number) => String(grams).replace(".", ",");
+
+export function addFood(draft: MealDraft, food: FoodHit): MealDraft {
+  return appendItem(draft, food, "", false);
 }
 
 export function setDraftGrams(draft: MealDraft, key: string, gramsText: string): MealDraft {
-  return { ...draft, items: draft.items.map((item) => (item.key === key ? { ...item, gramsText, portion: null } : item)) };
+  return { ...draft, items: draft.items.map((item) => (item.key === key ? { ...item, gramsText, portion: null, estimated: false } : item)) };
+}
+
+/** A food the AI or the text preview proposed, already loaded as a hit (003). */
+export interface ProposedFood {
+  food: FoodHit;
+  grams: number;
+  estimated: boolean;
+}
+
+/** Adds an analysis to the draft: proposed foods as items, the rest as unmatched entries (003 FR-004). */
+export function fillDraftFromAi(draft: MealDraft, items: readonly ProposedFood[], unmatched: readonly { description: string; grams?: number }[]): MealDraft {
+  let next = items.reduce((d, p) => appendItem(d, p.food, gramsText(p.grams), p.estimated), draft);
+  for (const u of unmatched) {
+    next = { ...next, unmatched: [...next.unmatched, { key: `unmatched-${next.nextKey}`, ...u }], nextKey: next.nextKey + 1 };
+  }
+  return next;
+}
+
+/** The user picked a food for an unmatched entry: it becomes an item with the entry's grams, if any. */
+export function resolveUnmatched(draft: MealDraft, key: string, food: FoodHit): MealDraft {
+  const entry = draft.unmatched.find((u) => u.key === key);
+  if (!entry) return draft;
+  const rest = { ...draft, unmatched: draft.unmatched.filter((u) => u.key !== key) };
+  return entry.grams === undefined ? appendItem(rest, food, "", false) : appendItem(rest, food, gramsText(entry.grams), true);
+}
+
+export function dismissUnmatched(draft: MealDraft, key: string): MealDraft {
+  return { ...draft, unmatched: draft.unmatched.filter((u) => u.key !== key) };
 }
 
 /** Writes the grams of a portion pick (unit × count) into the item and remembers the pick. */
 export function setDraftPortion(draft: MealDraft, key: string, pick: PortionPick): MealDraft {
   return {
     ...draft,
-    items: draft.items.map((item) => (item.key === key ? { ...item, gramsText: gramsForPick(item.food.portions, pick), portion: pick } : item)),
+    items: draft.items.map((item) => (item.key === key ? { ...item, gramsText: gramsForPick(item.food.portions, pick), portion: pick, estimated: false } : item)),
   };
 }
 

@@ -4,6 +4,8 @@ import type { Meal } from "@calorie/core/schemas/meal";
 import type { FoodHit } from "@calorie/core/schemas/rows";
 import {
   addFood,
+  dismissUnmatched,
+  fillDraftFromAi,
   dayTotals,
   draftItemMacros,
   draftReady,
@@ -17,7 +19,9 @@ import {
   mealNameFor,
   msUntilNextDay,
   removeDraftItem,
+  resolveUnmatched,
   setDraftGrams,
+  setDraftPortion,
   setDraftSlot,
 } from "../src/hooks/mealLogic.ts";
 
@@ -182,5 +186,47 @@ describe("today", () => {
   it("waits until just after the next local midnight", () => {
     assert.equal(msUntilNextDay(new Date(2026, 9, 11, 23, 59, 30)), 30_000 + 1000);
     assert.equal(msUntilNextDay(new Date(2026, 9, 11, 0, 0, 0)), 24 * 3600_000 + 1000);
+  });
+});
+
+describe("AI results in the draft (003)", () => {
+  const EGG = { ...hit("egg", "Yumurta", 143, 12.6, 0.7, 9.5), portions: [{ unit: "adet", grams: 50 }] };
+
+  it("adds the proposed foods with their grams and keeps what is already there", () => {
+    const start = addFood(EMPTY_DRAFT, CHICKEN);
+    const draft = fillDraftFromAi(start, [{ food: EGG, grams: 100, estimated: false }, { food: RICE, grams: 152.5, estimated: true }], [{ description: "turşu suyu", grams: 100 }]);
+    assert.deepEqual(draft.items.map((i) => [i.food.foodId, i.gramsText, i.estimated]), [["chicken_breast_grilled", "", false], ["egg", "100", false], ["white_rice", "152,5", true]]);
+    assert.deepEqual(draft.unmatched.map((u) => [u.description, u.grams]), [["turşu suyu", 100]]);
+    assert.equal(new Set([...draft.items.map((i) => i.key), ...draft.unmatched.map((u) => u.key)]).size, 4, "keys are unique");
+  });
+
+  it("never passes the item limit", () => {
+    let full = EMPTY_DRAFT;
+    for (let i = 0; i < MAX_DRAFT_ITEMS - 1; i++) full = addFood(full, hit(`f${i}`, `F${i}`, 100));
+    const draft = fillDraftFromAi(full, [{ food: EGG, grams: 50, estimated: true }, { food: RICE, grams: 100, estimated: true }], []);
+    assert.equal(draft.items.length, MAX_DRAFT_ITEMS);
+  });
+
+  it("typing grams or picking a portion clears the estimate", () => {
+    const draft = fillDraftFromAi(EMPTY_DRAFT, [{ food: EGG, grams: 120, estimated: true }, { food: RICE, grams: 150, estimated: true }], []);
+    const [egg, rice] = draft.items;
+    assert.equal(setDraftGrams(draft, rice.key, "160").items[1].estimated, false);
+    assert.equal(setDraftPortion(draft, egg.key, { unit: "adet", count: 2 }).items[0].estimated, false);
+  });
+
+  it("an unmatched entry becomes an item when the user picks a food, or goes away", () => {
+    const draft = fillDraftFromAi(EMPTY_DRAFT, [{ food: EGG, grams: 50, estimated: true }], [{ description: "pilav", grams: 150 }, { description: "su" }]);
+    const [pilav, su] = draft.unmatched;
+    const resolved = resolveUnmatched(draft, pilav.key, RICE);
+    assert.deepEqual(resolved.items.map((i) => [i.food.foodId, i.gramsText, i.estimated]), [["egg", "50", true], ["white_rice", "150", true]]);
+    assert.deepEqual(resolved.unmatched.map((u) => u.description), ["su"]);
+    assert.equal(resolveUnmatched(draft, su.key, RICE).items[1].gramsText, "", "no grams → the user types them");
+    assert.deepEqual(dismissUnmatched(draft, su.key).unmatched.map((u) => u.description), ["pilav"]);
+  });
+
+  it("the saved payload never holds unmatched entries", () => {
+    const draft = fillDraftFromAi(EMPTY_DRAFT, [{ food: EGG, grams: 100, estimated: false }], [{ description: "turşu suyu" }]);
+    const payload = logMealPayload(draft, "breakfast", { localDate: "2026-10-17", timeZone: "Europe/Istanbul" });
+    assert.deepEqual(payload?.items, [{ foodId: "egg", grams: 100 }]);
   });
 });

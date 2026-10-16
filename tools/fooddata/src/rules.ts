@@ -3,6 +3,7 @@
  * the food id(s) it is about, so one build run shows the whole list of fixes.
  */
 import { normalizeTr } from "@calorie/core/search/normalize";
+import { PORTION_UNITS } from "@calorie/core/text/units";
 import type { Per100 } from "./recipe.ts";
 import type { Category, Portion } from "./schemas.ts";
 
@@ -92,6 +93,7 @@ export function checkFoods(foods: ResolvedFood[], ctx: RuleContext): string[] {
       if (units.has(p.unit)) fail(`portion unit "${p.unit}" appears twice`);
       units.add(p.unit);
       if (p.unit.length < 1 || p.unit.length > 30) fail(`portion unit "${p.unit}" must be 1–30 characters`);
+      if (!(PORTION_UNITS as readonly string[]).includes(p.unit)) fail(`portion unit "${p.unit}" is not in @calorie/core text/units.ts (the text preview reads units from there)`);
       if (!(p.grams > 0 && p.grams <= MAX_GRAMS)) fail(`portion "${p.unit}" must be 0–${MAX_GRAMS} g (${p.grams})`);
     }
   }

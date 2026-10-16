@@ -1,7 +1,19 @@
 import type { MealSlot } from "@calorie/core/schemas/meal";
 import { useSyncExternalStore } from "react";
 import type { FoodHit } from "@/services/foodService";
-import { addFood, EMPTY_DRAFT, removeDraftItem, setDraftGrams, setDraftPortion, setDraftSlot, type MealDraft } from "./mealLogic";
+import {
+  addFood,
+  dismissUnmatched,
+  EMPTY_DRAFT,
+  fillDraftFromAi,
+  removeDraftItem,
+  resolveUnmatched,
+  setDraftGrams,
+  setDraftPortion,
+  setDraftSlot,
+  type MealDraft,
+  type ProposedFood,
+} from "./mealLogic";
 import type { PortionPick } from "./portionLogic";
 
 /*
@@ -35,6 +47,9 @@ export function useMealDraft() {
     setPortion: (key: string, pick: PortionPick) => update(setDraftPortion(draft, key, pick)),
     removeItem: (key: string) => update(removeDraftItem(draft, key)),
     setSlot: (slot: MealSlot) => update(setDraftSlot(draft, slot)),
+    fillFromAi: (items: readonly ProposedFood[], unmatched: readonly { description: string; grams?: number }[]) => update(fillDraftFromAi(draft, items, unmatched)),
+    resolveUnmatched: (key: string, food: FoodHit) => update(resolveUnmatched(draft, key, food)),
+    dismissUnmatched: (key: string) => update(dismissUnmatched(draft, key)),
     clear: clearMealDraft,
   };
 }

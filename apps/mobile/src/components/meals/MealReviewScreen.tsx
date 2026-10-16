@@ -11,6 +11,7 @@ import { colors, radius, space, type } from "@/theme";
 import DraftItemCard from "./DraftItemCard";
 import MacroLine from "./MacroLine";
 import SlotPicker from "./SlotPicker";
+import UnmatchedRow from "./UnmatchedRow";
 
 function leave() {
   if (router.canGoBack()) router.back();
@@ -33,7 +34,7 @@ export default function MealReviewScreen() {
     leave();
   }
 
-  if (meal.items.length === 0) {
+  if (meal.items.length === 0 && meal.unmatched.length === 0) {
     return (
       <Screen title="Kontrol et" back={{ label: "Geri", onPress: leave }}>
         <StateMessage
@@ -73,8 +74,24 @@ export default function MealReviewScreen() {
           portion={item.portion}
           onPickPortion={(unit) => meal.setPortion(item.key, pickUnit(unit))}
           onStepPortion={(delta) => item.portion && meal.setPortion(item.key, stepPick(item.food.portions, item.portion, delta))}
+          estimated={item.estimated}
         />
       ))}
+
+      {meal.unmatched.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.label}>Eşleşmeyenler</Text>
+          <Text style={styles.note}>Bunları listemizde bulamadım. Ara ve doğru yemeği seç ya da çıkar; seçmediğin kaydedilmez.</Text>
+          {meal.unmatched.map((u) => (
+            <UnmatchedRow
+              key={u.key}
+              description={u.description}
+              onSearch={() => router.push({ pathname: "/log/search", params: { adding: "1", resolve: u.key, q: u.description } })}
+              onDismiss={() => meal.dismissUnmatched(u.key)}
+            />
+          ))}
+        </View>
+      )}
 
       <View style={styles.section}>
         <Text style={styles.label}>Hangi öğün?</Text>
