@@ -55,6 +55,13 @@ describe("text preview: one phrase and its hits", () => {
     assert.equal(previewLine(phrase("çay"), [SUGAR, TEA])?.food?.foodId, "sugar", "without negation the first hit stays");
   });
 
+  it("a stated unit prefers the hit that has it", () => {
+    const DONER = hit("doner", "Döner", 150);
+    const WRAP = hit("doner_wrap", "Dürüm döner", 250, [{ unit: "adet", grams: 250 }]);
+    assert.deepEqual(previewLine(phrase("1 dürüm döner"), [DONER, WRAP]), { phrase: "1 dürüm döner", food: WRAP, grams: 250, estimated: false });
+    assert.equal(previewLine(phrase("döner"), [DONER, WRAP])?.food?.foodId, "doner", "without a unit the first hit stays");
+  });
+
   it("grams are capped at 5000 and rounded to 0.1 g", () => {
     assert.equal(previewLine(phrase("100 kase mercimek çorbası"), [SOUP])?.grams, 5000);
     assert.equal(previewLine(phrase("1,333 dilim ekmek"), [BREAD])?.grams, 40);

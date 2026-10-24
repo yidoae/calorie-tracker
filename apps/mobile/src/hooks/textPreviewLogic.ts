@@ -28,13 +28,24 @@ function chooseHit(parsed: ParsedPhrase, hits: readonly FoodHit[]): FoodHit | nu
     const carrying = hits.find((h) => negated.some((n) => normalizeTr(h.name).includes(n)));
     if (carrying) return carrying;
   }
+  // A stated unit picks a hit that has it as a portion or in its name: "1 dürüm döner" is the wrap.
+  const { unit } = parsed;
+  if (unit !== null && hits[0] && !hasUnit(hits[0], unit)) {
+    const withUnit = hits.slice(0, 5).find((h) => hasUnit(h, unit));
+    if (withUnit) return withUnit;
+  }
   return hits[0] ?? null;
 }
+
+const hasPortion = (food: FoodHit, unit: string) => food.portions.some((p) => p.unit === unit);
+const hasUnit = (food: FoodHit, unit: string) => hasPortion(food, unit) || normalizeTr(food.name).includes(normalizeTr(unit));
 
 export function previewLine(parsed: ParsedPhrase, hits: readonly FoodHit[]): PreviewLine {
   const food = chooseHit(parsed, hits);
   if (!food) return { phrase: parsed.phrase, food: null, grams: null, estimated: true };
-  const { amount, unit, unitKind } = parsed;
+  const { amount, unitKind } = parsed;
+  // A unit that names the food ("Dürüm döner") counts pieces of it.
+  const unit = parsed.unit !== null && !hasPortion(food, parsed.unit) && hasUnit(food, parsed.unit) ? null : parsed.unit;
   if (amount === null) return { phrase: parsed.phrase, food, grams: round(food.typicalPortionG), estimated: true };
   if (unitKind === "gram") return { phrase: parsed.phrase, food, grams: round(amount), estimated: false };
   // A bare count means pieces: "10 kiraz" is ten cherries, not ten bowls.
