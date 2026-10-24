@@ -23,6 +23,7 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
   `contracts/` > `tasks.md` > this file.
 - **AI (003):** one hosted vision model behind one Edge Function; the owner chose **Gemini**. No
   on-device or in-process models, no Ollama.
+- **Workout (007):** `specs/007-workout/`: one program per user (`workout_programs`, days as jsonb) and logged workouts (`workout_sessions`); the Antrenman tab, a program editor with ready-made splits, the workout logger and per-exercise weight progress (`hooks/workoutLogic.ts`). Separate from the plan wizard's training style, which only shapes calories.
 - **Out of scope:** FitBot, the AI plan strategy, any website.
 - **Workflow:** Spec Kit skills in `.claude/skills/` (`/speckit-specify` → `/speckit-plan` →
   `/speckit-tasks` → `/speckit-implement`); small pull requests, one phase or story each.

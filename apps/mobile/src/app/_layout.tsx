@@ -61,6 +61,9 @@ function RootNavigator() {
         <Stack.Screen name="day/[date]" />
         <Stack.Screen name="plan/wizard" />
         <Stack.Screen name="plan/review" />
+        <Stack.Screen name="workout/program" />
+        <Stack.Screen name="workout/session" />
+        <Stack.Screen name="workout/exercise" />
       </Stack.Protected>
     </Stack>
   );

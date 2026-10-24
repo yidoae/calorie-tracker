@@ -11,6 +11,7 @@ Features in the order they are specified and built (Spec Kit). Each one is a sep
 | 004 | Tracking | Weight and BMI, water, intermittent fasting with reminders, progress and trends, titled plan periods | 001 |
 | 005 | Account and stores | Data export, account deletion, privacy policy, store listings, EAS builds and submission | 001–004 |
 | 006 | Subscription | RevenueCat (`react-native-purchases`): free vs premium entitlement shared across iOS and Android by the Supabase user id, remotely configured paywall, restore purchases, in-app subscription management; RevenueCat webhooks write the entitlement to Supabase, and AI quotas (003) follow it. Products defined in App Store Connect and Google Play Console. Open for the owner: what is free and what is premium, and the prices | 001, 003, 005 |
+| 007 | Workout program | Done except phone validation (`specs/007-workout/`, owner request 2026-10-25): own split (Push / Pull / Legs, Upper / Lower, Full body, bro split or custom) with exercises, sets, reps and target kg; workout logging prefilled from last time; per-exercise weight progress (best kg, estimated 1RM, chart). Body weight stays in 004 | 001 |
 
 The web app (Next.js, Prisma, SQLite, in-process CLIP/SlimSAM/Tesseract and Ollama) is retired as
 these features land: 001 replaces the app shell, accounts, setup, plan and search logging; 003

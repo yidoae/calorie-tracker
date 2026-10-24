@@ -416,6 +416,70 @@ export type Database = {
         }
         Relationships: []
       }
+      workout_programs: {
+        Row: {
+          days: Json
+          name: string
+          split: string
+          user_id: string
+        }
+        Insert: {
+          days: Json
+          name: string
+          split: string
+          user_id?: string
+        }
+        Update: {
+          days?: Json
+          name?: string
+          split?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_programs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_sessions: {
+        Row: {
+          created_at: string
+          day_name: string
+          exercises: Json
+          id: string
+          performed_on: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_name: string
+          exercises: Json
+          id?: string
+          performed_on: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          day_name?: string
+          exercises?: Json
+          id?: string
+          performed_on?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

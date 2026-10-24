@@ -12,6 +12,7 @@ import HistoryScreen from "@/app/(tabs)/history";
 import PlanScreen from "@/app/(tabs)/plan";
 import ProfileScreen from "@/app/(tabs)/profile";
 import TodayScreen from "@/app/(tabs)/today";
+import WorkoutScreen from "@/app/(tabs)/workout";
 import PhotoCapture from "@/components/ai/PhotoCapture";
 import TextLogScreen from "@/components/ai/TextLogScreen";
 import VerifyEmail from "@/components/auth/VerifyEmail";
@@ -32,6 +33,9 @@ import Slider from "@/components/ui/Slider";
 import StateMessage from "@/components/ui/StateMessage";
 import TextField from "@/components/ui/TextField";
 import Toast from "@/components/ui/Toast";
+import ExerciseProgressScreen from "@/components/workout/ExerciseProgressScreen";
+import ProgramEditorScreen from "@/components/workout/ProgramEditorScreen";
+import WorkoutSessionScreen from "@/components/workout/WorkoutSessionScreen";
 import type { SetupStep } from "@/hooks/setupSteps";
 import { useMealDraft } from "@/hooks/useMealDraft";
 import { SessionContext, type SessionState } from "@/hooks/useSession";
@@ -179,6 +183,34 @@ const SCREENS: ScreenEntry[] = [
     title: "İnce ayar",
     note: "Antrenman/dinlenme sekmeleri, kalori kaydırıcısı (en az güvenli alt sınır) ve “Kalori sabit”: bir makroyu oynatınca diğer ikisi dengelenir, toplam aynı kalır. “Aktif planım yap” planı kaydedip Planım sekmesine döner.",
     Component: () => <PlanReviewScreen fromWizard={false} />,
+    status: "ready",
+  },
+  {
+    id: "workout",
+    title: "Antrenman",
+    note: "007: programın günleri (dokununca antrenman başlar), her hareketin en iyi kilosu ve son antrenmanlar (çöp kutusu onay sorar). “Programı düzenle” düzenleyiciyi açar.",
+    Component: WorkoutScreen,
+    status: "ready",
+  },
+  {
+    id: "workout-program",
+    title: "Programı düzenle",
+    note: "Hazır programlar (Push / Pull / Legs, Upper / Lower, Full body, bölgesel, kendi programın) seçilince alanları doldurur. Program tipi serbest yazılır; her günün adı, hareketleri, set, tekrar (8-12 gibi) ve hedef kilosu değişir. Ondalık virgül olur (62,5).",
+    Component: ProgramEditorScreen,
+    status: "ready",
+  },
+  {
+    id: "workout-session",
+    title: "Antrenman kaydı",
+    note: "Push günü: kilo ve tekrarlar son antrenmandan gelir, hiç yapılmamış harekette programın hedefinden. “+ Set ekle” üstteki seti kopyalar; boş bırakılan hareket kaydedilmez.",
+    Component: () => <WorkoutSessionScreen dayIndex={0} />,
+    status: "ready",
+  },
+  {
+    id: "workout-exercise",
+    title: "Hareket gelişimi",
+    note: "Bench press: en iyi kilo, tahmini 1RM (Epley), her antrenmandaki en ağır setin grafiği ve geçmiş (hacim = kg × tekrar toplamı).",
+    Component: () => <ExerciseProgressScreen name="Bench press" />,
     status: "ready",
   },
 ];
