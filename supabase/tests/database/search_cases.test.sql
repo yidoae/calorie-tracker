@@ -2,7 +2,7 @@
 -- The everyday searches of SC-002 against the current food list. Nothing persists.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(175);
+select plan(205);
 
 set local role authenticated;
 select set_config('request.jwt.claims', json_build_object('sub', 'a5000000-0000-4000-8000-0000000000a5', 'role', 'authenticated')::text, true);
@@ -14,6 +14,7 @@ select ok('adana_kebap' in (select food_id from public.search_foods('adana', 3))
 select ok('asure' in (select food_id from public.search_foods('asure', 3)), '"asure" finds asure in the top 3');
 select ok('asure' in (select food_id from public.search_foods('aşure', 3)), '"aşure" finds asure in the top 3');
 select ok('ayran' in (select food_id from public.search_foods('ayran', 3)), '"ayran" finds ayran in the top 3');
+select ok('ayva_tatlisi' in (select food_id from public.search_foods('ayva tatlısı tatlı tatlıs', 3)), '"ayva tatlısı" finds ayva_tatlisi in the top 3');
 select ok('almonds' in (select food_id from public.search_foods('badem', 3)), '"badem" finds almonds in the top 3');
 select ok('baklava' in (select food_id from public.search_foods('baklava', 3)), '"baklava" finds baklava in the top 3');
 select ok('honey' in (select food_id from public.search_foods('bal', 3)), '"bal" finds honey in the top 3');
@@ -30,8 +31,10 @@ select ok('cacik' in (select food_id from public.search_foods('cacık', 3)), '"c
 select ok('tea' in (select food_id from public.search_foods('cay', 3)), '"cay" finds tea in the top 3');
 select ok('walnuts' in (select food_id from public.search_foods('ceviz', 3)), '"ceviz" finds walnuts in the top 3');
 select ok('cheddar' in (select food_id from public.search_foods('cheddar', 3)), '"cheddar" finds cheddar in the top 3');
+select ok('cig_borek' in (select food_id from public.search_foods('cig borek', 3)), '"cig borek" finds cig_borek in the top 3');
 select ok('lentil_soup' in (select food_id from public.search_foods('corba', 3)), '"corba" finds lentil_soup in the top 3');
 select ok('tea' in (select food_id from public.search_foods('çay', 3)), '"çay" finds tea in the top 3');
+select ok('cig_borek' in (select food_id from public.search_foods('çiğ börek', 3)), '"çiğ börek" finds cig_borek in the top 3');
 select ok('cig_kofte' in (select food_id from public.search_foods('çiğ köfte köf', 3)), '"çiğ köfte" finds cig_kofte in the top 3');
 select ok('chocolate_milk_bar' in (select food_id from public.search_foods('çikolata çikola', 3)), '"çikolata" finds chocolate_milk_bar in the top 3');
 select ok('strawberries' in (select food_id from public.search_foods('çilek', 3)), '"çilek" finds strawberries in the top 3');
@@ -50,10 +53,13 @@ select ok('beef_raw' in (select food_id from public.search_foods('et', 3)), '"et
 select ok('etli_ekmek' in (select food_id from public.search_foods('etli ekmek et etl', 3)), '"etli ekmek" finds etli_ekmek in the top 3');
 select ok('ezogelin_soup' in (select food_id from public.search_foods('ezogelin ezogel', 3)), '"ezogelin" finds ezogelin_soup in the top 3');
 select ok('falafel' in (select food_id from public.search_foods('falafel', 3)), '"falafel" finds falafel in the top 3');
+select ok('fava' in (select food_id from public.search_foods('fava', 3)), '"fava" finds fava in the top 3');
 select ok('hazelnuts' in (select food_id from public.search_foods('fındık', 3)), '"fındık" finds hazelnuts in the top 3');
 select ok('french_bread' in (select food_id from public.search_foods('francala', 3)), '"francala" finds french_bread in the top 3');
 select ok('lemon_soda' in (select food_id from public.search_foods('gazoz', 3)), '"gazoz" finds lemon_soda in the top 3');
 select ok('gozleme' in (select food_id from public.search_foods('gözleme', 3)), '"gözleme" finds gozleme in the top 3');
+select ok('gullac' in (select food_id from public.search_foods('gullac', 3)), '"gullac" finds gullac in the top 3');
+select ok('gullac' in (select food_id from public.search_foods('güllaç', 3)), '"güllaç" finds gullac in the top 3');
 select ok('hamburger' in (select food_id from public.search_foods('hamburger', 3)), '"hamburger" finds hamburger in the top 3');
 select ok('anchovy_raw' in (select food_id from public.search_foods('hamsi ham hams hamıs', 3)), '"hamsi" finds anchovy_raw in the top 3');
 select ok('hamsili_pilav' in (select food_id from public.search_foods('hamsili pilav hamsi hamsil', 3)), '"hamsili pilav" finds hamsili_pilav in the top 3');
@@ -71,20 +77,30 @@ select ok('iskender' in (select food_id from public.search_foods('iskender', 3))
 select ok('iskembe_soup' in (select food_id from public.search_foods('işkembe', 3)), '"işkembe" finds iskembe_soup in the top 3');
 select ok('izmir_kofte' in (select food_id from public.search_foods('izmir köfte köf', 3)), '"izmir köfte" finds izmir_kofte in the top 3');
 select ok('zucchini_dolma' in (select food_id from public.search_foods('kabak dolması dolma dolmas', 3)), '"kabak dolması" finds zucchini_dolma in the top 3');
+select ok('kabak_tatlisi' in (select food_id from public.search_foods('kabak tatlısı tatlı tatlıs', 3)), '"kabak tatlısı" finds kabak_tatlisi in the top 3');
+select ok('kabak_tatlisi' in (select food_id from public.search_foods('kabak tatlisi tatli tatlis', 3)), '"kabak tatlisi" finds kabak_tatlisi in the top 3');
 select ok('tel_kadayif' in (select food_id from public.search_foods('kadayıf', 3)), '"kadayıf" finds tel_kadayif in the top 3');
 select ok('kadinbudu_kofte' in (select food_id from public.search_foods('kadinbudu kadinbud kadinbut', 3)), '"kadinbudu" finds kadinbudu_kofte in the top 3');
 select ok('coffee' in (select food_id from public.search_foods('kahve', 3)), '"kahve" finds coffee in the top 3');
+select ok('cocoa_cake' in (select food_id from public.search_foods('kakaolu kek kakao kakaol', 3)), '"kakaolu kek" finds cocoa_cake in the top 3');
+select ok('kapuska' in (select food_id from public.search_foods('kapuska', 3)), '"kapuska" finds kapuska in the top 3');
+select ok('cauliflower_fried' in (select food_id from public.search_foods('karnabahar kızartması kızartma kızartmas', 3)), '"karnabahar kızartması" finds cauliflower_fried in the top 3');
 select ok('karniyarik' in (select food_id from public.search_foods('karnıyarık', 3)), '"karnıyarık" finds karniyarik in the top 3');
 select ok('watermelon' in (select food_id from public.search_foods('karpuz', 3)), '"karpuz" finds watermelon in the top 3');
 select ok('kasar_cheese' in (select food_id from public.search_foods('kaşar', 3)), '"kaşar" finds kasar_cheese in the top 3');
 select ok('cheese_omelet' in (select food_id from public.search_foods('kaşarlı omlet kaşar kaşarl kaşarıl', 3)), '"kaşarlı omlet" finds cheese_omelet in the top 3');
 select ok('cheese_pide' in (select food_id from public.search_foods('kaşarlı pide kaşar kaşarl kaşarıl pi', 3)), '"kaşarlı pide" finds cheese_pide in the top 3');
+select ok('katmer' in (select food_id from public.search_foods('katmer', 3)), '"katmer" finds katmer in the top 3');
 select ok('kazandibi' in (select food_id from public.search_foods('kazandibi kazandib kazandip', 3)), '"kazandibi" finds kazandibi in the top 3');
+select ok('kemalpasa' in (select food_id from public.search_foods('kemalpaşa', 3)), '"kemalpaşa" finds kemalpasa in the top 3');
+select ok('keskek' in (select food_id from public.search_foods('keskek', 3)), '"keskek" finds keskek in the top 3');
+select ok('keskek' in (select food_id from public.search_foods('keşkek', 3)), '"keşkek" finds keskek in the top 3');
 select ok('keskul' in (select food_id from public.search_foods('keşkül', 3)), '"keşkül" finds keskul in the top 3');
 select ok('kisir' in (select food_id from public.search_foods('kısır', 3)), '"kısır" finds kisir in the top 3');
 select ok('beef_mince_raw' in (select food_id from public.search_foods('kıyma', 3)), '"kıyma" finds beef_mince_raw in the top 3');
 select ok('kofte' in (select food_id from public.search_foods('kofte kof', 3)), '"kofte" finds kofte in the top 3');
 select ok('kofte' in (select food_id from public.search_foods('koftesi kofte koftes', 3)), '"koftesi" finds kofte in the top 3');
+select ok('kol_boregi' in (select food_id from public.search_foods('kol böreği börek', 3)), '"kol böreği" finds kol_boregi in the top 3');
 select ok('cola' in (select food_id from public.search_foods('kola', 3)), '"kola" finds cola in the top 3');
 select ok('kofte' in (select food_id from public.search_foods('köfte köf', 3)), '"köfte" finds kofte in the top 3');
 select ok('crepe' in (select food_id from public.search_foods('krep', 3)), '"krep" finds crepe in the top 3');
@@ -92,6 +108,8 @@ select ok('kumpir' in (select food_id from public.search_foods('kumpir', 3)), '"
 select ok('kumru' in (select food_id from public.search_foods('kumru kumr kumur', 3)), '"kumru" finds kumru in the top 3');
 select ok('kunefe' in (select food_id from public.search_foods('kunefe', 3)), '"kunefe" finds kunefe in the top 3');
 select ok('kuru_fasulye' in (select food_id from public.search_foods('kuru fasulye kur', 3)), '"kuru fasulye" finds kuru_fasulye in the top 3');
+select ok('kusbasili_pide' in (select food_id from public.search_foods('kuşbaşılı pide kuşbaşı kuşbaşıl pi', 3)), '"kuşbaşılı pide" finds kusbasili_pide in the top 3');
+select ok('kuymak' in (select food_id from public.search_foods('kuymak', 3)), '"kuymak" finds kuymak in the top 3');
 select ok('kunefe' in (select food_id from public.search_foods('künefe', 3)), '"künefe" finds kunefe in the top 3');
 select ok('lahmacun' in (select food_id from public.search_foods('lahmacun lahmac lahmaç', 3)), '"lahmacun" finds lahmacun in the top 3');
 select ok('latte' in (select food_id from public.search_foods('latte lat', 3)), '"latte" finds latte in the top 3');
@@ -99,6 +117,7 @@ select ok('sea_bass_raw' in (select food_id from public.search_foods('levrek', 3
 select ok('lemonade' in (select food_id from public.search_foods('limonata limona', 3)), '"limonata" finds lemonade in the top 3');
 select ok('lokum' in (select food_id from public.search_foods('lokum', 3)), '"lokum" finds lokum in the top 3');
 select ok('pasta_dry' in (select food_id from public.search_foods('makarna', 3)), '"makarna" finds pasta_dry in the top 3');
+select ok('mantar_sote' in (select food_id from public.search_foods('mantar sote so', 3)), '"mantar sote" finds mantar_sote in the top 3');
 select ok('manti' in (select food_id from public.search_foods('mantı mant', 3)), '"mantı" finds manti in the top 3');
 select ok('menemen' in (select food_id from public.search_foods('menemen', 3)), '"menemen" finds menemen in the top 3');
 select ok('lentils_dry' in (select food_id from public.search_foods('mercimek', 3)), '"mercimek" finds lentils_dry in the top 3');
@@ -107,12 +126,16 @@ select ok('mercimek_koftesi' in (select food_id from public.search_foods('mercim
 select ok('green_lentil_stew' in (select food_id from public.search_foods('mercimek yemeği yemek', 3)), '"mercimek yemeği" finds green_lentil_stew in the top 3');
 select ok('corn_bread' in (select food_id from public.search_foods('mısır ekmeği ekmek', 3)), '"mısır ekmeği" finds corn_bread in the top 3');
 select ok('midye_dolma' in (select food_id from public.search_foods('midye dolma', 3)), '"midye dolma" finds midye_dolma in the top 3');
+select ok('kuymak' in (select food_id from public.search_foods('mihlama', 3)), '"mihlama" finds kuymak in the top 3');
+select ok('mucver' in (select food_id from public.search_foods('mucver', 3)), '"mucver" finds mucver in the top 3');
 select ok('muhammara' in (select food_id from public.search_foods('muhammara', 3)), '"muhammara" finds muhammara in the top 3');
 select ok('musakka' in (select food_id from public.search_foods('musakka', 3)), '"musakka" finds musakka in the top 3');
 select ok('banana' in (select food_id from public.search_foods('muz', 3)), '"muz" finds banana in the top 3');
+select ok('mucver' in (select food_id from public.search_foods('mücver', 3)), '"mücver" finds mucver in the top 3');
 select ok('chickpeas' in (select food_id from public.search_foods('nohut', 3)), '"nohut" finds chickpeas in the top 3');
 select ok('potato_raw' in (select food_id from public.search_foods('patates', 3)), '"patates" finds potato_raw in the top 3');
 select ok('mashed_potato' in (select food_id from public.search_foods('patates püresi püre püres', 3)), '"patates püresi" finds mashed_potato in the top 3');
+select ok('potato_stew' in (select food_id from public.search_foods('patates yemeği yemek', 3)), '"patates yemeği" finds potato_stew in the top 3');
 select ok('patlican_kebabi' in (select food_id from public.search_foods('patlıcan kebabı kebab kebap', 3)), '"patlıcan kebabı" finds patlican_kebabi in the top 3');
 select ok('white_cheese' in (select food_id from public.search_foods('peyniri peynir', 3)), '"peyniri" finds white_cheese in the top 3');
 select ok('pide' in (select food_id from public.search_foods('pide pi', 3)), '"pide" finds pide in the top 3');
@@ -125,6 +148,7 @@ select ok('pizza' in (select food_id from public.search_foods('pizza', 3)), '"pi
 select ok('pogaca' in (select food_id from public.search_foods('poğaça', 3)), '"poğaça" finds pogaca in the top 3');
 select ok('orange' in (select food_id from public.search_foods('portakal', 3)), '"portakal" finds orange in the top 3');
 select ok('orange_juice' in (select food_id from public.search_foods('portakal suyu su suy', 3)), '"portakal suyu" finds orange_juice in the top 3');
+select ok('profiterol' in (select food_id from public.search_foods('profiterol', 3)), '"profiterol" finds profiterol in the top 3');
 select ok('mashed_potato' in (select food_id from public.search_foods('pure', 3)), '"pure" finds mashed_potato in the top 3');
 select ok('raki' in (select food_id from public.search_foods('rakı rak', 3)), '"rakı" finds raki in the top 3');
 select ok('ramazan_pidesi' in (select food_id from public.search_foods('ramazan pidesi pide pides', 3)), '"ramazan pidesi" finds ramazan_pidesi in the top 3');
@@ -134,6 +158,7 @@ select ok('cucumber' in (select food_id from public.search_foods('salatalık', 3
 select ok('salep' in (select food_id from public.search_foods('salep', 3)), '"salep" finds salep in the top 3');
 select ok('sugar' in (select food_id from public.search_foods('seker', 3)), '"seker" finds sugar in the top 3');
 select ok('sekerpare' in (select food_id from public.search_foods('sekerpare', 3)), '"sekerpare" finds sekerpare in the top 3');
+select ok('yogurtlu_semizotu' in (select food_id from public.search_foods('semizotu salatası semizot salata salatas', 3)), '"semizotu salatası" finds yogurtlu_semizotu in the top 3');
 select ok('hot_chocolate' in (select food_id from public.search_foods('sıcak çikolata çikola', 3)), '"sıcak çikolata" finds hot_chocolate in the top 3');
 select ok('simit' in (select food_id from public.search_foods('simit', 3)), '"simit" finds simit in the top 3');
 select ok('onion' in (select food_id from public.search_foods('soğan', 3)), '"soğan" finds onion in the top 3');
@@ -162,13 +187,18 @@ select ok('tavuk_gogsu_tatli' in (select food_id from public.search_foods('tavuk
 select ok('chicken_saute' in (select food_id from public.search_foods('tavuk sote so', 3)), '"tavuk sote" finds chicken_saute in the top 3');
 select ok('chicken_shish' in (select food_id from public.search_foods('tavuk şiş', 3)), '"tavuk şiş" finds chicken_shish in the top 3');
 select ok('butter' in (select food_id from public.search_foods('tereyağı tereyak', 3)), '"tereyağı" finds butter in the top 3');
+select ok('testi_kebabi' in (select food_id from public.search_foods('testi kebabı test kebab kebap', 3)), '"testi kebabı" finds testi_kebabi in the top 3');
 select ok('tuna' in (select food_id from public.search_foods('ton balığı balık', 3)), '"ton balığı" finds tuna in the top 3');
 select ok('tost' in (select food_id from public.search_foods('tost', 3)), '"tost" finds tost in the top 3');
+select ok('trilece' in (select food_id from public.search_foods('trilece', 3)), '"trilece" finds trilece in the top 3');
+select ok('trilece' in (select food_id from public.search_foods('trileçe', 3)), '"trileçe" finds trilece in the top 3');
 select ok('tulumba' in (select food_id from public.search_foods('tulumba', 3)), '"tulumba" finds tulumba in the top 3');
 select ok('turkish_coffee' in (select food_id from public.search_foods('turk kahvesi kahve kahves', 3)), '"turk kahvesi" finds turkish_coffee in the top 3');
+select ok('tuzlu_kurabiye' in (select food_id from public.search_foods('tuzlu kurabiye tuz tuzl tuzul', 3)), '"tuzlu kurabiye" finds tuzlu_kurabiye in the top 3');
 select ok('turkish_coffee' in (select food_id from public.search_foods('türk kahvesi kahve kahves', 3)), '"türk kahvesi" finds turkish_coffee in the top 3');
 select ok('turlu' in (select food_id from public.search_foods('türlü tür türl türül', 3)), '"türlü" finds turlu in the top 3');
 select ok('flour' in (select food_id from public.search_foods('un', 3)), '"un" finds flour in the top 3');
+select ok('un_kurabiyesi' in (select food_id from public.search_foods('un kurabiyesi kurabiye kurabiyes', 3)), '"un kurabiyesi" finds un_kurabiyesi in the top 3');
 select ok('grapes' in (select food_id from public.search_foods('üzüm', 3)), '"üzüm" finds grapes in the top 3');
 select ok('sarma_olive' in (select food_id from public.search_foods('yaprak sarma', 3)), '"yaprak sarma" finds sarma_olive in the top 3');
 select ok('yayla_soup' in (select food_id from public.search_foods('yayla çorbası çorba çorbas', 3)), '"yayla çorbası" finds yayla_soup in the top 3');
@@ -182,8 +212,8 @@ select ok('olives' in (select food_id from public.search_foods('zeytin zeyt', 3)
 select ok('oil' in (select food_id from public.search_foods('zeytinyağı zeytinyak', 3)), '"zeytinyağı" finds oil in the top 3');
 select ok('green_beans_olive' in (select food_id from public.search_foods('zeytinyağlı fasulye zeytinyağl zeytinyağıl', 3)), '"zeytinyağlı fasulye" finds green_beans_olive in the top 3');
 select ok(
-  (select count(*) from (values ('acılı ezme acı acıl', 'acili_ezme'), ('acma', 'acma'), ('açma', 'acma'), ('adana', 'adana_kebap'), ('asure', 'asure'), ('aşure', 'asure'), ('ayran', 'ayran'), ('badem', 'almonds'), ('baklava', 'baklava'), ('bal', 'honey'), ('balik ekmek', 'balik_ekmek'), ('bazlama', 'bazlama'), ('beyaz peynir', 'white_cheese'), ('biber dolması dolma dolmas', 'pepper_dolma_olive'), ('bira', 'beer'), ('börek', 'borek'), ('brokoli broko brokol', 'broccoli'), ('bulgur', 'bulgur_dry'), ('bulgur pilavı pilav', 'bulgur'), ('cacık', 'cacik'), ('cay', 'tea'), ('ceviz', 'walnuts'), ('cheddar', 'cheddar'), ('corba', 'lentil_soup'), ('çay', 'tea'), ('çiğ köfte köf', 'cig_kofte'), ('çikolata çikola', 'chocolate_milk_bar'), ('çilek', 'strawberries'), ('çoban salata sala', 'coban_salata'), ('çorbası çorba çorbas', 'lentil_soup'), ('domates', 'tomato'), ('dondurma', 'ice_cream_vanilla'), ('döner', 'doner'), ('düğün çorbası dük çorba çorbas', 'dugun_soup'), ('dürüm', 'doner_wrap'), ('ekmeği ekmek', 'white_bread'), ('ekmek', 'white_bread'), ('elma', 'apple'), ('elmayı elma elmay', 'apple'), ('et', 'beef_raw'), ('etli ekmek et etl', 'etli_ekmek'), ('ezogelin ezogel', 'ezogelin_soup'), ('falafel', 'falafel'), ('fındık', 'hazelnuts'), ('francala', 'french_bread'), ('gazoz', 'lemon_soda'), ('gözleme', 'gozleme'), ('hamburger', 'hamburger'), ('hamsi ham hams hamıs', 'anchovy_raw'), ('hamsili pilav hamsi hamsil', 'hamsili_pilav'), ('havuç', 'carrot'), ('hindi hind hint', 'turkey'), ('humus', 'hummus'), ('hünkar beğendi beğend beğent', 'hunkar_begendi'), ('ıhlamur', 'herbal_tea'), ('ıslak hamburger', 'islak_hamburger'), ('ıspanak', 'spinach_raw'), ('icli kofte ic icl kof', 'icli_kofte'), ('ihlamur', 'herbal_tea'), ('imam bayıldı bayıld bayılt', 'imam_bayildi'), ('iskender', 'iskender'), ('işkembe', 'iskembe_soup'), ('izmir köfte köf', 'izmir_kofte'), ('kabak dolması dolma dolmas', 'zucchini_dolma'), ('kadayıf', 'tel_kadayif'), ('kadinbudu kadinbud kadinbut', 'kadinbudu_kofte'), ('kahve', 'coffee'), ('karnıyarık', 'karniyarik'), ('karpuz', 'watermelon'), ('kaşar', 'kasar_cheese'), ('kaşarlı omlet kaşar kaşarl kaşarıl', 'cheese_omelet'), ('kaşarlı pide kaşar kaşarl kaşarıl pi', 'cheese_pide'), ('kazandibi kazandib kazandip', 'kazandibi'), ('keşkül', 'keskul'), ('kısır', 'kisir'), ('kıyma', 'beef_mince_raw'), ('kofte kof', 'kofte'), ('koftesi kofte koftes', 'kofte'), ('kola', 'cola'), ('köfte köf', 'kofte'), ('krep', 'crepe'), ('kumpir', 'kumpir'), ('kumru kumr kumur', 'kumru'), ('kunefe', 'kunefe'), ('kuru fasulye kur', 'kuru_fasulye'), ('künefe', 'kunefe'), ('lahmacun lahmac lahmaç', 'lahmacun'), ('latte lat', 'latte'), ('levrek', 'sea_bass_raw'), ('limonata limona', 'lemonade'), ('lokum', 'lokum'), ('makarna', 'pasta_dry'), ('mantı mant', 'manti'), ('menemen', 'menemen'), ('mercimek', 'lentils_dry'), ('mercimek çorbası çorba çorbas', 'lentil_soup'), ('mercimek köftesi köfte köftes', 'mercimek_koftesi'), ('mercimek yemeği yemek', 'green_lentil_stew'), ('mısır ekmeği ekmek', 'corn_bread'), ('midye dolma', 'midye_dolma'), ('muhammara', 'muhammara'), ('musakka', 'musakka'), ('muz', 'banana'), ('nohut', 'chickpeas'), ('patates', 'potato_raw'), ('patates püresi püre püres', 'mashed_potato'), ('patlıcan kebabı kebab kebap', 'patlican_kebabi'), ('peyniri peynir', 'white_cheese'), ('pide pi', 'pide'), ('pilavı pilav', 'white_rice'), ('pilavi pilav', 'white_rice'), ('pirinç', 'rice_raw'), ('pirinç pilavı pilav', 'white_rice'), ('piyaz', 'piyaz'), ('pizza', 'pizza'), ('poğaça', 'pogaca'), ('portakal', 'orange'), ('portakal suyu su suy', 'orange_juice'), ('pure', 'mashed_potato'), ('rakı rak', 'raki'), ('ramazan pidesi pide pides', 'ramazan_pidesi'), ('revani revan', 'revani'), ('sahlep', 'salep'), ('salatalık', 'cucumber'), ('salep', 'salep'), ('seker', 'sugar'), ('sekerpare', 'sekerpare'), ('sıcak çikolata çikola', 'hot_chocolate'), ('simit', 'simit'), ('soğan', 'onion'), ('somon', 'salmon'), ('sosisli sosis sosisl sosisil', 'sosisli'), ('su', 'water'), ('su böreği börek', 'su_boregi'), ('sucuk', 'sucuk'), ('sucuklu yumurta sucuk sucukl yumur', 'sucuklu_yumurta'), ('sulu köfte su sul köf', 'eksili_kofte'), ('supangle', 'supangle'), ('sut', 'milk'), ('süt', 'milk'), ('sütlaç', 'sutlac'), ('şakşuka', 'saksuka'), ('şarap', 'wine_red'), ('şeker', 'sugar'), ('tahin pekmez tah', 'tahin_pekmez'), ('tarhana', 'tarhana_soup'), ('tavuğu tavuk', 'chicken_breast_raw'), ('tavuk', 'chicken_breast_raw'), ('tavuk döner', 'chicken_doner'), ('tavuk dürüm', 'chicken_wrap'), ('tavuk göğsü göğs göğüs', 'chicken_breast_raw'), ('tavuk göğsü tatlısı göğs göğüs tatlı tatlıs', 'tavuk_gogsu_tatli'), ('tavuk sote so', 'chicken_saute'), ('tavuk şiş', 'chicken_shish'), ('tereyağı tereyak', 'butter'), ('ton balığı balık', 'tuna'), ('tost', 'tost'), ('tulumba', 'tulumba'), ('turk kahvesi kahve kahves', 'turkish_coffee'), ('türk kahvesi kahve kahves', 'turkish_coffee'), ('türlü tür türl türül', 'turlu'), ('un', 'flour'), ('üzüm', 'grapes'), ('yaprak sarma', 'sarma_olive'), ('yayla çorbası çorba çorbas', 'yayla_soup'), ('yeşil çay', 'green_tea'), ('yogurt', 'yogurt'), ('yoğurt', 'yogurt'), ('yulaf', 'oats_dry'), ('yumurta yumur', 'egg'), ('yumurtası yumurta yumurtas', 'egg'), ('zeytin zeyt', 'olives'), ('zeytinyağı zeytinyak', 'oil'), ('zeytinyağlı fasulye zeytinyağl zeytinyağıl', 'green_beans_olive')) as c(q, id)
-    where (select food_id from public.search_foods(c.q, 1)) = c.id) >= 166, '≥ 95 % of the everyday searches find the expected food first');
+  (select count(*) from (values ('acılı ezme acı acıl', 'acili_ezme'), ('acma', 'acma'), ('açma', 'acma'), ('adana', 'adana_kebap'), ('asure', 'asure'), ('aşure', 'asure'), ('ayran', 'ayran'), ('ayva tatlısı tatlı tatlıs', 'ayva_tatlisi'), ('badem', 'almonds'), ('baklava', 'baklava'), ('bal', 'honey'), ('balik ekmek', 'balik_ekmek'), ('bazlama', 'bazlama'), ('beyaz peynir', 'white_cheese'), ('biber dolması dolma dolmas', 'pepper_dolma_olive'), ('bira', 'beer'), ('börek', 'borek'), ('brokoli broko brokol', 'broccoli'), ('bulgur', 'bulgur_dry'), ('bulgur pilavı pilav', 'bulgur'), ('cacık', 'cacik'), ('cay', 'tea'), ('ceviz', 'walnuts'), ('cheddar', 'cheddar'), ('cig borek', 'cig_borek'), ('corba', 'lentil_soup'), ('çay', 'tea'), ('çiğ börek', 'cig_borek'), ('çiğ köfte köf', 'cig_kofte'), ('çikolata çikola', 'chocolate_milk_bar'), ('çilek', 'strawberries'), ('çoban salata sala', 'coban_salata'), ('çorbası çorba çorbas', 'lentil_soup'), ('domates', 'tomato'), ('dondurma', 'ice_cream_vanilla'), ('döner', 'doner'), ('düğün çorbası dük çorba çorbas', 'dugun_soup'), ('dürüm', 'doner_wrap'), ('ekmeği ekmek', 'white_bread'), ('ekmek', 'white_bread'), ('elma', 'apple'), ('elmayı elma elmay', 'apple'), ('et', 'beef_raw'), ('etli ekmek et etl', 'etli_ekmek'), ('ezogelin ezogel', 'ezogelin_soup'), ('falafel', 'falafel'), ('fava', 'fava'), ('fındık', 'hazelnuts'), ('francala', 'french_bread'), ('gazoz', 'lemon_soda'), ('gözleme', 'gozleme'), ('gullac', 'gullac'), ('güllaç', 'gullac'), ('hamburger', 'hamburger'), ('hamsi ham hams hamıs', 'anchovy_raw'), ('hamsili pilav hamsi hamsil', 'hamsili_pilav'), ('havuç', 'carrot'), ('hindi hind hint', 'turkey'), ('humus', 'hummus'), ('hünkar beğendi beğend beğent', 'hunkar_begendi'), ('ıhlamur', 'herbal_tea'), ('ıslak hamburger', 'islak_hamburger'), ('ıspanak', 'spinach_raw'), ('icli kofte ic icl kof', 'icli_kofte'), ('ihlamur', 'herbal_tea'), ('imam bayıldı bayıld bayılt', 'imam_bayildi'), ('iskender', 'iskender'), ('işkembe', 'iskembe_soup'), ('izmir köfte köf', 'izmir_kofte'), ('kabak dolması dolma dolmas', 'zucchini_dolma'), ('kabak tatlısı tatlı tatlıs', 'kabak_tatlisi'), ('kabak tatlisi tatli tatlis', 'kabak_tatlisi'), ('kadayıf', 'tel_kadayif'), ('kadinbudu kadinbud kadinbut', 'kadinbudu_kofte'), ('kahve', 'coffee'), ('kakaolu kek kakao kakaol', 'cocoa_cake'), ('kapuska', 'kapuska'), ('karnabahar kızartması kızartma kızartmas', 'cauliflower_fried'), ('karnıyarık', 'karniyarik'), ('karpuz', 'watermelon'), ('kaşar', 'kasar_cheese'), ('kaşarlı omlet kaşar kaşarl kaşarıl', 'cheese_omelet'), ('kaşarlı pide kaşar kaşarl kaşarıl pi', 'cheese_pide'), ('katmer', 'katmer'), ('kazandibi kazandib kazandip', 'kazandibi'), ('kemalpaşa', 'kemalpasa'), ('keskek', 'keskek'), ('keşkek', 'keskek'), ('keşkül', 'keskul'), ('kısır', 'kisir'), ('kıyma', 'beef_mince_raw'), ('kofte kof', 'kofte'), ('koftesi kofte koftes', 'kofte'), ('kol böreği börek', 'kol_boregi'), ('kola', 'cola'), ('köfte köf', 'kofte'), ('krep', 'crepe'), ('kumpir', 'kumpir'), ('kumru kumr kumur', 'kumru'), ('kunefe', 'kunefe'), ('kuru fasulye kur', 'kuru_fasulye'), ('kuşbaşılı pide kuşbaşı kuşbaşıl pi', 'kusbasili_pide'), ('kuymak', 'kuymak'), ('künefe', 'kunefe'), ('lahmacun lahmac lahmaç', 'lahmacun'), ('latte lat', 'latte'), ('levrek', 'sea_bass_raw'), ('limonata limona', 'lemonade'), ('lokum', 'lokum'), ('makarna', 'pasta_dry'), ('mantar sote so', 'mantar_sote'), ('mantı mant', 'manti'), ('menemen', 'menemen'), ('mercimek', 'lentils_dry'), ('mercimek çorbası çorba çorbas', 'lentil_soup'), ('mercimek köftesi köfte köftes', 'mercimek_koftesi'), ('mercimek yemeği yemek', 'green_lentil_stew'), ('mısır ekmeği ekmek', 'corn_bread'), ('midye dolma', 'midye_dolma'), ('mihlama', 'kuymak'), ('mucver', 'mucver'), ('muhammara', 'muhammara'), ('musakka', 'musakka'), ('muz', 'banana'), ('mücver', 'mucver'), ('nohut', 'chickpeas'), ('patates', 'potato_raw'), ('patates püresi püre püres', 'mashed_potato'), ('patates yemeği yemek', 'potato_stew'), ('patlıcan kebabı kebab kebap', 'patlican_kebabi'), ('peyniri peynir', 'white_cheese'), ('pide pi', 'pide'), ('pilavı pilav', 'white_rice'), ('pilavi pilav', 'white_rice'), ('pirinç', 'rice_raw'), ('pirinç pilavı pilav', 'white_rice'), ('piyaz', 'piyaz'), ('pizza', 'pizza'), ('poğaça', 'pogaca'), ('portakal', 'orange'), ('portakal suyu su suy', 'orange_juice'), ('profiterol', 'profiterol'), ('pure', 'mashed_potato'), ('rakı rak', 'raki'), ('ramazan pidesi pide pides', 'ramazan_pidesi'), ('revani revan', 'revani'), ('sahlep', 'salep'), ('salatalık', 'cucumber'), ('salep', 'salep'), ('seker', 'sugar'), ('sekerpare', 'sekerpare'), ('semizotu salatası semizot salata salatas', 'yogurtlu_semizotu'), ('sıcak çikolata çikola', 'hot_chocolate'), ('simit', 'simit'), ('soğan', 'onion'), ('somon', 'salmon'), ('sosisli sosis sosisl sosisil', 'sosisli'), ('su', 'water'), ('su böreği börek', 'su_boregi'), ('sucuk', 'sucuk'), ('sucuklu yumurta sucuk sucukl yumur', 'sucuklu_yumurta'), ('sulu köfte su sul köf', 'eksili_kofte'), ('supangle', 'supangle'), ('sut', 'milk'), ('süt', 'milk'), ('sütlaç', 'sutlac'), ('şakşuka', 'saksuka'), ('şarap', 'wine_red'), ('şeker', 'sugar'), ('tahin pekmez tah', 'tahin_pekmez'), ('tarhana', 'tarhana_soup'), ('tavuğu tavuk', 'chicken_breast_raw'), ('tavuk', 'chicken_breast_raw'), ('tavuk döner', 'chicken_doner'), ('tavuk dürüm', 'chicken_wrap'), ('tavuk göğsü göğs göğüs', 'chicken_breast_raw'), ('tavuk göğsü tatlısı göğs göğüs tatlı tatlıs', 'tavuk_gogsu_tatli'), ('tavuk sote so', 'chicken_saute'), ('tavuk şiş', 'chicken_shish'), ('tereyağı tereyak', 'butter'), ('testi kebabı test kebab kebap', 'testi_kebabi'), ('ton balığı balık', 'tuna'), ('tost', 'tost'), ('trilece', 'trilece'), ('trileçe', 'trilece'), ('tulumba', 'tulumba'), ('turk kahvesi kahve kahves', 'turkish_coffee'), ('tuzlu kurabiye tuz tuzl tuzul', 'tuzlu_kurabiye'), ('türk kahvesi kahve kahves', 'turkish_coffee'), ('türlü tür türl türül', 'turlu'), ('un', 'flour'), ('un kurabiyesi kurabiye kurabiyes', 'un_kurabiyesi'), ('üzüm', 'grapes'), ('yaprak sarma', 'sarma_olive'), ('yayla çorbası çorba çorbas', 'yayla_soup'), ('yeşil çay', 'green_tea'), ('yogurt', 'yogurt'), ('yoğurt', 'yogurt'), ('yulaf', 'oats_dry'), ('yumurta yumur', 'egg'), ('yumurtası yumurta yumurtas', 'egg'), ('zeytin zeyt', 'olives'), ('zeytinyağı zeytinyak', 'oil'), ('zeytinyağlı fasulye zeytinyağl zeytinyağıl', 'green_beans_olive')) as c(q, id)
+    where (select food_id from public.search_foods(c.q, 1)) = c.id) >= 194, '≥ 95 % of the everyday searches find the expected food first');
 
 select * from finish();
 rollback;
