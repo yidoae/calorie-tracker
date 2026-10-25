@@ -154,7 +154,7 @@ export function programFromDraft(draft: ProgramDraft): Result<WorkoutProgram> {
     split: draft.split,
     days: draft.days.map((d) => ({
       name: d.name,
-      exercises: d.exercises.map((e) => ({ name: e.name, sets: parseNumber(e.sets) ?? Number.NaN, reps: e.reps, kg: parseNumber(e.kg) })),
+      exercises: d.exercises.map((e) => ({ name: e.name, sets: parseNumber(e.sets) ?? Number.NaN, reps: e.reps, kg: e.kg.trim() === "" ? null : (parseNumber(e.kg) ?? Number.NaN) })),
     })),
   };
   const parsed = workoutProgramSchema.safeParse(candidate);

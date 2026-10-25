@@ -41,6 +41,12 @@ describe("program editor", () => {
     assert.ok(result.ok && result.value.days[0].exercises[0].kg === null);
   });
 
+  it("a kg that is not a number is a problem, not a missing target", () => {
+    const draft = { name: "P", split: "Özel", days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat", kg: "60kg" }] }] };
+    const result = programFromDraft(draft);
+    assert.ok(!result.ok && result.error.startsWith("1. gün, 1. hareket · kg"), JSON.stringify(result));
+  });
+
   it("names where the first problem is", () => {
     const draft = { name: "P", split: "Özel", days: [{ name: "A", exercises: [] }, { name: "B", exercises: [{ ...EMPTY_EXERCISE }, { ...EMPTY_EXERCISE, name: "Row", sets: "x" }] }] };
     const result = programFromDraft(draft);
