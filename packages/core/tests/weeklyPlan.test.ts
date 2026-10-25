@@ -178,3 +178,11 @@ describe("after a deload week", () => {
     assert.equal(plan.intensity, "normal");
   });
 });
+
+describe("names from the exercise catalogue", () => {
+  it("a workout logged under an alias counts for the program's name", () => {
+    const push: WorkoutProgram = { ...PPL, days: [{ name: "Push", exercises: [bench] }] };
+    const plan = planWeek({ weekStart: "2026-10-26", program: push, sessions: [session("2026-10-20", "Push", [{ name: "düz bench", sets: sets(60, 8, 8, 8) }])], pastWeeks: [] });
+    assert.deepEqual(plan.days[0].exercises[0], { ...bench, kg: 62.5, reps: "6", change: "up_kg" });
+  });
+});

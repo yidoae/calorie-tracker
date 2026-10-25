@@ -1,7 +1,6 @@
 import { dayKey, dayToDate, LOCALE } from "../dates.ts";
 import type { WeekFeedback, WeekPlan, WorkoutSession, WorkoutSet } from "../schemas/workout.ts";
-import { normalizeTr } from "../search/normalize.ts";
-import { findExercise, MUSCLE_LABELS, type MuscleGroup } from "./exercises.ts";
+import { exerciseKey, findExercise, MUSCLE_LABELS, type MuscleGroup } from "./exercises.ts";
 
 /*
  * 008: the look back at a finished training week, from the logged weights only: workouts done
@@ -39,8 +38,8 @@ export const newestFirst = (sessions: readonly WorkoutSession[]) =>
 
 /** Every logged set list of one exercise, newest workout first (names match without case or Turkish letters). */
 export function exerciseHistory(name: string, sessionsNewestFirst: readonly WorkoutSession[]): WorkoutSet[][] {
-  const key = normalizeTr(name);
-  return sessionsNewestFirst.flatMap((s) => s.exercises.filter((e) => normalizeTr(e.name) === key && e.sets.length > 0).map((e) => e.sets));
+  const key = exerciseKey(name);
+  return sessionsNewestFirst.flatMap((s) => s.exercises.filter((e) => exerciseKey(e.name) === key && e.sets.length > 0).map((e) => e.sets));
 }
 
 /** No better estimated max in the last three workouts of the exercise than three workouts ago. */
@@ -62,7 +61,7 @@ export function reviewWeek(weekStart: string, sessions: readonly WorkoutSession[
   const previous = volumeOf(weekBefore);
   const volumeChangePct = previous > 0 ? Math.round((volume / previous - 1) * 100) : null;
 
-  const names = [...new Map(inWeek.flatMap((s) => s.exercises).map((e) => [normalizeTr(e.name), e.name])).values()];
+  const names = [...new Map(inWeek.flatMap((s) => s.exercises).map((e) => [exerciseKey(e.name), e.name])).values()];
   const records: WeekFeedback["records"] = [];
   const stalled: string[] = [];
   for (const name of names) {

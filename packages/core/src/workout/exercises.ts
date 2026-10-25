@@ -129,3 +129,6 @@ const byKey = new Map(EXERCISES.flatMap((x) => [x.name, ...x.aliases].map((text)
 
 /** The catalogue exercise a typed name means, by name or alias, without case or Turkish letters. */
 export const findExercise = (name: string): Exercise | undefined => byKey.get(normalizeTr(name));
+
+/** What makes two typed names the same exercise: the catalogue name it means, else the name itself (both folded). */
+export const exerciseKey = (name: string): string => normalizeTr(findExercise(name)?.name ?? name);

@@ -1,6 +1,6 @@
 import type { PlannedDay, PlannedExercise, ProgramExercise, WeekIntensity, WeekPlan, WorkoutProgram, WorkoutSession, WorkoutSet } from "../schemas/workout.ts";
 import { normalizeTr } from "../search/normalize.ts";
-import { findExercise } from "./exercises.ts";
+import { exerciseKey, findExercise } from "./exercises.ts";
 import { addDays, exerciseHistory, isStalled, mondayOf, newestFirst, reviewWeek, weekdayOf } from "./review.ts";
 
 /*
@@ -97,7 +97,7 @@ export function planWeek({ weekStart, program, sessions, pastWeeks }: PlanInput)
   };
 
   const days = program.days.filter((d) => d.exercises.length > 0);
-  const names = [...new Map(days.flatMap((d) => d.exercises).map((e) => [normalizeTr(e.name), e.name])).values()];
+  const names = [...new Map(days.flatMap((d) => d.exercises).map((e) => [exerciseKey(e.name), e.name])).values()];
   const tracked = names.map(history).filter((h) => h.length > 0);
   const stalledShare = tracked.length >= 2 ? tracked.filter(isStalled).length / tracked.length : 0;
   const intensity = weekIntensity(earlier, completion, stalledShare);
