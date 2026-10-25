@@ -8,6 +8,11 @@ import { Platform } from "react-native";
 
 const CHANNEL = "weekly-plan";
 
+/** Android needs the channel before it asks (13+) or shows anything; creating it again is a no-op. */
+async function ensureChannel(): Promise<void> {
+  if (Platform.OS === "android") await Notifications.setNotificationChannelAsync(CHANNEL, { name: "Haftalık plan", importance: Notifications.AndroidImportance.DEFAULT });
+}
+
 export interface Permission {
   granted: boolean;
   canAskAgain: boolean;
@@ -22,13 +27,13 @@ export async function getPermission(): Promise<Permission> {
 
 /** Shows the system prompt; Android 13+ shows it only once a channel exists. */
 export async function askPermission(): Promise<Permission> {
-  if (Platform.OS === "android") await Notifications.setNotificationChannelAsync(CHANNEL, { name: "Haftalık plan", importance: Notifications.AndroidImportance.DEFAULT });
+  await ensureChannel();
   return toPermission(await Notifications.requestPermissionsAsync());
 }
 
 /** Schedules (or replaces, by id) a notification every week at the given local time. */
 export async function scheduleWeekly(reminder: { id: string; title: string; body: string; weekday: number; hour: number; minute: number }): Promise<void> {
-  if (Platform.OS === "android") await Notifications.setNotificationChannelAsync(CHANNEL, { name: "Haftalık plan", importance: Notifications.AndroidImportance.DEFAULT });
+  await ensureChannel();
   await Notifications.scheduleNotificationAsync({
     identifier: reminder.id,
     content: { title: reminder.title, body: reminder.body },
