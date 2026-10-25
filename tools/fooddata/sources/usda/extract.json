@@ -3768,9 +3768,29 @@
       "description": "Bread, white, made from home recipe or purchased at a bakery",
       "moisturePct": -8
     },
+    "53105275": {
+      "fdcId": 2707868,
+      "description": "Cake or cupcake, chocolate, no icing",
+      "moisturePct": -11
+    },
     "53118100": {
       "fdcId": 2707886,
       "description": "Cake, sponge",
+      "moisturePct": 0
+    },
+    "53118550": {
+      "fdcId": 2707889,
+      "description": "Cake, tres leche",
+      "moisturePct": 0
+    },
+    "53239000": {
+      "fdcId": 2707964,
+      "description": "Cookie, shortbread",
+      "moisturePct": 0
+    },
+    "53241500": {
+      "fdcId": 2707970,
+      "description": "Cookie, butter or sugar",
       "moisturePct": 0
     },
     "53415110": {
@@ -3778,10 +3798,20 @@
       "description": "Fritter, plain",
       "moisturePct": -30
     },
+    "53420200": {
+      "fdcId": 2708031,
+      "description": "Cream puff, eclair, custard or cream filled, iced",
+      "moisturePct": 0
+    },
     "53441110": {
       "fdcId": 2708044,
       "description": "Baklava",
       "moisturePct": -11
+    },
+    "53452400": {
+      "fdcId": 2708053,
+      "description": "Pastry, puff",
+      "moisturePct": 0
     },
     "55401000": {
       "fdcId": 2708342,
@@ -3793,6 +3823,11 @@
       "description": "Pasta, cooked",
       "moisturePct": 0
     },
+    "56201517": {
+      "fdcId": 2708375,
+      "description": "Cornmeal mush, fat added",
+      "moisturePct": -15
+    },
     "56205004": {
       "fdcId": 2708405,
       "description": "Rice, white, cooked, made with butter",
@@ -3802,6 +3837,16 @@
       "fdcId": 2708439,
       "description": "Bulgur, fat added",
       "moisturePct": 0
+    },
+    "56207200": {
+      "fdcId": 2708442,
+      "description": "Whole wheat cereal, cooked",
+      "moisturePct": -15
+    },
+    "58111110": {
+      "fdcId": 2708705,
+      "description": "Wonton, dumpling or pot sticker, fried",
+      "moisturePct": -10
     },
     "58117310": {
       "fdcId": 2708716,
@@ -3843,6 +3888,11 @@
       "description": "Soup, chicken noodle",
       "moisturePct": 0
     },
+    "63101310": {
+      "fdcId": 2709220,
+      "description": "Apple, baked",
+      "moisturePct": -15
+    },
     "71508020": {
       "fdcId": 2709527,
       "description": "Potato, baked, peel eaten, with cheese",
@@ -3862,6 +3912,11 @@
       "fdcId": 2709621,
       "description": "Spinach, fresh, cooked, fat added, NS as to fat type",
       "moisturePct": -15
+    },
+    "73201020": {
+      "fdcId": 2709692,
+      "description": "Pumpkin, cooked",
+      "moisturePct": -7
     },
     "74601000": {
       "fdcId": 2709757,
@@ -3908,6 +3963,11 @@
       "description": "Green peas, cooked, from restaurant",
       "moisturePct": -4
     },
+    "75411020": {
+      "fdcId": 2710047,
+      "description": "Fritter, corn",
+      "moisturePct": -30
+    },
     "75649110": {
       "fdcId": 2710113,
       "description": "Soup, vegetable",
@@ -3927,6 +3987,16 @@
       "fdcId": 2710377,
       "description": "Coffee, Turkish",
       "moisturePct": 0
+    },
+    "99997515": {
+      "fdcId": 2710797,
+      "description": "Mushrooms, cooked, as ingredient",
+      "moisturePct": -20
+    },
+    "99997535": {
+      "fdcId": 2710801,
+      "description": "Cauliflower, cooked, as ingredient",
+      "moisturePct": -4
     }
   }
 }
