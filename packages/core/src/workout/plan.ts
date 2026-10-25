@@ -87,9 +87,18 @@ export function planWeek({ weekStart, program, sessions, pastWeeks }: PlanInput)
   const feedback = before.length > 0 ? reviewWeek(lastWeekStart, before, lastPlan) : null;
   const completion = feedback && feedback.sessionsPlanned ? feedback.sessionsDone / feedback.sessionsPlanned : null;
 
+  // Deload weeks are lighter on purpose: targets and stalls read the normal weeks (the deload
+  // sets only when an exercise was done in nothing else).
+  const deloadWeeks = new Set(earlier.filter((w) => w.intensity === "deload").map((w) => w.weekStart));
+  const working = before.filter((s) => !deloadWeeks.has(mondayOf(s.performedOn)));
+  const history = (name: string) => {
+    const normal = exerciseHistory(name, working);
+    return normal.length > 0 ? normal : exerciseHistory(name, before);
+  };
+
   const days = program.days.filter((d) => d.exercises.length > 0);
   const names = [...new Map(days.flatMap((d) => d.exercises).map((e) => [normalizeTr(e.name), e.name])).values()];
-  const tracked = names.map((n) => exerciseHistory(n, before)).filter((h) => h.length > 0);
+  const tracked = names.map(history).filter((h) => h.length > 0);
   const stalledShare = tracked.length >= 2 ? tracked.filter(isStalled).length / tracked.length : 0;
   const intensity = weekIntensity(earlier, completion, stalledShare);
 
@@ -100,7 +109,7 @@ export function planWeek({ weekStart, program, sessions, pastWeeks }: PlanInput)
       ? []
       : trainingWeekdays(program).map((weekday, i) => {
           const day = days[(lastDone + 1 + i) % days.length];
-          return { date: addDays(weekStart, weekday), name: day.name, exercises: day.exercises.map((e) => nextTarget(e, exerciseHistory(e.name, before), intensity)) };
+          return { date: addDays(weekStart, weekday), name: day.name, exercises: day.exercises.map((e) => nextTarget(e, history(e.name), intensity)) };
         });
 
   return { weekStart, intensity, days: plannedDays, feedback };

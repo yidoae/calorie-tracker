@@ -157,3 +157,24 @@ describe("planning a week", () => {
     assert.equal(plan.days[0].name, "Push");
   });
 });
+
+describe("after a deload week", () => {
+  const push: WorkoutProgram = { ...PPL, days: [{ name: "Push", exercises: [bench] }] };
+  const deloadWeek: WeekPlan = { weekStart: "2026-10-26", intensity: "deload", days: [], feedback: null };
+  const sessions = [session("2026-10-20", "Push", [{ name: "Bench press", sets: sets(60, 7, 7, 7) }]), session("2026-10-27", "Push", [{ name: "Bench press", sets: sets(54, 6, 6) }])];
+
+  it("targets go on from the last normal workout, not from the lighter deload sets", () => {
+    const plan = planWeek({ weekStart: "2026-11-02", program: push, sessions, pastWeeks: [deloadWeek] });
+    assert.equal(plan.intensity, "normal");
+    assert.deepEqual(plan.days[0].exercises[0], { ...bench, kg: 60, reps: "8", change: "up_reps" });
+  });
+
+  it("the lighter deload workout does not count as a stall, so deloads do not come every other week", () => {
+    const row = { name: "Barbell row", sets: 3, reps: "8-10", kg: 50 };
+    const program: WorkoutProgram = { ...PPL, days: [{ name: "Push", exercises: [bench, row] }] };
+    const both = (day: string, kg: number, reps: number) => session(day, "Push", [{ name: "Bench press", sets: sets(kg, reps, reps, reps) }, { name: "Barbell row", sets: sets(kg - 10, reps, reps, reps) }]);
+    const weeks: WeekPlan[] = [{ ...deloadWeek, weekStart: "2026-10-26" }, { weekStart: "2026-11-02", intensity: "normal", days: [], feedback: null }];
+    const plan = planWeek({ weekStart: "2026-11-09", program, sessions: [both("2026-10-20", 60, 7), both("2026-10-27", 54, 6), both("2026-11-03", 60, 7)], pastWeeks: weeks });
+    assert.equal(plan.intensity, "normal");
+  });
+});
