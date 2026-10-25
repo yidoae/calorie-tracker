@@ -101,6 +101,16 @@
       "fat": 30,
       "alcohol": 0
     },
+    "167989": {
+      "description": "Candies, gumdrops, starch jelly pieces",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 396,
+      "protein": 0,
+      "carbs": 98.9,
+      "fat": 0,
+      "alcohol": 0
+    },
     "167990": {
       "description": "Candies, hard",
       "dataType": "sr_legacy_food",
@@ -269,6 +279,16 @@
       "protein": 2.01,
       "carbs": 20.71,
       "fat": 0.15,
+      "alcohol": 0
+    },
+    "168555": {
+      "description": "Potatoes, mashed, home-prepared, whole milk and butter added",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 113,
+      "protein": 1.86,
+      "carbs": 16.81,
+      "fat": 4.22,
       "alcohol": 0
     },
     "168556": {
@@ -1451,6 +1471,16 @@
       "fat": 68.37,
       "alcohol": 0
     },
+    "170599": {
+      "description": "Beef, variety meats and by-products, tripe, raw",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 85,
+      "protein": 12.07,
+      "carbs": 0,
+      "fat": 3.69,
+      "alcohol": 0
+    },
     "170685": {
       "description": "Buckwheat groats, roasted, dry",
       "dataType": "sr_legacy_food",
@@ -2011,6 +2041,16 @@
       "fat": 0.02,
       "alcohol": 0
     },
+    "171891": {
+      "description": "Beverages, coffee, brewed, espresso, restaurant-prepared",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 9,
+      "protein": 0.12,
+      "carbs": 1.67,
+      "fat": 0.18,
+      "alcohol": 0
+    },
     "171893": {
       "description": "Beverages, coffee, instant, regular, powder",
       "dataType": "sr_legacy_food",
@@ -2029,6 +2069,16 @@
       "protein": 0,
       "carbs": 13.52,
       "fat": 0.1,
+      "alcohol": 0
+    },
+    "171917": {
+      "description": "Beverages, tea, green, brewed, regular",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 1,
+      "protein": 0.22,
+      "carbs": 0,
+      "fat": 0,
       "alcohol": 0
     },
     "171920": {
@@ -2321,6 +2371,16 @@
       "fat": 19.65,
       "alcohol": 0
     },
+    "172675": {
+      "description": "Bread, french or vienna (includes sourdough)",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 272,
+      "protein": 10.75,
+      "carbs": 51.88,
+      "fat": 2.42,
+      "alcohol": 0
+    },
     "172678": {
       "description": "Bread, oatmeal",
       "dataType": "sr_legacy_food",
@@ -2491,6 +2551,16 @@
       "fat": 0,
       "alcohol": 0
     },
+    "173217": {
+      "description": "Lemonade, frozen concentrate, white, prepared with water",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 40,
+      "protein": 0.07,
+      "carbs": 10.42,
+      "fat": 0.04,
+      "alcohol": 0
+    },
     "173227": {
       "description": "Beverages, tea, black, brewed, prepared with tap water",
       "dataType": "sr_legacy_food",
@@ -2498,6 +2568,16 @@
       "kcal": 1,
       "protein": 0,
       "carbs": 0.3,
+      "fat": 0,
+      "alcohol": 0
+    },
+    "173232": {
+      "description": "Beverages, tea, herb, other than chamomile, brewed",
+      "dataType": "sr_legacy_food",
+      "kcalNutrient": "1008",
+      "kcal": 1,
+      "protein": 0,
+      "carbs": 0.2,
       "fat": 0,
       "alcohol": 0
     },
@@ -3553,9 +3633,19 @@
     }
   },
   "fnddsMoisture": {
+    "11512010": {
+      "fdcId": 2705473,
+      "description": "Hot chocolate / cocoa, made with whole or reduced fat (2%) milk",
+      "moisturePct": 0
+    },
     "13200110": {
       "fdcId": 2705679,
       "description": "Pudding, chocolate, NFS",
+      "moisturePct": 0
+    },
+    "13210280": {
+      "fdcId": 2705681,
+      "description": "Pudding, flavors other than chocolate, NFS",
       "moisturePct": 0
     },
     "13210410": {
@@ -3567,6 +3657,11 @@
       "fdcId": 2705794,
       "description": "Cheese sandwich, NFS",
       "moisturePct": 0
+    },
+    "27118110": {
+      "fdcId": 2706395,
+      "description": "Meatballs, Puerto Rican style",
+      "moisturePct": -16.9
     },
     "27162040": {
       "fdcId": 2706470,
@@ -3603,6 +3698,11 @@
       "description": "Lamb shish kabob with vegetables, excluding potatoes",
       "moisturePct": -5
     },
+    "27500050": {
+      "fdcId": 2706880,
+      "description": "Sandwich, NFS",
+      "moisturePct": 0
+    },
     "27510521": {
       "fdcId": 2706920,
       "description": "Hamburger, NFS",
@@ -3611,6 +3711,21 @@
     "27516010": {
       "fdcId": 2706962,
       "description": "Gyro sandwich",
+      "moisturePct": 0
+    },
+    "27550420": {
+      "fdcId": 2707031,
+      "description": "Fish sandwich, grilled",
+      "moisturePct": 0
+    },
+    "27564000": {
+      "fdcId": 2707056,
+      "description": "Hot dog sandwich, NFS, on white bun",
+      "moisturePct": 0
+    },
+    "28310230": {
+      "fdcId": 2707123,
+      "description": "Soup, meatball",
       "moisturePct": 0
     },
     "31103010": {
@@ -3623,9 +3738,19 @@
       "description": "Egg omelet or scrambled egg, made with oil",
       "moisturePct": 0
     },
+    "32130460": {
+      "fdcId": 2707235,
+      "description": "Egg omelet or scrambled egg, with tomatoes and dark-green vegetables, fat added",
+      "moisturePct": 0
+    },
     "41209000": {
       "fdcId": 2707408,
       "description": "Falafel",
+      "moisturePct": 0
+    },
+    "41304990": {
+      "fdcId": 2707424,
+      "description": "Lentils, from dried, fat added",
       "moisturePct": 0
     },
     "41601010": {
@@ -3658,6 +3783,11 @@
       "description": "Baklava",
       "moisturePct": -11
     },
+    "55401000": {
+      "fdcId": 2708342,
+      "description": "Crepe, plain",
+      "moisturePct": -20
+    },
     "56130000": {
       "fdcId": 2708357,
       "description": "Pasta, cooked",
@@ -3672,6 +3802,11 @@
       "fdcId": 2708439,
       "description": "Bulgur, fat added",
       "moisturePct": 0
+    },
+    "58117310": {
+      "fdcId": 2708716,
+      "description": "Kibby, Puerto Rican style",
+      "moisturePct": -16.1
     },
     "58124250": {
       "fdcId": 2708729,
@@ -3706,6 +3841,11 @@
     "58403040": {
       "fdcId": 2709149,
       "description": "Soup, chicken noodle",
+      "moisturePct": 0
+    },
+    "71508020": {
+      "fdcId": 2709527,
+      "description": "Potato, baked, peel eaten, with cheese",
       "moisturePct": 0
     },
     "71601010": {
@@ -3773,9 +3913,19 @@
       "description": "Soup, vegetable",
       "moisturePct": 0
     },
+    "75652010": {
+      "fdcId": 2710115,
+      "description": "Soup, beef",
+      "moisturePct": 0
+    },
     "77316600": {
       "fdcId": 2710144,
       "description": "Eggplant and meat casserole",
+      "moisturePct": 0
+    },
+    "92101600": {
+      "fdcId": 2710377,
+      "description": "Coffee, Turkish",
       "moisturePct": 0
     }
   }

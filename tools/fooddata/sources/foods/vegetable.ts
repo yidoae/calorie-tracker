@@ -12,7 +12,7 @@ export default [
   { id: "green_pepper", name: "Yeşil biber", category: "vegetable", fdcId: 170427, aliases: ["sivri biber","yeşil biber","çarliston biber"], typicalPortionG: 50, portions: [{ unit: "adet", grams: 25 }] },
   { id: "greens", name: "Yeşil salata", category: "vegetable", fdcId: 169249, aliases: ["karışık yeşillik","salad","salata","yeşil salata","yeşillik"], typicalPortionG: 100, portions: [{ unit: "kase", grams: 100 }] },
   { id: "onion", name: "Soğan", category: "vegetable", fdcId: 170000, aliases: ["kuru soğan","soğan"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 110 }] },
-  { id: "potato", name: "Patates (haşlanmış)", category: "vegetable", fdcId: 170440, aliases: ["haşlanmış patates","patates püresi"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 170 }] },
+  { id: "potato", name: "Patates (haşlanmış)", category: "vegetable", fdcId: 170440, aliases: ["haşlanmış patates"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 170 }] },
   { id: "potato_raw", name: "Patates (çiğ)", category: "vegetable", fdcId: 170026, aliases: ["patates","potato","çiğ patates"], typicalPortionG: 200, portions: [{ unit: "adet", grams: 170 }] },
   { id: "red_pepper", name: "Kırmızı biber", category: "vegetable", fdcId: 170108, aliases: ["biber","kapya biber","kırmızı biber"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 120 }] },
   { id: "sweet_potato", name: "Tatlı patates (çiğ)", category: "vegetable", fdcId: 168482, aliases: ["sweet potato","tatlı patates"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 150 }] },

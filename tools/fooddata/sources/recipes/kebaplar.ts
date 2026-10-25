@@ -28,22 +28,28 @@ export default [
     yield: { kind: "fndds", foodCode: 27430610 },
   },
   {
-    id: "doner", name: "Et döner", category: "dish", aliases: ["döner","et döner","yaprak döner"], typicalPortionG: 150,
+    id: "doner", name: "Et döner", category: "dish", aliases: ["döner","et döner","yaprak döner"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 150 }],
     ingredients: [{ foodId: "beef_stew_cooked", grams: 600 }, { foodId: "beef_mince_cooked", grams: 300 }, { foodId: "butter", grams: 60 }, { foodId: "onion", grams: 60 }, { foodId: "salt", grams: 10 }],
     yield: { kind: "fndds", foodCode: 27410250 },
   },
   {
-    id: "chicken_doner", name: "Tavuk döner", category: "dish", aliases: ["tavuk döner"], typicalPortionG: 150,
+    id: "chicken_doner", name: "Tavuk döner", category: "dish", aliases: ["tavuk döner"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 150 }],
     ingredients: [{ foodId: "chicken_thigh", grams: 900 }, { foodId: "yogurt", grams: 60 }, { foodId: "oil", grams: 40 }, { foodId: "tomato_paste", grams: 15 }, { foodId: "salt", grams: 10 }],
     yield: { kind: "fndds", foodCode: 27341020 },
   },
   {
-    id: "iskender", name: "İskender", category: "dish", aliases: ["iskender","iskender kebap"], typicalPortionG: 350,
+    id: "iskender", name: "İskender", category: "dish", aliases: ["iskender","iskender kebap"], typicalPortionG: 350, portions: [{ unit: "porsiyon", grams: 350 }],
     ingredients: [{ foodId: "beef_stew_cooked", grams: 150 }, { foodId: "pita", grams: 100 }, { foodId: "yogurt", grams: 100 }, { foodId: "butter", grams: 25 }, { foodId: "tomato_paste", grams: 15 }, { foodId: "tomato", grams: 40 }],
     yield: { kind: "fndds", foodCode: 27516010 },
   },
   {
-    id: "doner_wrap", name: "Dürüm döner", category: "dish", aliases: ["dürüm","dürüm döner","tavuk dürüm"], typicalPortionG: 250, portions: [{ unit: "adet", grams: 250 }],
+    // Et döner in lavaş: the meat mix of "doner" (beef 2:1 kuşbaşı:kıyma, butter) with onion and parsley.
+    id: "doner_wrap", name: "Dürüm döner (et)", category: "dish", aliases: ["dürüm","dürüm döner","et dürüm"], typicalPortionG: 250, portions: [{ unit: "adet", grams: 250 }],
+    ingredients: [{ foodId: "beef_stew_cooked", grams: 80 }, { foodId: "beef_mince_cooked", grams: 40 }, { foodId: "butter", grams: 8 }, { foodId: "lavash", grams: 70 }, { foodId: "tomato", grams: 30 }, { foodId: "onion", grams: 20 }, { foodId: "parsley", grams: 5 }],
+    yield: { kind: "fndds", foodCode: 27516010 },
+  },
+  {
+    id: "chicken_wrap", name: "Tavuk dürüm", category: "dish", aliases: ["tavuk dürüm","dürüm tavuk"], typicalPortionG: 250, portions: [{ unit: "adet", grams: 250 }],
     ingredients: [{ foodId: "chicken_thigh", grams: 120 }, { foodId: "lavash", grams: 70 }, { foodId: "tomato", grams: 30 }, { foodId: "lettuce_romaine", grams: 15 }, { foodId: "onion", grams: 15 }, { foodId: "mayonnaise", grams: 10 }],
     yield: { kind: "fndds", foodCode: 27516010 },
   },

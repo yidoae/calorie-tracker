@@ -24,4 +24,6 @@ export default [
   { id: "oatmeal_cookies", name: "Yulaflı kurabiye", category: "sweet", fdcId: 172725, aliases: ["yulaflı kurabiye","yulaflı bisküvi"], typicalPortionG: 30, portions: [{ unit: "adet", grams: 15 }] },
   { id: "marshmallow", name: "Marshmallow", category: "sweet", fdcId: 167995, aliases: ["marshmallow","lokum köpüğü"], typicalPortionG: 20, portions: [{ unit: "adet", grams: 7 }] },
   { id: "vanilla_wafers", name: "Gofret (sade)", category: "sweet", fdcId: 174973, aliases: ["gofret","vanilyalı gofret"], typicalPortionG: 30, portions: [{ unit: "adet", grams: 10 }] },
+  // Lokum is starch and sugar gel; SR "gumdrops, starch jelly pieces" is the same composition.
+  { id: "lokum", name: "Lokum (sade)", category: "sweet", fdcId: 167989, aliases: ["lokum","türk lokumu","gül lokumu"], typicalPortionG: 30, portions: [{ unit: "adet", grams: 12 }] },
 ];

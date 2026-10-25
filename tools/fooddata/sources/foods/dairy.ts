@@ -24,7 +24,7 @@ export default [
   { id: "ricotta", name: "Ricotta", category: "dairy", fdcId: 323444, aliases: ["ricotta"], typicalPortionG: 50 },
   { id: "mozzarella", name: "Mozzarella", category: "dairy", fdcId: 170845, aliases: ["mozzarella","mozarella"], typicalPortionG: 30, portions: [{ unit: "dilim", grams: 20 }] },
   { id: "mozzarella_light", name: "Mozzarella (yarım yağlı)", category: "dairy", fdcId: 170847, aliases: ["light mozzarella","yarım yağlı mozzarella"], typicalPortionG: 30 },
-  { id: "cheddar", name: "Çedar peyniri", category: "dairy", fdcId: 328637, aliases: ["çedar","cheddar peyniri"], typicalPortionG: 30, portions: [{ unit: "dilim", grams: 20 }] },
+  { id: "cheddar", name: "Çedar peyniri", category: "dairy", fdcId: 328637, aliases: ["çedar","cheddar","cheddar peyniri"], typicalPortionG: 30, portions: [{ unit: "dilim", grams: 20 }] },
   { id: "parmesan", name: "Parmesan (rendelenmiş)", category: "dairy", fdcId: 325036, aliases: ["parmesan","parmesan peyniri"], typicalPortionG: 10, portions: [{ unit: "yemek kaşığı", grams: 5 }] },
   { id: "gouda", name: "Gouda peyniri", category: "dairy", fdcId: 171241, aliases: ["gouda"], typicalPortionG: 30, portions: [{ unit: "dilim", grams: 20 }] },
   { id: "goat_cheese", name: "Keçi peyniri", category: "dairy", fdcId: 173435, aliases: ["keçi peyniri"], typicalPortionG: 30 },
