@@ -47,3 +47,6 @@ export function median(values: number[]): number {
 }
 
 export const pct = (x: number) => `${(x * 100).toFixed(1)} %`;
+
+/** "egg 100 g, simit 120 g", or "—" for none: the food cells of both reports. */
+export const formatItems = (items: Predicted[]) => items.map((i) => `${i.food_id} ${i.grams} g`).join(", ") || "—";

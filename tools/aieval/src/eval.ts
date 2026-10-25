@@ -3,7 +3,7 @@ import { callGemini } from "../../../supabase/functions/_shared/ai/gemini.ts";
 import type { AiKind, FoodRef } from "../../../supabase/functions/_shared/ai/types.ts";
 import { validateAnswer } from "../../../supabase/functions/_shared/ai/validate.ts";
 import { loadFoods, loadPhotos, loadPhrases } from "./cases.ts";
-import { median, pct, phrasePasses, scorePlate } from "./score.ts";
+import { formatItems, median, pct, phrasePasses, scorePlate } from "./score.ts";
 
 /*
  * npm run eval -w aieval -- --model <id> (contracts/aieval.md): the owner's weighed photos and the
@@ -73,7 +73,6 @@ const found = sum(photoRows.map((r) => r.score.found));
 const expected = sum(photoRows.map((r) => r.score.expected));
 const falsePos = sum(photoRows.map((r) => r.score.falsePositives));
 const proposed = sum(photoRows.map((r) => r.score.proposed));
-const fmt = (items: { food_id: string; grams: number }[]) => items.map((i) => `${i.food_id} ${i.grams} g`).join(", ") || "—";
 
 const report = [
   `# Model evaluation: ${model}`,
@@ -94,13 +93,13 @@ const report = [
   "",
   "| Photo | Weighed | Proposed |",
   "|---|---|---|",
-  ...photoRows.map((r) => `| ${r.c.id} | ${fmt(r.c.items)} | ${r.call.error ? `error: ${r.call.error}` : fmt(r.call.items)} |`),
+  ...photoRows.map((r) => `| ${r.c.id} | ${formatItems(r.c.items)} | ${r.call.error ? `error: ${r.call.error}` : formatItems(r.call.items)} |`),
   "",
   "## Phrases",
   "",
   "| | Phrase | Expected | Proposed |",
   "|---|---|---|---|",
-  ...phraseRows.map((r) => `| ${r.pass ? "✓" : "✗"} | ${r.c.text} | ${fmt(r.c.items)} | ${r.call.error ? `error: ${r.call.error}` : fmt(r.call.items)} |`),
+  ...phraseRows.map((r) => `| ${r.pass ? "✓" : "✗"} | ${r.c.text} | ${formatItems(r.c.items)} | ${r.call.error ? `error: ${r.call.error}` : formatItems(r.call.items)} |`),
   "",
 ].join("\n");
 writeFileSync(new URL(`../out/${model}.md`, import.meta.url), report);

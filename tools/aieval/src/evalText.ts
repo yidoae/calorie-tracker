@@ -4,7 +4,7 @@ import { parseMeal } from "@calorie/core/text/parseMeal";
 import { PORTION_UNITS } from "@calorie/core/text/units";
 import { previewLine, proposedFoods } from "../../../apps/mobile/src/hooks/textPreviewLogic.ts";
 import { loadFoods, loadPhrases } from "./cases.ts";
-import { pct, phrasePasses } from "./score.ts";
+import { formatItems, pct, phrasePasses } from "./score.ts";
 import { makeSearch } from "./searchSim.ts";
 
 /*
@@ -25,7 +25,6 @@ const rows = cases.map((c) => {
 });
 const passed = rows.filter((r) => r.pass).length;
 const share = passed / rows.length;
-const fmt = (items: { food_id: string; grams: number }[]) => items.map((i) => `${i.food_id} ${i.grams} g`).join(", ") || "—";
 
 const report = [
   "# Text preview evaluation",
@@ -36,10 +35,10 @@ const report = [
   "",
   "| | Phrase | Expected | Preview |",
   "|---|---|---|---|",
-  ...rows.map((r) => `| ${r.pass ? "✓" : "✗"} | ${r.c.text} | ${fmt(r.c.items)} | ${fmt(r.predicted)} |`),
+  ...rows.map((r) => `| ${r.pass ? "✓" : "✗"} | ${r.c.text} | ${formatItems(r.c.items)} | ${formatItems(r.predicted)} |`),
   "",
 ].join("\n");
 writeFileSync(new URL("../out/text.md", import.meta.url), report);
 console.log(`text preview: ${passed}/${rows.length} (${pct(share)})`);
-for (const r of rows.filter((r) => !r.pass)) console.log(`  ✗ ${r.c.text} → ${fmt(r.predicted)} (want ${fmt(r.c.items)})`);
+for (const r of rows.filter((r) => !r.pass)) console.log(`  ✗ ${r.c.text} → ${formatItems(r.predicted)} (want ${formatItems(r.c.items)})`);
 if (share < THRESHOLD) process.exit(1);
