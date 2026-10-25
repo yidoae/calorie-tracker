@@ -1,5 +1,5 @@
 import { dayToDate, LOCALE } from "@calorie/core/dates";
-import { normalizeTr } from "@calorie/core/search/normalize";
+import { exerciseKey } from "@calorie/core/workout/exercises";
 import { router } from "expo-router";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import Screen from "@/components/ui/Screen";
@@ -15,7 +15,7 @@ const dateLabel = (day: string) => dayToDate(day).toLocaleDateString(LOCALE, { d
 export default function ExerciseProgressScreen({ name }: { name: string }) {
   const log = useWorkoutSessions();
   const back = { label: "Geri", onPress: () => router.back() };
-  const p = log.progress.find((x) => normalizeTr(x.name) === normalizeTr(name));
+  const p = log.progress.find((x) => exerciseKey(x.name) === exerciseKey(name));
 
   return (
     <Screen title={p?.name ?? name} lead="Her antrenmandaki en ağır setin." back={back}>

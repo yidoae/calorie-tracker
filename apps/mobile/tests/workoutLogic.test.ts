@@ -196,3 +196,18 @@ describe("weekly plan card (008, T005)", () => {
     assert.equal(dayStatus("2026-10-24", "2026-10-22", done), "upcoming");
   });
 });
+
+describe("names from the exercise catalogue (007 progress, like 008)", () => {
+  const session = (performedOn: string, name: string, kg: number) => ({ id: "6f1c2c47-5d7e-4c7b-9b3e-1f2a3b4c5d6e", performedOn, dayName: "Push", exercises: [{ name, sets: [{ kg, reps: 8 }] }], createdAt: `${performedOn}T10:00:00Z` });
+
+  it("an alias and the catalogue name are one exercise in the progress list", () => {
+    const progress = exerciseProgress([session("2026-10-20", "düz bench", 60), session("2026-10-23", "Bench press", 62.5)]);
+    assert.equal(progress.length, 1);
+    assert.deepEqual(progress[0].entries.map((e) => e.topKg), [60, 62.5]);
+  });
+
+  it("a program exercise starts from the last time it was logged under an alias", () => {
+    const day = { name: "Push", exercises: [{ name: "Bench press", sets: 1, reps: "6-8", kg: null }] };
+    assert.deepEqual(sessionDraft(day, [session("2026-10-20", "düz bench", 60)]).exercises[0].sets, [{ kg: "60", reps: "8", done: false }]);
+  });
+});

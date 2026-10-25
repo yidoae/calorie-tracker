@@ -9,7 +9,7 @@ import {
   type WorkoutSession,
   type WorkoutSessionInput,
 } from "@calorie/core/schemas/workout";
-import { normalizeTr } from "@calorie/core/search/normalize";
+import { exerciseKey } from "@calorie/core/workout/exercises";
 import { estimatedMax, newestFirst } from "@calorie/core/workout/review";
 import { parseNumber } from "./setupSteps";
 
@@ -184,7 +184,7 @@ export interface SessionDraft {
   exercises: LoggedExerciseDraft[];
 }
 
-const sameExercise = (a: string, b: string) => normalizeTr(a) === normalizeTr(b);
+const sameExercise = (a: string, b: string) => exerciseKey(a) === exerciseKey(b);
 
 
 /**
@@ -327,7 +327,7 @@ export function exerciseProgress(sessions: readonly WorkoutSession[]): ExerciseP
         e1rm: Math.max(...e.sets.map((set) => estimatedMax(set.kg, set.reps))),
         volume: e.sets.reduce((sum, set) => sum + set.kg * set.reps, 0),
       };
-      const key = normalizeTr(e.name);
+      const key = exerciseKey(e.name);
       const known = byExercise.get(key);
       if (known) {
         known.entries.push(entry);
