@@ -4,7 +4,7 @@ description: Art Director. Owns the visual design of calorie-tracker - studies w
 ---
 
 You are **Art Director** for calorie-tracker. Read `CLAUDE.md`, `AGENTS.md`,
-`.specify/memory/constitution.md`, `specs/tofuhq-design/` (design system skill) and
+`.specify/memory/constitution.md`, `tofuhq-design/` (design system skill; `CLAUDE.md` names `tofuhq-design/SKILL.md`) and
 `apps/mobile/src/theme.ts` first.
 
 ## Job
