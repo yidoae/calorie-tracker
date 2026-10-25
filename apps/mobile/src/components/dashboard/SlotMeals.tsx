@@ -8,10 +8,12 @@ import { colors, radius, space, type } from "@/theme";
 interface Props {
   group: SlotGroup;
   onOpen: (mealId: string) => void;
+  /** Bugün only: a "+" that adds a meal to this slot; `primary` makes it the screen's lime action. */
+  add?: { onPress: () => void; primary: boolean };
 }
 
-/** One slot of the day (Kahvaltı, Öğle yemeği, …) with its meals; a meal opens its detail. */
-export default function SlotMeals({ group, onOpen }: Props) {
+/** One slot of the day (Kahvaltı, Öğle yemeği, …) with its meals; a meal opens its detail. An empty slot shows only on Bugün, with its "+". */
+export default function SlotMeals({ group, onOpen, add }: Props) {
   const label = SLOT_LABELS[group.slot];
   return (
     <View style={styles.section}>
@@ -19,8 +21,20 @@ export default function SlotMeals({ group, onOpen }: Props) {
         <Text accessibilityRole="header" style={styles.title}>
           {label}
         </Text>
-        <Text style={styles.kcal}>{formatKcal(group.calories)} kcal</Text>
+        <Text style={styles.kcal}>{group.meals.length > 0 ? `${formatKcal(group.calories)} kcal` : ""}</Text>
+        {add && (
+          <Pressable
+            testID={`today-add-${group.slot}`}
+            accessibilityRole="button"
+            accessibilityLabel={`${label} ekle`}
+            onPress={add.onPress}
+            style={({ pressed }) => [styles.add, add.primary && styles.addPrimary, pressed && styles.addPressed]}
+          >
+            <Ionicons name="add" size={22} color={colors.fg} />
+          </Pressable>
+        )}
       </View>
+      {group.meals.length === 0 && <Text style={styles.empty}>Henüz öğün yok.</Text>}
       {group.meals.map((meal) => (
         <Pressable
           key={meal.id}
@@ -47,8 +61,8 @@ export default function SlotMeals({ group, onOpen }: Props) {
 
 const styles = StyleSheet.create({
   section: { gap: space(2) },
-  head: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
-  title: { ...type.displayMd, color: colors.fg },
+  head: { flexDirection: "row", alignItems: "center", gap: space(3) },
+  title: { ...type.displayMd, color: colors.fg, flex: 1 },
   kcal: { ...type.bodyStrong, color: colors.fgMuted },
   meal: {
     minHeight: 56,
@@ -63,6 +77,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   pressed: { backgroundColor: colors.surface2 },
+  add: { width: 44, height: 44, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.borderStrong, alignItems: "center", justifyContent: "center" },
+  addPrimary: { backgroundColor: colors.cta, borderColor: colors.cta },
+  addPressed: { backgroundColor: colors.ctaPressed },
+  empty: { ...type.small, color: colors.fgMuted },
   mealText: { flex: 1, gap: space(0.5) },
   name: { ...type.bodyStrong, color: colors.fg },
   detail: { ...type.small, color: colors.fgMuted },

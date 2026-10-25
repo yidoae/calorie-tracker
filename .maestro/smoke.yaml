@@ -80,10 +80,10 @@ appId: com.kaloritakip.app
 # Bugün → log 150 g of chicken
 - extendedWaitUntil:
     visible:
-      id: today-add-meal
+      id: today-add-lunch
     timeout: 20000
 - tapOn:
-    id: today-add-meal
+    id: today-add-lunch
 - tapOn:
     id: food-search-input
 - inputText: tavuk
@@ -100,16 +100,16 @@ appId: com.kaloritakip.app
 - tapOn:
     id: meal-save
 
-# The ring counts the saved meal (its accessibility label starts "Kalori: <eaten> / <target> kcal").
+# The band counts the saved meal (its accessibility label starts "Kalori: <eaten> / <target> kcal").
 - extendedWaitUntil:
     visible:
-      id: calorie-ring
+      id: calorie-summary
       text: "Kalori: 180 / .*"
     timeout: 10000
 
 # 002 US2: log two eggs with the portion shortcut (1 adet = 50 g, "+" makes it 2 → 100 g, 143 kcal).
 - tapOn:
-    id: today-add-meal
+    id: today-add-breakfast
 - tapOn:
     id: food-search-input
 - inputText: yumurta
@@ -126,6 +126,6 @@ appId: com.kaloritakip.app
     id: meal-save
 - extendedWaitUntil:
     visible:
-      id: calorie-ring
+      id: calorie-summary
       text: "Kalori: 323 / .*"
     timeout: 10000

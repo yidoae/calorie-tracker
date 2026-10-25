@@ -114,7 +114,7 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "today",
     title: "Bugün",
-    note: "Örnek gün: kahvaltı ve öğle yemeği. Banttaki kalan kalori ve makro kutuları öğünlerin sunucuda hesaplanan toplamlarından dolar; öğünler öğüne göre gruplanır, dokununca açılır. “Öğün ekle” arama ekranını açar.",
+    note: "Örnek gün: kahvaltı ve öğle yemeği. Banttaki kalan kalori ve makro kutuları öğünlerin sunucuda hesaplanan toplamlarından dolar; dört öğün hep listede; her öğünün “+” düğmesi aramayı o öğün seçili açar (saate uygun öğünün “+” düğmesi lime).",
     Component: TodayScreen,
     status: "ready",
   },

@@ -23,6 +23,8 @@ import {
   setDraftGrams,
   setDraftPortion,
   setDraftSlot,
+  slotParam,
+  withEmptySlots,
 } from "../src/hooks/mealLogic.ts";
 
 const hit = (foodId: string, name: string, kcal: number, protein = 0, carbs = 0, fat = 0): FoodHit => ({
@@ -168,6 +170,24 @@ describe("day summary", () => {
         ["dinner", ["3"], 600],
       ],
     );
+  });
+
+  it("lists all four slots on Today, empty ones with no meals and 0 kcal", () => {
+    assert.deepEqual(
+      withEmptySlots(groupBySlot(meals)).map((g) => [g.slot, g.meals.length, g.calories]),
+      [
+        ["breakfast", 2, 550],
+        ["lunch", 0, 0],
+        ["dinner", 1, 600],
+        ["snack", 0, 0],
+      ],
+    );
+  });
+
+  it("reads a slot from a route parameter and ignores anything else", () => {
+    assert.equal(slotParam("dinner"), "dinner");
+    assert.equal(slotParam(undefined), null);
+    assert.equal(slotParam("brunch"), null);
   });
 });
 

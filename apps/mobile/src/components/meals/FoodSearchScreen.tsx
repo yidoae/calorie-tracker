@@ -1,3 +1,5 @@
+import { SLOT_LABELS } from "@calorie/core/labels";
+import type { MealSlot } from "@calorie/core/schemas/meal";
 import type { FoodHit } from "@calorie/core/schemas/rows";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -19,19 +21,23 @@ interface Props {
   /** An unmatched AI entry to replace with the picked food (003), and the text to start from. */
   resolve?: string;
   initialText?: string;
+  /** The slot whose "+" on Bugün opened the search: the new meal goes there. */
+  slot?: MealSlot | null;
 }
 
 /** Yemek ara (US3, FR-012): results while typing; picking a food opens the gram review. */
-export default function FoodSearchScreen({ adding, resolve, initialText = "" }: Props) {
+export default function FoodSearchScreen({ adding, resolve, initialText = "", slot = null }: Props) {
   const [text, setText] = useState(initialText);
   const search = useFoodSearch(text);
-  const { addFood, resolveUnmatched, clear } = useMealDraft();
+  const { addFood, resolveUnmatched, clear, setSlot } = useMealDraft();
   const allowance = useAllowance();
 
   // A new meal starts empty: a draft left by leaving the review with the back gesture is dropped.
   useEffect(() => {
-    if (!adding) clear();
-  }, [adding, clear]);
+    if (adding) return;
+    clear();
+    if (slot) setSlot(slot);
+  }, [adding, clear, setSlot, slot]);
 
   function pick(hit: FoodHit) {
     if (resolve) resolveUnmatched(resolve, hit);
@@ -65,7 +71,7 @@ export default function FoodSearchScreen({ adding, resolve, initialText = "" }: 
   }
 
   return (
-    <Screen title="Yemek ara" lead="Ne yediğini yaz, listeden seç." back={{ label: "Kapat", onPress: close, icon: "close" }}>
+    <Screen title={slot ? SLOT_LABELS[slot] : "Yemek ara"} lead="Ne yediğini yaz, listeden seç." back={{ label: "Kapat", onPress: close, icon: "close" }}>
       {!adding && (
         <View style={styles.ai}>
           <View style={styles.aiButtons}>

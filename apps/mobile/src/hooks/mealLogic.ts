@@ -175,6 +175,16 @@ export function groupBySlot(meals: readonly Meal[]): SlotGroup[] {
   });
 }
 
+/** Today's slots (design proposal K1): all four in the order of the day, an empty one with no meals, so each can be added to. */
+export function withEmptySlots(groups: readonly SlotGroup[]): SlotGroup[] {
+  return MEAL_SLOTS.map((slot) => groups.find((g) => g.slot === slot) ?? { slot, meals: [], calories: 0 });
+}
+
+/** The slot a "+" on Today passed to the search; null for a missing or unknown value. */
+export function slotParam(value: string | undefined): MealSlot | null {
+  return MEAL_SLOTS.find((slot) => slot === value) ?? null;
+}
+
 /** `YYYY-MM-DD` of `now` in `timeZone`; the device's own day when Intl does not know the zone. */
 export function localDayKey(now: Date, timeZone: string): string {
   try {

@@ -38,6 +38,11 @@ export function clearMealDraft(): void {
   update(EMPTY_DRAFT);
 }
 
+/** Stable (module level), so the search can set the slot in an effect without re-running it. */
+function setSlot(slot: MealSlot): void {
+  update(setDraftSlot(draft, slot));
+}
+
 export function useMealDraft() {
   const current = useSyncExternalStore(subscribe, () => draft);
   return {
@@ -46,7 +51,7 @@ export function useMealDraft() {
     setGrams: (key: string, text: string) => update(setDraftGrams(draft, key, text)),
     setPortion: (key: string, pick: PortionPick) => update(setDraftPortion(draft, key, pick)),
     removeItem: (key: string) => update(removeDraftItem(draft, key)),
-    setSlot: (slot: MealSlot) => update(setDraftSlot(draft, slot)),
+    setSlot,
     fillFromAi: (items: readonly ProposedFood[], unmatched: readonly { description: string; grams?: number }[]) => update(fillDraftFromAi(draft, items, unmatched)),
     resolveUnmatched: (key: string, food: FoodHit) => update(resolveUnmatched(draft, key, food)),
     dismissUnmatched: (key: string) => update(dismissUnmatched(draft, key)),
