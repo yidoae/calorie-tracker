@@ -11,6 +11,7 @@ import {
   programFromDraft,
   REST_SECONDS,
   restLeft,
+  plannedSessionDraft,
   sessionDraft,
   sessionFromDraft,
   setProgress,
@@ -33,20 +34,20 @@ describe("templates", () => {
 
 describe("program editor", () => {
   it("a program survives the round trip through the text fields, with decimal commas", () => {
-    const program = { name: "PPL", split: "Push / Pull / Legs", days: [{ name: "Push", exercises: [{ name: "Bench press", sets: 4, reps: "6-8", kg: 62.5 }] }] };
+    const program = { name: "PPL", split: "Push / Pull / Legs", weekdays: [0, 2, 4], days: [{ name: "Push", exercises: [{ name: "Bench press", sets: 4, reps: "6-8", kg: 62.5 }] }] };
     const draft = programDraft(program);
     assert.equal(draft.days[0].exercises[0].kg, "62,5");
     assert.deepEqual(programFromDraft(draft), { ok: true, value: program });
   });
 
   it("an empty kg is no target", () => {
-    const draft = { name: "P", split: "Özel", days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat" }] }] };
+    const draft = { name: "P", split: "Özel", weekdays: [], days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat" }] }] };
     const result = programFromDraft(draft);
     assert.ok(result.ok && result.value.days[0].exercises[0].kg === null);
   });
 
   it("a kg that is not a number is a problem, not a missing target", () => {
-    const draft = { name: "P", split: "Özel", days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat", kg: "60kg" }] }] };
+    const draft = { name: "P", split: "Özel", weekdays: [], days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat", kg: "60kg" }] }] };
     const result = programFromDraft(draft);
     assert.deepEqual(result, { ok: false, error: "1. gün, 1. hareket · kg: Bir sayı yaz" });
     const sets = programFromDraft({ ...draft, days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat", sets: "x" }] }] });
@@ -54,7 +55,7 @@ describe("program editor", () => {
   });
 
   it("names where the first problem is", () => {
-    const draft = { name: "P", split: "Özel", days: [{ name: "A", exercises: [] }, { name: "B", exercises: [{ ...EMPTY_EXERCISE }, { ...EMPTY_EXERCISE, name: "Row", sets: "x" }] }] };
+    const draft = { name: "P", split: "Özel", weekdays: [], days: [{ name: "A", exercises: [] }, { name: "B", exercises: [{ ...EMPTY_EXERCISE }, { ...EMPTY_EXERCISE, name: "Row", sets: "x" }] }] };
     const result = programFromDraft(draft);
     assert.ok(!result.ok && result.error.startsWith("2. gün, 1. hareket · ad"), JSON.stringify(result));
   });
@@ -146,5 +147,24 @@ describe("weight progress", () => {
     assert.equal(squat.entries[1].volume, 500 + 315 + 420);
     assert.equal(squat.bestKg, 105);
     assert.equal(squat.bestE1rm, 119);
+  });
+});
+
+describe("weekly plan day (008)", () => {
+  it("every set starts at the planned weight and reps, and the target says why", () => {
+    const draft = plannedSessionDraft({
+      date: "2026-10-26",
+      name: "Push",
+      exercises: [
+        { name: "Bench press", sets: 2, reps: "6", kg: 62.5, change: "up_kg" },
+        { name: "Dips", sets: 1, reps: "AMRAP", kg: null, change: "new" },
+      ],
+    });
+    assert.deepEqual(draft.exercises[0], {
+      name: "Bench press",
+      target: "2 × 6 · 62,5 kg · kilo arttı",
+      sets: [{ kg: "62,5", reps: "6", done: false }, { kg: "62,5", reps: "6", done: false }],
+    });
+    assert.deepEqual(draft.exercises[1].sets, [{ kg: "", reps: "", done: false }]);
   });
 });

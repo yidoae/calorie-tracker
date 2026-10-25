@@ -422,18 +422,21 @@ export type Database = {
           name: string
           split: string
           user_id: string
+          weekdays: number[]
         }
         Insert: {
           days: Json
           name: string
           split: string
           user_id?: string
+          weekdays?: number[]
         }
         Update: {
           days?: Json
           name?: string
           split?: string
           user_id?: string
+          weekdays?: number[]
         }
         Relationships: [
           {
@@ -473,6 +476,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "workout_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_weeks: {
+        Row: {
+          created_at: string
+          feedback: Json | null
+          intensity: string
+          plan: Json
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          feedback?: Json | null
+          intensity: string
+          plan: Json
+          user_id?: string
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          feedback?: Json | null
+          intensity?: string
+          plan?: Json
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_weeks_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"

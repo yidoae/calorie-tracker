@@ -7,10 +7,12 @@ import FormError from "@/components/auth/FormError";
 import Button from "@/components/ui/Button";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
+import { useWeeklyPlan } from "@/hooks/useWeeklyPlan";
 import { useWorkoutProgram, useWorkoutSessions } from "@/hooks/useWorkout";
 import { formatKg } from "@/hooks/workoutLogic";
 import { colors, radius, space, type } from "@/theme";
 import IconButton from "./IconButton";
+import WeekPlanCard from "./WeekPlanCard";
 
 const RECENT = 10;
 const dateLabel = (day: string) => dayToDate(day).toLocaleDateString(LOCALE, { day: "numeric", month: "short", weekday: "short" });
@@ -19,6 +21,8 @@ const dateLabel = (day: string) => dayToDate(day).toLocaleDateString(LOCALE, { d
 export default function WorkoutOverview() {
   const program = useWorkoutProgram();
   const log = useWorkoutSessions();
+  const weekly = useWeeklyPlan();
+  const doneDates = new Set(log.sessions.map((s) => s.performedOn));
 
   const footer = (
     <Button
@@ -45,6 +49,14 @@ export default function WorkoutOverview() {
         <StateMessage kind="empty" title="Henüz programın yok" body="Push / Pull / Legs, Upper / Lower ya da kendi programını kur; hareketleri ve kiloları sen yaz." />
       ) : (
         <>
+          {weekly.nextWeek && <WeekPlanCard title="GELECEK HAFTA" week={weekly.nextWeek} doneDates={doneDates} today={weekly.today} />}
+          {weekly.thisWeek ? (
+            <WeekPlanCard title="BU HAFTA" week={weekly.thisWeek} doneDates={doneDates} today={weekly.today} />
+          ) : weekly.loading ? (
+            <ActivityIndicator accessibilityLabel="Haftalık plan hazırlanıyor" color={colors.fg} />
+          ) : weekly.error ? (
+            <StateMessage kind="error" title="Haftalık plan hazırlanamadı" actionLabel="Tekrar dene" onAction={() => void weekly.replan()} />
+          ) : null}
           <View style={styles.card}>
             <Text style={styles.eyebrow}>{program.data.split.toLocaleUpperCase(LOCALE)}</Text>
             <Text style={styles.cardTitle}>{program.data.name}</Text>

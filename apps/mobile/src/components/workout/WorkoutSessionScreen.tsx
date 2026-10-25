@@ -6,35 +6,41 @@ import FormError from "@/components/auth/FormError";
 import Button from "@/components/ui/Button";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
+import { useWeeklyPlan } from "@/hooks/useWeeklyPlan";
 import { useWorkoutProgram, useWorkoutSessions } from "@/hooks/useWorkout";
 import { useWorkoutLogger } from "@/hooks/useWorkoutLogger";
-import { formatRest, sessionDraft, type SessionDraft } from "@/hooks/workoutLogic";
+import { formatRest, plannedSessionDraft, sessionDraft, type SessionDraft } from "@/hooks/workoutLogic";
 import { colors, radius, space, type } from "@/theme";
 import CompactInput from "./CompactInput";
 import IconButton from "./IconButton";
 
-/** Logging a workout (007): one program day, its sets prefilled from last time. */
-export default function WorkoutSessionScreen({ dayIndex }: { dayIndex: number }) {
+/**
+ * Logging a workout: a day of the weekly plan (`plannedDate`, 008) with its targets, or a program
+ * day (007) prefilled from last time.
+ */
+export default function WorkoutSessionScreen({ dayIndex, plannedDate }: { dayIndex: number; plannedDate?: string }) {
   const program = useWorkoutProgram();
   const log = useWorkoutSessions();
+  const weekly = useWeeklyPlan();
   const back = { label: "Geri", onPress: () => router.back() };
   const day = program.data?.days[dayIndex];
+  const planned = plannedDate ? [weekly.thisWeek, weekly.nextWeek].flatMap((w) => w?.days ?? []).find((d) => d.date === plannedDate) : undefined;
 
-  if (program.isPending || log.loading) {
+  if (program.isPending || log.loading || (plannedDate && !planned && weekly.loading)) {
     return (
       <Screen title="Antrenman" back={back}>
         <ActivityIndicator accessibilityLabel="Antrenman hazırlanıyor" color={colors.fg} style={styles.loading} />
       </Screen>
     );
   }
-  if (program.error || log.loadError || !day) {
+  if (program.error || log.loadError || (plannedDate ? !planned : !day)) {
     return (
       <Screen title="Antrenman" back={back}>
         <StateMessage kind="error" title="Antrenman açılamadı" body="Bağlantını kontrol edip tekrar dene." actionLabel="Tekrar dene" onAction={() => (void program.refetch(), log.retry())} />
       </Screen>
     );
   }
-  return <Logger initial={sessionDraft(day, log.sessions)} />;
+  return <Logger initial={planned ? plannedSessionDraft(planned) : sessionDraft(day!, log.sessions)} />;
 }
 
 function Logger({ initial }: { initial: SessionDraft }) {

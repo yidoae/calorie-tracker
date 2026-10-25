@@ -3,12 +3,14 @@ import type { StrengthSplit } from "@calorie/core/schemas/plan";
 import {
   workoutProgramSchema,
   workoutSessionInputSchema,
+  type PlannedDay,
   type ProgramDay,
   type WorkoutProgram,
   type WorkoutSession,
   type WorkoutSessionInput,
 } from "@calorie/core/schemas/workout";
 import { normalizeTr } from "@calorie/core/search/normalize";
+import { estimatedMax, newestFirst } from "@calorie/core/workout/review";
 import { parseNumber } from "./setupSteps";
 
 /*
@@ -28,7 +30,7 @@ const PUSH = [ex("Bench press", 4, "6-8"), ex("Incline dumbbell press", 3, "8-10
 const PULL = [ex("Lat pulldown", 4, "8-10"), ex("Barbell row", 4, "6-8"), ex("Seated cable row", 3, "10-12"), ex("Face pull", 3, "12-15"), ex("Biceps curl", 3, "10-12")];
 const LEGS = [ex("Squat", 4, "5-8"), ex("Romanian deadlift", 3, "8-10"), ex("Leg press", 3, "10-12"), ex("Leg curl", 3, "10-12"), ex("Calf raise", 4, "12-15")];
 
-export const TEMPLATES: { id: TemplateId; label: string; hint: string; program: WorkoutProgram }[] = [
+export const TEMPLATES: { id: TemplateId; label: string; hint: string; program: Omit<WorkoutProgram, "weekdays"> }[] = [
   {
     id: "ppl",
     label: "Push / Pull / Legs",
@@ -108,12 +110,15 @@ export interface ProgramDraft {
   name: string;
   split: string;
   days: DayDraft[];
+  /** Training weekdays, Monday = 0 (008); empty spreads the days over the week. */
+  weekdays: number[];
 }
 
-export function programDraft(program: WorkoutProgram): ProgramDraft {
+export function programDraft(program: Omit<WorkoutProgram, "weekdays"> & { weekdays?: number[] }): ProgramDraft {
   return {
     name: program.name,
     split: program.split,
+    weekdays: program.weekdays ?? [],
     days: program.days.map((d) => ({
       name: d.name,
       exercises: d.exercises.map((e) => ({ name: e.name, sets: String(e.sets), reps: e.reps, kg: e.kg === null ? "" : formatKg(e.kg) })),
@@ -147,6 +152,7 @@ export function programFromDraft(draft: ProgramDraft): Result<WorkoutProgram> {
   const candidate = {
     name: draft.name,
     split: draft.split,
+    weekdays: draft.weekdays,
     days: draft.days.map((d) => ({
       name: d.name,
       exercises: d.exercises.map((e) => ({ name: e.name, sets: parseNumber(e.sets) ?? Number.NaN, reps: e.reps, kg: e.kg.trim() === "" ? null : (parseNumber(e.kg) ?? Number.NaN) })),
@@ -180,9 +186,6 @@ export interface SessionDraft {
 
 const sameExercise = (a: string, b: string) => normalizeTr(a) === normalizeTr(b);
 
-/** Newest first: by date, then by when it was saved. */
-const newestFirst = (sessions: readonly WorkoutSession[]) =>
-  [...sessions].sort((a, b) => b.performedOn.localeCompare(a.performedOn) || b.createdAt.localeCompare(a.createdAt));
 
 /**
  * The fields for a program day: each exercise starts from the sets done last time (to beat
@@ -202,6 +205,33 @@ export function sessionDraft(day: ProgramDay, history: readonly WorkoutSession[]
     }),
   };
 }
+
+/**
+ * The fields for a day of the weekly plan (008): every set starts at the planned weight and reps,
+ * so the user only ticks what they did. The target line says why it moved.
+ */
+export function plannedSessionDraft(day: PlannedDay): SessionDraft {
+  return {
+    dayName: day.name,
+    exercises: day.exercises.map((e) => {
+      const reps = /\d+/.exec(e.reps)?.[0] ?? "";
+      const kg = e.kg === null ? "" : formatKg(e.kg);
+      return {
+        name: e.name,
+        target: `${e.sets} × ${e.reps}${e.kg === null ? "" : ` · ${kg} kg`}${CHANGE_LABELS[e.change]}`,
+        sets: Array.from({ length: e.sets }, () => ({ kg, reps, done: false })),
+      };
+    }),
+  };
+}
+
+const CHANGE_LABELS: Record<PlannedDay["exercises"][number]["change"], string> = {
+  new: "",
+  up_kg: " · kilo arttı",
+  up_reps: " · +1 tekrar",
+  hold: " · aynı",
+  deload: " · hafif hafta",
+};
 
 /** ✓ needs both kg and reps. */
 export const canMarkDone = (set: SetDraft) => set.kg.trim() !== "" && set.reps.trim() !== "";
@@ -267,11 +297,7 @@ export interface ExerciseProgress {
   lastDate: string;
 }
 
-/** Epley: kg × (1 + reps / 30), the lift itself for a single; rounded to 0.5 kg. */
-export function estimatedMax(kg: number, reps: number): number {
-  const max = reps === 1 ? kg : kg * (1 + reps / 30);
-  return Math.round(max * 2) / 2;
-}
+export { estimatedMax };
 
 /** Every logged exercise with its history, the most recently done first. */
 export function exerciseProgress(sessions: readonly WorkoutSession[]): ExerciseProgress[] {

@@ -1,5 +1,7 @@
 // Preview stand-in for apps/mobile/src/services/workoutService.ts: the sample user's Push / Pull /
 // Legs program and three weeks of workouts, so the Antrenman tab shows weight progress.
+import { dayKey } from "@calorie/core/dates";
+import { planWeek, weeksDue } from "@calorie/core/workout/plan";
 import type * as Workouts from "@/services/workoutService";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 900));
@@ -10,6 +12,7 @@ type Session = Awaited<ReturnType<typeof Workouts.logSession>>;
 const PROGRAM: Program = {
   name: "PPL 6 gün",
   split: "Push / Pull / Legs",
+  weekdays: [0, 1, 2, 3, 4, 5],
   days: [
     {
       name: "Push",
@@ -67,5 +70,16 @@ export async function logSession(session: Parameters<typeof Workouts.logSession>
 }
 
 export async function deleteSession(..._args: Parameters<typeof Workouts.deleteSession>): ReturnType<typeof Workouts.deleteSession> {
+  await wait();
+}
+
+// 008: the plan the app would build from the sample program and workouts (this week, and next week from Sunday 18:00).
+export async function getWeeks(): ReturnType<typeof Workouts.getWeeks> {
+  const past: Awaited<ReturnType<typeof Workouts.getWeeks>> = [];
+  for (const weekStart of weeksDue(dayKey(new Date()), new Date().getHours())) past.unshift(planWeek({ weekStart, program: PROGRAM, sessions: SESSIONS, pastWeeks: past }));
+  return past;
+}
+
+export async function saveWeek(..._args: Parameters<typeof Workouts.saveWeek>): ReturnType<typeof Workouts.saveWeek> {
   await wait();
 }

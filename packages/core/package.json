@@ -10,7 +10,8 @@
     "./search/*": "./src/search/*.ts",
     "./dates": "./src/dates.ts",
     "./labels": "./src/labels.ts",
-    "./text/*": "./src/text/*.ts"
+    "./text/*": "./src/text/*.ts",
+    "./workout/*": "./src/workout/*.ts"
   },
   "scripts": {
     "test": "tsx --test tests/*.test.ts",
