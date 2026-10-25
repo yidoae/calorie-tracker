@@ -1,4 +1,5 @@
 import { LOCALE } from "@calorie/core/dates";
+import { progressOf } from "@calorie/core/nutrition/macros";
 import { StyleSheet, Text, View } from "react-native";
 import { colors, radius, space, type } from "@/theme";
 
@@ -17,7 +18,7 @@ const fmt = (n: number) => Math.round(n).toLocaleString(LOCALE);
 export default function DayHero({ eaten, target, dayType }: Props) {
   const left = target - eaten;
   const over = left < 0;
-  const share = target > 0 ? Math.min(eaten / target, 1) : 0;
+  const share = progressOf(eaten, target);
   const status = over ? `${fmt(-left)} kcal fazla` : `${fmt(left)} kcal kaldı`;
 
   return (

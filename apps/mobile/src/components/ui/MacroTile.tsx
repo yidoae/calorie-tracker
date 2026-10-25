@@ -1,4 +1,5 @@
 import { LOCALE } from "@calorie/core/dates";
+import { progressOf } from "@calorie/core/nutrition/macros";
 import { StyleSheet, Text, View } from "react-native";
 import { colors, radius, space, type } from "@/theme";
 
@@ -18,7 +19,7 @@ const fmt = (n: number) => Math.round(n).toLocaleString(LOCALE);
 /** One macronutrient as a tinted tile (design proposal K1): grams left (or over) as the number, eaten / target and a bar under it. */
 export default function MacroTile({ label, value, target, color, tint }: Props) {
   const left = target - value;
-  const share = target > 0 ? Math.min(value / target, 1) : 0;
+  const share = progressOf(value, target);
   return (
     <View
       accessible

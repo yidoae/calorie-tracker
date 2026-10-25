@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { parseGrams } from "../src/nutrition/macros.ts";
+import { parseGrams, progressOf } from "../src/nutrition/macros.ts";
 
 describe("parseGrams", () => {
   it("reads whole and decimal grams with a comma or a dot", () => {
@@ -16,5 +16,11 @@ describe("parseGrams", () => {
   it("refuses an amount that rounds to 0 g (the server refuses it too)", () => {
     assert.equal(parseGrams("0,04"), null);
     assert.equal(parseGrams("0,05"), 0.1);
+  });
+});
+
+describe("progressOf", () => {
+  it("the eaten share of the goal, held to 0–1; 0 without a goal", () => {
+    assert.deepEqual([progressOf(50, 200), progressOf(300, 200), progressOf(-5, 200), progressOf(50, 0)], [0.25, 1, 0, 0]);
   });
 });
