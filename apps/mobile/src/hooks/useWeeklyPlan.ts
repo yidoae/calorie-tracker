@@ -57,7 +57,6 @@ export function useWeeklyPlan() {
   }, [ready, missingKey, isPending, mutate]);
 
   return {
-    hasProgram: Boolean(program.data),
     thisWeek: stored(due[0]),
     /** Only from Sunday 18:00. */
     nextWeek: stored(due[1]),
