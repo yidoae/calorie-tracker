@@ -1,0 +1,364 @@
+<title>Kalori Takip Tasarım Önerisi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&display=swap">
+<style>
+/* Layout: proposal document; phone mockups side by side (önce → sonra), stacking on phones.
+   Page chrome follows the viewer's theme; the phones always show the app's own light theme (theme.ts). */
+:root {
+  --bg: #f5f8f1; --fg: #170b21; --muted: #4b5a69; --line: #dddddd; --card: #ffffff; --chip: #e5f4c1; --chipFg: #3b5500;
+  --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* app tokens (apps/mobile/src/theme.ts), fixed in both page themes because the app is light only */
+  --ink: #170b21; --ink2: #2c203a; --white: #ffffff; --s2: #f5f8f1; --s3: #eeeeee; --border: #dddddd; --strong: #222222;
+  --fgm: #4b5a69; --fgs: #5d6c7b; --onInkM: #c8c8c8; --cta: #a8e40f; --link: #0062cc;
+  --okSoft: #e5f4c1; --okText: #3b5500; --danger: #d92d20; --dangerSoft: #ffdede; --violetSoft: #e9ddff; --violetText: #3e1e7a;
+  --p: #bd41f0; --c: #3898ec; --f: #84cc16;
+  --pSoft: #f6e6fd; --cSoft: #e3f0fc; --fSoft: #eef7dc;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #120a1a; --fg: #f1edf5; --muted: #b5adbf; --line: #3a2d48; --card: #1d1328; --chip: #2f3d12; --chipFg: #d6f08a; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #120a1a; --fg: #f1edf5; --muted: #b5adbf; --line: #3a2d48; --card: #1d1328; --chip: #2f3d12; --chipFg: #d6f08a; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.05; }
+h2 { font-size: 28px; line-height: 1.15; }
+h3 { font-size: 19px; }
+p { margin: 0; max-width: 68ch; }
+.lead { font-size: 17px; color: var(--muted); }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+section { display: grid; gap: 20px; }
+.head { display: grid; gap: 12px; }
+.chip { display: inline-block; background: var(--chip); color: var(--chipFg); border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; }
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.principle { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.principle b { font-family: var(--display); font-size: 17px; }
+.principle small { color: var(--muted); font-size: 13px; }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 72ch; }
+.compare { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+.col { display: grid; gap: 10px; justify-items: start; min-width: 0; }
+.col > .eyebrow { padding-left: 4px; }
+.notes { flex: 1 1 280px; min-width: 0; display: grid; gap: 14px; align-content: start; }
+.notes ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.notes li small { display: block; color: var(--muted); font-size: 12.5px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+.decisions { display: grid; gap: 10px; counter-reset: d; }
+.decision { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: grid; gap: 4px; }
+.decision b::before { counter-increment: d; content: "K" counter(d) " · "; color: var(--muted); }
+.decision small { color: var(--muted); }
+a { color: inherit; }
+
+/* ---------- phone mockups (app tokens only) ---------- */
+.phone { width: 300px; max-width: 100%; height: 620px; border-radius: 36px; background: var(--ink); padding: 8px; box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 18px 40px -20px rgba(23,11,33,.55); color: var(--ink); font: 13px/1.4 var(--body); }
+.scr { height: 100%; border-radius: 28px; overflow: hidden; background: var(--ink); display: flex; flex-direction: column; position: relative; }
+.band { color: #fff; padding: 22px 16px 14px; display: grid; gap: 2px; }
+.band .t { font: 700 22px/1.15 var(--display); }
+.band .l { color: var(--onInkM); font-size: 11.5px; }
+.band .row { display: flex; justify-content: space-between; align-items: center; }
+.panel { background: var(--white); border-radius: 22px 22px 0 0; flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.foot { background: var(--white); padding: 10px 14px 14px; border-top: 1px solid var(--s3); }
+.btn { height: 44px; border-radius: 12px; display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.btn.cta { background: var(--cta); color: var(--ink); }
+.btn.sec { border: 1px solid var(--strong); background: var(--white); }
+.mut { color: var(--fgm); } .sub { color: var(--fgs); font-size: 11.5px; }
+.num { font-family: var(--display); font-variant-numeric: tabular-nums; }
+.card { border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px; }
+.card.strong { border-color: var(--strong); }
+.lbl { font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--fgm); }
+.bar { height: 6px; border-radius: 6px; background: var(--s3); overflow: hidden; } .bar i { display: block; height: 100%; border-radius: 6px; }
+.input { height: 40px; border: 1px solid var(--strong); border-radius: 10px; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+.ph { color: var(--fgs); }
+.hint { font-size: 10.5px; color: var(--fgs); line-height: 1.35; }
+.pill { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--strong); font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--white); }
+.pill.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pill.soft { border-color: transparent; background: var(--s2); }
+.pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.ring { width: 132px; height: 132px; border-radius: 50%; display: grid; place-items: center; }
+.ic { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 16px; flex: none; }
+.ic.plus { background: var(--cta); color: var(--ink); width: 32px; height: 32px; }
+.ic.ghost { border: 1px solid var(--strong); }
+.tag { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 6px; }
+.fade { position: absolute; left: 8px; right: 8px; bottom: 74px; height: 28px; background: linear-gradient(transparent, #fff); pointer-events: none; }
+.dim { opacity: .45; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--white); border-radius: 22px 22px 0 0; padding: 10px 14px 14px; display: grid; gap: 10px; box-shadow: 0 -10px 30px rgba(23,11,33,.35); }
+.grab { width: 36px; height: 4px; border-radius: 4px; background: var(--border); justify-self: center; }
+.stepper { display: grid; grid-template-columns: 44px 1fr 44px; height: 48px; border: 1px solid var(--strong); border-radius: 12px; overflow: hidden; }
+.stepper span { display: grid; place-items: center; font-weight: 700; font-size: 18px; }
+.stepper span:nth-child(2) { border-inline: 1px solid var(--s3); font: 700 22px var(--display); }
+.setrow { display: grid; grid-template-columns: 22px 56px 1fr 1fr 36px; gap: 6px; align-items: center; height: 40px; border-radius: 10px; padding: 0 4px; }
+.setrow.head { height: 18px; } .setrow.done { background: var(--okSoft); }
+.cell { height: 34px; border: 1px solid var(--strong); border-radius: 8px; display: grid; place-items: center; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--white); }
+.setrow.done .cell { border-color: transparent; background: transparent; }
+.chk { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--strong); display: grid; place-items: center; font-weight: 800; }
+.setrow.done .chk { background: var(--ink); color: var(--cta); border-color: var(--ink); }
+.timer { background: var(--ink); color: #fff; border-radius: 14px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.timer .bar { flex: 1; background: var(--ink2); } .timer .bar i { background: var(--cta); }
+@media (prefers-reduced-motion: no-preference) { .phone { transition: transform .2s } .phone:hover { transform: translateY(-2px) } }
+@media (max-width: 680px) { .compare { justify-content: center } }
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <span class="eyebrow">Art Director · ilk geçiş · 25 Ekim 2026</span>
+  <h1>Aynı renkler, daha hızlı bir uygulama</h1>
+  <p class="lead">Kalori Takip'in ekranlarını yedi açık kaynak beslenme ve antrenman uygulamasıyla karşılaştırdım. Renkler, Bricolage başlıklar ve tofuhq çizgisi aynı kalıyor. Değişen şey hiyerarşi, yoğunluk ve en sık iki akışın (yemek kaydı, set kaydı) dokunuş sayısı.</p>
+  <div class="pills" style="gap:8px"><span class="chip">Kod değişmedi</span><span class="chip">Onay bekliyor</span><span class="chip">Renkler: theme.ts + açık tonları</span></div>
+</header>
+
+<section>
+  <div class="head"><h2>İlkeler</h2><p class="mut" style="color:var(--muted)">Her biri bir kaynağa dayanıyor; ekran ekran öneriler bunlardan çıkıyor.</p></div>
+  <div class="principles">
+    <div class="principle"><b>Ekran başına tek kahraman sayı</b><span>Bugün'de "kalan kcal", antrenmanda "kalan set". Geri kalan sayılar küçük ve gri.</span><small>OpenNutriTracker: kalan kcal, aşınca "fazla" + kırmızı halka</small></div>
+    <div class="principle"><b>Kayıt 3 dokunuşta biter</b><span>Ara → dokun → porsiyon çipi → ekle. Gram yazmak isteğe bağlı, stepper ve çiplerle.</span><small>Flex stepper alanları · LibreFit sayı seçici</small></div>
+    <div class="principle"><b>Boş öğün de görünür</b><span>Dört öğün hep listede, her birinin kendi "+" düğmesi var; öğün seçimi baştan belli.</span><small>Waistline günlüğü</small></div>
+    <div class="principle"><b>Set bir dokunuşla "yapıldı"</b><span>Önceki değer satırda görünür, ✓ ile onaylanır, dinlenme sayacı kendiliğinden başlar.</span><small>Liftosaur set hapları · Flex dinlenme sayacı</small></div>
+    <div class="principle"><b>Çerçeve = dokunulabilir</b><span>Koyu 1 px çerçeve yalnız dokunulan kartlarda. Bilgi grupları çerçevesiz, açık zemin. Gürültü azalır.</span><small>tofuhq kuralının netleştirilmesi</small></div>
+    <div class="principle"><b>Makro renklerine açık tonlar</b><span>Protein, karbonhidrat, yağ için %10'luk tonlar: çipler ve satır zeminleri. Yeni renk yok.</span><small>Open Food Facts besin çipleri</small></div>
+  </div>
+</section>
+
+<!-- ============ TODAY ============ -->
+<section>
+  <div class="head"><span class="eyebrow">Ekran 1</span><h2>Bugün</h2></div>
+  <div class="compare">
+    <div class="col"><span class="eyebrow">Önce</span>
+      <div class="phone"><div class="scr">
+        <div class="band"><span class="t">Bugün</span><span class="l">Günlük hedeflerin ve öğünlerin.</span></div>
+        <div class="panel">
+          <div style="display:grid;justify-items:center;gap:4px">
+            <div class="ring" style="background:conic-gradient(var(--ink) 0 81%, var(--s3) 0);"><div style="width:110px;height:110px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center"><div><div class="num" style="font-size:26px">273</div><div class="sub">kcal kaldı</div><div class="sub">1.168 / 1.440 kcal</div></div></div></div>
+            <span class="sub">Dinlenme günü</span>
+          </div>
+          <div class="card" style="display:grid;gap:8px">
+            <div><div style="display:flex;justify-content:space-between"><b>Protein</b><span class="sub">96 / 154 g</span></div><div class="bar"><i style="width:62%;background:var(--p)"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between"><b>Karbonhidrat</b><span class="sub">120 / 0 g</span></div><div class="bar"><i style="width:0"></i></div></div>
+            <div><div style="display:flex;justify-content:space-between"><b>Yağ</b><span class="sub">31 / 92 g</span></div><div class="bar"><i style="width:34%;background:var(--f)"></i></div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between"><span class="num" style="font-size:17px">Kahvaltı</span><b class="mut">551 kcal</b></div>
+          <div class="card"><b>Yumurta, simit</b><div class="sub">2 yemek · 551 kcal</div></div>
+          <div style="display:flex;justify-content:space-between"><span class="num" style="font-size:17px">Öğle yemeği</span><b class="mut">617 kcal</b></div>
+          <div class="card"><b>Izgara tavuk göğsü, pirinç…</b></div>
+        </div>
+        <div class="fade"></div>
+        <div class="foot"><div class="btn cta">Öğün ekle</div></div>
+      </div></div>
+    </div>
+    <div class="col"><span class="eyebrow">Sonra</span>
+      <div class="phone"><div class="scr">
+        <div class="band">
+          <div class="row"><span class="t">Bugün</span><span class="pill" style="height:26px;background:var(--ink2);color:#fff;border-color:var(--ink2)">‹ 25 Eki ›</span></div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:10px">
+            <div><div class="num" style="font-size:44px;line-height:1;color:#fff">273</div><div class="l">kcal kaldı · hedef 1.440</div></div>
+            <div style="text-align:right" class="l">Dinlenme günü<br><span style="color:#fff;font-weight:600">1.168 alındı</span></div>
+          </div>
+          <div class="bar" style="background:var(--ink2);height:8px;margin-top:10px"><i style="width:81%;background:var(--cta)"></i></div>
+        </div>
+        <div class="panel">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+            <div style="background:var(--pSoft);border-radius:12px;padding:8px"><div class="lbl">Protein</div><div class="num" style="font-size:18px">58 g</div><div class="sub">kaldı · 96/154</div><div class="bar" style="background:#fff;margin-top:4px"><i style="width:62%;background:var(--p)"></i></div></div>
+            <div style="background:var(--cSoft);border-radius:12px;padding:8px"><div class="lbl">Karb.</div><div class="num" style="font-size:18px">120 g</div><div class="sub">alındı</div><div class="bar" style="background:#fff;margin-top:4px"><i style="width:100%;background:var(--c)"></i></div></div>
+            <div style="background:var(--fSoft);border-radius:12px;padding:8px"><div class="lbl">Yağ</div><div class="num" style="font-size:18px">61 g</div><div class="sub">kaldı · 31/92</div><div class="bar" style="background:#fff;margin-top:4px"><i style="width:34%;background:var(--f)"></i></div></div>
+          </div>
+          <div class="card strong" style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="display:flex;justify-content:space-between"><b>Kahvaltı</b><b class="num">551</b></div><div class="sub">Yumurta, simit</div></div><div class="ic ghost">+</div></div>
+          <div class="card strong" style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="display:flex;justify-content:space-between"><b>Öğle yemeği</b><b class="num">617</b></div><div class="sub">Izgara tavuk, pilav, yoğurt</div></div><div class="ic ghost">+</div></div>
+          <div class="card" style="display:flex;align-items:center;gap:10px;border-style:dashed"><div style="flex:1"><b>Akşam yemeği</b><div class="sub">Henüz yok · ~ 273 kcal yerin var</div></div><div class="ic plus">+</div></div>
+          <div class="card" style="display:flex;align-items:center;gap:10px;border-style:dashed"><div style="flex:1"><b>Ara öğün</b><div class="sub">Henüz yok</div></div><div class="ic ghost">+</div></div>
+          <div class="pills"><span class="pill soft">⟲ Dünkü kahvaltıyı ekle</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <h3>Ne değişiyor, neden</h3>
+      <ol>
+        <li>Kalan kcal koyu bandın içine çıkıyor; halka yerine ince lime çubuk. Ekranın üst yarısı öğünlere kalıyor.<small>Kaynak: OpenNutriTracker kahraman sayı. Ölçü: ilk ekranda 2 öğün yerine 4 öğün görünür.</small></li>
+        <li>Makrolar üç yan yana kutu, "kaldı" diliyle. Renk tonu = makro rengi.<small>Kaynak: wger hedef/gerçek tablosu, OFF besin çipleri.</small></li>
+        <li>Dört öğün hep görünür, her birinin "+" düğmesi var. Lime yalnız sıradaki öğünde (saate göre), ekranda tek birincil eylem kuralı korunur. Alttaki "Öğün ekle" kalkar.<small>Kaynak: Waistline. Öğün, arama ekranına parametreyle gider; kontrol ekranında seçmek gerekmez.</small></li>
+        <li>Gün değiştirici bantta (‹ 25 Eki ›): Geçmiş sekmesine gitmeden dün.<small>Davranış ekler, karar K4.</small></li>
+        <li>"Dünkü kahvaltıyı ekle" çipi: en sık tekrar eden öğünü tek dokunuşla kopyalar.<small>Kaynak: OpenNutriTracker "recent meals". Yeni özellik, karar K5.</small></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEARCH + REVIEW ============ -->
+<section>
+  <div class="head"><span class="eyebrow">Ekran 2–3</span><h2>Yemek ara ve kontrol et</h2><p style="color:var(--muted)">Bugün: ara → seç → kontrol ekranında her yemeğe gram yaz → öğün seç → kaydet. Kontrol ekranı 4 yemekte iki ekran boyu; her kartta aynı uzun ipucu tekrar ediyor.</p></div>
+  <div class="compare">
+    <div class="col"><span class="eyebrow">Önce · kontrol et</span>
+      <div class="phone"><div class="scr">
+        <div class="band"><span class="t">Kontrol et</span><span class="l">Ne kadar yediğini gram olarak yaz.</span></div>
+        <div class="panel">
+          <div class="card" style="display:grid;gap:6px"><b>Izgara tavuk göğsü</b><span class="lbl" style="text-transform:none;letter-spacing:0">Kaç gram yedin?</span><div class="input"><b>200</b><span class="ph" style="margin-left:auto">g</span></div><span class="hint">Tipik porsiyon yaklaşık 150 g; tarttığın ya da tahmin ettiğin miktarı yaz.</span><span class="sub"><b>330 kcal</b> · P 62 g · K 0 g · Y 7,2 g</span></div>
+          <div class="card" style="display:grid;gap:6px"><b>Pirinç pilavı</b><span class="lbl" style="text-transform:none;letter-spacing:0">Kaç gram yedin?</span><div class="input"><span class="ph">Gram</span><span class="ph" style="margin-left:auto">g</span></div><span class="hint">Tipik porsiyon yaklaşık 150 g; tarttığın ya da tahmin ettiğin miktarı yaz.</span><span class="hint">Gramı yazınca kalori ve makrolar görünür.</span></div>
+          <div class="card" style="display:grid;gap:6px"><b>Yumurta</b><span class="lbl" style="text-transform:none;letter-spacing:0">Kaç gram yedin?</span><div class="input"><span class="ph">Gram</span></div></div>
+        </div>
+        <div class="fade"></div>
+        <div class="foot" style="display:grid;gap:6px"><div class="btn cta">Kaydet</div><div class="btn sec">Yemek ekle</div></div>
+      </div></div>
+    </div>
+    <div class="col"><span class="eyebrow">Sonra · ara + porsiyon</span>
+      <div class="phone"><div class="scr">
+        <div class="band"><div class="row"><span class="t">Akşam yemeği</span><span class="l">✕</span></div>
+          <div class="input" style="background:#fff;margin-top:10px;border-color:#fff"><span>⌕</span><b>tavuk</b><span class="ph" style="margin-left:auto">📷 ✎</span></div>
+        </div>
+        <div class="panel">
+          <div class="lbl">Sonuçlar</div>
+          <div class="card strong" style="display:flex;align-items:center;gap:10px"><div style="flex:1"><b>Izgara tavuk göğsü</b><div class="sub">165 kcal / 100 g · porsiyon ~150 g</div></div><div class="ic plus">+</div></div>
+          <div class="card" style="display:flex;align-items:center;gap:10px" ><div style="flex:1"><b>Tavuk sote</b><div class="sub">"tavuğu" · 140 kcal / 100 g</div></div><div class="ic ghost">+</div></div>
+          <div class="card dim" style="display:flex;align-items:center;gap:10px"><div style="flex:1"><b>Tavuk döner</b></div></div>
+        </div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:15px">Izgara tavuk göğsü</b><span class="num" style="font-size:20px">330 kcal</span></div>
+          <div class="pills"><span class="tag" style="background:var(--pSoft);color:var(--violetText)">P 62 g</span><span class="tag" style="background:var(--cSoft);color:#0b4f8c">K 0 g</span><span class="tag" style="background:var(--fSoft);color:var(--okText)">Y 7,2 g</span></div>
+          <div class="pills"><span class="pill">½ porsiyon</span><span class="pill">1 porsiyon · 150 g</span><span class="pill on">200 g</span><span class="pill">100 g</span></div>
+          <div class="stepper"><span>−</span><span>200 g</span><span>+</span></div>
+          <div class="btn cta">Ekle · 1 yemek seçili</div>
+        </div>
+      </div></div>
+    </div>
+    <div class="col"><span class="eyebrow">Sonra · kontrol et</span>
+      <div class="phone"><div class="scr">
+        <div class="band"><div class="row"><span class="t">Akşam yemeği</span><span class="l">‹ Geri</span></div><span class="l">3 yemek · dokun, gramı değiştir</span></div>
+        <div class="panel">
+          <div style="background:var(--s2);border-radius:14px;padding:10px 12px;display:flex;justify-content:space-between;align-items:baseline"><div><div class="lbl">Öğün toplamı</div><div class="num" style="font-size:24px">625 kcal</div></div><div class="sub" style="text-align:right">P 84 · K 24 · Y 21 g<br>kalan: <b style="color:var(--ink)">−352 kcal</b></div></div>
+          <div class="card strong" style="display:flex;align-items:center;gap:8px"><div style="flex:1"><b>Izgara tavuk göğsü</b><div class="sub">330 kcal</div></div><span class="pill">200 g</span></div>
+          <div class="card strong" style="display:flex;align-items:center;gap:8px"><div style="flex:1"><b>Yumurta</b><div class="sub">155 kcal</div></div><span class="pill">2 adet</span></div>
+          <div class="card strong" style="display:flex;align-items:center;gap:8px;background:var(--violetSoft);border-color:var(--violetText)"><div style="flex:1"><b>Mercimek çorbası</b><div class="sub" style="color:var(--violetText)">Tahmini gram · kontrol et</div></div><span class="pill">250 g</span></div>
+          <div class="card" style="display:flex;align-items:center;gap:8px;border-style:dashed;border-color:var(--danger)"><div style="flex:1"><b>turşu suyu</b><div class="sub">Listede yok · kaydedilmez</div></div><span class="pill">Ara</span></div>
+          <div class="pills"><span class="pill soft">+ Yemek ekle</span></div>
+        </div>
+        <div class="foot"><div class="btn cta">Akşam yemeğine kaydet</div></div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <h3>Ne değişiyor, neden</h3>
+      <ol>
+        <li>Arama kutusu bandın içinde ve klavye açık gelir. Fotoğraf ve yazarak ekleme kutunun sağında iki simge; bugün iki büyük düğme kutunun üstünde.<small>Kaynak: OFF smooth-app arama. Kayıt yolunun %80'i aramadan geçiyor.</small></li>
+        <li>Sonuca dokununca alttan porsiyon sayfası: makro çipleri, porsiyon çipleri (½, 1, 100 g, son kullanılan), ± stepper. Klavye gerekmez; istersen ortadaki sayıya dokunup yazarsın.<small>Kaynak: Flex StepperField, LibreFit NumberPicker. Mevcut PortionPicker ve GramsSheet bileşenleri buna genişler.</small></li>
+        <li>Kontrol ekranında her yemek tek satır, gram bir hap. Uzun ipucu bir kez, en üstte. Tahmini gram mor ton (warningSoft), eşleşmeyen kesik kırmızı çerçeve.<small>Ölçü: 4 yemek bir ekrana sığar (bugün ~2,3 ekran).</small></li>
+        <li>Öğün seçimi Bugün'deki "+" düğmesinden gelir; birincil düğme öğünün adını söyler: "Akşam yemeğine kaydet".</li>
+        <li>Toplam kartı "kalan" ile birlikte: kaydetmeden önce günü aşıp aşmadığını görürsün.<small>Kaynak: OpenNutriTracker "too much" etiketi.</small></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKOUT LOGGER ============ -->
+<section>
+  <div class="head"><span class="eyebrow">Ekran 4</span><h2>Antrenman kaydı</h2><p style="color:var(--muted)">Bugün her set iki boş kutu ve bir ✕; yapılan ile yapılmayan set ayırt edilmiyor, önceki değer kutunun içinde kayboluyor.</p></div>
+  <div class="compare">
+    <div class="col"><span class="eyebrow">Önce</span>
+      <div class="phone"><div class="scr">
+        <div class="band"><span class="l">‹</span><span class="t">Push</span><span class="l">Kilolar son antrenmanından geliyor; yaptığını yaz. Boş bıraktığın hareket kaydedilmez.</span></div>
+        <div class="panel">
+          <div class="card strong" style="display:grid;gap:6px">
+            <b style="font-size:15px">Bench press</b><span class="sub">Hedef: 4 × 6-8 · 60 kg</span>
+            <div style="display:grid;grid-template-columns:22px 1fr 1fr 32px;gap:6px" class="lbl"><span>Set</span><span>KG</span><span>Tekrar</span><span></span></div>
+            <div style="display:grid;grid-template-columns:22px 1fr 1fr 32px;gap:6px;align-items:center"><b class="mut">1</b><div class="cell">65</div><div class="cell ph">tekrar</div><span class="mut" style="text-align:center">✕</span></div>
+            <div style="display:grid;grid-template-columns:22px 1fr 1fr 32px;gap:6px;align-items:center"><b class="mut">2</b><div class="cell">65</div><div class="cell ph">tekrar</div><span class="mut" style="text-align:center">✕</span></div>
+            <div style="display:grid;grid-template-columns:22px 1fr 1fr 32px;gap:6px;align-items:center"><b class="mut">3</b><div class="cell">67,5</div><div class="cell ph">tekrar</div><span class="mut" style="text-align:center">✕</span></div>
+            <div style="display:grid;grid-template-columns:22px 1fr 1fr 32px;gap:6px;align-items:center"><b class="mut">4</b><div class="cell">67,5</div><div class="cell ph">tekrar</div><span class="mut" style="text-align:center">✕</span></div>
+            <b style="text-align:center;padding:6px">+ Set ekle</b>
+          </div>
+          <div class="card strong"><b style="font-size:15px">Shoulder press</b></div>
+        </div>
+        <div class="fade"></div>
+        <div class="foot"><div class="btn cta">Antrenmanı kaydet</div></div>
+      </div></div>
+    </div>
+    <div class="col"><span class="eyebrow">Sonra</span>
+      <div class="phone"><div class="scr">
+        <div class="band">
+          <div class="row"><span class="l">‹ Push</span><span class="l">32:14</span></div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:6px"><div><div class="num" style="font-size:36px;line-height:1;color:#fff">6 / 10</div><div class="l">set yapıldı</div></div><div class="l" style="text-align:right">Hacim<br><span style="color:#fff;font-weight:600">1.320 kg</span></div></div>
+          <div class="bar" style="background:var(--ink2);height:8px;margin-top:8px"><i style="width:60%;background:var(--cta)"></i></div>
+        </div>
+        <div class="panel" style="gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:15px">Bench press</b><span class="sub">hedef 4 × 6-8</span></div>
+          <div class="setrow head lbl"><span>Set</span><span>Önceki</span><span>kg</span><span>Tekrar</span><span></span></div>
+          <div class="setrow done"><b>1</b><span class="sub">65×6</span><div class="cell">65</div><div class="cell">7</div><div class="chk">✓</div></div>
+          <div class="setrow done"><b>2</b><span class="sub">65×6</span><div class="cell">65</div><div class="cell">6</div><div class="chk">✓</div></div>
+          <div class="setrow"><b>3</b><span class="sub">67,5×6</span><div class="cell">67,5</div><div class="cell ph">6</div><div class="chk">✓</div></div>
+          <div class="setrow"><b>4</b><span class="sub">67,5×5</span><div class="cell">67,5</div><div class="cell ph">6</div><div class="chk">✓</div></div>
+          <div style="display:flex;gap:6px"><span class="pill soft">+ Set</span><span class="pill soft">Son seti kopyala</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px" class="dim"><b style="font-size:15px">Shoulder press</b><span class="sub">0 / 3</span></div>
+        </div>
+        <div class="foot" style="display:grid;gap:8px">
+          <div class="timer"><span class="l" style="color:#fff">Dinlenme</span><div class="bar"><i style="width:45%"></i></div><b class="num" style="font-size:16px">1:21</b><span class="l">+30 sn</span></div>
+          <div class="btn cta">Antrenmanı bitir</div>
+        </div>
+      </div></div>
+    </div>
+    <div class="notes">
+      <h3>Ne değişiyor, neden</h3>
+      <ol>
+        <li>Her setin sonunda ✓. Dokununca satır lime tonuna döner, kutular sade metne iner. Yapılmamış set kaydedilmez; bugünkü "boş bıraktığın kaydedilmez" kuralı görünür olur.<small>Kaynak: Liftosaur set hapları, Strong/Hevy deseni (Flex'in session_sets.dart yorumunda adıyla geçiyor).</small></li>
+        <li>"Önceki" sütunu son antrenmandaki kg×tekrar'ı gösterir; tekrar kutusunda hedef gri ipucu. ✓'ye basınca boş tekrar ipucundaki değeri alır: tipik set iki dokunuş yerine bir dokunuş.<small>Kaynak: Flex _fillPreviousSet.</small></li>
+        <li>Bantta kahraman sayı "6 / 10 set" ve süre. Uzun açıklama metni kalkar.</li>
+        <li>✓ sonrası altta dinlenme sayacı (hareketin varsayılanı, +30 sn). Titreşim/ses yok, yalnız görsel.<small>Kaynak: Flex rest timers. Yeni davranış, karar K6.</small></li>
+        <li>Satırdaki ✕ kalkar; seti silmek sola kaydırma ya da uzun basma. 44 pt hedefler korunur (satır 40 pt + aralık; ✓ 44 pt dokunma alanı).</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>Denetim: ekran ekran</h2><p style="color:var(--muted)">Preview'daki 31 ekran gezildi. Sorun, öneri ve kaynak desen.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Ekran</th><th>Bugün gördüğüm</th><th>Öneri</th><th>Kaynak</th></tr></thead>
+    <tbody>
+      <tr><td>Bugün</td><td>Halka + 3 tam genişlik çubuk ilk ekranın %60'ı; boş öğünler görünmüyor; tek "Öğün ekle".</td><td>Yukarıdaki maket.</td><td>OpenNutriTracker, Waistline</td></tr>
+      <tr><td>Yemek ara</td><td>2 harften önce ekran boş; AI düğmeleri aramanın üstünde.</td><td>Son kullanılanlar + sık yenenler listesi boşken; AI simge olarak kutuda.</td><td>OFF smooth-app, OpenNutriTracker recent</td></tr>
+      <tr><td>Kontrol et</td><td>Her kartta etiket + 2 satır ipucu; 4 yemek ≈ 2,3 ekran.</td><td>Tek satır + gram hapı; ipucu bir kez.</td><td>wger öğün satırları</td></tr>
+      <tr><td>Fotoğrafla</td><td>Büyük boş beyaz alan; hak satırı altta küçük.</td><td>Vizör çerçeveli kart ("tabağı üstten çek" çizimi), hak bantta hap: "3/5 AI".</td><td>OFF tarayıcı ekranı</td></tr>
+      <tr><td>Yazarak ekle</td><td>Boş metin kutusu, örnek yok.</td><td>Altında dokunulabilir örnek çipler ("2 yumurta, 1 simit").</td><td>LibreFit boş durumlar</td></tr>
+      <tr><td>Öğün</td><td>İyi. Silme ikonları gri, toplam kartı yeşil zemin.</td><td>Satırlar makro tonlu mini çiplerle; "Öğünü sil" sade (ghost) kırmızı metin.</td><td>OFF besin çipleri</td></tr>
+      <tr><td>Geçmiş</td><td>Durum yalnız renkli 4 px nokta: renk körü için zor, dokunma alanı küçük.</td><td>Gün hücresi tonla dolu (yeşil/mor/kırmızı tint) + işaret (✓ ↓ ↑); altta haftalık ortalama şeridi.</td><td>Waistline grafik, erişilebilirlik</td></tr>
+      <tr><td>Geçmiş bir gün</td><td>Bugün ile aynı.</td><td>Bugün'ün yeni düzeni, "+" düğmeleri yok.</td><td>—</td></tr>
+      <tr><td>Planım</td><td>Uzun açıklama paragrafı en üstte; döngü kartları iyi.</td><td>Üstte kcal + makro yığın çubuğu; açıklama "Neden bu hedef?" altında katlanır.</td><td>OpenNutriTracker kcal bilgi ekranı</td></tr>
+      <tr><td>Plan sihirbazı</td><td>Canlı önizleme her adımda ekranın ~%30'u.</td><td>Önizleme tek satırlık yapışkan şerit (1.714 kcal · −0,45 kg/hf), dokununca açılır.</td><td>Flex düzen ekranı</td></tr>
+      <tr><td>İnce ayar</td><td>İyi; kaydırıcılar net.</td><td>Makro satırlarına renk tonu zemin; yüzde ve g/kg tek satır.</td><td>—</td></tr>
+      <tr><td>Kurulum 1–6</td><td>Temiz; adım sayacı metin.</td><td>Adım çubuğu (6 parça) bantta; büyük seçim kartları korunur.</td><td>—</td></tr>
+      <tr><td>Profil</td><td>Büyük harf etiketler, düz metin.</td><td>Gruplu liste satırları (ayar ekranı deseni), "Çıkış yap" en altta tehlike metni.</td><td>wger ayarlar</td></tr>
+      <tr><td>Antrenman</td><td>Program günleri 3 eş kart, hepsinde "Başla".</td><td>Sıradaki gün kahraman kart + lime "Başla"; diğerleri sade satır. Kilo gelişiminde mini çizgi grafik.</td><td>Flex plan listesi, Liftosaur</td></tr>
+      <tr><td>Programı düzenle</td><td>Hazır programlar 5 dikey kart; günler çok uzun.</td><td>Hazırlar yatay çip; günler katlanır akordeon; set×tekrar×kg tek satır ("4 × 6-8 · 60 kg").</td><td>Liftosaur program düzenleyici</td></tr>
+      <tr><td>Antrenman kaydı</td><td>Yukarıdaki maket.</td><td>✓, önceki, dinlenme sayacı.</td><td>Liftosaur, Flex</td></tr>
+      <tr><td>Hareket gelişimi</td><td>Stat etiketleri kırılıyor ("ANTRENMA N", "TAHMİNİ 1RM"); grafikte ızgara yok.</td><td>Etiketler kısalır (ANTR.), grafik alan dolgulu + ızgara + son nokta vurgulu.</td><td>Flex flex_line_chart</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="head"><h2>Tasarımla ilgisi olmayan iki bulgu</h2><p style="color:var(--muted)">Tester'a not olarak bırakıldı; bu öneri bunlara dokunmaz.</p></div>
+  <ul class="plain">
+    <li><b>Kalori döngüsünde dinlenme günü karbonhidrat hedefi 0 g.</b> Preview: Bugün "Karbonhidrat 120 / 0 g", Planım "Dinlenme günü 1.440 kcal · K 0". Plan motorunda alt sınır ya da yağ tavanı gerekiyor gibi.</li>
+    <li><b>Antrenman kaydında tekrar kutusu web önizlemede kart dışına taşıyor.</b> Telefonda görünmeyebilir; CompactInput'a <code>minWidth: 0</code> yeter.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="head"><h2>Senin kararın gereken</h2><p style="color:var(--muted)">Onaylananlar ayrı küçük değişikliklerle gelir: önce Bugün, sonra arama/kontrol, sonra antrenman kaydı. Her biri testler + yeni preview ile.</p></div>
+  <div class="decisions">
+    <div class="decision"><b>Genel yön: bu önerinin ilkeleri</b><small>Tek kahraman sayı, 3 dokunuşla kayıt, boş öğün görünür, set ✓, çerçeve = dokunulabilir.</small></div>
+    <div class="decision"><b>theme.ts'e makro tonları</b><small>proteinSoft #f6e6fd, carbsSoft #e3f0fc, fatSoft #eef7dc. Yeni renk değil, mevcut makro renklerinin açık tonu.</small></div>
+    <div class="decision"><b>Bugün: halka yerine bantta sayı + çubuk</b><small>Halka bileşeni (Ring) kalkar ya da yalnız Geçmiş bir gün'de kalır.</small></div>
+    <div class="decision"><b>Bugün'e gün değiştirici (‹ 25 Eki ›)</b><small>Küçük davranış ekler; route parametresi.</small></div>
+    <div class="decision"><b>"Dünkü öğünü ekle" kısayolu</b><small>Yeni özellik: servis ve hook ister, tasarım geçişinin dışında ayrı iş olur.</small></div>
+    <div class="decision"><b>Antrenman: set ✓ + dinlenme sayacı</b><small>✓ yalnız sunum değil, yapılmamış setin kaydedilmemesi davranışı değişir; sayaç yeni özellik. Hook işi gerektirir.</small></div>
+    <div class="decision"><b>Porsiyon sayfasında ± stepper (klavyesiz giriş)</b><small>GramsSheet/PortionPicker genişler; adım 10 g, adet birimlerinde 1.</small></div>
+  </div>
+</section>
+
+<footer style="color:var(--muted);font-size:13px;display:grid;gap:6px">
+  <span>İncelenen kaynaklar: <a href="https://github.com/simonoppowa/OpenNutriTracker">OpenNutriTracker</a> (GPL-3.0) · <a href="https://github.com/davidhealey/waistline">Waistline</a> (GPL-3.0) · <a href="https://github.com/openfoodfacts/smooth-app">Open Food Facts</a> (Apache-2.0) · <a href="https://github.com/wger-project/flutter">wger</a> (AGPL-3.0) · <a href="https://github.com/brandonp2412/Flex">Flex</a> (MIT) · <a href="https://github.com/astashov/liftosaur">Liftosaur</a> (AGPL-3.0) · <a href="https://github.com/LibreFitOrg/LibreFit">LibreFit</a> (GPL-3.0).</span>
+  <span>Yalnız desenler alındı; kod ya da görsel kopyalanmadı. Maketler HTML ile çizildi, uygulamanın renk ve tipografi tokenları kullanıldı.</span>
+</footer>
+</div>
