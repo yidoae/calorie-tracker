@@ -18,3 +18,9 @@ test("median", () => {
   assert.equal(median([4, 1, 2, 3]), 2.5);
   assert.ok(Number.isNaN(median([])));
 });
+
+test("each expected food needs its own predicted item", () => {
+  const egg = { food_id: "egg", grams: 50 };
+  assert.equal(phrasePasses([egg, { food_id: "tea", grams: 100 }], [egg, egg]), false);
+  assert.equal(phrasePasses([egg, egg], [egg, egg]), true);
+});

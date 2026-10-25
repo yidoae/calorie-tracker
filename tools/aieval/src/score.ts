@@ -15,7 +15,12 @@ const close = (a: number, b: number) => Math.abs(a - b) <= Math.max(1, 0.02 * b)
 
 export function phrasePasses(predicted: Predicted[], expected: ExpectedItem[]): boolean {
   if (predicted.length !== expected.length) return false;
-  return expected.every((e) => predicted.some((p) => p.food_id === e.food_id && close(p.grams, e.grams)));
+  // One to one: a predicted item that matched an expected one cannot match another.
+  const left = [...predicted];
+  return expected.every((e) => {
+    const i = left.findIndex((p) => p.food_id === e.food_id && close(p.grams, e.grams));
+    return i >= 0 && left.splice(i, 1).length === 1;
+  });
 }
 
 export interface PlateScore {
