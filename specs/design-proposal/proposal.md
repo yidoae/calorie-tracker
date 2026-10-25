@@ -90,3 +90,11 @@ each with tests and a fresh preview.
 
 Not applied (behaviour, owner's call): always-visible slot rows with their own "+" (needs the slot as a
 route parameter), K4 date switcher, K5 "add yesterday's meal", K6 set ✓ + rest timer.
+
+## Applied (2026-10-25, second round, owner's approval)
+
+- K1: all four slots on Bugün, each with a "+" that opens the search with that slot set (14b7041).
+- K4: ‹ day › switcher on Bugün; earlier days are read only against their own targets (0815edb).
+- K6: ✓ per set (only done sets are saved) and a skippable 90 s rest after each (9b17c20).
+
+Open: K5 "add yesterday's meal" (later, owner's call).
