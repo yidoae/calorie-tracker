@@ -27,7 +27,9 @@ export function weeksDue(today: string, hour: number): string[] {
 const SPREAD: Record<number, number[]> = { 1: [0], 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 2, 3, 4], 6: [0, 1, 2, 3, 4, 5], 7: [0, 1, 2, 3, 4, 5, 6] };
 
 export function trainingWeekdays(program: WorkoutProgram): number[] {
-  return program.weekdays.length > 0 ? [...program.weekdays].sort((a, b) => a - b) : SPREAD[program.days.length];
+  if (program.weekdays.length > 0) return [...program.weekdays].sort((a, b) => a - b);
+  // A day with no exercises is not trained, so it does not count towards the spread.
+  return SPREAD[program.days.filter((d) => d.exercises.length > 0).length] ?? [];
 }
 
 /** "8-12" → [8, 12], "5" → [5, 5]; null for text like "AMRAP". */

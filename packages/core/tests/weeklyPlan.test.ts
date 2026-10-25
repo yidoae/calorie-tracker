@@ -42,6 +42,12 @@ describe("calendar", () => {
     assert.deepEqual(trainingWeekdays(PPL), [0, 2, 4]);
     assert.deepEqual(trainingWeekdays({ ...PPL, weekdays: [5, 0, 2] }), [0, 2, 5]);
   });
+
+  it("the spread counts only days with exercises", () => {
+    const withEmpty = { ...PPL, days: [...PPL.days.slice(0, 2), { name: "Boş", exercises: [] }] };
+    assert.deepEqual(trainingWeekdays(withEmpty), [0, 3]);
+    assert.deepEqual(trainingWeekdays({ ...PPL, days: [{ name: "Boş", exercises: [] }] }), []);
+  });
 });
 
 describe("targets (double progression)", () => {
