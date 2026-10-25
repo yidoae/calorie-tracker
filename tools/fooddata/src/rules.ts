@@ -2,6 +2,7 @@
  * The build rules (data-model.md "Build rules"). checkFoods returns every failure, each starting with
  * the food id(s) it is about, so one build run shows the whole list of fixes.
  */
+import { MAX_ITEM_GRAMS as MAX_GRAMS } from "@calorie/core/schemas/nutrition";
 import { normalizeTr } from "@calorie/core/search/normalize";
 import { PORTION_UNITS } from "@calorie/core/text/units";
 import type { Per100 } from "./recipe.ts";
@@ -32,7 +33,6 @@ export interface RuleContext {
 }
 
 const ID = /^[a-z0-9_]{1,64}$/;
-const MAX_GRAMS = 5000;
 // USDA computes energy with food-specific Atwater factors and counts fibre in carbohydrate, so plain
 // 4/4/9/7 overshoots vegetables by up to ~20 %. The rule is there to catch typos, not rounding.
 const ENERGY_TOLERANCE = 0.2;
