@@ -91,7 +91,8 @@ if (process.argv.includes("--check")) {
   // CI (T031, SC-003): rebuild in memory; every committed output must match byte for byte.
   const latest = listFiles.filter((f) => f.includes("_food_list_")).at(-1);
   if (latest) outputs.push(listMigration(latest.slice(0, 14)));
-  const stale = outputs.filter(([url, text]) => read(url) !== text).map(([url]) => url.pathname.slice(url.pathname.indexOf("/supabase/") >= 0 ? url.pathname.indexOf("/supabase/") + 1 : url.pathname.indexOf("/tools/") + 1));
+  const root = new URL("../../../", import.meta.url).href;
+  const stale = outputs.filter(([url, text]) => read(url) !== text).map(([url]) => url.href.slice(root.length));
   if (stale.length > 0) {
     console.error(`out of date (run npm run build -w fooddata and commit):\n${stale.map((s) => `  ${s}`).join("\n")}`);
     process.exit(1);
