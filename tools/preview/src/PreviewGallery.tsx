@@ -202,7 +202,7 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "workout-session",
     title: "Antrenman kaydı",
-    note: "Push günü: kilo ve tekrarlar son antrenmandan gelir, hiç yapılmamış harekette programın hedefinden. “+ Set ekle” üstteki seti kopyalar; boş bırakılan hareket kaydedilmez.",
+    note: "Push günü: kilo ve tekrarlar son antrenmandan gelir, hiç yapılmamış harekette programın hedefinden. Sete ✓ basınca satır yeşillenir ve 90 sn dinlenme sayacı başlar (“Geç” ile atlanır); yalnız ✓ basılan setler kaydedilir. “+ Set ekle” üstteki seti kopyalar.",
     Component: () => <WorkoutSessionScreen dayIndex={0} />,
     status: "ready",
   },

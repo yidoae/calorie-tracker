@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   input: {
     ...type.bodyStrong,
     flex: 1,
+    minWidth: 0,
     minHeight: 44,
     borderWidth: 1,
     borderColor: colors.borderStrong,

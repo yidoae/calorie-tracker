@@ -164,6 +164,8 @@ export function programFromDraft(draft: ProgramDraft): Result<WorkoutProgram> {
 export interface SetDraft {
   kg: string;
   reps: string;
+  /** Marked done with ✓ (design proposal K6); only done sets are saved. */
+  done: boolean;
 }
 interface LoggedExerciseDraft {
   name: string;
@@ -194,38 +196,53 @@ export function sessionDraft(day: ProgramDay, history: readonly WorkoutSession[]
       const last = done.find((d) => sameExercise(d.name, e.name));
       const firstReps = /\d+/.exec(e.reps)?.[0] ?? "";
       const sets = last
-        ? last.sets.map((s) => ({ kg: formatKg(s.kg), reps: String(s.reps) }))
-        : Array.from({ length: e.sets }, () => ({ kg: e.kg === null ? "" : formatKg(e.kg), reps: firstReps }));
+        ? last.sets.map((s) => ({ kg: formatKg(s.kg), reps: String(s.reps), done: false }))
+        : Array.from({ length: e.sets }, () => ({ kg: e.kg === null ? "" : formatKg(e.kg), reps: firstReps, done: false }));
       return { name: e.name, target: `${e.sets} × ${e.reps}${e.kg === null ? "" : ` · ${formatKg(e.kg)} kg`}`, sets };
     }),
   };
 }
 
+/** ✓ needs both kg and reps. */
+export const canMarkDone = (set: SetDraft) => set.kg.trim() !== "" && set.reps.trim() !== "";
+
 /**
- * The workout to save: sets with both fields filled, exercises with at least one such set (an
- * exercise left empty was skipped). An error in Turkish when a set is half filled, nothing was
- * filled or a number is off.
+ * The workout to save: the sets marked done, exercises with at least one (an exercise with none was
+ * skipped). An error in Turkish when a done set lost a field, no set is done or a number is off.
  */
 export function sessionFromDraft(draft: SessionDraft, performedOn: string): Result<WorkoutSessionInput> {
   for (const e of draft.exercises) {
-    const half = e.sets.findIndex((s) => (s.kg.trim() === "") !== (s.reps.trim() === ""));
+    const half = e.sets.findIndex((s) => s.done && !canMarkDone(s));
     if (half >= 0) return { ok: false, error: `${e.name} · ${half + 1}. sette kilo ve tekrar ikisi de dolu olmalı` };
   }
   const exercises = draft.exercises
     .map((e) => ({
       name: e.name,
-      sets: e.sets
-        .filter((s) => s.kg.trim() !== "" && s.reps.trim() !== "")
-        .map((s) => ({ kg: parseNumber(s.kg) ?? Number.NaN, reps: parseNumber(s.reps) ?? Number.NaN })),
+      sets: e.sets.filter((s) => s.done).map((s) => ({ kg: parseNumber(s.kg) ?? Number.NaN, reps: parseNumber(s.reps) ?? Number.NaN })),
     }))
     .filter((e) => e.sets.length > 0);
-  if (exercises.length === 0) return { ok: false, error: "En az bir sete kilo ve tekrar yaz." };
+  if (exercises.length === 0) return { ok: false, error: "Kaydetmek için en az bir seti ✓ ile işaretle." };
   const parsed = workoutSessionInputSchema.safeParse({ performedOn, dayName: draft.dayName, exercises });
   if (parsed.success) return { ok: true, value: parsed.data };
   const issue = parsed.error.issues[0];
   const exercise = issue.path[0] === "exercises" && typeof issue.path[1] === "number" ? exercises[issue.path[1]].name : null;
   return { ok: false, error: issueText(exercise, issue) };
 }
+
+/** Done sets against all sets, for the band of the logger. */
+export function setProgress(draft: SessionDraft): { done: number; total: number } {
+  const sets = draft.exercises.flatMap((e) => e.sets);
+  return { done: sets.filter((s) => s.done).length, total: sets.length };
+}
+
+/** The rest after a set marked done, in seconds. */
+export const REST_SECONDS = 90;
+
+/** Whole seconds of rest left at `now` (ms) for a rest ending at `endsAt` (ms); 0 once over. */
+export const restLeft = (endsAt: number, now: number) => Math.max(0, Math.ceil((endsAt - now) / 1000));
+
+/** 90 → "1:30". */
+export const formatRest = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
 // ---------------------------------------------------------------------------------------------
 // Weight progress

@@ -2,13 +2,18 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { workoutProgramSchema, type WorkoutSession } from "@calorie/core/schemas/workout";
 import {
+  canMarkDone,
   EMPTY_EXERCISE,
   estimatedMax,
   exerciseProgress,
+  formatRest,
   programDraft,
   programFromDraft,
+  REST_SECONDS,
+  restLeft,
   sessionDraft,
   sessionFromDraft,
+  setProgress,
   TEMPLATES,
 } from "../src/hooks/workoutLogic.ts";
 
@@ -57,11 +62,13 @@ describe("program editor", () => {
 
 describe("workout logger", () => {
   const day = { name: "Push", exercises: [{ name: "Bench press", sets: 3, reps: "6-8", kg: 60 }, { name: "Dips", sets: 2, reps: "AMRAP", kg: null }] };
+  const set = (kg: string, reps: string, done = true) => ({ kg, reps, done });
+  const one = (name: string, sets: ReturnType<typeof set>[]) => ({ dayName: "Push", exercises: [{ name, target: "", sets }] });
 
-  it("a never-logged exercise starts from the targets", () => {
+  it("a never-logged exercise starts from the targets, no set done yet", () => {
     const draft = sessionDraft(day, []);
-    assert.deepEqual(draft.exercises[0].sets, [{ kg: "60", reps: "6" }, { kg: "60", reps: "6" }, { kg: "60", reps: "6" }]);
-    assert.deepEqual(draft.exercises[1].sets, [{ kg: "", reps: "" }, { kg: "", reps: "" }]);
+    assert.deepEqual(draft.exercises[0].sets, [set("60", "6", false), set("60", "6", false), set("60", "6", false)]);
+    assert.deepEqual(draft.exercises[1].sets, [set("", "", false), set("", "", false)]);
     assert.equal(draft.exercises[0].target, "3 × 6-8 · 60 kg");
   });
 
@@ -70,32 +77,53 @@ describe("workout logger", () => {
       session("2026-10-20", [{ name: "bench press", sets: [{ kg: 60, reps: 8 }] }]),
       session("2026-10-23", [{ name: "BENCH PRESS", sets: [{ kg: 62.5, reps: 6 }, { kg: 62.5, reps: 5 }] }]),
     ];
-    assert.deepEqual(sessionDraft(day, history).exercises[0].sets, [{ kg: "62,5", reps: "6" }, { kg: "62,5", reps: "5" }]);
+    assert.deepEqual(sessionDraft(day, history).exercises[0].sets, [set("62,5", "6", false), set("62,5", "5", false)]);
   });
 
-  it("saves filled sets and skips empty ones and untouched exercises", () => {
-    const draft = { dayName: "Push", exercises: [{ name: "Bench press", target: "", sets: [{ kg: "60", reps: "8" }, { kg: "", reps: "" }] }, { name: "Dips", target: "", sets: [{ kg: "", reps: "" }] }] };
+  it("saves only the sets marked done; untouched exercises are left out", () => {
+    const draft = {
+      dayName: "Push",
+      exercises: [
+        { name: "Bench press", target: "", sets: [set("60", "8"), set("60", "8", false), set("", "", false)] },
+        { name: "Dips", target: "", sets: [set("", "", false)] },
+      ],
+    };
     assert.deepEqual(sessionFromDraft(draft, "2026-10-25"), {
       ok: true,
       value: { performedOn: "2026-10-25", dayName: "Push", exercises: [{ name: "Bench press", sets: [{ kg: 60, reps: 8 }] }] },
     });
   });
 
-  it("refuses an empty workout and impossible numbers", () => {
-    assert.deepEqual(sessionFromDraft({ dayName: "Push", exercises: [{ name: "Dips", target: "", sets: [{ kg: "", reps: "" }] }] }, "2026-10-25"), {
-      ok: false,
-      error: "En az bir sete kilo ve tekrar yaz.",
-    });
-    const bad = sessionFromDraft({ dayName: "Push", exercises: [{ name: "Squat", target: "", sets: [{ kg: "100", reps: "0" }] }] }, "2026-10-25");
+  it("refuses a workout with no set done and impossible numbers", () => {
+    assert.deepEqual(sessionFromDraft(one("Squat", [set("100", "5", false)]), "2026-10-25"), { ok: false, error: "Kaydetmek için en az bir seti ✓ ile işaretle." });
+    const bad = sessionFromDraft(one("Squat", [set("100", "0")]), "2026-10-25");
     assert.ok(!bad.ok && bad.error.startsWith("Squat · tekrar"), JSON.stringify(bad));
-    const text = sessionFromDraft({ dayName: "Push", exercises: [{ name: "Squat", target: "", sets: [{ kg: "abc", reps: "5" }] }] }, "2026-10-25");
-    assert.deepEqual(text, { ok: false, error: "Squat · kg: Bir sayı yaz" });
+    assert.deepEqual(sessionFromDraft(one("Squat", [set("abc", "5")]), "2026-10-25"), { ok: false, error: "Squat · kg: Bir sayı yaz" });
   });
 
-  it("a set with only kg or only reps is a problem, not a skipped set", () => {
-    const sets = (s: { kg: string; reps: string }[]) => sessionFromDraft({ dayName: "Push", exercises: [{ name: "Squat", target: "", sets: s }] }, "2026-10-25");
-    assert.deepEqual(sets([{ kg: "100", reps: "5" }, { kg: "100", reps: "" }]), { ok: false, error: "Squat · 2. sette kilo ve tekrar ikisi de dolu olmalı" });
-    assert.deepEqual(sets([{ kg: " ", reps: "5" }]), { ok: false, error: "Squat · 1. sette kilo ve tekrar ikisi de dolu olmalı" });
+  it("a done set emptied afterwards is a problem, not a skipped set", () => {
+    assert.deepEqual(sessionFromDraft(one("Squat", [set("100", "5"), set("100", "")]), "2026-10-25"), { ok: false, error: "Squat · 2. sette kilo ve tekrar ikisi de dolu olmalı" });
+    assert.deepEqual(sessionFromDraft(one("Squat", [set(" ", "5")]), "2026-10-25"), { ok: false, error: "Squat · 1. sette kilo ve tekrar ikisi de dolu olmalı" });
+  });
+
+  it("a set can be marked done once both fields are filled", () => {
+    assert.equal(canMarkDone(set("60", "8", false)), true);
+    assert.equal(canMarkDone(set("60", " ", false)), false);
+    assert.equal(canMarkDone(set("", "8", false)), false);
+  });
+
+  it("counts the done sets of the whole workout", () => {
+    const draft = { dayName: "Push", exercises: [{ name: "A", target: "", sets: [set("1", "1"), set("1", "1", false)] }, { name: "B", target: "", sets: [set("1", "1")] }] };
+    assert.deepEqual(setProgress(draft), { done: 2, total: 3 });
+  });
+
+  it("counts the rest down in whole seconds and shows it as m:ss", () => {
+    assert.equal(REST_SECONDS, 90);
+    assert.equal(restLeft(100_000, 10_000), 90);
+    assert.equal(restLeft(100_000, 99_001), 1);
+    assert.equal(restLeft(100_000, 120_000), 0);
+    assert.equal(formatRest(90), "1:30");
+    assert.equal(formatRest(5), "0:05");
   });
 });
 
