@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { weekPlanSchema, type WeekPlan, type WorkoutProgram, type WorkoutSession } from "../src/schemas/workout.ts";
 import { nextTarget, planWeek, repRange, trainingWeekdays, weekIntensity, weeksDue } from "../src/workout/plan.ts";
-import { estimatedMax, isStalled, mondayOf, reviewWeek } from "../src/workout/review.ts";
+import { addDays, estimatedMax, isStalled, mondayOf, reviewWeek } from "../src/workout/review.ts";
 
 const ID = "6f1c2c47-5d7e-4c7b-9b3e-1f2a3b4c5d6e";
 const session = (performedOn: string, dayName: string, exercises: WorkoutSession["exercises"]): WorkoutSession => ({
@@ -184,5 +184,19 @@ describe("names from the exercise catalogue", () => {
     const push: WorkoutProgram = { ...PPL, days: [{ name: "Push", exercises: [bench] }] };
     const plan = planWeek({ weekStart: "2026-10-26", program: push, sessions: [session("2026-10-20", "Push", [{ name: "düz bench", sets: sets(60, 8, 8, 8) }])], pastWeeks: [] });
     assert.deepEqual(plan.days[0].exercises[0], { ...bench, kg: 62.5, reps: "6", change: "up_kg" });
+  });
+});
+
+describe("deload rhythm across a break", () => {
+  const normalWeek = (weekStart: string): WeekPlan => ({ weekStart, intensity: "normal", days: [], feedback: null });
+  const fiveWeeks = (last: string) => [0, 7, 14, 21, 28].map((d) => normalWeek(addDays(last, -d)));
+
+  it("five weeks in a row bring a deload", () => {
+    assert.equal(planWeek({ weekStart: "2026-10-26", program: PPL, sessions: [], pastWeeks: fiveWeeks("2026-10-19") }).intensity, "deload");
+  });
+
+  it("one missed week keeps counting; a longer break starts the count again", () => {
+    assert.equal(planWeek({ weekStart: "2026-10-26", program: PPL, sessions: [], pastWeeks: fiveWeeks("2026-10-12") }).intensity, "deload");
+    assert.equal(planWeek({ weekStart: "2026-10-26", program: PPL, sessions: [], pastWeeks: fiveWeeks("2026-10-05") }).intensity, "normal");
   });
 });

@@ -100,7 +100,13 @@ export function planWeek({ weekStart, program, sessions, pastWeeks }: PlanInput)
   const names = [...new Map(days.flatMap((d) => d.exercises).map((e) => [exerciseKey(e.name), e.name])).values()];
   const tracked = names.map(history).filter((h) => h.length > 0);
   const stalledShare = tracked.length >= 2 ? tracked.filter(isStalled).length / tracked.length : 0;
-  const intensity = weekIntensity(earlier, completion, stalledShare);
+  // A break of more than one calendar week between stored weeks starts the deload count again.
+  const run: WeekPlan[] = [];
+  for (const w of earlier) {
+    if (w.weekStart < addDays(run.at(-1)?.weekStart ?? weekStart, -14)) break;
+    run.push(w);
+  }
+  const intensity = weekIntensity(run, completion, stalledShare);
 
   // The rotation goes on from the day after the last one done.
   const lastDone = before[0] ? days.findIndex((d) => normalizeTr(d.name) === normalizeTr(before[0].dayName)) : -1;
