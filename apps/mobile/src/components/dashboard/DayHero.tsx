@@ -1,6 +1,6 @@
-import { LOCALE } from "@calorie/core/dates";
 import { progressOf } from "@calorie/core/nutrition/macros";
 import { StyleSheet, Text, View } from "react-native";
+import { formatKcal } from "@/components/meals/format";
 import { colors, radius, space, type } from "@/theme";
 
 interface Props {
@@ -12,35 +12,34 @@ interface Props {
 }
 
 const DAY_TYPE = { training: "Antrenman günü", rest: "Dinlenme günü" } as const;
-const fmt = (n: number) => Math.round(n).toLocaleString(LOCALE);
 
 /** The day's calories in the ink band (design proposal K3): what is left as the one big number, eaten as a lime bar; red once over. */
 export default function DayHero({ eaten, target, dayType }: Props) {
   const left = target - eaten;
   const over = left < 0;
   const share = progressOf(eaten, target);
-  const status = over ? `${fmt(-left)} kcal fazla` : `${fmt(left)} kcal kaldı`;
+  const status = over ? `${formatKcal(-left)} kcal fazla` : `${formatKcal(left)} kcal kaldı`;
 
   return (
     <View
       testID="calorie-summary"
       accessible
       accessibilityRole="progressbar"
-      accessibilityLabel={`Kalori: ${fmt(eaten)} / ${fmt(target)} kcal, ${status}`}
+      accessibilityLabel={`Kalori: ${formatKcal(eaten)} / ${formatKcal(target)} kcal, ${status}`}
       accessibilityValue={{ min: 0, max: Math.round(target), now: Math.round(eaten) }}
       style={styles.wrap}
     >
       <View style={styles.row}>
         <View>
           <Text maxFontSizeMultiplier={1.3} style={[styles.number, over && styles.over]}>
-            {fmt(Math.abs(left))}
+            {formatKcal(Math.abs(left))}
           </Text>
           <Text style={[styles.caption, over && styles.over]}>{over ? "kcal fazla" : "kcal kaldı"}</Text>
         </View>
         <View style={styles.side}>
           {dayType && <Text style={styles.caption}>{DAY_TYPE[dayType]}</Text>}
           <Text style={styles.detail}>
-            {fmt(eaten)} / {fmt(target)} kcal
+            {formatKcal(eaten)} / {formatKcal(target)} kcal
           </Text>
         </View>
       </View>
