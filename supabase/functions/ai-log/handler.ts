@@ -136,20 +136,27 @@ export async function handle(req: Request, deps: Deps): Promise<Response> {
 
   const started = deps.now();
   const settle = (f: Omit<Finish, "model" | "latencyMs">) => deps.finish(claim.id, { ...f, model: deps.modelName, latencyMs: Math.round(deps.now() - started) });
+  let result: AiResult;
   try {
     const foods = await deps.foods();
     const answer = await deps.model(kind, foods, input);
-    const result = validateAnswer(answer.text, new Map(foods.map((f) => [f.id, f])));
+    result = validateAnswer(answer.text, new Map(foods.map((f) => [f.id, f])));
     const tokens = { inputTokens: answer.inputTokens, outputTokens: answer.outputTokens };
     if (result.items.length === 0) {
       await settle({ status: "released", ...tokens, result: null, error: "no_food" });
       return fail("no_food");
     }
     await settle({ status: "counted", ...tokens, result, error: null });
-    return json(200, { ...result, allowance: await deps.allowance(token) });
   } catch (e) {
     if (!(e instanceof AiUnavailable)) console.error("ai-log", e);
     await settle({ status: "released", inputTokens: null, outputTokens: null, result: null, error: "ai_unavailable" });
+    return fail("ai_unavailable");
+  }
+  // Already counted: a failed allowance read must not release it; a retry with the same key replays the body.
+  try {
+    return json(200, { ...result, allowance: await deps.allowance(token) });
+  } catch (e) {
+    console.error("ai-log", e);
     return fail("ai_unavailable");
   }
 }

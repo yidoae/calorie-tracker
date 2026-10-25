@@ -95,6 +95,14 @@ Deno.test("model failure, timeout or no food release the attempt", async () => {
   assertEquals([r3.status, (await r3.json()).error, empty.finished[0].status], [422, "no_food", "released"]);
 });
 
+Deno.test("a failed allowance read after counting keeps the count, so a retry replays the body", async () => {
+  const f = fakes();
+  f.deps.allowance = () => Promise.reject(new Error("db down"));
+  const res = await handle(post(text("2 yumurta")), f.deps);
+  assertEquals([res.status, (await res.json()).error], [503, "ai_unavailable"]);
+  assertEquals(f.finished.map((x) => x.status), ["counted"]);
+});
+
 Deno.test("jpegSize reads the frame size and rejects other bytes", () => {
   const bytes = Uint8Array.from(atob(jpeg(640, 480)), (c) => c.charCodeAt(0));
   assertEquals(jpegSize(bytes), { width: 640, height: 480 });
