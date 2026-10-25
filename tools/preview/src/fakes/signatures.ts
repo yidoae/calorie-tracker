@@ -3,6 +3,7 @@ import type * as RealAuth from "@/services/authService";
 import type * as RealErrors from "@/services/errors";
 import type * as RealFood from "@/services/foodService";
 import type * as RealMeal from "@/services/mealService";
+import type * as RealNotification from "@/services/notificationService";
 import type * as RealPlan from "@/services/planService";
 import type * as RealProfile from "@/services/profileService";
 import type * as RealWorkout from "@/services/workoutService";
@@ -11,6 +12,7 @@ import type * as Auth from "./authService";
 import type * as Errors from "./errors";
 import type * as Food from "./foodService";
 import type * as Meal from "./mealService";
+import type * as Notification from "./notificationService";
 import type * as Plan from "./planService";
 import type * as Profile from "./profileService";
 import type * as Workout from "./workoutService";
@@ -28,6 +30,7 @@ export type FakesFitServices = [
   Fits<typeof RealErrors, typeof Errors>,
   Fits<typeof RealFood, typeof Food>,
   Fits<typeof RealMeal, typeof Meal>,
+  Fits<typeof RealNotification, typeof Notification>,
   Fits<typeof RealPlan, typeof Plan>,
   Fits<typeof RealProfile, typeof Profile>,
   Fits<typeof RealWorkout, typeof Workout>,

@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
 import { useWeeklyPlan } from "@/hooks/useWeeklyPlan";
+import { useWeeklyReminder } from "@/hooks/useWeeklyReminder";
 import { useWorkoutProgram, useWorkoutSessions } from "@/hooks/useWorkout";
 import { formatKg } from "@/hooks/workoutLogic";
 import { colors, radius, space, type } from "@/theme";
@@ -22,6 +23,7 @@ export default function WorkoutOverview() {
   const program = useWorkoutProgram();
   const log = useWorkoutSessions();
   const weekly = useWeeklyPlan();
+  useWeeklyReminder(program.isSuccess ? Boolean(program.data) : null);
   const doneDates = new Set(log.sessions.map((s) => s.performedOn));
 
   const footer = (
