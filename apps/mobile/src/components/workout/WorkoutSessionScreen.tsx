@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { progressOf } from "@calorie/core/nutrition/macros";
 import { router } from "expo-router";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import FormError from "@/components/auth/FormError";
@@ -51,7 +52,7 @@ function Logger({ initial }: { initial: SessionDraft }) {
       </Text>
       <Text style={styles.heroCaption}>set yapıldı · ✓ ile işaretlediğin setler kaydedilir</Text>
       <View style={styles.track}>
-        <View style={[styles.fill, { width: `${total > 0 ? (done / total) * 100 : 0}%` }]} />
+        <View style={[styles.fill, { width: `${progressOf(done, total) * 100}%` }]} />
       </View>
     </View>
   );
