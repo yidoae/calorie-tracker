@@ -20,4 +20,9 @@ describe("stepGrams", () => {
     assert.equal(stepGrams("4995", 1), "5000");
     assert.equal(stepGrams("5000", 1), "5000");
   });
+
+  it("steps an amount over the cap down from the cap, not from 0", () => {
+    assert.equal(stepGrams("6000", -1), "4990");
+    assert.equal(stepGrams("6000", 1), "5000");
+  });
 });
