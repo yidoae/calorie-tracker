@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import DayBody from "@/components/dashboard/DayBody";
+import DayHero from "@/components/dashboard/DayHero";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
 import { usePastDay } from "@/hooks/usePastDay";
@@ -9,7 +10,7 @@ function leave() {
   else router.replace("/history");
 }
 
-/** A day from the calendar (US5): the dashboard's ring, bars and meals, against that day's targets. */
+/** A day from the calendar (US5): the dashboard's calories, macro tiles and meals, against that day's targets. */
 export default function DayDetailScreen({ date }: { date: string | undefined }) {
   const day = usePastDay(date);
   const back = { label: "Takvime dön", onPress: leave };
@@ -23,7 +24,7 @@ export default function DayDetailScreen({ date }: { date: string | undefined }) 
   }
 
   return (
-    <Screen title={day.title} lead="O günün hedefleri ve öğünleri." back={back}>
+    <Screen title={day.title} back={back} hero={day.resolved && <DayHero eaten={day.eaten.calories} target={day.resolved.targets.calories} dayType={day.resolved.dayType} />}>
       <DayBody day={day} subject="Gün" empty={{ title: "Bu gün öğün yok", body: "O gün kayıt girilmemiş." }} />
     </Screen>
   );

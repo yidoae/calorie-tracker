@@ -33,7 +33,7 @@ export default function DayBody({ day, subject, empty }: Props) {
   }
   return (
     <>
-      <DaySummary eaten={day.eaten} targets={day.resolved.targets} dayType={day.resolved.dayType} />
+      <DaySummary eaten={day.eaten} targets={day.resolved.targets} />
       {day.groups.length === 0 ? (
         <StateMessage kind="empty" title={empty.title} body={empty.body} />
       ) : (

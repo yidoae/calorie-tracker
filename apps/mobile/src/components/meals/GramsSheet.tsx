@@ -3,6 +3,7 @@ import FormError from "@/components/auth/FormError";
 import Button from "@/components/ui/Button";
 import Sheet from "@/components/ui/Sheet";
 import TextField from "@/components/ui/TextField";
+import { GRAM_STEP, stepGrams } from "./gramStep";
 import { gramsError } from "@/hooks/mealLogic";
 
 interface Props {
@@ -38,7 +39,7 @@ function GramsForm({ grams, pending, onSave, onClose }: { grams: number; pending
 
   return (
     <>
-      <TextField label="Kaç gram yedin?" value={text} onChangeText={setText} unit="g" keyboardType="decimal-pad" error={error} autoFocus />
+      <TextField label="Kaç gram yedin?" value={text} onChangeText={setText} unit="g" keyboardType="decimal-pad" error={error} autoFocus stepper={{ onStep: (d) => setText(stepGrams(text, d)), ...GRAM_STEP }} />
       <Button label="Kaydet" loading={pending} onPress={save} />
       <Button label="Vazgeç" variant="ghost" onPress={onClose} />
     </>

@@ -14,10 +14,12 @@ interface Props {
   footer?: ReactNode;
   /** A back arrow (or a cross for modals) above the heading. */
   back?: { label: string; onPress: () => void; icon?: "back" | "close" };
+  /** The screen's one big number, under the heading in the band (e.g. Bugün's calories). */
+  hero?: ReactNode;
 }
 
 /** The tofuhq page: an ink header band, then a white rounded panel that scrolls. */
-export default function Screen({ title, lead, children, footer, back }: Props) {
+export default function Screen({ title, lead, children, footer, back, hero }: Props) {
   return (
     <SafeAreaView edges={["top"]} style={styles.root}>
       <View style={styles.band}>
@@ -30,6 +32,7 @@ export default function Screen({ title, lead, children, footer, back }: Props) {
           {title}
         </Text>
         {lead && <Text style={styles.lead}>{lead}</Text>}
+        {hero}
       </View>
       <View style={styles.panel}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">

@@ -16,6 +16,7 @@ import WorkoutScreen from "@/app/(tabs)/workout";
 import PhotoCapture from "@/components/ai/PhotoCapture";
 import TextLogScreen from "@/components/ai/TextLogScreen";
 import VerifyEmail from "@/components/auth/VerifyEmail";
+import DayHero from "@/components/dashboard/DayHero";
 import DayDetailScreen from "@/components/history/DayDetailScreen";
 import FoodSearchScreen from "@/components/meals/FoodSearchScreen";
 import MealDetailScreen from "@/components/meals/MealDetailScreen";
@@ -25,8 +26,7 @@ import PlanWizardScreen from "@/components/plan/PlanWizardScreen";
 import { SensitiveNoticeContent } from "@/components/plan/SensitiveNotice";
 import SetupStepScreen from "@/components/setup/SetupStepScreen";
 import Button from "@/components/ui/Button";
-import MacroBar from "@/components/ui/MacroBar";
-import Ring from "@/components/ui/Ring";
+import MacroTile from "@/components/ui/MacroTile";
 import Screen from "@/components/ui/Screen";
 import Segmented from "@/components/ui/Segmented";
 import Slider from "@/components/ui/Slider";
@@ -114,7 +114,7 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "today",
     title: "Bugün",
-    note: "Örnek gün: kahvaltı ve öğle yemeği. Halka ve makro çubukları öğünlerin sunucuda hesaplanan toplamlarından dolar; öğünler öğüne göre gruplanır, dokununca açılır. “Öğün ekle” arama ekranını açar.",
+    note: "Örnek gün: kahvaltı ve öğle yemeği. Banttaki kalan kalori ve makro kutuları öğünlerin sunucuda hesaplanan toplamlarından dolar; öğünler öğüne göre gruplanır, dokununca açılır. “Öğün ekle” arama ekranını açar.",
     Component: TodayScreen,
     status: "ready",
   },
@@ -163,7 +163,7 @@ const SCREENS: ScreenEntry[] = [
   {
     id: "day-detail",
     title: "Geçmiş bir gün",
-    note: "Takvimden açılan gün: Bugün ekranındaki halka, makro çubukları ve öğünler, o gün geçerli olan planın hedeflerine göre (döngüde antrenman/dinlenme günü). Öğüne dokununca düzenlenebilir.",
+    note: "Takvimden açılan gün: Bugün ekranındaki kalori bandı, makro kutuları ve öğünler, o gün geçerli olan planın hedeflerine göre (döngüde antrenman/dinlenme günü). Öğüne dokununca düzenlenebilir.",
     Component: () => <DayDetailScreen date={SAMPLE_MEALS[0].localDate} />,
     status: "ready",
   },
@@ -322,17 +322,19 @@ export default function PreviewGallery() {
                 <FieldSample label="Ne kadar yedin?" unit="g" initial="150" hint="Tipik porsiyon 150 g" />
                 <FieldSample label="Boy" unit="cm" initial="300" error="Boy 100–250 cm arasında olmalı." />
               </Specimen>
-              <Specimen label="Kalori halkası: başlangıç, yolda, hedef aşıldı">
-                <View style={styles.rings}>
-                  <Ring value={0} target={1714} size={150} />
-                  <Ring value={1120} target={1714} size={150} />
-                  <Ring value={1900} target={1714} size={150} />
-                </View>
+              <Specimen label="Kalori bandı: başlangıç, yolda, hedef aşıldı">
+                {[0, 1120, 1900].map((eaten) => (
+                  <View key={eaten} style={styles.inkSample}>
+                    <DayHero eaten={eaten} target={1714} dayType={eaten === 1120 ? "training" : null} />
+                  </View>
+                ))}
               </Specimen>
-              <Specimen label="Makro çubukları">
-                <MacroBar label="Protein" value={96} target={154} color={colors.macroProtein} />
-                <MacroBar label="Karbonhidrat" value={40} target={86} color={colors.macroCarbs} />
-                <MacroBar label="Yağ" value={90} target={84} color={colors.macroFat} />
+              <Specimen label="Makro kutuları: yolda, hedef aşıldı">
+                <View style={styles.tiles}>
+                  <MacroTile label="Protein" value={96} target={154} color={colors.macroProtein} tint={colors.proteinSoft} />
+                  <MacroTile label="Karbonhidrat" value={40} target={86} color={colors.macroCarbs} tint={colors.carbsSoft} />
+                  <MacroTile label="Yağ" value={90} target={84} color={colors.macroFat} tint={colors.fatSoft} />
+                </View>
               </Specimen>
               <Specimen label="Kaydırıcı ve sekmeli seçim">
                 <SliderSample />
@@ -468,7 +470,7 @@ const styles = StyleSheet.create({
   specimen: { flexGrow: 1, flexBasis: 300, borderWidth: 1, borderColor: colors.border, borderRadius: radius.lg, padding: space(5), gap: space(3) },
   specimenLabel: { ...type.label, color: colors.fgMuted },
   specimenBody: { gap: space(3) },
-  rings: { flexDirection: "row", flexWrap: "wrap", gap: space(3) },
+  tiles: { flexDirection: "row", gap: space(2) },
   inkSample: { backgroundColor: colors.ink, borderRadius: radius.md, padding: space(3) },
   noticeTitle: { ...type.displayMd, color: colors.fg },
   sampleValue: { ...type.bodyStrong, color: colors.fg },

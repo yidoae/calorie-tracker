@@ -39,6 +39,10 @@ export const colors = {
   macroProtein: "#bd41f0",
   macroCarbs: "#3898ec",
   macroFat: "#84cc16",
+  /** Light tints of the macro colours for tiles and chips (design proposal K2); text on them stays fg / fgMuted. */
+  proteinSoft: "#f6e6fd",
+  carbsSoft: "#e3f0fc",
+  fatSoft: "#eef7dc",
   /** Dims the screen behind sheets and dialogs (ink at 50 %). */
   overlay: "rgba(23, 11, 33, 0.5)",
   transparent: "transparent",

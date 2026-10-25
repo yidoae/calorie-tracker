@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View, type KeyboardTypeOptions } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View, type KeyboardTypeOptions } from "react-native";
 import { colors, radius, space, type } from "@/theme";
 
 interface Props {
@@ -20,13 +20,16 @@ interface Props {
   maxLength?: number;
   /** Stable id for the Maestro smoke flow (.maestro/smoke.yaml). */
   testID?: string;
+  /** −/+ buttons inside the field for numbers (design proposal K7); the caller computes the next value. */
+  stepper?: { onStep: (delta: 1 | -1) => void; less: string; more: string };
 }
 
-export default function TextField({ label, value, onChangeText, placeholder, error, hint, unit, keyboardType, secureTextEntry, autoComplete = "off", autoFocus, multiline, maxLength, testID }: Props) {
+export default function TextField({ label, value, onChangeText, placeholder, error, hint, unit, keyboardType, secureTextEntry, autoComplete = "off", autoFocus, multiline, maxLength, testID, stepper }: Props) {
   return (
     <View style={styles.wrap}>
       <Text style={styles.label}>{label}</Text>
-      <View style={[styles.field, error ? styles.fieldError : null]}>
+      <View style={[styles.field, stepper && styles.fieldStepper, error ? styles.fieldError : null]}>
+        {stepper && <StepButton label={stepper.less} symbol="−" onPress={() => stepper.onStep(-1)} />}
         <TextInput
           testID={testID}
           accessibilityLabel={label}
@@ -42,9 +45,10 @@ export default function TextField({ label, value, onChangeText, placeholder, err
           autoFocus={autoFocus}
           multiline={multiline}
           maxLength={maxLength}
-          style={styles.input}
+          style={[styles.input, stepper && styles.inputStepper]}
         />
         {unit && <Text style={styles.unit}>{unit}</Text>}
+        {stepper && <StepButton label={stepper.more} symbol="+" onPress={() => stepper.onStep(1)} />}
       </View>
       {error ? (
         <Text accessibilityLiveRegion="polite" style={styles.error}>
@@ -54,6 +58,14 @@ export default function TextField({ label, value, onChangeText, placeholder, err
         <Text style={styles.hint}>{hint}</Text>
       ) : null}
     </View>
+  );
+}
+
+function StepButton({ label, symbol, onPress }: { label: string; symbol: string; onPress: () => void }) {
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={({ pressed }) => [styles.step, pressed && styles.stepPressed]}>
+      <Text style={styles.stepSymbol}>{symbol}</Text>
+    </Pressable>
   );
 }
 
@@ -70,8 +82,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     paddingHorizontal: space(4),
   },
+  fieldStepper: { paddingHorizontal: space(1) },
   fieldError: { borderColor: colors.danger, borderWidth: 2 },
-  input: { ...type.body, flex: 1, color: colors.fg, paddingVertical: space(3) },
+  input: { ...type.body, flex: 1, minWidth: 0, color: colors.fg, paddingVertical: space(3) },
+  inputStepper: { ...type.displayMd, textAlign: "center" },
+  step: { width: 44, height: 44, alignItems: "center", justifyContent: "center", borderRadius: radius.sm },
+  stepPressed: { backgroundColor: colors.surface2 },
+  stepSymbol: { ...type.displayMd, color: colors.fg },
   unit: { ...type.bodyStrong, color: colors.fgMuted, marginLeft: space(2) },
   error: { ...type.small, color: colors.dangerText },
   hint: { ...type.small, color: colors.fgMuted },

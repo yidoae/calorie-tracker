@@ -2,6 +2,7 @@ import type { Macros } from "@calorie/core/schemas/nutrition";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import TextField from "@/components/ui/TextField";
+import { GRAM_STEP, stepGrams } from "./gramStep";
 import type { Portion, PortionPick } from "@/hooks/portionLogic";
 import { colors, radius, space, type } from "@/theme";
 import { formatGrams } from "./format";
@@ -50,6 +51,7 @@ export default function DraftItemCard({ name, typicalPortionG, gramsText, onChan
             : `Tipik porsiyon yaklaşık ${formatGrams(typicalPortionG)} g; tarttığın ya da tahmin ettiğin miktarı yaz.`
         }
         error={error}
+        stepper={{ onStep: (d) => onChangeGrams(stepGrams(gramsText, d)), ...GRAM_STEP }}
       />
       {portions.length > 0 && <PortionPicker portions={portions} pick={portion} onPick={onPickPortion} onStep={onStepPortion} />}
       {macros ? <MacroLine macros={macros} /> : <Text style={styles.pending}>Gramı yazınca kalori ve makrolar görünür.</Text>}
