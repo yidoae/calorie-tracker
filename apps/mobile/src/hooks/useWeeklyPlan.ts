@@ -1,4 +1,4 @@
-import type { WeekPlan } from "@calorie/core/schemas/workout";
+import type { WeekPlan, WorkoutProgram } from "@calorie/core/schemas/workout";
 import { planWeek, weeksDue } from "@calorie/core/workout/plan";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
@@ -31,11 +31,13 @@ export function useWeeklyPlan() {
   const missing = due.filter((start) => !stored(start));
 
   const build = useMutation({
-    mutationFn: async ({ starts, replace }: { starts: string[]; replace: boolean }) => {
-      if (!program.data) return;
-      const past = [...(weeks.data ?? [])];
+    mutationFn: async ({ starts, replace, from }: { starts: string[]; replace: boolean; from?: WorkoutProgram }) => {
+      const current = from ?? program.data;
+      if (!current) return;
+      // Earlier weeks only: a replanned week must not count its own old plan.
+      const past = (weeks.data ?? []).filter((w) => !starts.includes(w.weekStart));
       for (const weekStart of starts) {
-        const plan = planWeek({ weekStart, program: program.data, sessions: log.sessions, pastWeeks: past });
+        const plan = planWeek({ weekStart, program: current, sessions: log.sessions, pastWeeks: past });
         await saveWeek(plan, replace);
         past.push(plan);
       }
@@ -63,7 +65,7 @@ export function useWeeklyPlan() {
     today: localDate,
     loading: program.isPending || log.loading || weeks.isPending || build.isPending,
     error: weeks.error ? toAppError(weeks.error) : build.error ? toAppError(build.error) : null,
-    /** Rebuilds the due weeks from the current program (after an edit); true when stored. */
-    replan: () => build.mutateAsync({ starts: due, replace: true }).then(() => true, () => false),
+    /** Rebuilds the due weeks from `from` (the program just saved) or the loaded one; true when stored. */
+    replan: (from?: WorkoutProgram) => build.mutateAsync({ starts: due, replace: true, from }).then(() => true, () => false),
   };
 }

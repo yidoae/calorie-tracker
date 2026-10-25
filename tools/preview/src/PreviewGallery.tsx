@@ -35,7 +35,9 @@ import TextField from "@/components/ui/TextField";
 import Toast from "@/components/ui/Toast";
 import ExerciseProgressScreen from "@/components/workout/ExerciseProgressScreen";
 import ProgramEditorScreen from "@/components/workout/ProgramEditorScreen";
+import WeekPlanCard from "@/components/workout/WeekPlanCard";
 import WorkoutSessionScreen from "@/components/workout/WorkoutSessionScreen";
+import type { WeekPlan } from "@calorie/core/schemas/workout";
 import type { SetupStep } from "@/hooks/setupSteps";
 import { useMealDraft } from "@/hooks/useMealDraft";
 import { SessionContext, type SessionState } from "@/hooks/useSession";
@@ -348,6 +350,12 @@ export default function PreviewGallery() {
                 <Text style={styles.noticeTitle}>Aralıklı oruç herkese uygun değil</Text>
                 <SensitiveNoticeContent kind="fasting" onAccept={() => {}} onDecline={() => {}} />
               </Specimen>
+              <Specimen label="Haftalık plan (008): deload haftası, geri bildirim, bugün, yapıldı, kaçırıldı">
+                <WeekPlanCard title="BU HAFTA" week={DELOAD_WEEK} doneDates={new Set([DELOAD_WEEK.days[0].date])} today={DELOAD_WEEK.days[2].date} />
+              </Specimen>
+              <Specimen label="Haftalık plan: hafif hafta, planlı gün yok">
+                <WeekPlanCard title="GELECEK HAFTA" week={{ weekStart: "2026-11-02", intensity: "light", days: [], feedback: null }} doneDates={new Set()} today="2026-10-25" />
+              </Specimen>
               <Specimen label="Boş durum ve hata durumu">
                 <StateMessage kind="empty" title="Henüz öğün yok" body="İlk öğününü eklemek için + düğmesine dokun." actionLabel="Öğün ekle" onAction={() => {}} />
                 <StateMessage kind="error" title="Öğün kaydedilemedi" body="İnternet bağlantısı yok gibi görünüyor. Bağlantını kontrol edip tekrar dene." actionLabel="Tekrar dene" onAction={() => {}} />
@@ -392,6 +400,27 @@ export default function PreviewGallery() {
     </QueryClientProvider>
   );
 }
+
+const DELOAD_WEEK: WeekPlan = {
+  weekStart: "2026-10-19",
+  intensity: "deload",
+  days: [
+    { date: "2026-10-19", name: "Push", exercises: [{ name: "Bench press", sets: 3, reps: "6-8", kg: 60, change: "deload" }, { name: "Lateral raise", sets: 2, reps: "12-15", kg: 8, change: "deload" }] },
+    { date: "2026-10-21", name: "Pull", exercises: [{ name: "Barbell row", sets: 3, reps: "8-10", kg: 55, change: "deload" }] },
+    { date: "2026-10-23", name: "Legs", exercises: [{ name: "Squat", sets: 3, reps: "5", kg: 85, change: "deload" }, { name: "Plank", sets: 3, reps: "AMRAP", kg: null, change: "new" }] },
+  ],
+  feedback: {
+    weekStart: "2026-10-12",
+    sessionsDone: 3,
+    sessionsPlanned: 3,
+    volume: 9850,
+    volumeChangePct: 6,
+    records: [{ name: "Bench press", kg: 67.5, reps: 6 }],
+    stalled: ["Squat", "Barbell row"],
+    headline: "Planlanan 3 antrenmanın hepsi yapıldı.",
+    notes: ["Yeni rekor: Bench press 67,5 kg × 6", "Squat ve Barbell row üç antrenmandır ilerlemedi: bu hafta yük hafif."],
+  },
+};
 
 function Specimen({ label, children }: { label: string; children: ReactNode }) {
   return (

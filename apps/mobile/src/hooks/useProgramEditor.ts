@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { WORKOUT_LIMITS } from "@calorie/core/schemas/workout";
+import { WORKOUT_LIMITS, type WorkoutProgram } from "@calorie/core/schemas/workout";
 import { toAppError } from "@/services/errors";
 import { saveProgram } from "@/services/workoutService";
 import { useToast } from "./useToast";
-import { EMPTY_EXERCISE, programDraft, programFromDraft, TEMPLATES, type ExerciseDraft, type ProgramDraft, type TemplateId } from "./workoutLogic";
+import { EMPTY_EXERCISE, programDraft, programFromDraft, TEMPLATES, toggleWeekday, type ExerciseDraft, type ProgramDraft, type TemplateId } from "./workoutLogic";
 
 /**
  * The program editor (007): starts from the saved program or a ready-made split, lets the user
@@ -40,6 +40,8 @@ export function useProgramEditor(initial: ProgramDraft) {
     },
     setName: (name: string) => setDraft((d) => ({ ...d, name })),
     setSplit: (split: string) => setDraft((d) => ({ ...d, split })),
+    /** 008: a training weekday on or off (Monday = 0). */
+    toggleWeekday: (day: number) => setDraft((d) => ({ ...d, weekdays: toggleWeekday(d.weekdays, day) })),
     canAddDay: draft.days.length < WORKOUT_LIMITS.days.max,
     addDay: () => setDraft((d) => ({ ...d, days: [...d.days, { name: `Gün ${d.days.length + 1}`, exercises: [] }] })),
     removeDay: (day: number) => setDraft((d) => ({ ...d, days: d.days.filter((_, i) => i !== day) })),
@@ -50,17 +52,16 @@ export function useProgramEditor(initial: ProgramDraft) {
     setExercise: (day: number, index: number, field: keyof ExerciseDraft, value: string) =>
       editDay(day, (d) => ({ ...d, exercises: d.exercises.map((e, i) => (i === index ? { ...e, [field]: value } : e)) })),
     problem,
-    /** Saves the program; true when it was saved. */
-    save: async (): Promise<boolean> => {
-      if (mutation.isPending) return false;
+    /** Saves the program; the saved program, or null when it was not saved. */
+    save: async (): Promise<WorkoutProgram | null> => {
+      if (mutation.isPending) return null;
       const result = programFromDraft(draft);
       setProblem(result.ok ? null : result.error);
-      if (!result.ok) return false;
+      if (!result.ok) return null;
       try {
-        await mutation.mutateAsync(result.value);
-        return true;
+        return await mutation.mutateAsync(result.value);
       } catch {
-        return false;
+        return null;
       }
     },
     pending: mutation.isPending,

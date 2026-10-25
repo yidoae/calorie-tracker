@@ -7,8 +7,10 @@ import Button from "@/components/ui/Button";
 import Screen from "@/components/ui/Screen";
 import StateMessage from "@/components/ui/StateMessage";
 import TextField from "@/components/ui/TextField";
+import WeekdayPicker from "@/components/ui/WeekdayPicker";
 import { useActivePlan } from "@/hooks/useActivePlan";
 import { useProgramEditor } from "@/hooks/useProgramEditor";
+import { useWeeklyPlan } from "@/hooks/useWeeklyPlan";
 import { useWorkoutProgram } from "@/hooks/useWorkout";
 import { programDraft, TEMPLATES, type ProgramDraft } from "@/hooks/workoutLogic";
 import { colors, radius, space, type } from "@/theme";
@@ -44,9 +46,14 @@ export default function ProgramEditorScreen() {
 
 function Editor({ initial, isNew }: { initial: ProgramDraft; isNew: boolean }) {
   const e = useProgramEditor(initial);
+  const weekly = useWeeklyPlan();
 
   async function save() {
-    if (await e.save()) router.back();
+    const saved = await e.save();
+    if (!saved) return;
+    // This week and (from Sunday 18:00) next week follow the new program; it finishes after leaving.
+    void weekly.replan(saved);
+    router.back();
   }
 
   return (
@@ -64,6 +71,12 @@ function Editor({ initial, isNew }: { initial: ProgramDraft; isNew: boolean }) {
 
       <TextField label="Program adı" value={e.draft.name} onChangeText={e.setName} maxLength={60} />
       <TextField label="Program tipi" value={e.draft.split} onChangeText={e.setSplit} hint="Örn. Push / Pull / Legs, Upper / Lower, Full body" maxLength={40} />
+      <Field
+        label="Hangi günler antrenman yapıyorsun?"
+        hint={e.draft.weekdays.length === 0 ? "Gün seçmezsen haftalık plan antrenmanları haftaya yayar." : `${e.draft.weekdays.length} gün · haftalık plan bu günlere kurulur.`}
+      >
+        <WeekdayPicker value={e.draft.weekdays} onToggle={e.toggleWeekday} />
+      </Field>
 
       {e.draft.days.map((day, d) => (
         <View key={d} style={styles.day}>

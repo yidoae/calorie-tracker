@@ -9,7 +9,7 @@
 
 ## Open
 
-- [ ] T005 [Art Director] Design pass on the weekly plan card and feedback (intensity badge, change chips, today highlight, empty week); weekday picker in the program editor (`ProgramDraft.weekdays`); "Planı yeniden oluştur" after a program save (`useWeeklyPlan().replan`); preview entries
+- [x] T005 [Art Director] Design pass on the weekly plan card and feedback (intensity badge, change chips, today highlight, empty week); weekday picker in the program editor (`ProgramDraft.weekdays`); "Planı yeniden oluştur" after a program save (`useWeeklyPlan().replan`); preview entries
 - [ ] T006 [Art Director] Sunday 19:00 local notification "Haftalık planın hazır" (`npx expo install expo-notifications`; permission asked from the Antrenman tab; cancelled when there is no program)
 - [x] T007 [Admin] Exercise catalogue: common exercises with Turkish and English names and aliases, muscle group and weight step; plug the step into `increment` and add volume per muscle group to the feedback (core change with tests)
 - [ ] T008 [Tester] Review T001–T007; edge cases (time zone at Sunday 18:00, program with empty days, two devices); simplify

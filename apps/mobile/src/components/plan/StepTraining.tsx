@@ -1,10 +1,9 @@
-import { SPLIT_LABELS, TRAINING_STYLE_HINTS, TRAINING_STYLE_LABELS, WEEKDAY_NAMES, WEEKDAY_SHORT } from "@calorie/core/labels";
+import { SPLIT_LABELS, TRAINING_STYLE_HINTS, TRAINING_STYLE_LABELS } from "@calorie/core/labels";
 import { STRENGTH_SPLITS, TRAINING_STYLES } from "@calorie/core/schemas/plan";
-import { Pressable, StyleSheet, Text, View } from "react-native";
 import ChoiceCard from "@/components/setup/ChoiceCard";
 import Segmented from "@/components/ui/Segmented";
+import WeekdayPicker from "@/components/ui/WeekdayPicker";
 import type { PlanWizard } from "@/hooks/usePlanWizard";
-import { colors, radius, space, type } from "@/theme";
 import Field from "./Field";
 
 const FREQUENCIES = [2, 3, 4, 5, 6].map((n) => ({ id: n, label: `${n} gün`, accessibilityLabel: `Haftada ${n} gün` }));
@@ -48,45 +47,9 @@ export default function StepTraining({ w }: { w: PlanWizard }) {
             : `${form.trainingDays.length} antrenman günü · kalori döngüsü açılırsa bu günlerde daha fazla karbonhidrat alırsın.`
         }
       >
-        <View style={styles.days}>
-          {WEEKDAY_SHORT.map((day, i) => {
-            const on = form.trainingDays.includes(i);
-            return (
-              <Pressable
-                key={day}
-                accessibilityRole="checkbox"
-                accessibilityLabel={WEEKDAY_NAMES[i]}
-                accessibilityState={{ checked: on, disabled: sedentary }}
-                disabled={sedentary}
-                onPress={() => w.toggleDay(i)}
-                style={[styles.day, on && styles.dayOn, sedentary && styles.dayOff]}
-              >
-                <Text maxFontSizeMultiplier={1.3} style={[styles.dayLabel, on && styles.dayLabelOn, sedentary && styles.dayLabelOff]}>{day}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <WeekdayPicker value={form.trainingDays} onToggle={w.toggleDay} disabled={sedentary} />
       </Field>
     </>
   );
 }
 
-const styles = StyleSheet.create({
-  // A narrow gap so seven 44 pt days fit from a 360 pt wide screen up.
-  days: { flexDirection: "row", gap: space(0.5) },
-  day: {
-    flex: 1,
-    minHeight: 44,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.sm,
-    backgroundColor: colors.surface,
-  },
-  dayOn: { backgroundColor: colors.cta, borderColor: colors.cta },
-  dayOff: { backgroundColor: colors.surface2 },
-  dayLabel: { ...type.small, fontWeight: "600", color: colors.fgMuted },
-  dayLabelOn: { color: colors.ctaFg },
-  dayLabelOff: { color: colors.fgSubtle },
-});

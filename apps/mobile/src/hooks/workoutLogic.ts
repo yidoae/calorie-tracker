@@ -201,7 +201,7 @@ export function sessionDraft(day: ProgramDay, history: readonly WorkoutSession[]
       const sets = last
         ? last.sets.map((s) => ({ kg: formatKg(s.kg), reps: String(s.reps), done: false }))
         : Array.from({ length: e.sets }, () => ({ kg: e.kg === null ? "" : formatKg(e.kg), reps: firstReps, done: false }));
-      return { name: e.name, target: `${e.sets} × ${e.reps}${e.kg === null ? "" : ` · ${formatKg(e.kg)} kg`}`, sets };
+      return { name: e.name, target: targetText(e), sets };
     }),
   };
 }
@@ -218,20 +218,35 @@ export function plannedSessionDraft(day: PlannedDay): SessionDraft {
       const kg = e.kg === null ? "" : formatKg(e.kg);
       return {
         name: e.name,
-        target: `${e.sets} × ${e.reps}${e.kg === null ? "" : ` · ${kg} kg`}${CHANGE_LABELS[e.change]}`,
+        target: [targetText(e), CHANGE_LABELS[e.change]].filter(Boolean).join(" · "),
         sets: Array.from({ length: e.sets }, () => ({ kg, reps, done: false })),
       };
     }),
   };
 }
 
-const CHANGE_LABELS: Record<PlannedDay["exercises"][number]["change"], string> = {
-  new: "",
-  up_kg: " · kilo arttı",
-  up_reps: " · +1 tekrar",
-  hold: " · aynı",
-  deload: " · hafif hafta",
+/** Why a planned target moved, as a chip; a first target has none. */
+export const CHANGE_LABELS: Record<PlannedDay["exercises"][number]["change"], string | null> = {
+  new: null,
+  up_kg: "kilo arttı",
+  up_reps: "+1 tekrar",
+  hold: "aynı",
+  deload: "hafif hafta",
 };
+
+/** "3 × 6-8 · 62,5 kg"; no kg part for bodyweight. */
+export const targetText = (e: { sets: number; reps: string; kg: number | null }) => `${e.sets} × ${e.reps}${e.kg === null ? "" : ` · ${formatKg(e.kg)} kg`}`;
+
+/** A training weekday on or off in the program editor (Monday = 0), kept in week order. */
+export const toggleWeekday = (days: readonly number[], day: number) =>
+  days.includes(day) ? days.filter((d) => d !== day) : [...days, day].sort((a, b) => a - b);
+
+/** A planned day on the week card: done (a workout logged that date), today, missed or still to come. */
+export function dayStatus(date: string, today: string, doneDates: ReadonlySet<string>): "done" | "today" | "missed" | "upcoming" {
+  if (doneDates.has(date)) return "done";
+  if (date === today) return "today";
+  return date < today ? "missed" : "upcoming";
+}
 
 /** ✓ needs both kg and reps. */
 export const canMarkDone = (set: SetDraft) => set.kg.trim() !== "" && set.reps.trim() !== "";

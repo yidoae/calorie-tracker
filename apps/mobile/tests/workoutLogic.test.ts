@@ -3,6 +3,8 @@ import { describe, it } from "node:test";
 import { workoutProgramSchema, type WorkoutSession } from "@calorie/core/schemas/workout";
 import {
   canMarkDone,
+  CHANGE_LABELS,
+  dayStatus,
   EMPTY_EXERCISE,
   estimatedMax,
   exerciseProgress,
@@ -15,7 +17,9 @@ import {
   sessionDraft,
   sessionFromDraft,
   setProgress,
+  targetText,
   TEMPLATES,
+  toggleWeekday,
 } from "../src/hooks/workoutLogic.ts";
 
 const session = (performedOn: string, exercises: WorkoutSession["exercises"], createdAt = `${performedOn}T10:00:00Z`): WorkoutSession => ({
@@ -166,5 +170,29 @@ describe("weekly plan day (008)", () => {
       sets: [{ kg: "62,5", reps: "6", done: false }, { kg: "62,5", reps: "6", done: false }],
     });
     assert.deepEqual(draft.exercises[1].sets, [{ kg: "", reps: "", done: false }]);
+  });
+});
+
+describe("weekly plan card (008, T005)", () => {
+  it("writes a target as sets × reps · kg, without kg for bodyweight", () => {
+    assert.equal(targetText({ sets: 3, reps: "6-8", kg: 62.5 }), "3 × 6-8 · 62,5 kg");
+    assert.equal(targetText({ sets: 2, reps: "AMRAP", kg: null }), "2 × AMRAP");
+  });
+
+  it("names why a target moved; a first target has no chip", () => {
+    assert.deepEqual(CHANGE_LABELS, { new: null, up_kg: "kilo arttı", up_reps: "+1 tekrar", hold: "aynı", deload: "hafif hafta" });
+  });
+
+  it("toggles a training weekday, keeping Monday-first order", () => {
+    assert.deepEqual(toggleWeekday([0, 3], 2), [0, 2, 3]);
+    assert.deepEqual(toggleWeekday([0, 2], 0), [2]);
+  });
+
+  it("tells a planned day's state: done, today, missed or still to come", () => {
+    const done = new Set(["2026-10-20"]);
+    assert.equal(dayStatus("2026-10-20", "2026-10-22", done), "done");
+    assert.equal(dayStatus("2026-10-22", "2026-10-22", done), "today");
+    assert.equal(dayStatus("2026-10-21", "2026-10-22", done), "missed");
+    assert.equal(dayStatus("2026-10-24", "2026-10-22", done), "upcoming");
   });
 });
