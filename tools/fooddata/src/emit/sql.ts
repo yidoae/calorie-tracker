@@ -5,7 +5,8 @@
  */
 import type { ResolvedFood } from "../rules.ts";
 
-const str = (s: string) => `'${s.replaceAll("'", "''")}'`;
+/** A SQL string literal. */
+export const str = (s: string) => `'${s.replaceAll("'", "''")}'`;
 const n2 = (x: number) => x.toFixed(2);
 const n1 = (x: number) => x.toFixed(1);
 const list = (ids: string[]) => `(${ids.map(str).join(", ")})`;

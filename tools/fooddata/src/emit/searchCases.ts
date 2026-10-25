@@ -5,8 +5,7 @@
  */
 import { searchQuery } from "@calorie/core/search/normalize";
 import type { SearchCase } from "../schemas.ts";
-
-const str = (s: string) => `'${s.replaceAll("'", "''")}'`;
+import { str } from "./sql.ts";
 
 export function searchCasesSql(cases: SearchCase[]): string {
   const sorted = [...cases].sort((a, b) => a.query.localeCompare(b.query, "tr"));
