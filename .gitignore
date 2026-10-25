@@ -32,3 +32,6 @@ coverage/
 
 # fooddata: USDA downloads (re-fetched from sources/usda/release.json)
 tools/fooddata/.cache/
+
+# Background agents write their status here (outside their worktrees)
+.claude/agent-status/
