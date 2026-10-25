@@ -9,6 +9,7 @@ import {
   type WorkoutSessionInput,
 } from "@calorie/core/schemas/workout";
 import { normalizeTr } from "@calorie/core/search/normalize";
+import { parseNumber } from "./setupSteps";
 
 /*
  * 007 workout rules with no React Native imports (tests/workoutLogic.test.ts): ready-made splits,
@@ -86,14 +87,6 @@ export const TEMPLATES: { id: TemplateId; label: string; hint: string; program: 
 
 // ---------------------------------------------------------------------------------------------
 // Numbers typed by the user
-
-/** "62,5" or "62.5" → 62.5; empty or not a number → null. */
-export function parseNumber(text: string): number | null {
-  const t = text.trim().replace(",", ".");
-  if (t === "") return null;
-  const n = Number(t);
-  return Number.isFinite(n) ? n : null;
-}
 
 /** 62.5 → "62,5". */
 export const formatKg = (kg: number) => kg.toLocaleString(LOCALE, { maximumFractionDigits: 2 });

@@ -5,7 +5,6 @@ import {
   EMPTY_EXERCISE,
   estimatedMax,
   exerciseProgress,
-  parseNumber,
   programDraft,
   programFromDraft,
   sessionDraft,
@@ -91,12 +90,6 @@ describe("workout logger", () => {
 });
 
 describe("weight progress", () => {
-  it("parses decimal commas", () => {
-    assert.equal(parseNumber(" 62,5 "), 62.5);
-    assert.equal(parseNumber(""), null);
-    assert.equal(parseNumber("abc"), null);
-  });
-
   it("Epley estimate, a single is the lift itself", () => {
     assert.equal(estimatedMax(100, 1), 100);
     assert.equal(estimatedMax(100, 5), 116.5);
