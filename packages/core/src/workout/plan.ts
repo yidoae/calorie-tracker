@@ -1,5 +1,6 @@
 import type { PlannedDay, PlannedExercise, ProgramExercise, WeekIntensity, WeekPlan, WorkoutProgram, WorkoutSession, WorkoutSet } from "../schemas/workout.ts";
 import { normalizeTr } from "../search/normalize.ts";
+import { findExercise } from "./exercises.ts";
 import { addDays, exerciseHistory, isStalled, mondayOf, newestFirst, reviewWeek, weekdayOf } from "./review.ts";
 
 /*
@@ -38,8 +39,8 @@ export function repRange(reps: string): [number, number] | null {
   return a <= b ? [a, b] : [b, a];
 }
 
-/** The usual plate step: 1 kg under 20 kg (dumbbells, isolation), 2.5 kg above. */
-export const increment = (kg: number) => (kg < 20 ? 1 : 2.5);
+/** The catalogue step of a known exercise; else the usual plate step: 1 kg under 20 kg, 2.5 kg above. */
+export const increment = (kg: number, name?: string) => (name !== undefined ? findExercise(name)?.stepKg : undefined) ?? (kg < 20 ? 1 : 2.5);
 const roundKg = (kg: number) => Math.round(kg * 2) / 2;
 
 /** One exercise's target for the week from its latest logged sets. */
@@ -55,7 +56,7 @@ export function nextTarget(exercise: ProgramExercise, history: readonly WorkoutS
   const [lo, hi] = range;
   const minReps = Math.min(...last.filter((s) => s.kg === top).map((s) => s.reps));
   const allSets = last.filter((s) => s.kg === top).length >= exercise.sets;
-  if (intensity === "normal" && top > 0 && allSets && minReps >= hi) return { ...exercise, kg: roundKg(top + increment(top)), reps: String(lo), change: "up_kg" };
+  if (intensity === "normal" && top > 0 && allSets && minReps >= hi) return { ...exercise, kg: roundKg(top + increment(top, exercise.name)), reps: String(lo), change: "up_kg" };
   if (intensity === "normal" && minReps >= lo && minReps < hi) return { ...exercise, kg: top, reps: String(minReps + 1), change: "up_reps" };
   return { ...exercise, kg: top, reps: String(Math.min(hi, Math.max(lo, minReps))), change: "hold" };
 }

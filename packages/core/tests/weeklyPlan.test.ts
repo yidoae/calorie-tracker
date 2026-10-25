@@ -58,7 +58,7 @@ describe("targets (double progression)", () => {
 
   it("every set at the top of the range: more weight, back to the bottom", () => {
     assert.deepEqual(nextTarget(bench, [sets(60, 8, 8, 8)], "normal"), { ...bench, kg: 62.5, reps: "6", change: "up_kg" });
-    assert.equal(nextTarget({ ...bench, kg: 12 }, [sets(12, 8, 8, 8)], "normal").kg, 13, "1 kg steps under 20 kg");
+    assert.equal(nextTarget({ ...bench, name: "Benim hareketim", kg: 12 }, [sets(12, 8, 8, 8)], "normal").kg, 13, "an exercise outside the catalogue: 1 kg steps under 20 kg");
   });
 
   it("inside the range: one more rep at the same weight", () => {

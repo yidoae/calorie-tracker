@@ -1,4 +1,5 @@
 import { dayKeySchema } from "./meal.ts";
+import { MUSCLE_GROUPS } from "../workout/exercises.ts";
 import { z } from "./zod.ts";
 
 /*
@@ -113,6 +114,8 @@ export const weekFeedbackSchema = z.object({
   stalled: z.array(z.string()),
   headline: z.string(),
   notes: z.array(z.string()),
+  /** Sets of catalogue exercises per muscle group, most first; absent in weeks stored before T007. */
+  muscleSets: z.array(z.object({ muscle: z.enum(MUSCLE_GROUPS), sets: z.number().int().min(0) })).optional(),
 });
 export type WeekFeedback = z.output<typeof weekFeedbackSchema>;
 

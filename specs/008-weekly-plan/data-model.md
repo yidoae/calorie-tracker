@@ -24,10 +24,11 @@ RLS read/insert/update own. Grants: select; insert `week_start, intensity, plan,
 - **Rotation**: the program's days with exercises, from the day after the last workout's day name, one per training weekday.
 - **Target** (`nextTarget`), from the latest logged sets of the exercise (name match without case or Turkish letters); working weight = heaviest set:
   - never logged → program target (`new`)
-  - every planned set at the top of the range → +1 kg (< 20 kg) or +2,5 kg, reps back to the bottom (`up_kg`)
+  - every planned set at the top of the range → the catalogue step of the exercise (`workout/exercises.ts`), else +1 kg (< 20 kg) or +2,5 kg; reps back to the bottom (`up_kg`)
   - inside the range → same kg, +1 rep (`up_reps`)
   - below the range, a light week, 0 kg at the top, or text reps → same (`hold`)
   - deload → kg × 0,9 rounded to 0,5, one set fewer, bottom reps (`deload`)
 - **Intensity** (`weekIntensity`): deload after 5 weeks without one, or when ≥ 40 % of tracked exercises (at least 2) stall, never twice in a row; light when last week's completion < 50 %; else normal.
 - **Stall**: the newest best estimated 1RM (Epley) is not above the one three workouts earlier.
-- **Feedback** (`reviewWeek`): done vs planned; volume Σ kg × reps vs the week before (within ±5 % reads "aynı seviyede"); records (best e1RM above every earlier workout); stalls.
+- **Feedback** (`reviewWeek`): done vs planned; volume Σ kg × reps vs the week before (within ±5 % reads "aynı seviyede"); records (best e1RM above every earlier workout); stalls; sets per muscle group of catalogue exercises (`muscleSets`, optional so older stored weeks parse).
+- **Exercise catalogue** (`workout/exercises.ts`, T007): 78 exercises, English name + Turkish aliases (matched without case or Turkish letters), muscle group, weight step (5 kg heavy lower body, 2,5 kg barbell/machine, 2 kg dumbbell press/row, 1 kg isolation and bodyweight). Code data, no table: programs and logs keep free-text names.

@@ -1,6 +1,7 @@
 import { dayKey, dayToDate, LOCALE } from "../dates.ts";
 import type { WeekFeedback, WeekPlan, WorkoutSession, WorkoutSet } from "../schemas/workout.ts";
 import { normalizeTr } from "../search/normalize.ts";
+import { findExercise, MUSCLE_LABELS, type MuscleGroup } from "./exercises.ts";
 
 /*
  * 008: the look back at a finished training week, from the logged weights only: workouts done
@@ -96,5 +97,13 @@ export function reviewWeek(weekStart: string, sessions: readonly WorkoutSession[
   }
   if (stalled.length > 0) notes.push(`${stalled.join(", ")}: son ${STALL_SESSIONS} antrenmanda ilerleme yok.`);
 
-  return { weekStart, sessionsDone: done, sessionsPlanned: planned, volume, volumeChangePct, records, stalled, headline, notes };
+  const perMuscle = new Map<MuscleGroup, number>();
+  for (const x of inWeek.flatMap((s) => s.exercises)) {
+    const muscle = findExercise(x.name)?.muscle;
+    if (muscle && x.sets.length > 0) perMuscle.set(muscle, (perMuscle.get(muscle) ?? 0) + x.sets.length);
+  }
+  const muscleSets = [...perMuscle].map(([muscle, sets]) => ({ muscle, sets })).sort((a, b) => b.sets - a.sets);
+  if (muscleSets.length > 0) notes.push(`Bölgelere göre set: ${muscleSets.map((m) => `${MUSCLE_LABELS[m.muscle]} ${m.sets}`).join(", ")}`);
+
+  return { weekStart, sessionsDone: done, sessionsPlanned: planned, volume, volumeChangePct, records, stalled, headline, notes, muscleSets };
 }
