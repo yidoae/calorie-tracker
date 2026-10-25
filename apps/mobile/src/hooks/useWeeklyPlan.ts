@@ -1,5 +1,5 @@
-import type { WeekPlan, WorkoutProgram } from "@calorie/core/schemas/workout";
-import { planWeek, weeksDue } from "@calorie/core/workout/plan";
+import type { WeekPlan, WorkoutProgram, WorkoutSession } from "@calorie/core/schemas/workout";
+import { planWeek, weeksDue, weeksToReplan } from "@calorie/core/workout/plan";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { toAppError } from "@/services/errors";
@@ -12,7 +12,8 @@ import { useWorkoutProgram, useWorkoutSessions } from "./useWorkout";
  * The weekly training plan (008): this week's plan, and from Sunday 18:00 next week's, each with
  * the feedback on the week before. A week without a stored plan gets one as soon as the program,
  * the workouts and the stored weeks are loaded; another device's plan is never overwritten.
- * `replan` rebuilds the due weeks after a program change.
+ * `replan` rebuilds the due weeks after a program change, `afterWorkout` the weeks a new workout
+ * makes stale (a Sunday workout once next week is planned).
  */
 export function useWeeklyPlan() {
   const { session, status } = useSession();
@@ -31,13 +32,13 @@ export function useWeeklyPlan() {
   const missing = due.filter((start) => !stored(start));
 
   const build = useMutation({
-    mutationFn: async ({ starts, replace, from }: { starts: string[]; replace: boolean; from?: WorkoutProgram }) => {
+    mutationFn: async ({ starts, replace, from, sessions = log.sessions }: { starts: string[]; replace: boolean; from?: WorkoutProgram; sessions?: readonly WorkoutSession[] }) => {
       const current = from ?? program.data;
       if (!current) return;
       // Earlier weeks only: a replanned week must not count its own old plan.
       const past = (weeks.data ?? []).filter((w) => !starts.includes(w.weekStart));
       for (const weekStart of starts) {
-        const plan = planWeek({ weekStart, program: current, sessions: log.sessions, pastWeeks: past });
+        const plan = planWeek({ weekStart, program: current, sessions, pastWeeks: past });
         await saveWeek(plan, replace);
         past.push(plan);
       }
@@ -67,5 +68,12 @@ export function useWeeklyPlan() {
     error: weeks.error ? toAppError(weeks.error) : build.error ? toAppError(build.error) : null,
     /** Rebuilds the due weeks from `from` (the program just saved) or the loaded one; true when stored. */
     replan: (from?: WorkoutProgram) => build.mutateAsync({ starts: due, replace: true, from }).then(() => true, () => false),
+    /** After a workout is saved: rebuilds the stored weeks that start after it, counting it (the list may not have it yet). */
+    afterWorkout: (saved: WorkoutSession) => {
+      const starts = weeksToReplan(saved.performedOn, due.filter((start) => stored(start)));
+      if (starts.length === 0) return;
+      const sessions = [saved, ...log.sessions.filter((s) => s.id !== saved.id)];
+      build.mutate({ starts, replace: true, sessions });
+    },
   };
 }

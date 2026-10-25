@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { WORKOUT_LIMITS } from "@calorie/core/schemas/workout";
+import { WORKOUT_LIMITS, type WorkoutSession } from "@calorie/core/schemas/workout";
 import { toAppError } from "@/services/errors";
 import { logSession } from "@/services/workoutService";
 import { useToast } from "./useToast";
@@ -12,7 +12,8 @@ import { canMarkDone, REST_SECONDS, restLeft, sessionFromDraft, setProgress, typ
  * time, sets added or removed, each marked done with ✓ (K6), which starts a 90 s rest that can be
  * skipped. Only done sets are saved, for today.
  */
-export function useWorkoutLogger(initial: SessionDraft) {
+/** `onSaved` runs with the stored workout (008: the weekly plan rebuilds the weeks it changes). */
+export function useWorkoutLogger(initial: SessionDraft, onSaved?: (saved: WorkoutSession) => void) {
   const [draft, setDraft] = useState(initial);
   const [problem, setProblem] = useState<string | null>(null);
   const { localDate } = useToday();
@@ -37,6 +38,7 @@ export function useWorkoutLogger(initial: SessionDraft) {
     mutationFn: logSession,
     onSuccess: (s) => {
       void queryClient.invalidateQueries({ queryKey: ["workoutSessions"] });
+      onSaved?.(s);
       const sets = s.exercises.reduce((n, e) => n + e.sets.length, 0);
       toast.show("success", "Antrenman kaydedildi", `${s.dayName} · ${s.exercises.length} hareket, ${sets} set`);
     },

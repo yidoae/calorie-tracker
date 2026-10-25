@@ -23,6 +23,12 @@ export function weeksDue(today: string, hour: number): string[] {
   return weekdayOf(today) === 6 && hour >= PLAN_HOUR ? [monday, addDays(monday, 7)] : [monday];
 }
 
+/**
+ * The stored weeks a workout on `performedOn` makes stale: the ones that start after it (a Sunday
+ * workout once next week is planned). Only workouts before a week count, so earlier weeks stay.
+ */
+export const weeksToReplan = (performedOn: string, storedStarts: readonly string[]) => storedStarts.filter((start) => start > performedOn);
+
 /** Weekdays when none are chosen: the program's days spread over the week with rest between. */
 const SPREAD: Record<number, number[]> = { 1: [0], 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 2, 3, 4], 6: [0, 1, 2, 3, 4, 5], 7: [0, 1, 2, 3, 4, 5, 6] };
 

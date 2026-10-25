@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { progressOf } from "@calorie/core/nutrition/macros";
+import type { WorkoutSession } from "@calorie/core/schemas/workout";
 import { router } from "expo-router";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import FormError from "@/components/auth/FormError";
@@ -40,11 +41,11 @@ export default function WorkoutSessionScreen({ dayIndex, plannedDate }: { dayInd
       </Screen>
     );
   }
-  return <Logger initial={planned ? plannedSessionDraft(planned) : sessionDraft(day!, log.sessions)} />;
+  return <Logger initial={planned ? plannedSessionDraft(planned) : sessionDraft(day!, log.sessions)} onSaved={weekly.afterWorkout} />;
 }
 
-function Logger({ initial }: { initial: SessionDraft }) {
-  const w = useWorkoutLogger(initial);
+function Logger({ initial, onSaved }: { initial: SessionDraft; onSaved: (saved: WorkoutSession) => void }) {
+  const w = useWorkoutLogger(initial, onSaved);
 
   async function save() {
     if (await w.save()) router.back();

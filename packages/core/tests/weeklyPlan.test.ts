@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { weekPlanSchema, type WeekPlan, type WorkoutProgram, type WorkoutSession } from "../src/schemas/workout.ts";
-import { nextTarget, planWeek, repRange, trainingWeekdays, weekIntensity, weeksDue } from "../src/workout/plan.ts";
+import { nextTarget, planWeek, repRange, trainingWeekdays, weekIntensity, weeksDue, weeksToReplan } from "../src/workout/plan.ts";
 import { addDays, estimatedMax, isStalled, mondayOf, reviewWeek } from "../src/workout/review.ts";
 
 const ID = "6f1c2c47-5d7e-4c7b-9b3e-1f2a3b4c5d6e";
@@ -204,5 +204,12 @@ describe("deload rhythm across a break", () => {
   it("one missed week keeps counting; a longer break starts the count again", () => {
     assert.equal(planWeek({ weekStart: "2026-10-26", program: PPL, sessions: [], pastWeeks: fiveWeeks("2026-10-12") }).intensity, "deload");
     assert.equal(planWeek({ weekStart: "2026-10-26", program: PPL, sessions: [], pastWeeks: fiveWeeks("2026-10-05") }).intensity, "normal");
+  });
+});
+
+describe("a workout after the next week was planned", () => {
+  it("a Sunday-evening workout rebuilds next week; this week's plan stays", () => {
+    assert.deepEqual(weeksToReplan("2026-10-25", ["2026-10-19", "2026-10-26"]), ["2026-10-26"]);
+    assert.deepEqual(weeksToReplan("2026-10-21", ["2026-10-19"]), []);
   });
 });
