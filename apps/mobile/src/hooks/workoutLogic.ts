@@ -141,6 +141,12 @@ function issuePlace(path: PropertyKey[]): string {
 
 const FIELD_NAMES: Record<string, string> = { name: "ad", split: "program tipi", sets: "set", reps: "tekrar", kg: "kg" };
 
+/** "<place> · <field>: <message>", or the bare message when neither is known. */
+function issueText(place: string | null, issue: { path: PropertyKey[]; message: string }): string {
+  const field = FIELD_NAMES[String(issue.path.at(-1))];
+  return [place, field && `${field}: ${issue.message}`].filter(Boolean).join(" · ") || issue.message;
+}
+
 /** The draft as a program the database accepts, or the first problem in Turkish. */
 export function programFromDraft(draft: ProgramDraft): Result<WorkoutProgram> {
   const candidate = {
@@ -154,9 +160,7 @@ export function programFromDraft(draft: ProgramDraft): Result<WorkoutProgram> {
   const parsed = workoutProgramSchema.safeParse(candidate);
   if (parsed.success) return { ok: true, value: parsed.data };
   const issue = parsed.error.issues[0];
-  const field = FIELD_NAMES[String(issue.path.at(-1))];
-  const place = issuePlace(issue.path);
-  return { ok: false, error: [place, field && `${field}: ${issue.message}`].filter(Boolean).join(" · ") || issue.message };
+  return { ok: false, error: issueText(issuePlace(issue.path), issue) };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -188,11 +192,11 @@ const newestFirst = (sessions: readonly WorkoutSession[]) =>
  * them), or from the program's targets when it was never logged.
  */
 export function sessionDraft(day: ProgramDay, history: readonly WorkoutSession[]): SessionDraft {
-  const sessions = newestFirst(history);
+  const done = newestFirst(history).flatMap((s) => s.exercises);
   return {
     dayName: day.name,
     exercises: day.exercises.map((e) => {
-      const last = sessions.flatMap((s) => s.exercises).find((done) => sameExercise(done.name, e.name));
+      const last = done.find((d) => sameExercise(d.name, e.name));
       const firstReps = /\d+/.exec(e.reps)?.[0] ?? "";
       const sets = last
         ? last.sets.map((s) => ({ kg: formatKg(s.kg), reps: String(s.reps) }))
@@ -220,8 +224,7 @@ export function sessionFromDraft(draft: SessionDraft, performedOn: string): Resu
   if (parsed.success) return { ok: true, value: parsed.data };
   const issue = parsed.error.issues[0];
   const exercise = issue.path[0] === "exercises" && typeof issue.path[1] === "number" ? exercises[issue.path[1]].name : null;
-  const field = FIELD_NAMES[String(issue.path.at(-1))];
-  return { ok: false, error: [exercise, field && `${field}: ${issue.message}`].filter(Boolean).join(" · ") || issue.message };
+  return { ok: false, error: issueText(exercise, issue) };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -256,7 +259,7 @@ export function estimatedMax(kg: number, reps: number): number {
 /** Every logged exercise with its history, the most recently done first. */
 export function exerciseProgress(sessions: readonly WorkoutSession[]): ExerciseProgress[] {
   const byExercise = new Map<string, ExerciseProgress>();
-  for (const s of [...newestFirst(sessions)].reverse()) {
+  for (const s of newestFirst(sessions).reverse()) {
     for (const e of s.exercises) {
       const top = e.sets.reduce((best, set) => (set.kg > best.kg || (set.kg === best.kg && set.reps > best.reps) ? set : best));
       const entry: ProgressEntry = {
