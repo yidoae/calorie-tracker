@@ -63,6 +63,9 @@ and the output checks, in plain TypeScript so `tools/aieval` scores the same cod
 - **ai-log** (003, [contract](../specs/003-ai-logging/contracts/ai-log.md)): photo or text →
   foods and grams, with the daily allowance in `ai_requests` (`ai_claim` / `ai_finish`, service
   role only). `verify_jwt` on (`config.toml`).
+- **Known exception** (constitution II): `ai-log/handler.ts` checks the request body by hand
+  instead of with core `aiLogRequestSchema`, because the functions do not load zod in Deno yet
+  (owner decision, 2026-10-25); keep the two in step.
 - **Secrets** (dashboard → Edge Functions → Secrets, or MCP `create_edge_function_secret`; never in
   the repository): `GEMINI_API_KEY` (dev: a free-tier key; production: the paid key before
   TestFlight) and `GEMINI_MODEL` (default `gemini-3.5-flash-lite`; set to the model the evaluation
