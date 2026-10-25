@@ -43,7 +43,9 @@ describe("program editor", () => {
   it("a kg that is not a number is a problem, not a missing target", () => {
     const draft = { name: "P", split: "Özel", days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat", kg: "60kg" }] }] };
     const result = programFromDraft(draft);
-    assert.ok(!result.ok && result.error.startsWith("1. gün, 1. hareket · kg"), JSON.stringify(result));
+    assert.deepEqual(result, { ok: false, error: "1. gün, 1. hareket · kg: Bir sayı yaz" });
+    const sets = programFromDraft({ ...draft, days: [{ name: "Gün 1", exercises: [{ ...EMPTY_EXERCISE, name: "Squat", sets: "x" }] }] });
+    assert.deepEqual(sets, { ok: false, error: "1. gün, 1. hareket · set: Bir sayı yaz" });
   });
 
   it("names where the first problem is", () => {
@@ -86,6 +88,14 @@ describe("workout logger", () => {
     });
     const bad = sessionFromDraft({ dayName: "Push", exercises: [{ name: "Squat", target: "", sets: [{ kg: "100", reps: "0" }] }] }, "2026-10-25");
     assert.ok(!bad.ok && bad.error.startsWith("Squat · tekrar"), JSON.stringify(bad));
+    const text = sessionFromDraft({ dayName: "Push", exercises: [{ name: "Squat", target: "", sets: [{ kg: "abc", reps: "5" }] }] }, "2026-10-25");
+    assert.deepEqual(text, { ok: false, error: "Squat · kg: Bir sayı yaz" });
+  });
+
+  it("a set with only kg or only reps is a problem, not a skipped set", () => {
+    const sets = (s: { kg: string; reps: string }[]) => sessionFromDraft({ dayName: "Push", exercises: [{ name: "Squat", target: "", sets: s }] }, "2026-10-25");
+    assert.deepEqual(sets([{ kg: "100", reps: "5" }, { kg: "100", reps: "" }]), { ok: false, error: "Squat · 2. sette kilo ve tekrar ikisi de dolu olmalı" });
+    assert.deepEqual(sets([{ kg: " ", reps: "5" }]), { ok: false, error: "Squat · 1. sette kilo ve tekrar ikisi de dolu olmalı" });
   });
 });
 

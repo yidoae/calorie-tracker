@@ -135,9 +135,11 @@ function issuePlace(path: PropertyKey[]): string {
 const FIELD_NAMES: Record<string, string> = { name: "ad", split: "program tipi", sets: "set", reps: "tekrar", kg: "kg" };
 
 /** "<place> · <field>: <message>", or the bare message when neither is known. */
-function issueText(place: string | null, issue: { path: PropertyKey[]; message: string }): string {
+function issueText(place: string | null, issue: { path: PropertyKey[]; message: string; code: string; expected?: unknown }): string {
   const field = FIELD_NAMES[String(issue.path.at(-1))];
-  return [place, field && `${field}: ${issue.message}`].filter(Boolean).join(" · ") || issue.message;
+  // Text that is not a number reaches the schema as NaN; zod's own text for it names the type.
+  const message = issue.code === "invalid_type" && issue.expected === "number" ? "Bir sayı yaz" : issue.message;
+  return [place, field && `${field}: ${message}`].filter(Boolean).join(" · ") || message;
 }
 
 /** The draft as a program the database accepts, or the first problem in Turkish. */
@@ -201,9 +203,14 @@ export function sessionDraft(day: ProgramDay, history: readonly WorkoutSession[]
 
 /**
  * The workout to save: sets with both fields filled, exercises with at least one such set (an
- * exercise left empty was skipped). An error in Turkish when nothing was filled or a number is off.
+ * exercise left empty was skipped). An error in Turkish when a set is half filled, nothing was
+ * filled or a number is off.
  */
 export function sessionFromDraft(draft: SessionDraft, performedOn: string): Result<WorkoutSessionInput> {
+  for (const e of draft.exercises) {
+    const half = e.sets.findIndex((s) => (s.kg.trim() === "") !== (s.reps.trim() === ""));
+    if (half >= 0) return { ok: false, error: `${e.name} · ${half + 1}. sette kilo ve tekrar ikisi de dolu olmalı` };
+  }
   const exercises = draft.exercises
     .map((e) => ({
       name: e.name,
