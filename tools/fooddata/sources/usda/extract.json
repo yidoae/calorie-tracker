@@ -3698,6 +3698,11 @@
       "description": "Lamb shish kabob with vegetables, excluding potatoes",
       "moisturePct": -5
     },
+    "27460750": {
+      "fdcId": 2706876,
+      "description": "Liver, beef or calves, and onions",
+      "moisturePct": 0
+    },
     "27500050": {
       "fdcId": 2706880,
       "description": "Sandwich, NFS",
@@ -3726,6 +3731,11 @@
     "28310230": {
       "fdcId": 2707123,
       "description": "Soup, meatball",
+      "moisturePct": 0
+    },
+    "28340660": {
+      "fdcId": 2707134,
+      "description": "Soup, chicken",
       "moisturePct": 0
     },
     "31103010": {
@@ -3768,6 +3778,11 @@
       "description": "Bread, white, made from home recipe or purchased at a bakery",
       "moisturePct": -8
     },
+    "53104500": {
+      "fdcId": 2707861,
+      "description": "Cheesecake, plain",
+      "moisturePct": -5
+    },
     "53105275": {
       "fdcId": 2707868,
       "description": "Cake or cupcake, chocolate, no icing",
@@ -3783,6 +3798,11 @@
       "description": "Cake, tres leche",
       "moisturePct": 0
     },
+    "53204010": {
+      "fdcId": 2707904,
+      "description": "Cookie, brownie, without icing",
+      "moisturePct": 0
+    },
     "53239000": {
       "fdcId": 2707964,
       "description": "Cookie, shortbread",
@@ -3791,6 +3811,11 @@
     "53241500": {
       "fdcId": 2707970,
       "description": "Cookie, butter or sugar",
+      "moisturePct": 0
+    },
+    "53241600": {
+      "fdcId": 2707972,
+      "description": "Cookie, butter or sugar, with fruit and/or nuts",
       "moisturePct": 0
     },
     "53415110": {
@@ -3812,6 +3837,21 @@
       "fdcId": 2708053,
       "description": "Pastry, puff",
       "moisturePct": 0
+    },
+    "55101000": {
+      "fdcId": 2708304,
+      "description": "Pancakes, plain",
+      "moisturePct": -15
+    },
+    "55201000": {
+      "fdcId": 2708325,
+      "description": "Waffle, plain",
+      "moisturePct": -30
+    },
+    "55301000": {
+      "fdcId": 2708335,
+      "description": "French toast, plain",
+      "moisturePct": -15
     },
     "55401000": {
       "fdcId": 2708342,
