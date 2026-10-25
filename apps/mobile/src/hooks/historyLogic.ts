@@ -89,3 +89,16 @@ export function isOpenableDay(param: string | undefined, today: string): param i
   if (!param || !/^\d{4}-\d{2}-\d{2}$/.test(param)) return false;
   return dayKey(dayToDate(param)) === param && param <= today;
 }
+
+/** The day switcher on Bugün (design proposal K4): `delta` days from `localDate`, never past today. */
+export function shiftDay(localDate: string, delta: number, today: string): string {
+  const date = dayToDate(localDate);
+  const next = dayKey(new Date(date.getFullYear(), date.getMonth(), date.getDate() + delta));
+  return next > today ? today : next;
+}
+
+/** The switcher's label: "Bugün", "Dün", else the day's title. */
+export function dayLabel(localDate: string, today: string): string {
+  if (localDate === today) return "Bugün";
+  return localDate === shiftDay(today, -1, today) ? "Dün" : dayTitle(localDate);
+}

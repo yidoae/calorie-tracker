@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { NutritionPlan } from "@calorie/core/schemas/plan";
-import { calendarDays, canGoForward, dayTitle, isOpenableDay, kcalByDay, monthTitle, planOnDay } from "../src/hooks/historyLogic.ts";
+import { calendarDays, canGoForward, dayLabel, dayTitle, isOpenableDay, kcalByDay, monthTitle, planOnDay, shiftDay } from "../src/hooks/historyLogic.ts";
 
 const TZ = "Europe/Istanbul";
 
@@ -120,5 +120,20 @@ describe("month navigation and titles", () => {
     assert.equal(isOpenableDay("2026-02-30", "2026-10-13"), false);
     assert.equal(isOpenableDay("bugün", "2026-10-13"), false);
     assert.equal(isOpenableDay(undefined, "2026-10-13"), false);
+  });
+});
+
+describe("day switcher on Bugün", () => {
+  it("steps a day back or forward across months and years, never past today", () => {
+    assert.equal(shiftDay("2026-10-01", -1, "2026-10-25"), "2026-09-30");
+    assert.equal(shiftDay("2026-01-01", -1, "2026-10-25"), "2025-12-31");
+    assert.equal(shiftDay("2026-10-24", 1, "2026-10-25"), "2026-10-25");
+    assert.equal(shiftDay("2026-10-25", 1, "2026-10-25"), "2026-10-25");
+  });
+
+  it("names today and yesterday, other days by date", () => {
+    assert.equal(dayLabel("2026-10-25", "2026-10-25"), "Bugün");
+    assert.equal(dayLabel("2026-10-24", "2026-10-25"), "Dün");
+    assert.equal(dayLabel("2026-10-11", "2026-10-25"), dayTitle("2026-10-11"));
   });
 });
