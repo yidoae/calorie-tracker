@@ -1,5 +1,5 @@
 import { focusManager, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { AppState } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SessionContext, useSessionController } from "@/hooks/useSession";
@@ -36,8 +36,10 @@ function SessionProvider({ children }: { children: ReactNode }) {
 
 function ToastProvider({ children }: { children: ReactNode }) {
   const { current, show, dismiss } = useToastController();
+  // A stable value: showing a toast must not re-render every screen that can show one.
+  const value = useMemo(() => ({ show, dismiss }), [show, dismiss]);
   return (
-    <ToastContext.Provider value={{ show, dismiss }}>
+    <ToastContext.Provider value={value}>
       {children}
       {current && <Toast key={current.id} kind={current.kind} title={current.title} body={current.body} onDismiss={dismiss} />}
     </ToastContext.Provider>
