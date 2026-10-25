@@ -1,7 +1,7 @@
 import type { WeekPlan } from "@calorie/core/schemas/workout";
 import { planWeek, weeksDue } from "@calorie/core/workout/plan";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toAppError } from "@/services/errors";
 import { getWeeks, saveWeek } from "@/services/workoutService";
 import { useSession } from "./useSession";
@@ -45,10 +45,16 @@ export function useWeeklyPlan() {
 
   const ready = Boolean(program.data) && !log.loading && !log.loadError && weeks.isSuccess;
   const missingKey = missing.join();
+  // The weeks already tried: a week that falls due while the app stays open (Sunday 18:00, Monday
+  // 00:00) is still built, but a failure is not retried in a loop.
+  const tried = useRef("");
+  const { mutate, isPending } = build;
   useEffect(() => {
     // One try per missing set of weeks; a failure waits for `replan` or the next app start.
-    if (ready && missingKey && build.isIdle) build.mutate({ starts: missingKey.split(","), replace: false });
-  }, [ready, missingKey, build]);
+    if (!ready || !missingKey || isPending || tried.current === missingKey) return;
+    tried.current = missingKey;
+    mutate({ starts: missingKey.split(","), replace: false });
+  }, [ready, missingKey, isPending, mutate]);
 
   return {
     hasProgram: Boolean(program.data),
