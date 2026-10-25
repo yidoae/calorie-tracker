@@ -9,7 +9,7 @@ export default [
   { id: "beef_stew_raw", name: "Dana kuşbaşı (çiğ, sote/haşlamalık)", category: "meat", fdcId: 170809, aliases: ["haşlamalık et","sotelik et","yahnilik et"], typicalPortionG: 150 },
   { id: "beef_tbone_raw", name: "Dana pirzola / T-bone (çiğ)", category: "meat", fdcId: 172118, aliases: ["t-bone","dana pirzola"], typicalPortionG: 250 },
   { id: "veal_mince_raw", name: "Dana kıyma (çiğ, yağlı)", category: "meat", fdcId: 175290, aliases: ["yağlı kıyma","köftelik kıyma"], typicalPortionG: 125 },
-  { id: "beef_liver_raw", name: "Dana ciğeri (çiğ)", category: "meat", fdcId: 169451, aliases: ["ciğer","dana ciğeri","arnavut ciğeri"], typicalPortionG: 150 },
+  { id: "beef_liver_raw", name: "Dana ciğeri (çiğ)", category: "meat", fdcId: 169451, aliases: ["ciğer","dana ciğeri"], typicalPortionG: 150 },
   { id: "lamb_mince_raw", name: "Kuzu kıyma (çiğ)", category: "meat", fdcId: 174370, aliases: ["kuzu kıyma"], typicalPortionG: 125 },
   { id: "lamb_leg_raw", name: "Kuzu but (çiğ)", category: "meat", fdcId: 174342, aliases: ["kuzu but","kuzu eti","kuzu"], typicalPortionG: 150 },
   { id: "lamb_shoulder_raw", name: "Kuzu kol (çiğ)", category: "meat", fdcId: 175262, aliases: ["kuzu kol","kuzu gerdan"], typicalPortionG: 150 },
