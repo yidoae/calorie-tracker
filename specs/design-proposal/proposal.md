@@ -1,6 +1,8 @@
 # Design proposal: same colours, faster app
 
-**Status:** awaiting the owner's approval (no app code changed).
+**Status:** K1 (presentation part), K2, K3 and K7 applied on 2026-10-25 (d854d92); K4, K5, K6 and the
+slot rows with their own "+" await the owner's approval.
+**Real screens after the change:** https://claude.ai/artifact/HtBEq1gLQnJciaXpiX4hWE
 **Artifact (before/after mockups):** https://claude.ai/artifact/JB1RzudP7itwF8i4PKPH75
 **Source of the artifact:** `proposal.html` in this folder.
 **Author:** Art Director, first pass, 2026-10-25.
@@ -76,3 +78,15 @@ Only patterns were taken; no code or assets.
 
 Approved items land as small separate changes: Today, then search/review, then the workout logger,
 each with tests and a fresh preview.
+
+## Applied (2026-10-25)
+
+- K2: `proteinSoft`, `carbsSoft`, `fatSoft` in `theme.ts`.
+- K3: `DayHero` puts calories left, eaten / target and a lime bar (red when over) in the band of Bugün
+  and of a past day; `Screen` takes a `hero`. The ring (`Ring`) is gone.
+- K1 (presentation only): `MacroTile` shows grams left or over on the macro tint; it replaces `MacroBar`.
+- K7: `TextField` takes an optional −/+ stepper; the gram fields on the review step and in the grams
+  sheet step by 10 g (10 to 5.000, `gramStep.ts`, tested). Piece units keep their own −/+.
+
+Not applied (behaviour, owner's call): always-visible slot rows with their own "+" (needs the slot as a
+route parameter), K4 date switcher, K5 "add yesterday's meal", K6 set ✓ + rest timer.
