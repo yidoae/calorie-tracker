@@ -22,4 +22,5 @@ export default [
   { id: "lamb_mince_cooked", name: "Kuzu kıyma (pişmiş)", category: "meat", fdcId: 172544, aliases: ["pişmiş kuzu kıyma"], typicalPortionG: 100 },
   { id: "lamb_leg_cooked", name: "Kuzu eti (pişmiş)", category: "meat", fdcId: 174460, aliases: ["pişmiş kuzu","kuzu tandır eti","kuzu kızartma"], typicalPortionG: 150 },
   { id: "beef_liver_cooked", name: "Ciğer tava (pişmiş)", category: "meat", fdcId: 168627, aliases: ["ciğer tava","pişmiş ciğer"], typicalPortionG: 150 },
+  { id: "tripe_raw", name: "İşkembe (çiğ)", category: "meat", fdcId: 170599, aliases: ["çiğ işkembe","dana işkembe"], typicalPortionG: 150 },
 ];

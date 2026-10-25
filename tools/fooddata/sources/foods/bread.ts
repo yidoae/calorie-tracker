@@ -11,4 +11,5 @@ export default [
   { id: "pita_whole", name: "Tam buğday pita", category: "bread", fdcId: 174916, aliases: ["tam buğday pita"], typicalPortionG: 60, portions: [{ unit: "adet", grams: 60 }] },
   { id: "lavash", name: "Lavaş", category: "bread", fdcId: 167535, aliases: ["lavaş","dürüm lavaşı","tortilla","wrap ekmeği"], typicalPortionG: 70, portions: [{ unit: "adet", grams: 70 }] },
   { id: "bagel", name: "Bagel", category: "bread", fdcId: 174899, aliases: ["bagel"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 100 }] },
+  { id: "french_bread", name: "Francala / baget ekmek", category: "bread", fdcId: 172675, aliases: ["francala","baget ekmek","ekşi mayalı ekmek"], typicalPortionG: 60, portions: [{ unit: "dilim", grams: 30 }] },
 ];

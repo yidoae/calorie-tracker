@@ -47,7 +47,7 @@ export default [
     waterG: 300, yield: { kind: "fndds", foodCode: 53415110 },
   },
   {
-    id: "menemen", name: "Menemen", category: "dish", aliases: ["menemen"], typicalPortionG: 250,
+    id: "menemen", name: "Menemen", category: "dish", aliases: ["menemen"], typicalPortionG: 250, portions: [{ unit: "porsiyon", grams: 250 }],
     ingredients: [{ foodId: "egg", grams: 300 }, { foodId: "tomato", grams: 500 }, { foodId: "green_pepper", grams: 150 }, { foodId: "onion", grams: 80 }, { foodId: "oil", grams: 40 }, { foodId: "salt", grams: 5 }],
     yield: { kind: "fndds", foodCode: 32130010 },
   },
