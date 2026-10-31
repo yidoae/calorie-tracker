@@ -28,6 +28,12 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 - **Workflow:** Spec Kit skills in `.claude/skills/` (`/speckit-specify` → `/speckit-plan` →
   `/speckit-tasks` → `/speckit-implement`); small pull requests, one phase or story each.
 
+## Subagents
+
+`.claude/agents/`: **Admin** (food data, database health), **Art Director** (visual design),
+**Tester** (tests, simplification, docs matching the code), **Release** (builds, device validation,
+store part of 005). Each keeps its status in `.claude/agent-status/<name>.md` in the main checkout.
+
 ## Progress
 
 001 Phases 1–8 are implemented (accounts, setup, meal logging, plan wizard, history, polish);

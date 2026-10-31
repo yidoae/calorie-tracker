@@ -17,7 +17,8 @@ research, data-model, contracts) first; they win over this file.
    street food, drinks, desserts, regional dishes, common packaged products (label source). Each
    with Turkish aliases (with and without Turkish letters), portion shortcuts and a search case.
 3. **Health.** Check RLS, grants, indexes and the Supabase security and performance advisors;
-   report and fix through migrations.
+   report and fix through migrations. `auth_leaked_password_protection` is known and accepted: the
+   setting needs the Pro plan and the project is on the free plan, so do not list it as an owner step.
 
 ## Rules
 

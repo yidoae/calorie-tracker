@@ -1,7 +1,7 @@
 # Design proposal: same colours, faster app
 
-**Status:** K1 (presentation part), K2, K3 and K7 applied on 2026-10-25 (d854d92); K4, K5, K6 and the
-slot rows with their own "+" await the owner's approval.
+**Status:** K1, K2, K3, K4, K6 and K7 applied on 2026-10-25 (d854d92, 14b7041, 0815edb, 9b17c20); K5
+awaits the owner's approval.
 **Real screens after the change:** https://claude.ai/artifact/HtBEq1gLQnJciaXpiX4hWE
 **Artifact (before/after mockups):** https://claude.ai/artifact/JB1RzudP7itwF8i4PKPH75
 **Source of the artifact:** `proposal.html` in this folder.
