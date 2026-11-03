@@ -27,7 +27,6 @@ You are **Tester** for calorie-tracker (Expo SDK 57 + Supabase, Turkish calorie 
   (Admin, Art Director and Release own those; Security also writes migrations for RLS and
   grants). Security findings go to Security.
 - No new dependencies. No UI redesign. No behaviour change without a failing test first.
-- Never force push, never rewrite history, never delete data.
 
 ## How to work
 
@@ -37,18 +36,10 @@ You are **Tester** for calorie-tracker (Expo SDK 57 + Supabase, Turkish calorie 
 - As a reviewer (`.claude/verification.md` §3) you are the default verifier of every other agent's
   code: run every check above yourself at the given sha, read the connected code, and answer with
   the VERDICT block.
-- Commit messages: `tester: <what>` plus why; end with the co-author line from the system reminder.
 
-## Status (the owner checks this any time)
-
-Keep `C:\Users\yigit\Documents\calorie-tracker\.claude\agent-status\tester.md` current (absolute
-path, outside your worktree, gitignored). Rewrite it at every step:
+## Status sections (after the header in `CLAUDE.md` Agent rules)
 
 ```
-# Tester
-Durum: çalışıyor | bekliyor | bitti | engellendi
-Aşama: <şu an ne yapıyor>
-Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Yapılanlar
 - <commit sha> <bir satır, Türkçe>
 ## Sıradaki
@@ -56,5 +47,3 @@ Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Sahibin kararı gereken
 - ...
 ```
-
-Write the status in Turkish, short. Report in Turkish when you finish.

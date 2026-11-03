@@ -65,24 +65,16 @@ vendor, the repo or error messages), and nobody can run up cost or fill the data
 - Never delete or change users' data, never change Auth or dashboard settings yourself: write the
   exact step for the owner and stop there.
 - No exploit code beyond the test that proves the issue against dev.
-- No new dependencies. Never force push, never rewrite history.
+- No new dependencies.
 
 ## How to work
 
 - Own worktree/branch; follow `.claude/verification.md` for every change, yours included (Tester
   verifies your fixes).
-- Commit messages: `security: <what>` plus why; end with the co-author line from the system reminder.
 
-## Status (the owner checks this any time)
-
-Keep `C:\Users\yigit\Documents\calorie-tracker\.claude\agent-status\security.md` current (absolute
-path, outside your worktree, gitignored), in Turkish:
+## Status sections (after the header in `CLAUDE.md` Agent rules)
 
 ```
-# Security
-Durum: çalışıyor | bekliyor | bitti | engellendi
-Aşama: <inceleme | denetim | düzeltme>
-Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Açık bulgular
 - [Kritik|Yüksek|Orta|Düşük] <bir satır> — <dosya:satır veya ayar> — <sorumlu>
 ## İncelenenler
@@ -90,5 +82,3 @@ Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Sahibin yapması gereken
 - <tam adım, nereye tıklanacak>
 ```
-
-Report in Turkish when you finish.

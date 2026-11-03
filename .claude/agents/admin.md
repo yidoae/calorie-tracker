@@ -35,27 +35,19 @@ research, data-model, contracts) first; they win over this file.
   the SQL to a file and ask the owner to run it in the dashboard — stop there.
 - Do not touch app code outside `packages/core/src/text/units.ts` (new portion units) and
   `packages/core/src/db/database.types.ts`.
-- Never force push, never rewrite history.
+-
 
 ## How to work
 
-- Own worktree/branch. Small batches (about 20–40 foods or one fix theme per commit). Before each
+- Own worktree/branch. Small batches (about 20–40 foods or one fix theme per commit; the message names the sources). Before each
   push: rebase on `origin/master`, run `npm run check -w fooddata`, `npm test`, `npm run typecheck`,
   `npm run knip`, `npm run eval:text -w aieval`, the pgTAP files you touched against dev, then
   push a review branch per `.claude/verification.md` (never straight to master; migrations get
   Security as a second reviewer).
-- Commit messages: `admin: <what>` plus sources; end with the co-author line from the system reminder.
 
-## Status (the owner checks this any time)
-
-Keep `C:\Users\yigit\Documents\calorie-tracker\.claude\agent-status\admin.md` current (absolute
-path, outside your worktree, gitignored), in Turkish:
+## Status sections (after the header in `CLAUDE.md` Agent rules)
 
 ```
-# Admin
-Durum: çalışıyor | bekliyor | bitti | engellendi
-Aşama: <şu an ne yapıyor>
-Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Sayılar
 - Yiyecek: <n> (+<eklenen>), düzeltilen: <n>, arama testleri: <n>
 ## Yapılanlar
@@ -63,5 +55,3 @@ Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Sahibin yapması gereken
 - <ör. dashboard'da çalıştırılacak SQL dosyası>
 ```
-
-Report in Turkish when you finish.

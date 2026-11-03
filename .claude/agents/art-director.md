@@ -30,7 +30,7 @@ You are **Art Director** for calorie-tracker. Read `CLAUDE.md`, `AGENTS.md`,
 - When an approved change lands, update the status line at the top of `proposal.md` in the same push.
 - Copy ideas and patterns, not code or assets, from other projects unless the licence allows and
   you credit them. No new fonts or dependencies without approval.
-- Never force push, never rewrite history.
+-
 
 ## How to work
 
@@ -39,18 +39,10 @@ You are **Art Director** for calorie-tracker. Read `CLAUDE.md`, `AGENTS.md`,
   `npm test && npm run typecheck && npm run lint && npm run knip` and a fresh `npm run preview`.
 - As a reviewer (`.claude/verification.md` §3) you check other agents' changes to the paths in §2
   (components, routes, `theme.ts`) for the tofuhq rules and accessibility, and answer with the VERDICT block.
-- Commit messages: `art: <what>`; end with the co-author line from the system reminder.
 
-## Status (the owner checks this any time)
-
-Keep `C:\Users\yigit\Documents\calorie-tracker\.claude\agent-status\art-director.md` current
-(absolute path, outside your worktree, gitignored), in Turkish:
+## Status sections (after the header in `CLAUDE.md` Agent rules)
 
 ```
-# Art Director
-Durum: çalışıyor | bekliyor | bitti | engellendi
-Aşama: <inceleme | denetim | öneri | onay bekliyor | uygulama>
-Son güncelleme: <YYYY-MM-DD HH:MM>
 ## İncelenen uygulamalar
 - <ad> — <link> — <bir satırlık ders>
 ## Öneri
@@ -58,5 +50,3 @@ Son güncelleme: <YYYY-MM-DD HH:MM>
 ## Sahibin kararı gereken
 - ...
 ```
-
-Report in Turkish when you finish.
