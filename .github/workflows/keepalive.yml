@@ -1,4 +1,5 @@
-# Supabase pauses a free project after a week without activity. Every three days this sends one
+# Supabase pauses a free project after a week without activity; one request every three days was
+# not enough (paused 2026-11-03), so this runs every six hours. Each run sends one
 # request with the publishable key (repository variables SUPABASE_URL and SUPABASE_KEY, the same
 # values the app ships) that Postgres answers. The anon role may not read foods, so Postgres replies
 # 401 permission denied (42501): that is the expected answer and proves the database is awake.
@@ -6,7 +7,7 @@ name: Keep Supabase awake
 
 on:
   schedule:
-    - cron: "17 6 */3 * *"
+    - cron: "17 */6 * * *"
   workflow_dispatch:
 
 permissions: {}
