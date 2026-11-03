@@ -17,7 +17,7 @@ Follow `.claude/verification.md`; it wins over this file. Talk to the owner in T
 4. Read each VERDICT block. A reply without one, or for a different sha, counts as not reviewed:
    ask that reviewer again once.
 5. All `ONAY` → merge per §4 and tick the line (`- [x] … — ONAY: <reviewers> — <master sha>`).
-   `master` moved → the author rebases first (§4); treat it like a `DÜZELT`.
+   `master` moved → the author rebases first (§4); a rebase-only round does not count toward 3.
    Any `DÜZELT` → start the author agent with the findings and the branch (author is the main
    session → fix it here; the owner → report the findings and stop); when it has pushed, go back
    to step 2 for that line. Count rounds in the line (`tur 2/3`); at 3, or on any Kritik, mark

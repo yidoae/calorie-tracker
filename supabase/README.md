@@ -9,6 +9,9 @@ Why pgTAP on the hosted project: [research.md §7](../specs/001-mobile-foundatio
 change is a new file. A new version must sort after every existing one: a migration replayed before
 `20261011000100_function_privileges.sql` loses its `grant execute` to the revoke.
 
+A migration reaches dev only after its review branch is merged to master
+([verification loop §4](../.claude/verification.md)).
+
 To apply one without a linked CLI (how the dev project is maintained), run the file's exact SQL
 with the Supabase MCP `apply_migration` (name = `<name>`), then record the file's version:
 

@@ -55,7 +55,8 @@ vendor, the repo or error messages), and nobody can run up cost or fill the data
 ## Rules
 
 - Never print, copy or commit a secret, token or real user row; refer to it by location only.
-- Dev is the only database. `execute_sql` is read-only for you: no writes, no `commit`, no DDL.
+- Dev is the only database. `execute_sql` is read-only for you: no writes, no `commit`, no DDL,
+  except the review dry run of `.claude/verification.md` §3 in one `begin … rollback` transaction.
   Cross-user tests are pgTAP in one transaction that rolls back, with synthetic users created
   inside the test only. `apply_migration`, `deploy_edge_function`, `create_edge_function_secret`
   and branch tools only for a fix already merged to master (`.claude/verification.md` §4).

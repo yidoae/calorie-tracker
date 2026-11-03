@@ -26,9 +26,9 @@ research, data-model, contracts) first; they win over this file.
 - Edit only `tools/fooddata/sources/` (never the generated `*_food_list_*.sql`, `foods.txt`,
   `foods.json`, `search_cases.test.sql`) and build with `npm run build -w fooddata`; a release
   is `npm run build -w fooddata -- --release <YYYYMMDDHHMMSS>`. Follow research.md §11 for recipes.
-- Migrations: new file; identical SQL applied to dev with MCP `apply_migration` only after the
-  review branch is merged (`.claude/verification.md` §4), recorded version
-  equal to the file name, types regenerated, pgTAP written first and seen failing. Never edit an
+- Migrations: new file, pgTAP written first and seen failing (in a `begin … rollback` dry run),
+  `database.types.ts` updated by hand on the branch. `/verify` applies it to dev after the merge
+  (`.claude/verification.md` §4) and checks the recorded version and the generated types. Never edit an
   applied migration.
 - Saved meals keep their snapshot values; never change or delete users' rows (meals, plans,
   profiles, workouts). The Supabase MCP refuses SQL containing `delete`: when a step needs it, write

@@ -20,7 +20,8 @@ session) drives the loop; subagents cannot start each other. Owner decision 2026
 The **author** is the agent named by the commit prefix (`admin:`, `art:`, `release:`, `security:`,
 `tester:`); any other prefix is the main session. Not the branch name.
 
-**Exempt** (straight to master as before): changes that touch only Markdown under `specs/`, and
+**Exempt** (straight to master as before): changes that touch only Markdown under `specs/` (not
+`specs/*/contracts/`), and
 status files (outside the repo anyway). Everything else, including `CLAUDE.md`, agent files,
 config, tests and generated files, goes through review.
 
@@ -39,7 +40,7 @@ function secret is set until the change is on master (§4). Dev holds the owner'
 `apps/mobile/src/services/`, `apps/mobile/src/providers/`, `apps/mobile/src/app/_layout.tsx`,
 `apps/mobile/src/app/(auth)/`, `apps/mobile/src/hooks/useSession.ts`, `useAuth*.ts`,
 `authValidation.ts`, `packages/core/src/schemas/`, `packages/core/src/db/`,
-`app.config.ts`, `eas.json`, `.env*`, `.gitignore`, `.github/`, `.maestro/`, any `package.json` or
+`specs/*/contracts/`, `app.config.ts`, `eas.json`, `.env*`, `.gitignore`, `.github/`, `.maestro/`, any `package.json` or
 lockfile, `tools/**` scripts that call the network, dev or an API key (`tools/aieval/src/eval.ts`,
 `tools/fooddata` fetch), `tools/preview/metro.config.js`, `.claude/`.
 
@@ -52,7 +53,10 @@ the only code reviewer (plus Art Director for its paths).
    before the install, delete `apps/mobile/.expo/cache/eslint/` and run it again.
 2. Run every check yourself: `npm test`, `npm run typecheck`, `npm run lint`, `npm run knip`, plus
    what the paths need: `check -w fooddata`, `eval:text -w aieval`, `test:functions`, and for a
-   migration its SQL and the pgTAP files in one transaction against dev
+   migration (Tester runs it; Security reads the SQL and may run the same dry run) its SQL and the
+   pgTAP files in one transaction against dev, sent as one script on one connection, only after
+   reading them: transaction control outside the wrapper (`begin`, `commit`, `end`, `rollback`,
+   `savepoint`), `dblink`, `pg_cron`/`cron.schedule` or `copy … program` → do not run, `DÜZELT`
    (`begin; <migration>; <tests>; rollback;`; a statement that cannot run in a transaction →
    say so and review the SQL by reading). Never trust the author's "checks:" line.
 3. Read the change and the code it connects to: correctness, tests for new branches, the
@@ -74,14 +78,18 @@ A check that fails only because of your environment is not a finding; fix the en
 ## 4. Merge (main session, `/verify`)
 
 - The merged sha is the sha in the VERDICT blocks, never the current tip of `origin/review/*`.
-- All reviewers `ONAY` on that sha and its parent is the tip of `origin/master` →
-  `git push origin <sha>:master` (fast-forward only), delete the review branch, tick the line.
+- All reviewers `ONAY` on that sha and `origin/master` is its ancestor
+  (`git merge-base --is-ancestor origin/master <sha>`) → `git push origin <sha>:master`
+  (fast-forward only), delete the review branch, tick the line.
 - `master` moved → no merge. The author rebases (§1.4) and the reviewers review the new sha again;
   they may limit the reading to `git range-diff`, but they rerun every check.
-- After a merge that holds a migration: apply the file's exact SQL to dev (`apply_migration`,
-  record the version, `supabase/README.md`), run the security and performance advisors, regenerate
-  `database.types.ts`. A difference from the committed file goes back through review as a fix.
+- After a merge that holds a migration, the main session (`/verify`) applies the file's exact SQL
+  to dev (`apply_migration`, record the version, `supabase/README.md`), runs the security and
+  performance advisors and compares `generate_typescript_types` with the committed
+  `database.types.ts`. The author writes that type change by hand on the branch, so the code that
+  needs it typechecks in review; a difference goes back through review as a fix.
   Edge Function deploys and secrets likewise happen only from the merged sha.
 - Any `DÜZELT` → the author fixes and all reviewers review again. Three rounds without `ONAY`, or
-  any Kritik → `engellendi` for the owner, with the findings.
+  any Kritik → `engellendi` for the owner, with the findings; delete its `-r<n>` branches. A round
+  that is only a rebase because `master` moved does not count toward the three.
 - Orta/Düşük follow-ups go to the owning agent's status file under "Sıradaki".
