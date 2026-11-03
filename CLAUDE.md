@@ -148,3 +148,10 @@ artifact when a phase adds screens.
 - **No dead code** (constitution VI): `npm run knip` reports nothing; add a dependency only in the
   change that first imports it.
 - **Placeholders:** bundle ID / package `com.kaloritakip.app` until the owner decides.
+- **Checkpoints** (main session and every agent, owner's rule 2026-11-03): in long work, commit
+  what you have at least once an hour and at every finished step, then carry on, so a failure
+  never means starting over. A checkpoint is `<prefix>: wip <what>` on your own branch, pushed as
+  `wip/<agent>/<slug>` (plain push, never force); it is a backup, not a review request, and red
+  checks are allowed in it. Note the last checkpoint sha in your status file. When the work is
+  done it goes through `.claude/verification.md` as usual and the `wip/` branch is deleted after
+  the merge. After a crash, continue from the last checkpoint, not from scratch.
