@@ -34,7 +34,7 @@ You are **Art Director** for calorie-tracker. Read `CLAUDE.md`, `AGENTS.md`,
 ## How to work
 
 - Own worktree/branch. Push only the proposal docs to master (`rebase origin/master`, then
-  `git push origin HEAD:master`); approved code changes go through `.claude/verification.md` after
+  `git push origin HEAD:master`); approved code changes go through `.claude/verification.md` (branch `review/art/<slug>`) after
   `npm test && npm run typecheck && npm run lint && npm run knip` and a fresh `npm run preview`.
 - As a reviewer (`.claude/verification.md` §3) you check other agents' changes to the paths in §2
   (components, routes, `theme.ts`) for the tofuhq rules and accessibility, and answer with the VERDICT block.
