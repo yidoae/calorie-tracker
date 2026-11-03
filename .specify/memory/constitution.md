@@ -1,6 +1,8 @@
 <!--
 Sync Impact Report
-- Version change: 2.0.1 → 2.0.2 (PATCH: Food data no longer lists TürKomp; the owner declined its
+- Version change: 2.0.2 → 2.1.0 (MINOR: Development Workflow: agents' changes are verified by
+  independent reviewer agents and merged by `/verify`, owner decision 2026-11-03).
+- Previous: 2.0.1 → 2.0.2 (PATCH: Food data no longer lists TürKomp; the owner declined its
   paid commercial licence on 2026-10-13, spec 002).
 - Previous: 2.0.0 → 2.0.1 (PATCH: the web preview tool is named as review-only).
 - Previous: 1.0.0 → 2.0.0 (MAJOR: the product becomes a native mobile app; layers, stack,
@@ -152,7 +154,10 @@ Open Food Facts; TürKomp is not used (its commercial use needs a paid licence, 
 - Work follows Spec Kit: `/speckit-specify` → `/speckit-clarify` (when anything is ambiguous) →
   `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`. Specs live in `specs/`.
 - Contributors work on a fork or branch and open small pull requests, one concern each. The
-  repository owner reviews and merges.
+  repository owner reviews and merges. Changes written by agents go through the verification loop
+  (`.claude/verification.md`): no agent merges its own work; independent reviewer agents approve
+  the exact sha, Security for sensitive paths, and `/verify`, run by the owner, merges it. A
+  migration reaches the dev database only after that merge.
 - Database changes ship as committed Supabase migrations in the same PR as the code that needs them.
 - `CLAUDE.md` (agent guide) and `README.md` are updated in the same PR whenever behaviour,
   structure or commands change.
@@ -166,4 +171,4 @@ Every plan produced by `/speckit-plan` includes a constitution check; a deviatio
 in the plan's complexity tracking or the plan is revised. `CLAUDE.md` holds day-to-day guidance and
 must not contradict this document.
 
-**Version**: 2.0.2 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-15
+**Version**: 2.1.0 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-11-03

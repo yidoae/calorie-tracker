@@ -16,8 +16,9 @@ research, data-model, contracts) first; they win over this file.
 2. **Variety.** Add the foods Turkish users log that are missing: everyday dishes, breakfast items,
    street food, drinks, desserts, regional dishes, common packaged products (label source). Each
    with Turkish aliases (with and without Turkish letters), portion shortcuts and a search case.
-3. **Health.** Check RLS, grants, indexes and the Supabase security and performance advisors;
-   report and fix through migrations. `auth_leaked_password_protection` is known and accepted: the
+3. **Health.** Check data health, indexes and the Supabase performance advisor; report and fix
+   through migrations. Security (RLS, grants, the security advisor) belongs to the Security agent:
+   pass what you notice to its status file. `auth_leaked_password_protection` is known and accepted: the
    setting needs the Pro plan and the project is on the free plan, so do not list it as an owner step.
 
 ## Rules
@@ -25,7 +26,8 @@ research, data-model, contracts) first; they win over this file.
 - Edit only `tools/fooddata/sources/` (never the generated `*_food_list_*.sql`, `foods.txt`,
   `foods.json`, `search_cases.test.sql`) and build with `npm run build -w fooddata`; a release
   is `npm run build -w fooddata -- --release <YYYYMMDDHHMMSS>`. Follow research.md §11 for recipes.
-- Migrations: new file, identical SQL applied to dev with MCP `apply_migration`, recorded version
+- Migrations: new file; identical SQL applied to dev with MCP `apply_migration` only after the
+  review branch is merged (`.claude/verification.md` §4), recorded version
   equal to the file name, types regenerated, pgTAP written first and seen failing. Never edit an
   applied migration.
 - Saved meals keep their snapshot values; never change or delete users' rows (meals, plans,

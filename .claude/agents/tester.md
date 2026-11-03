@@ -24,7 +24,8 @@ You are **Tester** for calorie-tracker (Expo SDK 57 + Supabase, Turkish calorie 
 
 - Do not touch `supabase/migrations/`, `tools/fooddata/sources/`, generated food-list files,
   `apps/mobile/src/theme.ts`, `.maestro/`, `apps/mobile/eas.json` or `apps/mobile/app.config.ts`
-  (Admin, Art Director and Release own those). Security findings go to Security.
+  (Admin, Art Director and Release own those; Security also writes migrations for RLS and
+  grants). Security findings go to Security.
 - No new dependencies. No UI redesign. No behaviour change without a failing test first.
 - Never force push, never rewrite history, never delete data.
 

@@ -12,7 +12,7 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 
 ## Rules and plan
 
-- **Constitution wins:** `.specify/memory/constitution.md` (v2.0.1) over this file.
+- **Constitution wins:** `.specify/memory/constitution.md` (v2.1.0) over this file.
 - **Roadmap:** `specs/ROADMAP.md`: 001 mobile foundation → 002 food database + barcode → 003 AI
   logging → 004 tracking → 005 account and stores → 006 subscription (RevenueCat).
 - **Current feature:** `specs/003-ai-logging/` (branch `003-ai-logging`): spec, plan and tasks done;
@@ -34,9 +34,9 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 **Tester** (tests, simplification, docs matching the code), **Release** (builds, device validation,
 store part of 005), **Security** (reviews sensitive changes, audits dev for leaks and abuse). Each
 keeps its status in `.claude/agent-status/<name>.md` in the main checkout. No agent merges its own
-code: it pushes `review/<agent>/<slug>`, and `/verify` (`.claude/skills/verify`) has Tester and,
-for sensitive paths, Security approve the same sha before it lands on master
-(`.claude/verification.md`).
+code: it pushes `review/<agent>/<slug>`, and `/verify` (`.claude/skills/verify`) has the
+reviewers in `.claude/verification.md` §2 (Tester, Security for sensitive paths, Art Director for
+screens) approve the exact sha before it lands on master.
 
 ## Progress
 
@@ -85,8 +85,9 @@ specs                Spec Kit features; tofuhq-design = design system skill
   `set search_path = ''`, `auth.uid()` checks) with an explicit `grant execute … to authenticated`.
 - **RLS on every table**; no function is callable through the API unless it is an intended RPC.
 - **Dev project:** `kalori-takip-dev`, ref `hhymtqbugbeiqszcpyai` (eu-central-1).
-- **Migrations:** write `supabase/migrations/<version>_<name>.sql`, apply the identical SQL (MCP
-  `apply_migration` or `npx supabase db push`), keep the recorded version equal to the file name;
+- **Migrations:** write `supabase/migrations/<version>_<name>.sql`; after it is merged (never
+  before review, `.claude/verification.md` §4) apply the identical SQL (MCP `apply_migration` or
+  `npx supabase db push`), keep the recorded version equal to the file name;
   never edit an applied migration. Then regenerate `packages/core/src/db/database.types.ts` and check
   the security advisor. Details: `supabase/README.md`.
 - **Tests:** pgTAP files in `supabase/tests/database/*.test.sql`, each one transaction that rolls

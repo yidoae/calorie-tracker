@@ -1,42 +1,62 @@
 # Verification loop
 
-No agent merges its own code. Every change reaches `master` only after an independent agent has
-read it and run the checks itself at the same sha. The `/verify` skill (main session) drives the
-loop; subagents cannot start each other.
+No agent merges its own code. A change reaches `master` only as the exact sha that every reviewer
+approved, after they read it and ran the checks themselves at that sha. The `/verify` skill (main
+session) drives the loop; subagents cannot start each other. Owner decision 2026-11-03
+(constitution, Development Workflow).
 
 ## 1. Author
 
 1. Work in your own worktree/branch. Run your own checks (your agent file) and keep them green.
-2. Rebase on `origin/master`, then push a review branch instead of master:
-   `git push origin HEAD:refs/heads/review/<agent>/<slug>` (force-push only this branch of yours,
-   only while it is under review).
+2. Rebase on `origin/master` (your unpushed commits only), then push a review branch instead of
+   master: `git push origin HEAD:refs/heads/review/<agent>/<slug>`. Never force push, not even here.
 3. Append one line to `C:\Users\yigit\Documents\calorie-tracker\.claude\agent-status\queue.md`:
    `- [ ] review/<agent>/<slug> @<sha> — <one line, Turkish> — checks: <what you ran>`
-4. Stop. On `DÜZELT` you get the findings on the same branch: fix, push, update the sha in the line.
+   Never tick or edit another line; only `/verify` ticks lines.
+4. Stop. On `DÜZELT`: fix with new commits on top of the same branch (plain push) and update the sha
+   in your line. If `master` moved meanwhile and you must rebase, push the rebased branch as
+   `review/<agent>/<slug>-r<n>` and replace the line; the old branch is deleted at merge.
+
+The **author** is the agent named by the commit prefix (`admin:`, `art:`, `release:`, `security:`,
+`tester:`); any other prefix is the main session. Not the branch name.
 
 **Exempt** (straight to master as before): changes that touch only Markdown under `specs/`, and
-status files (outside the repo anyway). Anything else, including `CLAUDE.md`, agent files,
-config, tests, generated files and migrations, goes through review.
+status files (outside the repo anyway). Everything else, including `CLAUDE.md`, agent files,
+config, tests and generated files, goes through review.
+
+**Not before merge:** a migration is not applied to dev, an Edge Function is not deployed and no
+function secret is set until the change is on master (§4). Dev holds the owner's real data.
 
 ## 2. Reviewers (from the changed paths)
 
 | Changed | Reviewer |
 |---|---|
-| any code, test, config or generated file | **Tester** (Security when Tester is the author) |
-| `supabase/migrations/`, `supabase/functions/`, `supabase/config.toml`, `apps/mobile/src/services/`, auth/session hooks and routes, `app.config.ts`, `eas.json`, `.env*`, any `package.json` or lockfile, `.claude/` | also **Security** (Tester when Security is the author) |
-| `components/`, `theme.ts` | also **Art Director** for tofuhq and accessibility (not when it is the author) |
+| any code, test, config or generated file | **Tester** |
+| sensitive paths (below) | also **Security** |
+| `apps/mobile/src/components/`, `apps/mobile/src/app/**/*.tsx`, `theme.ts` | also **Art Director** (tofuhq tokens and accessibility in the code; the screen in the published preview when the author published one) |
 
-A reviewer never reviews their own commit. Admin's food-data rules are checked by Tester
-(`npm run check -w fooddata`, search cases) unless Admin asks for a data reviewer.
+**Sensitive paths:** `supabase/` (migrations, tests, functions, `config.toml`),
+`apps/mobile/src/services/`, `apps/mobile/src/providers/`, `apps/mobile/src/app/_layout.tsx`,
+`apps/mobile/src/app/(auth)/`, `apps/mobile/src/hooks/useSession.ts`, `useAuth*.ts`,
+`authValidation.ts`, `packages/core/src/schemas/`, `packages/core/src/db/`,
+`app.config.ts`, `eas.json`, `.env*`, `.gitignore`, `.github/`, `.maestro/`, any `package.json` or
+lockfile, `tools/**` scripts that call the network, dev or an API key (`tools/aieval/src/eval.ts`,
+`tools/fooddata` fetch), `tools/preview/metro.config.js`, `.claude/`.
+
+A reviewer never reviews their own commit. When Tester or Security is the author, the other one is
+the only code reviewer (plus Art Director for its paths).
 
 ## 3. Reviewer
 
-1. Check out the exact sha in your own worktree (`git fetch origin && git checkout --detach <sha>`).
+1. In your own worktree: `git fetch origin && git checkout --detach <sha> && npm ci`. If lint ran
+   before the install, delete `apps/mobile/.expo/cache/eslint/` and run it again.
 2. Run every check yourself: `npm test`, `npm run typecheck`, `npm run lint`, `npm run knip`, plus
-   what the paths need (`check -w fooddata`, `eval:text -w aieval`, `test:functions`, pgTAP against
-   dev for migrations, `npm run preview` for screens). Never trust the author's "checks:" line.
+   what the paths need: `check -w fooddata`, `eval:text -w aieval`, `test:functions`, and for a
+   migration its SQL and the pgTAP files in one transaction against dev
+   (`begin; <migration>; <tests>; rollback;`; a statement that cannot run in a transaction →
+   say so and review the SQL by reading). Never trust the author's "checks:" line.
 3. Read the change and the code it connects to: correctness, tests for new branches, the
-   constitution, your own area (Security: section "Audit" of `security.md`).
+   constitution, your own area (Security: "Audit" in `security.md`).
 4. Answer with exactly this block (the main session parses it):
 
 ```
@@ -49,13 +69,19 @@ FINDINGS:
 
 `DÜZELT` only for findings that must change before merge (any Kritik/Yüksek, wrong behaviour, a
 red check, a missing test for a new branch). Orta/Düşük alone → `ONAY`, findings go to follow-ups.
-Approving a sha means that sha; a new push needs a new review.
+A check that fails only because of your environment is not a finding; fix the environment and rerun.
 
 ## 4. Merge (main session, `/verify`)
 
-- All reviewers `ONAY` on the same sha → rebase on `origin/master`. If the rebase is clean and only
-  `master` moved, rerun `npm test && npm run typecheck`, then `git push origin <sha>:master`, delete
-  the review branch, tick the queue line. A conflict goes back to the author.
-- Any `DÜZELT` → the author fixes on the branch, then all reviewers review again.
-- Three rounds without `ONAY`, or any Kritik → `engellendi` for the owner, with the findings.
+- The merged sha is the sha in the VERDICT blocks, never the current tip of `origin/review/*`.
+- All reviewers `ONAY` on that sha and its parent is the tip of `origin/master` →
+  `git push origin <sha>:master` (fast-forward only), delete the review branch, tick the line.
+- `master` moved → no merge. The author rebases (§1.4) and the reviewers review the new sha again;
+  they may limit the reading to `git range-diff`, but they rerun every check.
+- After a merge that holds a migration: apply the file's exact SQL to dev (`apply_migration`,
+  record the version, `supabase/README.md`), run the security and performance advisors, regenerate
+  `database.types.ts`. A difference from the committed file goes back through review as a fix.
+  Edge Function deploys and secrets likewise happen only from the merged sha.
+- Any `DÜZELT` → the author fixes and all reviewers review again. Three rounds without `ONAY`, or
+  any Kritik → `engellendi` for the owner, with the findings.
 - Orta/Düşük follow-ups go to the owning agent's status file under "Sıradaki".
