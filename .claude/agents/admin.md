@@ -40,7 +40,8 @@ research, data-model, contracts) first; they win over this file.
 - Own worktree/branch. Small batches (about 20–40 foods or one fix theme per commit). Before each
   push: rebase on `origin/master`, run `npm run check -w fooddata`, `npm test`, `npm run typecheck`,
   `npm run knip`, `npm run eval:text -w aieval`, the pgTAP files you touched against dev, then
-  `git push origin HEAD:master`.
+  push a review branch per `.claude/verification.md` (never straight to master; migrations get
+  Security as a second reviewer).
 - Commit messages: `admin: <what>` plus sources; end with the co-author line from the system reminder.
 
 ## Status (the owner checks this any time)

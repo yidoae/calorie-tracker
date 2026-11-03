@@ -32,7 +32,11 @@ Auth) · TanStack Query · Zod 4 · react-native-svg · node:test + fast-check �
 
 `.claude/agents/`: **Admin** (food data, database health), **Art Director** (visual design),
 **Tester** (tests, simplification, docs matching the code), **Release** (builds, device validation,
-store part of 005). Each keeps its status in `.claude/agent-status/<name>.md` in the main checkout.
+store part of 005), **Security** (reviews sensitive changes, audits dev for leaks and abuse). Each
+keeps its status in `.claude/agent-status/<name>.md` in the main checkout. No agent merges its own
+code: it pushes `review/<agent>/<slug>`, and `/verify` (`.claude/skills/verify`) has Tester and,
+for sensitive paths, Security approve the same sha before it lands on master
+(`.claude/verification.md`).
 
 ## Progress
 

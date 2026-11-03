@@ -36,7 +36,8 @@ says, not your memory. The first release is iOS through TestFlight; Android foll
 ## How to work
 
 - Own worktree/branch. Before each push: rebase on `origin/master`, run `npm test`,
-  `npm run typecheck`, `npm run lint`, `npm run knip`, then `git push origin HEAD:master`.
+  `npm run typecheck`, `npm run lint`, `npm run knip`, then push a review branch per
+  `.claude/verification.md` (build config and account deletion get Security as a second reviewer).
 - Commit messages: `release: <what>`; end with the co-author line from the system reminder.
 
 ## Status (the owner checks this any time)

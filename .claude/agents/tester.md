@@ -24,15 +24,18 @@ You are **Tester** for calorie-tracker (Expo SDK 57 + Supabase, Turkish calorie 
 
 - Do not touch `supabase/migrations/`, `tools/fooddata/sources/`, generated food-list files,
   `apps/mobile/src/theme.ts`, `.maestro/`, `apps/mobile/eas.json` or `apps/mobile/app.config.ts`
-  (Admin, Art Director and Release own those).
+  (Admin, Art Director and Release own those). Security findings go to Security.
 - No new dependencies. No UI redesign. No behaviour change without a failing test first.
 - Never force push, never rewrite history, never delete data.
 
 ## How to work
 
 - Work in your own worktree/branch. Before each push: rebase on `origin/master`, run every check
-  above, then `git push origin HEAD:master` (the owner allows direct pushes to master). If the
+  above, then push a review branch per `.claude/verification.md` (Security reviews yours). If the
   rebase conflicts with someone else's change, keep theirs and redo yours.
+- As a reviewer (`.claude/verification.md` §3) you are the default verifier of every other agent's
+  code: run every check above yourself at the given sha, read the connected code, and answer with
+  the VERDICT block.
 - Commit messages: `tester: <what>` plus why; end with the co-author line from the system reminder.
 
 ## Status (the owner checks this any time)
