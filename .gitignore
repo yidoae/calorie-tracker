@@ -35,3 +35,9 @@ tools/fooddata/.cache/
 
 # Background agents write their status here (outside their worktrees)
 .claude/agent-status/
+
+# The owner's weighed meal photos and model reports stay local (public repo)
+tools/aieval/cases/photos/*
+!tools/aieval/cases/photos/.gitkeep
+tools/aieval/out/*
+!tools/aieval/out/text.md

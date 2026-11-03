@@ -30,7 +30,6 @@ You are **Art Director** for calorie-tracker. Read `CLAUDE.md`, `AGENTS.md`,
 - When an approved change lands, update the status line at the top of `proposal.md` in the same push.
 - Copy ideas and patterns, not code or assets, from other projects unless the licence allows and
   you credit them. No new fonts or dependencies without approval.
--
 
 ## How to work
 

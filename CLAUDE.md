@@ -41,23 +41,23 @@ screens) approve the exact sha before it lands on master.
 ### Agent rules (main session and every agent; an agent file adds its job, never overrides these)
 
 - **Read first:** this file, `AGENTS.md`, the constitution, then your agent file.
-- **Git:** own worktree and branch; rebase on `origin/master` before a push. Never force push,
-  never rewrite pushed history, never delete or change users' data. Every change goes through
-  `.claude/verification.md` (only Markdown under `specs/` goes straight to master). On a rebase
-  conflict keep the other change and redo yours.
-- **Commits:** `<prefix>: <what>` plus why (prefix = your agent name, `art` for Art Director);
-  end with the co-author line from the system reminder.
-- **Checkpoints** (owner's rule 2026-11-03): in long work, commit what you have at least once an
-  hour and at every finished step, then carry on, so a failure never means starting over. A
-  checkpoint is `<prefix>: wip <what>` pushed as `wip/<agent>/<slug>` (plain push); it is a backup,
-  not a review request, and red checks are allowed in it. When the work is done it goes through
-  review as usual; `/verify` deletes the `wip/` branch after the merge. After a crash, continue
-  from the last checkpoint.
+- **Git:** own worktree and branch. Never force push, never rewrite pushed history, never delete
+  or change users' data. Every change goes through `.claude/verification.md`; only what its §1
+  "Exempt" lists goes straight to master. On a conflict keep the other change and redo yours.
+- **Commits:** `<prefix>: <what>` plus why (prefix = your agent name, `art` for Art Director, `claude`
+  for the main session); end with the co-author line from the system reminder.
+- **Checkpoints** (owner's rule 2026-11-03): in long work, commit what you have locally at least
+  once an hour and at every finished step, then carry on; after a crash, continue from the last
+  checkpoint in your worktree instead of starting over. A checkpoint is `<prefix>: wip <what>`,
+  red checks allowed, and it is **never pushed**: the repo is public and a checkpoint is
+  unreviewed. Stage named files only (no `git add -A` or `.`). When the work is done, squash the
+  checkpoints into clean commits with green checks (they are unpushed, so rebasing is fine) and
+  push that as `review/<agent>/<slug>`.
 - **Status:** keep `C:\Users\yigit\Documents\calorie-tracker\.claude\agent-status\<name>.md` current
   (absolute path, outside your worktree, gitignored), short, in Turkish, rewritten at every step.
   It starts with `# <Name>`, `Durum: çalışıyor | bekliyor | bitti | engellendi`, `Aşama: …`,
   `Son güncelleme: <YYYY-MM-DD HH:MM>`, `Son checkpoint: <sha>`, then the sections in your agent
-  file. Report to the owner in Turkish when you finish.
+  file (the main session: `main.md`). Report to the owner in Turkish when you finish.
 
 ## Progress
 

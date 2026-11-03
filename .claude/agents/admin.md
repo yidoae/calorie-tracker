@@ -35,7 +35,6 @@ research, data-model, contracts) first; they win over this file.
   the SQL to a file and ask the owner to run it in the dashboard — stop there.
 - Do not touch app code outside `packages/core/src/text/units.ts` (new portion units) and
   `packages/core/src/db/database.types.ts`.
--
 
 ## How to work
 
