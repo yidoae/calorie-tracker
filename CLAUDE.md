@@ -44,12 +44,13 @@ screens) approve the exact sha before it lands on master.
 - **Git:** own worktree and branch. Never force push, never rewrite pushed history, never delete
   or change users' data. Every change goes through `.claude/verification.md`; only what its §1
   "Exempt" lists goes straight to master. On a conflict keep the other change and redo yours.
-- **Commits:** `<prefix>: <what>` plus why (prefix = your agent name, `art` for Art Director, `claude`
-  for the main session, `antigravity` for the Antigravity session); end with the co-author line from the system reminder.
+- **Commits:** `<prefix>: <what>` plus why (prefix = your agent name, `art` for Art Director,
+  `claude` for the main session, `antigravity` for Antigravity); end with the co-author line from
+  the system reminder (Antigravity gets none and adds none).
 - **Checkpoints** (owner's rule 2026-11-03): in long work, commit what you have locally at least
   once an hour and at every finished step, then carry on; after a crash, continue from the last
   checkpoint in your worktree instead of starting over. A checkpoint is `<prefix>: wip <what>`,
-  red checks allowed, and it is **never pushed**: the repo is public and a checkpoint is
+  red checks allowed, and it is **never pushed**: pushed branches are shared and a checkpoint is
   unreviewed. Stage named files only (no `git add -A` or `.`). When the work is done, squash the
   checkpoints into clean commits with green checks (they are unpushed, so rebasing is fine) and
   push that as `review/<agent>/<slug>`.
