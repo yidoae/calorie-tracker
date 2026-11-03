@@ -45,7 +45,7 @@ screens) approve the exact sha before it lands on master.
   or change users' data. Every change goes through `.claude/verification.md`; only what its §1
   "Exempt" lists goes straight to master. On a conflict keep the other change and redo yours.
 - **Commits:** `<prefix>: <what>` plus why (prefix = your agent name, `art` for Art Director, `claude`
-  for the main session); end with the co-author line from the system reminder.
+  for the main session, `antigravity` for the Antigravity session); end with the co-author line from the system reminder.
 - **Checkpoints** (owner's rule 2026-11-03): in long work, commit what you have locally at least
   once an hour and at every finished step, then carry on; after a crash, continue from the last
   checkpoint in your worktree instead of starting over. A checkpoint is `<prefix>: wip <what>`,

@@ -18,7 +18,9 @@ session) drives the loop; subagents cannot start each other. Owner decision 2026
    `review/<agent>/<slug>-r<n>` and replace the line; the old branch is deleted at merge.
 
 The **author** is the agent named by the commit prefix (`admin:`, `art:`, `release:`, `security:`,
-`tester:`); any other prefix is the main session. Not the branch name.
+`tester:`, `antigravity:`); any other prefix is the main session. Not the branch name. Antigravity
+is a separate session the owner runs: on `DÜZELT` `/verify` writes the findings to its status file
+and reports them to the owner instead of starting an agent.
 
 **Exempt** (straight to master as before): changes that touch only Markdown under `specs/` (not
 `specs/*/contracts/`), and
