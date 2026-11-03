@@ -99,12 +99,13 @@ select throws_ok(
     values ('f0000000-0000-4000-8000-00000000000f', '{"sex": "female"}', 1300, 1600, 1300, 100, 150, 33)$$,
   '23505', null, 'a second active plan for the same user is rejected');
 
--- Function privileges: anon executes nothing in public; authenticated only the RPCs listed here
--- (add each RPC's signature when its migration grants execute).
+-- Function privileges: anon executes only keepalive() in public; authenticated only the RPCs listed
+-- here (add each RPC's signature when its migration grants execute).
 select is_empty(
   $$select p.oid::regprocedure::text from pg_proc p
-     where p.pronamespace = 'public'::regnamespace and has_function_privilege('anon', p.oid, 'execute')$$,
-  'anon cannot execute any function in public');
+     where p.pronamespace = 'public'::regnamespace and has_function_privilege('anon', p.oid, 'execute')
+       and p.oid::regprocedure::text <> 'keepalive()'$$,
+  'anon executes no function in public except keepalive()');
 select is_empty(
   $$select p.oid::regprocedure::text from pg_proc p
      where p.pronamespace = 'public'::regnamespace and has_function_privilege('authenticated', p.oid, 'execute')
