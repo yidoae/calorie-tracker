@@ -1,21 +1,21 @@
 // poultry: raw and plain foods with USDA FoodData Central ids (values come from sources/usda/extract.json).
 export default [
-  { id: "chicken_boiled", name: "Haşlama tavuk", category: "poultry", fdcId: 171478, aliases: ["didiklenmiş tavuk","haşlama tavuk","haşlanmış tavuk","pilav üstü tavuk","tavuk haşlama"], typicalPortionG: 150 },
-  { id: "chicken_breast_grilled", name: "Izgara tavuk göğsü", category: "poultry", fdcId: 171477, aliases: ["grilled chicken","piliç","tavuk fileto","ızgara tavuk","ızgara tavuk göğsü"], typicalPortionG: 150 },
-  { id: "chicken_breast_raw", name: "Tavuk göğsü (çiğ)", category: "poultry", fdcId: 171077, aliases: ["chicken","raw chicken","tavuk","tavuk göğsü","çiğ tavuk","çiğ tavuk göğsü"], typicalPortionG: 200 },
-  { id: "chicken_roast", name: "Fırın tavuk (derili)", category: "poultry", fdcId: 171450, aliases: ["bütün tavuk","derili tavuk","fırın tavuk","fırında tavuk","roast chicken"], typicalPortionG: 180 },
+  { id: "chicken_boiled", name: "Haşlama tavuk", category: "poultry", fdcId: 171478, aliases: ["didiklenmiş tavuk","haşlama tavuk","haşlanmış tavuk","pilav üstü tavuk","tavuk haşlama"], typicalPortionG: 150, portions: [{ unit: "su bardağı", grams: 140 }] }, // FDC 171478 SR "1 cup, chopped or diced" 140 g
+  { id: "chicken_breast_grilled", name: "Izgara tavuk göğsü", category: "poultry", fdcId: 171477, aliases: ["grilled chicken","piliç","tavuk fileto","ızgara tavuk","ızgara tavuk göğsü"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 120 }, { unit: "dilim", grams: 60 }] }, // FNDDS 24123301 "1 medium breast" 120 g, "1 medium slice" 60 g
+  { id: "chicken_breast_raw", name: "Tavuk göğsü (çiğ)", category: "poultry", fdcId: 171077, aliases: ["chicken","raw chicken","tavuk","tavuk göğsü","çiğ tavuk","çiğ tavuk göğsü"], typicalPortionG: 200, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 171077 SR "4 oz" 113 g
+  { id: "chicken_roast", name: "Fırın tavuk (derili)", category: "poultry", fdcId: 171450, aliases: ["bütün tavuk","derili tavuk","fırın tavuk","fırında tavuk","roast chicken"], typicalPortionG: 180, portions: [{ unit: "su bardağı", grams: 140 }, { unit: "porsiyon", grams: 85 }] }, // FDC 171450 SR "1 cup, chopped or diced" 140 g, "3 oz" 85 g
   { id: "chicken_thigh", name: "Tavuk but (derisiz, ızgara)", category: "poultry", fdcId: 172388, aliases: ["baget","tavuk baget","tavuk pirzola","ızgara tavuk but"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 90 }] },
   { id: "chicken_thigh_raw", name: "Tavuk but (çiğ, derisiz)", category: "poultry", fdcId: 173627, aliases: ["chicken thigh","tavuk but","çiğ tavuk but"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 110 }] },
   { id: "chicken_wing", name: "Tavuk kanat (fırında)", category: "poultry", fdcId: 173630, aliases: ["chicken wings","kanat","tavuk kanat"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 35 }] },
-  { id: "fried_chicken", name: "Kızarmış tavuk (panelenmiş)", category: "poultry", fdcId: 171475, aliases: ["kızarmış tavuk","nugget","pane tavuk","tavuk kızartma","tavuk şnitzel","çıtır tavuk"], typicalPortionG: 150 },
+  { id: "fried_chicken", name: "Kızarmış tavuk (panelenmiş)", category: "poultry", fdcId: 171475, aliases: ["kızarmış tavuk","nugget","pane tavuk","tavuk kızartma","tavuk şnitzel","çıtır tavuk"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 175 }] }, // FNDDS 24127200 "1 medium breast" 175 g
   { id: "turkey", name: "Hindi füme", category: "poultry", fdcId: 172941, aliases: ["hindi","hindi füme"], typicalPortionG: 45, portions: [{ unit: "dilim", grams: 16 }] },
   { id: "chicken_drumstick_raw", name: "Tavuk baget (çiğ, derili)", category: "poultry", fdcId: 172373, aliases: ["çiğ baget","derili baget"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 110 }] },
   { id: "chicken_wing_raw", name: "Tavuk kanat (çiğ)", category: "poultry", fdcId: 172390, aliases: ["çiğ kanat"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 45 }] },
-  { id: "chicken_whole_raw", name: "Bütün tavuk (çiğ, derili)", category: "poultry", fdcId: 171447, aliases: ["çiğ bütün tavuk","derili tavuk eti"], typicalPortionG: 200 },
-  { id: "chicken_mince_raw", name: "Tavuk kıyma (çiğ)", category: "poultry", fdcId: 171116, aliases: ["tavuk kıyma","tavuk kıyması"], typicalPortionG: 125 },
-  { id: "chicken_liver_raw", name: "Tavuk ciğeri (çiğ)", category: "poultry", fdcId: 171060, aliases: ["tavuk ciğeri"], typicalPortionG: 100 },
-  { id: "chicken_giblets_raw", name: "Tavuk taşlık (çiğ)", category: "poultry", fdcId: 171057, aliases: ["taşlık","tavuk taşlık"], typicalPortionG: 100 },
-  { id: "turkey_breast_raw", name: "Hindi göğsü (çiğ)", category: "poultry", fdcId: 171098, aliases: ["hindi göğsü","hindi eti"], typicalPortionG: 150 },
-  { id: "turkey_mince_raw", name: "Hindi kıyma (çiğ)", category: "poultry", fdcId: 171505, aliases: ["hindi kıyma"], typicalPortionG: 125 },
+  { id: "chicken_whole_raw", name: "Bütün tavuk (çiğ, derili)", category: "poultry", fdcId: 171447, aliases: ["çiğ bütün tavuk","derili tavuk eti"], typicalPortionG: 200, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 171447 SR "4 oz" 113 g
+  { id: "chicken_mince_raw", name: "Tavuk kıyma (çiğ)", category: "poultry", fdcId: 171116, aliases: ["tavuk kıyma","tavuk kıyması"], typicalPortionG: 125, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 171116 SR "4 oz crumbled" 113 g
+  { id: "chicken_liver_raw", name: "Tavuk ciğeri (çiğ)", category: "poultry", fdcId: 171060, aliases: ["tavuk ciğeri"], typicalPortionG: 100, portions: [{ unit: "adet", grams: 44 }] }, // FDC 171060 SR "1 liver" 44 g
+  { id: "chicken_giblets_raw", name: "Tavuk taşlık (çiğ)", category: "poultry", fdcId: 171057, aliases: ["taşlık","tavuk taşlık"], typicalPortionG: 100, portions: [{ unit: "porsiyon", grams: 75 }] }, // FDC 171057 SR "1 giblets" 75 g
+  { id: "turkey_breast_raw", name: "Hindi göğsü (çiğ)", category: "poultry", fdcId: 171098, aliases: ["hindi göğsü","hindi eti"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 171098 SR "4 oz" 113 g
+  { id: "turkey_mince_raw", name: "Hindi kıyma (çiğ)", category: "poultry", fdcId: 171505, aliases: ["hindi kıyma"], typicalPortionG: 125, portions: [{ unit: "porsiyon", grams: 114 }] }, // FDC 171505 SR "1 patty, 4 oz" 114 g
   { id: "turkey_sausage", name: "Hindi sosis", category: "poultry", fdcId: 325992, aliases: ["hindi sosis"], typicalPortionG: 50, portions: [{ unit: "adet", grams: 25 }] },
 ];

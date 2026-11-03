@@ -6,5 +6,5 @@
 export const PORTION_UNITS = [
   "adet", "yemek kaşığı", "kase", "dilim", "porsiyon", "su bardağı", "çay kaşığı", "kutu", "avuç", "demet",
   "kadeh", "tabak", "şiş", "kare", "şişe", "kupa", "paket", "salkım", "tablet", "top", "shot", "tek",
-  "yaprak", "ölçek", "ince belli bardak", "bardak", "duble", "sap", "dürüm", "fincan",
+  "yaprak", "ölçek", "ince belli bardak", "bardak", "duble", "sap", "dürüm", "fincan", "fileto",
 ] as const;

@@ -1,26 +1,26 @@
 // meat: raw and plain foods with USDA FoodData Central ids (values come from sources/usda/extract.json).
 export default [
-  { id: "beef_mince_lean_raw", name: "Yağsız kıyma (çiğ)", category: "meat", fdcId: 171790, aliases: ["az yağlı kıyma","yağsız kıyma"], typicalPortionG: 125 },
-  { id: "beef_mince_raw", name: "Kıyma (çiğ, orta yağlı)", category: "meat", fdcId: 171796, aliases: ["dana kıyma","kıyma","orta yağlı kıyma","çiğ kıyma"], typicalPortionG: 125 },
+  { id: "beef_mince_lean_raw", name: "Yağsız kıyma (çiğ)", category: "meat", fdcId: 171790, aliases: ["az yağlı kıyma","yağsız kıyma"], typicalPortionG: 125, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 171790 SR "4 oz" 113 g
+  { id: "beef_mince_raw", name: "Kıyma (çiğ, orta yağlı)", category: "meat", fdcId: 171796, aliases: ["dana kıyma","kıyma","orta yağlı kıyma","çiğ kıyma"], typicalPortionG: 125, portions: [{ unit: "porsiyon", grams: 113 }, { unit: "su bardağı", grams: 225 }] }, // FDC 171796 SR "4 oz" 113 g; FNDDS 21500000 "1 cup" 225 g
   { id: "beef_patty", name: "Hamburger köftesi (pişmiş)", category: "meat", fdcId: 174032, aliases: ["burger köftesi","hamburger köftesi"], typicalPortionG: 110, portions: [{ unit: "adet", grams: 110 }] },
-  { id: "beef_raw", name: "Dana eti (çiğ, yağsız)", category: "meat", fdcId: 171816, aliases: ["dana eti","dana kuşbaşı","et","kuşbaşı","kırmızı et","çiğ et"], typicalPortionG: 150 },
-  { id: "beef_sirloin_raw", name: "Dana antrikot (çiğ, yağlı)", category: "meat", fdcId: 168726, aliases: ["antrikot","yağlı dana eti"], typicalPortionG: 150 },
-  { id: "steak", name: "Biftek (pişmiş)", category: "meat", fdcId: 169457, aliases: ["biftek","bonfile","steak"], typicalPortionG: 150 },
-  { id: "beef_stew_raw", name: "Dana kuşbaşı (çiğ, sote/haşlamalık)", category: "meat", fdcId: 170809, aliases: ["haşlamalık et","sotelik et","yahnilik et"], typicalPortionG: 150 },
-  { id: "beef_tbone_raw", name: "Dana pirzola / T-bone (çiğ)", category: "meat", fdcId: 172118, aliases: ["t-bone","dana pirzola"], typicalPortionG: 250 },
-  { id: "veal_mince_raw", name: "Dana kıyma (çiğ, yağlı)", category: "meat", fdcId: 175290, aliases: ["yağlı kıyma","köftelik kıyma"], typicalPortionG: 125 },
-  { id: "beef_liver_raw", name: "Dana ciğeri (çiğ)", category: "meat", fdcId: 169451, aliases: ["ciğer","dana ciğeri"], typicalPortionG: 150 },
-  { id: "lamb_mince_raw", name: "Kuzu kıyma (çiğ)", category: "meat", fdcId: 174370, aliases: ["kuzu kıyma"], typicalPortionG: 125 },
-  { id: "lamb_leg_raw", name: "Kuzu but (çiğ)", category: "meat", fdcId: 174342, aliases: ["kuzu but","kuzu eti","kuzu"], typicalPortionG: 150 },
-  { id: "lamb_shoulder_raw", name: "Kuzu kol (çiğ)", category: "meat", fdcId: 175262, aliases: ["kuzu kol","kuzu gerdan"], typicalPortionG: 150 },
+  { id: "beef_raw", name: "Dana eti (çiğ, yağsız)", category: "meat", fdcId: 171816, aliases: ["dana eti","dana kuşbaşı","et","kuşbaşı","kırmızı et","çiğ et"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 171816 SR "4 oz" 113 g
+  { id: "beef_sirloin_raw", name: "Dana antrikot (çiğ, yağlı)", category: "meat", fdcId: 168726, aliases: ["antrikot","yağlı dana eti"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 168726 SR "4 oz" 113 g
+  { id: "steak", name: "Biftek (pişmiş)", category: "meat", fdcId: 169457, aliases: ["biftek","bonfile","steak"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 160 }, { unit: "dilim", grams: 30 }] }, // FNDDS 21001000 "1 regular" 160 g, "1 piece/slice" 30 g
+  { id: "beef_stew_raw", name: "Dana kuşbaşı (çiğ, sote/haşlamalık)", category: "meat", fdcId: 170809, aliases: ["haşlamalık et","sotelik et","yahnilik et"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 170809 SR "4 oz" 113 g
+  { id: "beef_tbone_raw", name: "Dana pirzola / T-bone (çiğ)", category: "meat", fdcId: 172118, aliases: ["t-bone","dana pirzola"], typicalPortionG: 250, portions: [{ unit: "adet", grams: 460 }] }, // FDC 172118 SR "1 steak" 460 g
+  { id: "veal_mince_raw", name: "Dana kıyma (çiğ, yağlı)", category: "meat", fdcId: 175290, aliases: ["yağlı kıyma","köftelik kıyma"], typicalPortionG: 125, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 175290 SR "4 oz" 113 g
+  { id: "beef_liver_raw", name: "Dana ciğeri (çiğ)", category: "meat", fdcId: 169451, aliases: ["ciğer","dana ciğeri"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 169451 SR "4 oz" 113 g
+  { id: "lamb_mince_raw", name: "Kuzu kıyma (çiğ)", category: "meat", fdcId: 174370, aliases: ["kuzu kıyma"], typicalPortionG: 125, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 174370 SR "4 oz" 113 g
+  { id: "lamb_leg_raw", name: "Kuzu but (çiğ)", category: "meat", fdcId: 174342, aliases: ["kuzu but","kuzu eti","kuzu"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 115 }] }, // FDC 174342 SR "1 serving" 115 g
+  { id: "lamb_shoulder_raw", name: "Kuzu kol (çiğ)", category: "meat", fdcId: 175262, aliases: ["kuzu kol","kuzu gerdan"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 115 }] }, // FDC 175262 SR "1 serving" 115 g
   { id: "lamb_chop_raw", name: "Kuzu pirzola (çiğ)", category: "meat", fdcId: 172517, aliases: ["kuzu pirzola","pirzola"], typicalPortionG: 150, portions: [{ unit: "adet", grams: 60 }] },
-  { id: "lamb_liver_raw", name: "Kuzu ciğeri (çiğ)", category: "meat", fdcId: 172531, aliases: ["kuzu ciğeri"], typicalPortionG: 150 },
+  { id: "lamb_liver_raw", name: "Kuzu ciğeri (çiğ)", category: "meat", fdcId: 172531, aliases: ["kuzu ciğeri"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 172531 SR "4 oz" 113 g
   { id: "frankfurter", name: "Sosis (dana)", category: "meat", fdcId: 323121, aliases: ["sosis","dana sosis"], typicalPortionG: 50, portions: [{ unit: "adet", grams: 45 }] },
   { id: "salami", name: "Salam (dana)", category: "meat", fdcId: 172935, aliases: ["salam","dana salam"], typicalPortionG: 30, portions: [{ unit: "dilim", grams: 10 }] },
-  { id: "beef_mince_cooked", name: "Kıyma (kavrulmuş)", category: "meat", fdcId: 171799, aliases: ["kavrulmuş kıyma","pişmiş kıyma"], typicalPortionG: 100 },
-  { id: "beef_stew_cooked", name: "Dana kuşbaşı (pişmiş)", category: "meat", fdcId: 171204, aliases: ["pişmiş kuşbaşı","haşlanmış et","et haşlama"], typicalPortionG: 120 },
-  { id: "lamb_mince_cooked", name: "Kuzu kıyma (pişmiş)", category: "meat", fdcId: 172544, aliases: ["pişmiş kuzu kıyma"], typicalPortionG: 100 },
-  { id: "lamb_leg_cooked", name: "Kuzu eti (pişmiş)", category: "meat", fdcId: 174460, aliases: ["pişmiş kuzu","kuzu tandır eti","kuzu kızartma"], typicalPortionG: 150 },
-  { id: "beef_liver_cooked", name: "Ciğer tava (pişmiş)", category: "meat", fdcId: 168627, aliases: ["ciğer tava","pişmiş ciğer"], typicalPortionG: 150 },
-  { id: "tripe_raw", name: "İşkembe (çiğ)", category: "meat", fdcId: 170599, aliases: ["çiğ işkembe","dana işkembe"], typicalPortionG: 150 },
+  { id: "beef_mince_cooked", name: "Kıyma (kavrulmuş)", category: "meat", fdcId: 171799, aliases: ["kavrulmuş kıyma","pişmiş kıyma"], typicalPortionG: 100, portions: [{ unit: "su bardağı", grams: 125 }, { unit: "porsiyon", grams: 85 }] }, // FNDDS 21500100 "1 cup" 125 g; FDC 171799 SR "3 oz" 85 g
+  { id: "beef_stew_cooked", name: "Dana kuşbaşı (pişmiş)", category: "meat", fdcId: 171204, aliases: ["pişmiş kuşbaşı","haşlanmış et","et haşlama"], typicalPortionG: 120, portions: [{ unit: "porsiyon", grams: 135 }] }, // FNDDS 21410000 "1 cup" 135 g
+  { id: "lamb_mince_cooked", name: "Kuzu kıyma (pişmiş)", category: "meat", fdcId: 172544, aliases: ["pişmiş kuzu kıyma"], typicalPortionG: 100, portions: [{ unit: "su bardağı", grams: 125 }, { unit: "porsiyon", grams: 85 }] }, // FNDDS 23132000 "1 cup" 125 g; FDC 172544 SR "3 oz" 85 g
+  { id: "lamb_leg_cooked", name: "Kuzu eti (pişmiş)", category: "meat", fdcId: 174460, aliases: ["pişmiş kuzu","kuzu tandır eti","kuzu kızartma"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 85 }, { unit: "dilim", grams: 30 }] }, // FDC 174460 SR "3 oz" 85 g; FNDDS 23000100 "1 piece/slice" 30 g
+  { id: "beef_liver_cooked", name: "Ciğer tava (pişmiş)", category: "meat", fdcId: 168627, aliases: ["ciğer tava","pişmiş ciğer"], typicalPortionG: 150, portions: [{ unit: "dilim", grams: 81 }, { unit: "porsiyon", grams: 85 }] }, // FDC 168627 SR "1 slice" 81 g, "3 oz" 85 g
+  { id: "tripe_raw", name: "İşkembe (çiğ)", category: "meat", fdcId: 170599, aliases: ["çiğ işkembe","dana işkembe"], typicalPortionG: 150, portions: [{ unit: "porsiyon", grams: 113 }] }, // FDC 170599 SR "4 oz" 113 g
 ];
