@@ -583,6 +583,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      keepalive: { Args: never; Returns: boolean }
       log_meal: {
         Args: {
           items: Json

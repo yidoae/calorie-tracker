@@ -1,13 +1,13 @@
-# Supabase pauses a free project after a week without activity; one request every three days was
-# not enough (paused 2026-11-03), so this runs every six hours. Each run sends one
-# request with the publishable key (repository variables SUPABASE_URL and SUPABASE_KEY, the same
-# values the app ships) that Postgres answers. The anon role may not read foods, so Postgres replies
-# 401 permission denied (42501): that is the expected answer and proves the database is awake.
+# Supabase pauses a free project after a week without activity. Pings that Postgres refused
+# (42501, anon reading foods) did not count: the project paused on 2026-11-03 after pings on
+# 10-28, 10-31 and 11-01. So each run calls public.keepalive() (migration 20261103190000), the
+# one RPC anon may call, which returns true. The publishable key comes from the repository
+# variables SUPABASE_URL and SUPABASE_KEY, the same values the app ships.
 name: Keep Supabase awake
 
 on:
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "17 6 */3 * *"
   workflow_dispatch:
 
 permissions: {}
@@ -17,11 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Query the dev project
+      - name: Call keepalive on the dev project
         env:
           SUPABASE_URL: ${{ vars.SUPABASE_URL }}
           SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
         run: |
-          body=$(curl -sS --max-time 30 "$SUPABASE_URL/rest/v1/foods?select=id&limit=1" -H "apikey: $SUPABASE_KEY")
-          echo "$body"
-          echo "$body" | grep -q '"code":"42501"'
+          body=$(curl -sS --max-time 30 -X POST "$SUPABASE_URL/rest/v1/rpc/keepalive" -H "apikey: $SUPABASE_KEY" -H "Content-Type: application/json" -d '{}')
+          [ "$body" = "true" ] || { echo "unexpected answer: $(echo "$body" | grep -o '"code":"[^"]*"')"; exit 1; }
