@@ -3,11 +3,13 @@
 # 10-28, 10-31 and 11-01. So each run calls public.keepalive() (migration 20261103190000), the
 # one RPC anon may call, which returns true. The publishable key comes from the repository
 # variables SUPABASE_URL and SUPABASE_KEY, the same values the app ships.
+# Every three days was still not enough: green RPC pings on 11-10 and 11-13, paused by 11-16.
+# Supabase wants activity on most days, so this runs daily.
 name: Keep Supabase awake
 
 on:
   schedule:
-    - cron: "17 6 */3 * *"
+    - cron: "17 6 * * *"
   workflow_dispatch:
 
 permissions: {}
