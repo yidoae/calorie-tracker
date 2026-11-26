@@ -85,7 +85,7 @@ function Logger({ initial, onSaved }: { initial: SessionDraft; onSaved: (saved: 
           <Text style={styles.name}>{ex.name}</Text>
           <Text style={styles.target}>Hedef: {ex.target}</Text>
           <View style={styles.row}>
-            <Text style={[styles.columnLabel, styles.setNo]}>SET</Text>
+            <Text style={[styles.setNo, styles.columnLabel]}>SET</Text>
             <Text style={[styles.columnLabel, styles.cell]}>KG</Text>
             <Text style={[styles.columnLabel, styles.cell]}>TEKRAR</Text>
             <View style={styles.spacer} />

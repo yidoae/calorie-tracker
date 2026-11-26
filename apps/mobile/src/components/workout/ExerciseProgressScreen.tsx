@@ -28,9 +28,9 @@ export default function ExerciseProgressScreen({ name }: { name: string }) {
       ) : (
         <>
           <View style={styles.tiles}>
-            <Tile label="EN İYİ" value={`${formatKg(p.bestKg)} kg`} />
-            <Tile label="TAHMİNİ 1RM" value={`${formatKg(p.bestE1rm)} kg`} />
-            <Tile label="ANTRENMAN" value={String(p.entries.length)} />
+            <Tile label="En iyi" value={`${formatKg(p.bestKg)} kg`} />
+            <Tile label="Tahmini 1RM" value={`${formatKg(p.bestE1rm)} kg`} />
+            <Tile label="Antrenman" value={String(p.entries.length)} />
           </View>
           <ProgressChart entries={p.entries} />
           <View style={styles.list}>
@@ -64,8 +64,8 @@ function Tile({ label, value }: { label: string; value: string }) {
 const styles = StyleSheet.create({
   loading: { marginVertical: space(10) },
   tiles: { flexDirection: "row", gap: space(2) },
-  tile: { flex: 1, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.md, padding: space(3), gap: space(1) },
-  tileLabel: { ...type.label, color: colors.fgMuted },
+  tile: { flex: 1, minWidth: 0, justifyContent: "space-between", backgroundColor: colors.surface2, borderRadius: radius.md, padding: space(3), gap: space(1) },
+  tileLabel: { ...type.label, letterSpacing: 0, color: colors.fgMuted },
   tileValue: { ...type.displayMd, color: colors.fg },
   list: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.lg, paddingHorizontal: space(4) },
   row: { flexDirection: "row", alignItems: "center", gap: space(2), minHeight: 56, paddingVertical: space(2), borderBottomWidth: 1, borderBottomColor: colors.border },

@@ -172,5 +172,5 @@ const styles = StyleSheet.create({
   exerciseText: { ...type.small, color: colors.fgMuted, flexShrink: 1 },
   exerciseName: { color: colors.fg, fontWeight: "600" },
   chip: { borderRadius: radius.pill, paddingHorizontal: space(2), paddingVertical: space(0.5) },
-  chipLabel: { ...type.label, fontSize: 11, letterSpacing: 0 },
+  chipLabel: { ...type.label, letterSpacing: 0 },
 });

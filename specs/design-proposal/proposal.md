@@ -1,7 +1,7 @@
 # Design proposal: same colours, faster app
 
-**Status:** K1, K2, K3, K4, K6 and K7 applied on 2026-10-25 (d854d92, 14b7041, 0815edb, 9b17c20); K5
-awaits the owner's approval.
+**Status:** K1, K2, K3, K4, K6 and K7 applied on 2026-10-25 (d854d92, 14b7041, 0815edb, 9b17c20); design
+fixes D1–D7 on 2026-11-26 (`review/art/design-fixes`); K5 awaits the owner's approval.
 **Real screens after the change:** https://claude.ai/artifact/HtBEq1gLQnJciaXpiX4hWE
 **Artifact (before/after mockups):** https://claude.ai/artifact/JB1RzudP7itwF8i4PKPH75
 **Source of the artifact:** `proposal.html` in this folder.
@@ -98,3 +98,26 @@ route parameter), K4 date switcher, K5 "add yesterday's meal", K6 set ✓ + rest
 - K6: ✓ per set (only done sets are saved) and a skippable 90 s rest after each (9b17c20).
 
 Open: K5 "add yesterday's meal" (later, owner's call).
+
+## Design fixes (2026-11-26, owner's approval: "designer ile düzeltmeler yap")
+
+An audit of every preview screen; presentation only, the same tokens.
+
+- D1 `MacroTile`: "kaldı · 120/1…" was cut off with three tiles on a phone; "kaldı"/"fazla" and
+  eaten/target now sit on two lines. Over target the number, the word and a full bar turn red (as in
+  `DayHero`); before, "fazla" had no colour and an empty bar.
+- D2 Workout log: the "SET" column title used the set-number style (15 px) instead of the column-label
+  style of "KG" and "TEKRAR".
+- D3 Exercise progress: "ANTRENMA/N" broke inside the word and the values sat at different heights;
+  labels are sentence case like the macro tiles, the tiles are filled (`surface2`) without the dark
+  outline (principle 5) and the values align.
+- D4 `PlanTargets` (setup summary, Planım): the macro boxes use the macro tints like Bugün instead of a
+  dark outline on information.
+- D5 `DayTile` (calorie cycle): filled `surface2`, no dark outline; today's kind keeps its lime border.
+- D6 `ToggleRow`: the off track was `surface3` on `surface2` (1.1:1), the switch disappeared when off;
+  now `fgSubtle` (WCAG 1.4.11).
+- D7 `WeekPlanCard` change chips: 11 px was below the type scale; now `type.label` (12 px).
+
+Found, not changed (outside presentation): under "GEÇEN HAFTA" the empty headline from
+`packages/core/src/workout/review.ts` reads "Bu hafta antrenman kaydı yok." (this week); the program
+editor's columns are SET · TEKRAR · KG while the workout log uses SET · KG · TEKRAR.

@@ -31,9 +31,10 @@ export default function ToggleRow({ label, description, value, onChange, disable
         value={value}
         onValueChange={onChange}
         disabled={disabled}
-        trackColor={{ false: colors.surface3, true: colors.cta }}
+        // Off track in fgSubtle: surface3 on this surface2 row was 1.1:1, the switch vanished when off (WCAG 1.4.11 wants 3:1).
+        trackColor={{ false: colors.fgSubtle, true: colors.cta }}
         thumbColor={colors.surface}
-        ios_backgroundColor={colors.surface3}
+        ios_backgroundColor={colors.fgSubtle}
       />
     </Pressable>
   );

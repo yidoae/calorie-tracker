@@ -22,8 +22,9 @@ export default function DayTile({ title, kcal, detail, highlighted = false }: Pr
 }
 
 const styles = StyleSheet.create({
-  tile: { flex: 1, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.lg, padding: space(3), gap: space(1) },
-  highlighted: { borderColor: colors.cta, borderWidth: 2, backgroundColor: colors.surface2 },
+  // Information, not a button: filled, no dark outline (proposal principle 5); the 2 px border is clear until highlighted.
+  tile: { flex: 1, minWidth: 0, borderWidth: 2, borderColor: colors.transparent, backgroundColor: colors.surface2, borderRadius: radius.lg, padding: space(3), gap: space(1) },
+  highlighted: { borderColor: colors.cta },
   title: { ...type.small, color: colors.fgMuted, fontWeight: "600" },
   kcal: { ...type.displayMd, color: colors.fg },
   detail: { ...type.small, color: colors.fgMuted },

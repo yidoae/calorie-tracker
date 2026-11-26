@@ -11,9 +11,9 @@ interface Props {
 }
 
 const MACROS = [
-  { key: "protein", color: colors.macroProtein },
-  { key: "carbs", color: colors.macroCarbs },
-  { key: "fat", color: colors.macroFat },
+  { key: "protein", color: colors.macroProtein, tint: colors.proteinSoft },
+  { key: "carbs", color: colors.macroCarbs, tint: colors.carbsSoft },
+  { key: "fat", color: colors.macroFat, tint: colors.fatSoft },
 ] as const;
 
 const fmt = (n: number) => Math.round(n).toLocaleString(LOCALE);
@@ -31,8 +31,8 @@ export default function PlanTargets({ plan, eyebrow = "GÜNLÜK HEDEFİN" }: Pro
         </Text>
       </View>
       <View style={styles.macros}>
-        {MACROS.map(({ key, color }) => (
-          <View key={key} style={styles.macro} accessible accessibilityLabel={`${MACRO_LABELS[key]} ${fmt(plan.base[key])} gram`}>
+        {MACROS.map(({ key, color, tint }) => (
+          <View key={key} style={[styles.macro, { backgroundColor: tint }]} accessible accessibilityLabel={`${MACRO_LABELS[key]} ${fmt(plan.base[key])} gram`}>
             <View style={[styles.dot, { backgroundColor: color }]} />
             <Text style={styles.macroValue}>{fmt(plan.base[key])} g</Text>
             <Text style={styles.macroLabel}>{MACRO_LABELS[key]}</Text>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   kcal: { ...type.displayXl, color: colors.onInk },
   goal: { ...type.body, color: colors.onInkMuted },
   macros: { flexDirection: "row", gap: space(3) },
-  macro: { flex: 1, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.lg, padding: space(3), gap: space(1) },
+  macro: { flex: 1, minWidth: 0, borderRadius: radius.lg, padding: space(3), gap: space(1) },
   dot: { width: 10, height: 10, borderRadius: 5 },
   macroValue: { ...type.displayMd, color: colors.fg },
   macroLabel: { ...type.small, color: colors.fgMuted },
