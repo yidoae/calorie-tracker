@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import * as aesjs from "aes-js";
 import * as SecureStore from "expo-secure-store";
-import { AppState } from "react-native";
+import { AppState, Platform } from "react-native";
 
 /*
  * The one Supabase client (constitution I: only src/services talks to Supabase). The session is
@@ -41,7 +41,9 @@ const key = process.env.EXPO_PUBLIC_SUPABASE_KEY ?? "";
 /** False when apps/mobile/.env is missing; requests then fail with a clear message. */
 export const supabaseConfigured = url.length > 0 && key.length > 0;
 
-const storage = new EncryptedSessionStorage();
+// Web (dev testing only, `npm run web`): expo-secure-store has no web build, so the session goes to
+// AsyncStorage (localStorage) unencrypted.
+const storage = Platform.OS === "web" ? AsyncStorage : new EncryptedSessionStorage();
 const SESSION_KEY = "kalori-takip-session";
 
 export const supabase = createClient(supabaseConfigured ? url : "https://not-configured.invalid", supabaseConfigured ? key : "missing", {

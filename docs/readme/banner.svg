@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 420" width="1280" height="420" role="img" aria-labelledby="t d">
+  <title id="t">Kalori Takip</title>
+  <desc id="d">Öğününü kaydet, hedefini takip et. A Turkish calorie and macro tracker for iOS and Android.</desc>
+  <defs>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#2c203a"/>
+    </pattern>
+    <radialGradient id="glow" cx="0.8" cy="0.45" r="0.5">
+      <stop offset="0" stop-color="#a8e40f" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#a8e40f" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .d { font-family: 'Bricolage Grotesque', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-weight: 700; }
+      .b { font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="420" rx="24" fill="#170b21"/>
+  <rect width="1280" height="420" rx="24" fill="url(#dots)"/>
+  <rect width="1280" height="420" rx="24" fill="url(#glow)"/>
+
+  <!-- copy -->
+  <text x="72" y="112" class="b" font-size="16" font-weight="600" letter-spacing="3" fill="#a8e40f">KALORİ TAKİP</text>
+  <text x="72" y="182" class="d" font-size="58" fill="#ffffff">Öğününü kaydet,</text>
+  <text x="72" y="248" class="d" font-size="58" fill="#ffffff">hedefini <tspan fill="#a8e40f">takip et.</tspan></text>
+  <text x="72" y="296" class="b" font-size="20" fill="#c8c8c8">Fotoğraf, arama ya da birkaç kelime: öğün saniyeler içinde kayıtta.</text>
+
+  <!-- chips -->
+  <g class="b" font-size="15" font-weight="600">
+    <rect x="72" y="330" width="96" height="36" rx="18" fill="#a8e40f"/>
+    <text x="120" y="353" text-anchor="middle" fill="#170b21">iOS</text>
+    <rect x="180" y="330" width="120" height="36" rx="18" fill="none" stroke="#c8c8c8" stroke-opacity="0.5"/>
+    <text x="240" y="353" text-anchor="middle" fill="#ffffff">Android</text>
+    <rect x="312" y="330" width="104" height="36" rx="18" fill="none" stroke="#c8c8c8" stroke-opacity="0.5"/>
+    <text x="364" y="353" text-anchor="middle" fill="#ffffff">Expo 57</text>
+    <rect x="428" y="330" width="118" height="36" rx="18" fill="none" stroke="#c8c8c8" stroke-opacity="0.5"/>
+    <text x="487" y="353" text-anchor="middle" fill="#ffffff">Supabase</text>
+  </g>
+
+  <!-- macro ring: protein 30 %, carbs 45 %, fat 25 % (C = 2πr = 691.15) -->
+  <g transform="translate(1010 196) rotate(-90)" fill="none" stroke-width="26" stroke-linecap="round">
+    <circle r="110" stroke="#2c203a"/>
+    <circle r="110" stroke="#bd41f0" stroke-dasharray="186 1000" stroke-dashoffset="-6"/>
+    <circle r="110" stroke="#3898ec" stroke-dasharray="285 1000" stroke-dashoffset="-219"/>
+    <circle r="110" stroke="#84cc16" stroke-dasharray="148 1000" stroke-dashoffset="-531"/>
+  </g>
+  <text x="1010" y="200" text-anchor="middle" class="d" font-size="52" fill="#ffffff">1 840</text>
+  <text x="1010" y="232" text-anchor="middle" class="b" font-size="16" font-weight="600" letter-spacing="2" fill="#c8c8c8">KCAL HEDEF</text>
+
+  <!-- legend -->
+  <g class="b" font-size="15" fill="#ffffff">
+    <circle cx="884" cy="358" r="7" fill="#bd41f0"/><text x="898" y="363">Protein</text>
+    <circle cx="986" cy="358" r="7" fill="#3898ec"/><text x="1000" y="363">Karbonhidrat</text>
+    <circle cx="1124" cy="358" r="7" fill="#84cc16"/><text x="1138" y="363">Yağ</text>
+  </g>
+</svg>

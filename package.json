@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "mobile": "npm run start -w mobile",
+    "web": "npm run web -w mobile",
     "preview": "npm run build -w preview",
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
@@ -17,7 +18,8 @@
     "knip": "knip"
   },
   "overrides": {
-    "react": "19.2.3"
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "knip": "^6.40.0",

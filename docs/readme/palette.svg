@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 150" width="1280" height="150" role="img" aria-label="Kalori Takip color palette">
+  <style>
+    .n { font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 600; }
+    .h { font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; font-size: 13px; }
+  </style>
+  <rect width="1280" height="150" rx="20" fill="#f5f8f1"/>
+  <g transform="translate(24 20)">
+    <rect width="160" height="72" rx="12" fill="#170b21"/>
+    <text x="4" y="96" class="n" fill="#170b21">Ink</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#170b21</text>
+  </g>
+  <g transform="translate(200 20)">
+    <rect width="160" height="72" rx="12" fill="#a8e40f"/>
+    <text x="4" y="96" class="n" fill="#170b21">Lime CTA</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#a8e40f</text>
+  </g>
+  <g transform="translate(376 20)">
+    <rect width="160" height="72" rx="12" fill="#bd41f0"/>
+    <text x="4" y="96" class="n" fill="#170b21">Protein</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#bd41f0</text>
+  </g>
+  <g transform="translate(552 20)">
+    <rect width="160" height="72" rx="12" fill="#3898ec"/>
+    <text x="4" y="96" class="n" fill="#170b21">Carbs</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#3898ec</text>
+  </g>
+  <g transform="translate(728 20)">
+    <rect width="160" height="72" rx="12" fill="#84cc16"/>
+    <text x="4" y="96" class="n" fill="#170b21">Fat</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#84cc16</text>
+  </g>
+  <g transform="translate(904 20)">
+    <rect width="160" height="72" rx="12" fill="#0062cc"/>
+    <text x="4" y="96" class="n" fill="#170b21">Accent</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#0062cc</text>
+  </g>
+  <g transform="translate(1080 20)">
+    <rect width="176" height="72" rx="12" fill="#ffffff" stroke="#dddddd"/>
+    <text x="4" y="96" class="n" fill="#170b21">Surface</text>
+    <text x="4" y="114" class="h" fill="#4b5a69">#ffffff · #f5f8f1</text>
+  </g>
+</svg>
