@@ -41,6 +41,24 @@ The app gives each macro one colour everywhere, from the ring on the dashboard t
 
 ---
 
+## 📱 How it works
+
+```text
+  👤 Sign up  ──▶  📝 Setup  ──▶  🎯 Your plan  ──▶  🍽️ Log meals  ──▶  📊 Track  ──▶  🏋️ Train
+```
+
+1. **👤 Sign up** with e-mail, Google or Apple. The session is stored encrypted on the phone.
+2. **📝 Setup** asks a few questions: age, height and weight, your goal, how active you are and how you eat.
+3. **🎯 Your plan** turns those answers into a daily calorie target split into protein, carbs and fat. You can tune it live in the plan wizard and see the numbers move.
+4. **🍽️ Log meals** the way that suits the moment:
+   - 🔎 search 553 foods and Turkish dishes, pick grams or a portion like "1 kase"
+   - 📸 snap a photo of the plate
+   - ✍️ type a few words, like "2 yumurta ve bir dilim ekmek"
+5. **📊 Track** the day on the macro ring; open any past day from the calendar and edit its meals.
+6. **🏋️ Train** with your own split. Each workout starts from last time's weights, and every Sunday the next week is planned from what you lifted.
+
+---
+
 ## 🚀 Quick start
 
 > [!NOTE]
@@ -98,23 +116,6 @@ calorie-tracker/
 ├── 📐 specs/                Spec Kit features and the roadmap
 └── 🎨 tofuhq-design/        Design system
 ```
-
----
-
-## 🗺️ Roadmap
-
-| | # | Feature | Status |
-|:-:|:-:|---|---|
-| 🟢 | 001 | Mobile foundation: accounts, setup, plan, search logging, history | Done, iPhone validation open |
-| 🟢 | 002 | Food database: 553 sourced foods and dishes, portion shortcuts | Part A done; barcode and own foods later |
-| 🟡 | 003 | AI logging: photo and text through one Gemini Edge Function | In progress |
-| ⚪ | 004 | Tracking: weight, water, fasting, trends | After the MVP |
-| ⚪ | 005 | Account and stores: deletion, privacy, EAS, TestFlight | Store part is in the MVP |
-| ⚪ | 006 | Subscription (RevenueCat) | Decided from usage data |
-| 🟢 | 007 | Workout program | Done, phone validation open |
-| 🟡 | 008 | Weekly training plan | Engine done; design and notification open |
-
-Details, the MVP cut and the order: [specs/ROADMAP.md](specs/ROADMAP.md).
 
 ---
 
